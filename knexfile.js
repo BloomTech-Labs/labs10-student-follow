@@ -1,7 +1,9 @@
 // Update with your config settings.
 require('dotenv').config();
 const pg = require('pg');
-pg.defaults.ssl = true;
+
+pg.defaults.ssl = false; // this needs to be false in development, true when using heroku db
+
 
 module.exports = {
 	development: {
@@ -10,13 +12,13 @@ module.exports = {
 		connection: {
 			host: '127.0.0.1',
 			user: 'justin',
-			database: ''
+			database: 'refreshr_dev'
 		},
 		migrations: {
-			directory: './data/migrations'
+      directory: './server/data/migrations'
 		},
 		seeds: {
-			directory: './data/seeds'
+      directory: './server/data/seeds'
 		}
 	},
 
