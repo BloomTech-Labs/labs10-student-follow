@@ -2,7 +2,7 @@ const express = require('express');
 // const helpers = require('../db/dbHelper/helpers.js');
 
 const router = express.Router();
-const responseStatus = require('./responseStatus');
+const responseStatus = require('../config/responseStatusConfig');
 
 // gets
 router.get('/', async (req, res) => {
