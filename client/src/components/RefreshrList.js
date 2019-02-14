@@ -12,13 +12,15 @@ const styles = theme => ({
   }
 });
 
-const RefreshersList = props => {
+const RefreshrList = props => {
   return (
     <>
       <Grid className={props.classes.wrapper}>
-        <h1>Add a new Followup</h1>
+        <p>Card</p>
+        <p>Card</p>
+        <p>Card</p>
       </Grid>
     </>
   );
 };
-export default withStyles(styles)(RefreshersList);
+export default withStyles(styles)(RefreshrList);
