@@ -1,6 +1,7 @@
 import React from "react";
 import Grid from "@material-ui/core/Grid";
 import { withStyles } from "@material-ui/core/styles";
+// import { RefreshrCard } from "./index.js";
 
 const styles = theme => ({
   wrapper: {
@@ -12,13 +13,15 @@ const styles = theme => ({
   }
 });
 
-const RefreshersList = props => {
+const RefreshrList = props => {
   return (
     <>
       <Grid className={props.classes.wrapper}>
-        <h1>Add a new Followup</h1>
+        {/* <RefreshrCard />
+        <RefreshrCard />
+        <RefreshrCard /> */}
       </Grid>
     </>
   );
 };
-export default withStyles(styles)(RefreshersList);
+export default withStyles(styles)(RefreshrList);
