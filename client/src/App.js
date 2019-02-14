@@ -8,14 +8,17 @@ export default function App() {
   const [people, setPeople] = useState([]);
 
   const fetchPeople = async () => {
-    const response = await axios("https://swapi.co/api/people/");
-    setPeople(response.data.results);
+    const response = await axios('https://refreshr.herokuapp.com/teachers/');
+    setPeople(response.data);
   };
 
   useEffect(() => {
     fetchPeople();
   }, []);
 
+  if (!people.length) {
+    return <>Loading...</>;
+  }
   return (
     <>
       <Route

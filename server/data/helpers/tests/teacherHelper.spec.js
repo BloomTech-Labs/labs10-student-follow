@@ -1,5 +1,5 @@
-const db = require('../../config/dbConfig.js');
-const teacherHelper = require('./teacherHelper.js');
+const db = require('../../../config/dbConfig.js');
+const teacherHelper = require('../teacherHelper.js');
 
 afterEach(async () => {
 	await db('teachers').truncate();
