@@ -1,15 +1,17 @@
 import React from "react";
 import Grid from "@material-ui/core/Grid";
 import { withStyles } from "@material-ui/core/styles";
-import { RefreshrCard } from "./index.js";
 
 const styles = theme => ({
   wrapper: {
+    border: "1px solid black",
     display: "flex",
-    justifyContent: "center",
+    flexWrap: "wrap",
     alignItems: "center",
-    height: "90vh",
-    margin: "0 1rem"
+    justifyContent: "center",
+    margin: "1rem",
+    width: "30%",
+    height: "30%"
   }
 });
 
@@ -17,9 +19,7 @@ const RefreshrList = props => {
   return (
     <>
       <Grid className={props.classes.wrapper}>
-        <RefreshrCard />
-        <RefreshrCard />
-        <RefreshrCard />
+        <h1>Card</h1>
       </Grid>
     </>
   );
