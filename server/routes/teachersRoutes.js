@@ -5,6 +5,8 @@ const knex = require('knex');
 const knexConfig = require('../../knexfile');
 const db = knex(knexConfig.production);
 
+const checkJwt = require('../middleware/authenticate');
+
 const responseStatus = require('../config/responseStatusConfig');
 
 router.get('/', async (req, res) => {
