@@ -1,68 +1,114 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# [Refreshr App](https://refreshr-app.netlify.com) (Lambda School Labs 10)
 
-## Available Scripts
+![Refreshr Logo](./logo.png "Refresh your mind")
 
-In the project directory, you can run:
+- [App Home](https://refreshr-app.netlify.com)
 
-### `npm start`
+## Contributors
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- **Chaya Otikor** | [Github](https://github.com/cotikor) | [LinkedIn]()
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+- **Justin Lowry** | [Github](https://github.com/dividedsky) | [LinkedIn]()
 
-### `npm test`
+- **Nick O'Ferrall** | [Github](https://github.com/nickoferrall) | [LinkedIn]()
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- **Sawyer Zincone** | [Github](https://github.com/szincone) | [LinkedIn]()
 
-### `npm run build`
+- **Timothy Hoang** | [Github](https://github.com/timh1203) | [LinkedIn]()
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Project Overview
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+- Learning is difficult. Teaching is hard. When learners have small triggers to remember content over a spread out period of time they retain more. Send customizable quizzes on scheduled intervals of 2 days, 2 weeks and 2 months after the initial lecture.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Key Features
 
-### `npm run eject`
+```
+- Create a class and manage students in the class
+- Create and edit Refreshes
+- A Refresh should have a 2 day, 2 week, and 2 month review
+- A Refresh review item should have text and a multiple choice question
+- Assign a Refresh to a class with a lecture time to automate the delivery of quizzes
+- The Refreshes should be automatically delivered via email
+- A teacher should be able to see the participation rate in dashboard
+- Payment service for school
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Tech Stack
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Frontend
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### React (JavaScript Library)
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+```
 
-## Learn More
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### React Hooks (Library Feature)
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```
 
-### Code Splitting
+```
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+### Material-UI Library (Styling Library)
 
-### Analyzing the Bundle Size
+```
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+```
 
-### Making a Progressive Web App
+### Netlify (Deployment)
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+```
 
-### Advanced Configuration
+```
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+## Backend
 
-### Deployment
+### NodeJS, ExpressJS (Framework/Library)
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
+```
 
-### `npm run build` fails to minify
+```
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+### PostgreSQL (Database)
+
+```
+
+```
+
+### Data Model
+
+![Data Model](./dataModel.png "Refreshr Data Model")
+
+## API/Services
+
+- Auth0 - authorization and authentication service
+- Stripe - payment portal service
+- Axios - Promise based HTTP client for the browser and node.js
+- SendGrid - Email service
+- Papaparse - CSV parser package
+- Jest - Testing library
+- Knex - SQL Query Builder for Javascript
+- Material-UI - UI Design library
+- Supertest - Testing library
+- Enzyme - JavaScript Testing utilities for React
+- Dotenv - load local environment variables for env
+- Cors - Cross Origin Bridge
+- Faker - Simulates fake data
+
+### Stripe
+
+### Sendgrid
+
+## Environment Variables
+
+```
+
+```
+
+## Testing
+
+## Contributions/Issues/Bugs
+
+## Additional Documentation
+
+- For the backend documentation, please visit [Backend Documentation]().
