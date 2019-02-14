@@ -5,7 +5,7 @@ const responseStatus = require('./responseStatus');
 
 router.get('/', async (req, res) => {
   try {
-    const students = db('students');
+    const students = await db('students');
     res.status(responseStatus.success).json(students);
   } catch (err) {
     res.status(responseStatus.serverError).json('Error');
@@ -29,7 +29,7 @@ router.post('/', async (req, res) => {
 
 router.get('/classes', async (req, res) => {
   try {
-    const studentsClasses = db('students_classes');
+    const studentsClasses = await db('students_classes');
     res.status(responseStatus.success).json(studentsClasses);
   } catch (err) {
     res.status(responseStatus.serverError).json('Error');
