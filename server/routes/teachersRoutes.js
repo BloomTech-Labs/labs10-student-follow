@@ -9,6 +9,14 @@ const responseStatus = require('../config/responseStatusConfig');
 
 router.get('/', async (req, res) => {
   try {
+    res.status(responseStatus.success).json('Sanity Check');
+  } catch (err) {
+    res.status(responseStatus.serverError).json('Error');
+  }
+});
+
+router.get('/second', async (req, res) => {
+  try {
     const teachers = await db('teachers');
     res.status(responseStatus.success).json(teachers);
   } catch (err) {
