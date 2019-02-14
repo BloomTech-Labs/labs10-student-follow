@@ -1,7 +1,7 @@
 import React from "react";
 import Grid from "@material-ui/core/Grid";
 import { withStyles } from "@material-ui/core/styles";
-import { Navcrumbs, Navbar, RefreshersList } from "./index.js";
+import { Navcrumbs, Navbar, RefreshrList } from "./index.js";
 
 const styles = theme => ({
   wrapper: {
@@ -9,7 +9,7 @@ const styles = theme => ({
   }
 });
 
-const RefreshersView = props => {
+const RefreshrView = props => {
   return (
     <>
       <Navcrumbs />
@@ -18,11 +18,11 @@ const RefreshersView = props => {
           <Navbar />
         </Grid>
         <Grid item xs={10}>
-          <RefreshersList />
+          <RefreshrList />
         </Grid>
       </Grid>
     </>
   );
 };
 
-export default withStyles(styles)(RefreshersView);
+export default withStyles(styles)(RefreshrView);

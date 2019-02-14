@@ -4,21 +4,24 @@ import { withStyles } from "@material-ui/core/styles";
 
 const styles = theme => ({
   wrapper: {
+    border: "1px solid black",
     display: "flex",
-    justifyContent: "center",
+    flexWrap: "wrap",
     alignItems: "center",
-    height: "90vh",
-    margin: "0 1rem"
+    justifyContent: "center",
+    margin: "1rem",
+    width: "30%",
+    height: "30%"
   }
 });
 
-const RefreshersList = props => {
+const RefreshrList = props => {
   return (
     <>
       <Grid className={props.classes.wrapper}>
-        <h1>Add a new Followup</h1>
+        <h1>Card</h1>
       </Grid>
     </>
   );
 };
-export default withStyles(styles)(RefreshersList);
+export default withStyles(styles)(RefreshrList);

@@ -1,6 +1,7 @@
-import RefreshersView from "./RefreshersView";
+import RefreshrView from "./RefreshrView";
 import Navbar from "./Navbar";
 import Navcrumbs from "./Navcrumbs";
-import RefreshersList from "./RefreshersList";
+import RefreshrList from "./RefreshrList";
+import RefreshrCard from "./RefreshrCard";
 
-export { RefreshersView, Navcrumbs, Navbar, RefreshersList };
+export { RefreshrView, Navcrumbs, Navbar, RefreshrList, RefreshrCard };
