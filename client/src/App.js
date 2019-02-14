@@ -6,16 +6,20 @@ import LandingPage from './containers/LandingPage.js';
 export default function App() {
   const [people, setPeople] = useState([]);
 
-  useEffect(async () => {
+  const fetchPeople = async () => {
     const response = await axios('https://swapi.co/api/people/');
     setPeople(response.data.results);
+  };
+
+  useEffect(() => {
+    fetchPeople();
   }, []);
 
   return (
     <>
       <Route
         path="/"
-        render={props => <LandingPage {...props} people={people} />}
+        render={(props) => <LandingPage {...props} people={people} />}
       />
     </>
   );
