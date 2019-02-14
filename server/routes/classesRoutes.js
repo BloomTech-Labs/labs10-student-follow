@@ -6,7 +6,7 @@ const knexConfig = require('../../knexfile');
 const db = knex(knexConfig.production);
 
 const responseStatus = require('../config/responseStatusConfig');
-
+//
 router.get('/', async (req, res) => {
   try {
     const classes = await db('classes');
