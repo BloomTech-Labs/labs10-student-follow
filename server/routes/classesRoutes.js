@@ -1,6 +1,10 @@
 const express = require('express');
-
 const router = express.Router();
+
+const knex = require('knex');
+const knexConfig = require('../../knexfile');
+const db = knex(knexConfig.production);
+
 const responseStatus = require('../config/responseStatusConfig');
 
 router.get('/', async (req, res) => {
