@@ -13,22 +13,4 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.get('/teachers', async (req, res) => {
-  try {
-    const teachers = db('teachers');
-    res.status(responseStatus.success).json(teachers);
-  } catch (err) {
-    res.status(responseStatus.serverError).json('Error');
-  }
-});
-
-router.get('/students', async (req, res) => {
-  try {
-    const students = db('students');
-    res.status(responseStatus.success).json(students);
-  } catch (err) {
-    res.status(responseStatus.serverError).json('Error');
-  }
-});
-
 module.exports = router;
