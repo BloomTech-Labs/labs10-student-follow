@@ -1,26 +1,29 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Route } from 'react-router-dom';
+import LandingPage from './containers/LandingPage.js';
 
 class App extends Component {
+  state = {
+    data: [{ message: 'Hey', id: 1 }],
+  };
+
+  componentDidMount() {}
+
   render() {
+    if (!this.state.data.length) {
+      return (
+        <>
+          <p>Loading please wait...</p>
+        </>
+      );
+    }
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
+      <>
+        <Route
+          path="/"
+          render={(props) => <LandingPage {...props} data={this.state.data} />}
+        />
+      </>
     );
   }
 }
