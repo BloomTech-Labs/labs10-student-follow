@@ -8,7 +8,7 @@ exports.up = function(knex, Promise) {
       .integer('class_id')
       .references('id')
       .inTable('classes');
-    tbl
+    /*tbl
       .integer('followup_1')
       .references('id')
       .inTable('followups');
@@ -20,6 +20,7 @@ exports.up = function(knex, Promise) {
       .integer('followup_3')
       .references('id')
       .inTable('followups');
+      */
   });
 };
 
