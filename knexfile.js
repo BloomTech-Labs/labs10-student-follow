@@ -4,7 +4,6 @@ const pg = require('pg');
 
 pg.defaults.ssl = true; // this needs to be false in development, true when using heroku db
 
-
 module.exports = {
 	development: {
 		client: 'pg',
@@ -15,11 +14,11 @@ module.exports = {
 		},
 		migrations: {
       directory: './server/data/migrations'
-		},
-		seeds: {
+    },
+    seeds: {
       directory: './server/data/seeds'
-		}
-	},
+    }
+  },
 
 	production: {
 		client: 'pg',

@@ -4,13 +4,14 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "test": "(knex migrate:rollback && knex migrate:latest && knex seed:run) && cross-env DB_ENV=testing jest --verbose --watch",
+    "test": "cross-env DB_ENV=testing jest --verbose --watch",
     "develop": "cross-env DB_ENV=development nodemon index.js",
     "reload": "(knex migrate:rollback && knex migrate:latest && knex seed:run) && yarn develop",
     "start": "cross-env DB_ENV=production node index.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
+    "cross-env": "^5.2.0",
     "dotenv": "^6.2.0",
     "express": "^4.16.4",
     "faker": "^4.1.0",
@@ -20,7 +21,6 @@
     "pg": "^7.8.0"
   },
   "devDependencies": {
-    "cross-env": "^5.2.0",
     "jest": "^24.1.0",
     "nodemon": "^1.18.10",
     "supertest": "^3.4.2"
