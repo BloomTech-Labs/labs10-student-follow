@@ -5,8 +5,8 @@ const responseStatus = require('./responseStatus');
 
 router.get('/', async (req, res) => {
   try {
-    const teachers = db('teachers');
-    res.status(responseStatus.success).json(teachers);
+    const students = db('students');
+    res.status(responseStatus.success).json(students);
   } catch (err) {
     res.status(responseStatus.serverError).json('Error');
   }
@@ -14,7 +14,7 @@ router.get('/', async (req, res) => {
 
 router.post('/', async (req, res) => {
   try {
-    const ids = await db('teachers').insert(req.body);
+    const ids = await db('students').insert(req.body);
     res.status(responseStatus.postCreated).json(`Added new log with ID ${ids}`);
   } catch (error) {
     if (error.errno === 19) {
@@ -29,8 +29,8 @@ router.post('/', async (req, res) => {
 
 router.get('/classes', async (req, res) => {
   try {
-    const teachersClasses = db('classes_teachers');
-    res.status(responseStatus.success).json(teachersClasses);
+    const studentsClasses = db('students_classes');
+    res.status(responseStatus.success).json(studentsClasses);
   } catch (err) {
     res.status(responseStatus.serverError).json('Error');
   }
@@ -38,7 +38,7 @@ router.get('/classes', async (req, res) => {
 
 router.post('/classes', async (req, res) => {
   try {
-    const ids = await db('classes_teachers').insert(req.body);
+    const ids = await db('students_classes').insert(req.body);
     res.status(responseStatus.postCreated).json(`Added new log with ID ${ids}`);
   } catch (error) {
     if (error.errno === 19) {
