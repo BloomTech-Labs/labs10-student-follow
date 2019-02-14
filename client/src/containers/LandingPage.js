@@ -1,15 +1,13 @@
 import React from 'react';
 
-const LandingPage = (props) => {
+export default function LandingPage(props) {
   return (
     <>
-      {props.data.map((message) => (
-        <div key={message.id}>
-          <h1>{message.message}</h1>
+      {props.people.map((person) => (
+        <div key={person.name}>
+          <h1>{person.name}</h1>
         </div>
       ))}
     </>
   );
-};
-
-export default LandingPage;
+}

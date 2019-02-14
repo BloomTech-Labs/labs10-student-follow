@@ -1,31 +1,26 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Route } from 'react-router-dom';
+import axios from 'axios';
 import LandingPage from './containers/LandingPage.js';
 
-class App extends Component {
-  state = {
-    data: [{ message: 'Hey', id: 1 }],
+export default function App() {
+  const [people, setPeople] = useState([]);
+
+  const fetchPeople = async () => {
+    const response = await axios('https://swapi.co/api/people/');
+    setPeople(response.data.results);
   };
 
-  componentDidMount() {}
+  useEffect(() => {
+    fetchPeople();
+  }, []);
 
-  render() {
-    if (!this.state.data.length) {
-      return (
-        <>
-          <p>Loading please wait...</p>
-        </>
-      );
-    }
-    return (
-      <>
-        <Route
-          path="/"
-          render={(props) => <LandingPage {...props} data={this.state.data} />}
-        />
-      </>
-    );
-  }
+  return (
+    <>
+      <Route
+        path="/"
+        render={(props) => <LandingPage {...props} people={people} />}
+      />
+    </>
+  );
 }
-
-export default App;
