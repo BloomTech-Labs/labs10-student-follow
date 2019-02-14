@@ -8,7 +8,6 @@ exports.up = function(knex, Promise) {
       .integer('class_id')
       .references('id')
       .inTable('classes');
-    // add followup foreign keys here after followups table is created
     tbl
       .integer('followup_1')
       .references('id')

@@ -1,4 +1,6 @@
 const faker = require('faker');
+console.log('students');
+
 
 const students = [];
 
