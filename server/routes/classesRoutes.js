@@ -15,7 +15,9 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
   try {
     const ids = await db('classes').insert(req.body);
-    res.status(responseStatus.postCreated).json(`Added new log with ID ${ids}`);
+    res
+      .status(responseStatus.postCreated)
+      .json(`Added new class with ID ${ids}`);
   } catch (error) {
     if (error.errno === 19) {
       res
