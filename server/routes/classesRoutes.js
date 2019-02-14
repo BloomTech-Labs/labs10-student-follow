@@ -1,7 +1,7 @@
 const express = require('express');
 
 const router = express.Router();
-const responseStatus = require('./responseStatus');
+const responseStatus = require('../config/responseStatusConfig');
 
 router.get('/', async (req, res) => {
   try {
