@@ -1,19 +1,15 @@
 const faker = require('faker');
 
-const followups = [];
+const refreshrs = [];
 
 for (let i = 0; i < 100; i++) {
-  followups.push({
+  refreshrs.push({
     date: faker.date.future(),
-    question: Math.floor(Math.random() * 100),
+    question: Math.ceil(Math.random() * 100),
   })
 }
 
-exports.seed = function(knex, Promise) {
-  // Deletes ALL existing entries
-  return knex('followups').del()
-    .then(function () {
-      // Inserts seed entries
-      return knex('followups').insert(followups);
-    });
+exports.seed = async function(knex, Promise) {
+  await knex.raw('truncate table refreshrs restart identity cascade');
+  await knex('refreshrs').insert(refreshrs);
 };

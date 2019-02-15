@@ -5,9 +5,11 @@ const knex = require('knex');
 const knexConfig = require('../../knexfile');
 const db = knex(knexConfig.production);
 
+const jwtCheck = require('../middleware/authenticate');
+
 const responseStatus = require('../config/responseStatusConfig');
 
-router.get('/', async (req, res) => {
+router.get('/', jwtCheck, async (req, res) => {
   try {
     const questions = await db('questions');
     res.status(responseStatus.success).json(questions);
@@ -16,7 +18,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.post('/', async (req, res) => {
+router.post('/', jwtCheck, async (req, res) => {
   try {
     const ids = await db('questions').insert(req.body);
     res

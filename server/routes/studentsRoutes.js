@@ -5,9 +5,11 @@ const knex = require('knex');
 const knexConfig = require('../../knexfile');
 const db = knex(knexConfig.production);
 
+const jwtCheck = require('../middleware/authenticate');
+
 const responseStatus = require('../config/responseStatusConfig');
 
-router.get('/', async (req, res) => {
+router.get('/', jwtCheck, async (req, res) => {
   try {
     const students = await db('students');
     res.status(responseStatus.success).json(students);
@@ -16,7 +18,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.post('/', async (req, res) => {
+router.post('/', jwtCheck, async (req, res) => {
   try {
     const ids = await db('students').insert(req.body);
     res
@@ -33,7 +35,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.get('/classes', async (req, res) => {
+router.get('/classes', jwtCheck, async (req, res) => {
   try {
     const studentsClasses = await db('students_classes');
     res.status(responseStatus.success).json(studentsClasses);
@@ -42,7 +44,7 @@ router.get('/classes', async (req, res) => {
   }
 });
 
-router.post('/classes', async (req, res) => {
+router.post('/classes', jwtCheck, async (req, res) => {
   try {
     const ids = await db('students_classes').insert(req.body);
     res
