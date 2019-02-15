@@ -1,5 +1,5 @@
 exports.up = function(knex, Promise) {
-  return knex.schema.createTable('students_classes', (tbl) => {4
+  return knex.schema.createTable('students_classes', (tbl) => {
     tbl.increments();
 		tbl
 			.integer('student_id')
