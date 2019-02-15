@@ -8,18 +8,6 @@ exports.up = function(knex, Promise) {
       .integer('class_id')
       .references('id')
       .inTable('classes');
-    tbl
-      .integer('followup_1')
-      .references('id')
-      .inTable('followups');
-    tbl
-      .integer('followup_2')
-      .references('id')
-      .inTable('followups');
-    tbl
-      .integer('followup_3')
-      .references('id')
-      .inTable('followups');
   });
 };
 
