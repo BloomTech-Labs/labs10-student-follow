@@ -1,7 +1,7 @@
 const db = require('../../config/dbConfig');
 
 module.exports = {
-	getAll: async (id) => {
+	getAll: async () => {
 		const allTeachers = await db('teachers').select(
 			'id',
 			'firstname',
