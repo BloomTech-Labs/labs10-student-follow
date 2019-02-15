@@ -10,19 +10,37 @@ const PORT = process.env.PORT || 9000;
 
 ////
 
-// server.use(jwtCheck);
+const express = require('express');
+const expressjwt = require('express-jwt');
+const jwks = require('jwks-rsa');
+const jwt = require('express-jwt');
+const jwtAuthz = require('express-jwt-authz');
 
-const authenticate = require('./server/middleware/authenticate');
+const jwtCheck = expressjwt({
+  secret: jwks.expressJwtSecret({
+    cache: true,
+    rateLimit: true,
+    jwksRequestsPerMinute: 5,
+    jwksUri: 'https://nickoferrall.auth0.com/.well-known/jwks.json'
+  }),
+  audience: 'labs-api',
+  issuer: 'https://nickoferrall.auth0.com/',
+  algorithms: ['RS256']
+});
+
+// const checkScopes = jwtAuthz(['read:messages']);
 
 server.get('/authorized', async (req, res) => {
   try {
+    // const token = generateToken();
+    // console.log('TOKEN', token);
     res.send('Secured Resource');
   } catch (error) {
     res.status(500).json(console.log('Err', error));
   }
 });
 
-server.get('/elon', authenticate, async (req, res) => {
+server.get('/elon', jwtCheck, async (req, res) => {
   try {
     res.send('Funding secured');
   } catch (error) {

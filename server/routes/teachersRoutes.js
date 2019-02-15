@@ -3,11 +3,19 @@ const router = express.Router();
 
 const knex = require('knex');
 const knexConfig = require('../../knexfile');
-const db = knex(knexConfig.production);
+const db = knex(knexConfig.testing);
 
-const checkJwt = require('../middleware/authenticate');
+const authenticate = require('../middleware/authenticate');
 
 const responseStatus = require('../config/responseStatusConfig');
+
+// router.get('/testing', authenticate, async (req, res) => {
+//   try {
+//     res.status(responseStatus.success).json({ message: 'Heyyyy' });
+//   } catch (err) {
+//     res.status(responseStatus.serverError).json('Error');
+//   }
+// });
 
 router.get('/', async (req, res) => {
   try {

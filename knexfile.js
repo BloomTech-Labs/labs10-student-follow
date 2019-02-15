@@ -20,7 +20,7 @@ module.exports = {
     }
   },
 
-  test: {
+  testing: {
     client: 'pg',
     connection: 'postgres://localhost/9000',
     migrations: {
