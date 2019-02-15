@@ -1,19 +1,19 @@
 const db = require('../../../config/dbConfig.js');
 const teacherHelper = require('../teacherHelper.js');
 
-afterEach(async () => {
-	await db('teachers').truncate();
+afterAll(async () => {
+	await db.raw('TRUNCATE TABLE teachers RESTART IDENTITY CASCADE')
 });
 
 describe('GET query to teachers db', () => {
 	it('should return all 500 teachers', async () => {
-		const allTeachers = await teacherHelper.getTeachers();
+		const allTeachers = await teacherHelper.getAll();
 		expect(allTeachers).toHaveLength(500);
 	});
 
 	it('should return 1 teacher', async () => {
-		const teacher = await teacherHelper.getTeachers(1);
-		expect(teacher).toHaveLength(1);
+		const teacher = await teacherHelper.getTeacher(1);
+		expect(Object.keys(teacher).sort()).toEqual(['classes', 'email', 'firstname', 'lastname', 'id'].sort())
 	});
 });
 
@@ -24,7 +24,7 @@ describe('UPDATE query to teachers db', () => {
 			lastname: 'Doe',
 			email: 'jdoe@abc.com'
 		});
-		const updated = await teacherHelper.getTeachers(1);
+		const updated = await teacherHelper.getTeacher(1);
 
 		expect(updated.email).toEqual('jdoe@abc.com');
 	});

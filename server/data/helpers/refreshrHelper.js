@@ -2,32 +2,55 @@ const db = require('../../config/dbConfig');
 
 module.exports = {
 	getRefreshrs: async (id) => {
-		const allRefreshrs = await db('followups').select('id', 'date', 'question');
-		const selectedRefreshr = await db('followups')
-			.select('id', 'date', 'question')
+		const allRefreshrs = await db('refreshrs').select('id', 'date');
+		const selectedRefreshr = await db('refreshrs')
+			.select('refreshrs.id', 'refreshrs.date')
 			.where({ id })
 			.first();
 
+		const questions = await db('questions')
+			.select(
+				'questions.review_text',
+				'questions.question',
+				'questions.wrong_answer_1',
+				'questions.wrong_answer_2',
+				'questions.wrong_answer_3',
+				'questions.correct_answer'
+			)
+			.join(
+				'questions_refreshrs',
+				'question.id',
+				'questions_refreshrs.question_id'
+			)
+			.where('questions_refreshrs.refreshr_id', id);
 		if (id) {
-			return selectedRefreshr;
+			return Promise.all([selectedRefreshr, questions]).then((response) => {
+				let [selectedRefreshr, questions] = response;
+				let result = {
+					id: selectedRefreshr.id,
+					date: selectedRefreshr.date,
+					questions: questions
+				};
+				return result;
+			});
 		}
 		return allRefreshrs;
 	},
 	addRefreshr: async (refreshr) => {
-		const ID = await db('followups').insert(refreshr);
+		const ID = await db('refreshrs').insert(refreshr);
 
 		return { newRefreshrID: ID[0] };
 	},
 
 	updateRefreshr: async (id, refreshr) => {
-		const updateCount = await db('followups')
+		const updateCount = await db('refreshrs')
 			.where({ id })
 			.update(refreshr);
 		return updateCount;
 	},
 
 	deleteRefreshr: async (id) => {
-		const deleteCount = await db('followups')
+		const deleteCount = await db('refreshrs')
 			.where({ id })
 			.del();
 		return deleteCount;
