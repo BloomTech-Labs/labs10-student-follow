@@ -1,25 +1,35 @@
 const db = require('../../config/dbConfig');
 
 module.exports = {
-	getQuestions: async (id) => {
-		const allQuestions = await db('questions').select('id', 'date');
+	getAll: async () => {
+		const allQuestions = await db('questions').select(
+			'id',
+			'review_text',
+			'question',
+			'wrong_answer_1',
+			'wrong_answer_2',
+			'wrong_answer_3',
+			'correct_answer'
+		);
+
+		return allQuestions;
+	},
+
+	getQuestion: async (id) => {
 		const selectedQuestion = await db('questions')
 			.select(
-				'questions.id',
-				'questions.review_text',
-				'questions.question',
-				'questions.wrong_answer_1',
-				'questions.wrong_answer_2',
-				'questions.wrong_answer_3',
-				'questions.correct_answer'
+				'id',
+				'review_text',
+				'question',
+				'wrong_answer_1',
+				'wrong_answer_2',
+				'wrong_answer_3',
+				'correct_answer'
 			)
 			.where({ id })
 			.first();
 
-		if (id) {
-			return selectedQuestion;
-		}
-		return allQuestions;
+		return selectedQuestion;
 	},
 	addQuestion: async (question) => {
 		const ID = await db('questions').insert(question);

@@ -1,8 +1,13 @@
 const db = require('../../config/dbConfig');
 
 module.exports = {
-	getRefreshrs: async (id) => {
+	getAll: async () => {
 		const allRefreshrs = await db('refreshrs').select('id', 'date');
+
+		return allRefreshrs;
+	},
+
+	getRefreshr: async (id) => {
 		const selectedRefreshr = await db('refreshrs')
 			.select('refreshrs.id', 'refreshrs.date')
 			.where({ id })
@@ -23,18 +28,16 @@ module.exports = {
 				'questions_refreshrs.question_id'
 			)
 			.where('questions_refreshrs.refreshr_id', id);
-		if (id) {
-			return Promise.all([selectedRefreshr, questions]).then((response) => {
-				let [selectedRefreshr, questions] = response;
-				let result = {
-					id: selectedRefreshr.id,
-					date: selectedRefreshr.date,
-					questions: questions
-				};
-				return result;
-			});
-		}
-		return allRefreshrs;
+
+		return Promise.all([selectedRefreshr, questions]).then((response) => {
+			let [selectedRefreshr, questions] = response;
+			let result = {
+				id: selectedRefreshr.id,
+				date: selectedRefreshr.date,
+				questions: questions
+			};
+			return result;
+		});
 	},
 	addRefreshr: async (refreshr) => {
 		const ID = await db('refreshrs').insert(refreshr);

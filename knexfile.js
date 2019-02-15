@@ -2,7 +2,7 @@
 require('dotenv').config();
 const pg = require('pg');
 
-pg.defaults.ssl = false; // this needs to be false in development, true when using heroku db
+pg.defaults.ssl = true; // this needs to be false in development, true when using heroku db
 
 module.exports = {
 	development: {
@@ -13,10 +13,10 @@ module.exports = {
 			database: 'refreshr_dev'
 		},
 		migrations: {
-			directory: './server/data/migrations/dev'
+			directory: './server/data/migrations/test'
 		},
 		seeds: {
-			directory: './server/data/seeds/dev'
+			directory: './server/data/seeds/test'
 		},
 		useNullAsDefault: true
 	},
@@ -46,10 +46,10 @@ module.exports = {
 			max: 10
 		},
 		migrations: {
-			directory: './server/data/migrations'
+			directory: './server/data/migrations/production'
 		},
 		seeds: {
-			directory: './server/data/seeds'
+			directory: './server/data/seeds/production'
 		}
 	}
 };
