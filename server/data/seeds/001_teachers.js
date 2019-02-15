@@ -11,11 +11,7 @@ for (let i = 0; i < 500; i++) {
   })
 }
 
-exports.seed = function(knex, Promise) {
-  // Deletes ALL existing entries
-  return knex('teachers').del() // one annoying thing about postgres is we can't seem to truncate, have to delete :(
-    .then(function () {
-      // Inserts seed entries
-      return knex('teachers').insert(teachers);
-    });
+exports.seed = async function(knex, Promise) {
+  await knex.raw('truncate table teachers restart identity cascade')
+  await knex('teachers').insert(teachers);
 };

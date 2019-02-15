@@ -7,11 +7,7 @@ for (let i = 0; i < 500; i++) {
     name: faker.hacker.ingverb(),
   })
 }
-exports.seed = function(knex, Promise) {
-  // Deletes ALL existing entries
-  return knex('classes').del()
-    .then(function () {
-      // Inserts seed entries
-      return knex('classes').insert(classes);
-    });
+exports.seed = async function(knex, Promise) {
+  await knex.raw('truncate table classes restart identity cascade');
+  await knex('classes').insert(classes);
 };
