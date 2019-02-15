@@ -1,9 +1,12 @@
 const db = require('../../config/dbConfig');
 
 module.exports = {
-	getClasses: async (id) => {
+	getAll: async () => {
 		const allClasses = await db('classes').select('id', 'name');
+		return allClasses;
+	},
 
+	getClass: async (id) => {
 		const selectedClass = await db('classes')
 			.select('id', 'name')
 			.where({ id })
@@ -11,36 +14,57 @@ module.exports = {
 
 		const teacher = await db('teachers')
 			.select('teachers.firstname', 'teachers.lastname', 'teachers.email')
-			.join('classes_teachers', 'teachers.id', 'classes_teachers.teachers_id')
-			.where('classes_id', id);
+			.join('teachers_classes', 'teachers.id', 'teachers_classes.teacher_id')
+			.where('class_id', id);
 
 		const students = await db('students')
-			.select('students.firstName', 'students.lastName', 'students.email')
-			.join('students_classes', 'students.id', 'students_classes.students_id')
-			.where('classes_id', id);
-		const followups = await db('followups')
-			.select('followups.id', 'followups.date', 'followups.question')
-			.join('classes_teachers', 'followups.id', 'classes_teachers.followup_1')
-			.join('classes_teachers', 'followups.id', 'classes_teachers.followup_2')
-			.join('classes_teachers', 'followups.id', 'classes_teachers.followup_3')
-			.where('classes_id', id);
+			.select('students.firstname', 'students.lastname', 'students.email')
+			.join('students_classes', 'students.id', 'students_classes.student_id')
+			.where('class_id', id);
 
-		if (id) {
-			return Promise.all([selectedClass, teacher, students, followups]).then(
-				(response) => {
-					let [selectedClass, teacher, students, followups] = response;
-					let result = {
-						id: selectedClass.id,
-						name: selectedClass.name,
-						teacher: teacher,
-						students: students,
-						followups: followups
-					};
-					return result;
-				}
-			);
-		}
-		return allClasses;
+		const refreshrs = await db('refreshrs')
+			.select(
+				'refreshrs.id',
+				'refreshrs.date',
+				'questions.review_text',
+				'questions.question',
+				'questions.wrong_answer_1',
+				'questions.wrong_answer_2',
+				'questions.wrong_answer_3',
+				'questions.correct_answer'
+			)
+			.join(
+				'questions_refreshrs',
+				'refreshrs.id',
+				'questions_refreshrs.refreshr_id'
+			)
+			.join('questions', 'questions.id', 'questions_refreshrs.question_id')
+			.join('classes', 'refreshrs.class_id', 'classes.id')
+			.where('class_id', id);
+
+		return Promise.all([selectedClass, teacher, students, refreshrs]).then(
+			(response) => {
+				let [selectedClass, teacher, students, refreshrs] = response;
+				let result = {
+					id: selectedClass.id,
+					name: selectedClass.name,
+					teacher: teacher,
+					students: students,
+					refreshrs: {
+						...refreshrs,
+						questions: {
+							review_text: refreshrs.review_text,
+							question: refreshrs.question,
+							wrong_answer_1: refreshrs.wrong_answer_1,
+							wrong_answer_2: refreshrs.wrong_answer_2,
+							wrong_answer_3: refreshrs.wrong_answer_3,
+							correct_answer: refreshrs.correct_answer
+						}
+					}
+				};
+				return result;
+			}
+		);
 	},
 
 	addClass: async (classInfo) => {

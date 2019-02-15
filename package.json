@@ -1,35 +1,31 @@
 {
-  "name": "server",
-  "version": "1.0.0",
-  "main": "index.js",
-  "license": "MIT",
-  "scripts": {
-    "test": "cross-env DB_ENV=testing jest --verbose --watch",
-    "develop": "cross-env DB_ENV=development nodemon index.js",
-    "reload": "(knex migrate:rollback && knex migrate:latest && knex seed:run) && yarn develop",
-    "start": "node index.js"
-  },
-  "dependencies": {
-    "cors": "^2.8.5",
-    "cross-env": "^5.2.0",
-    "dotenv": "^6.2.0",
-    "express": "^4.16.4",
-    "express-jwt": "^5.3.1",
-    "express-jwt-authz": "^1.0.0",
-    "faker": "^4.1.0",
-    "helmet": "^3.15.1",
-    "jsonwebtoken": "^8.4.0",
-    "jwks-rsa": "^1.4.0",
-    "knex": "^0.16.3",
-    "morgan": "^1.9.1",
-    "pg": "^7.8.0"
-  },
-  "devDependencies": {
-    "jest": "^24.1.0",
-    "nodemon": "^1.18.10",
-    "supertest": "^3.4.2"
-  },
-  "jest": {
-    "testEnvironment": "node"
-  }
+	"name": "server",
+	"version": "1.0.0",
+	"main": "index.js",
+	"license": "MIT",
+	"scripts": {
+		"test": "cross-env NODE_ENV=testing && (knex migrate:rollback && knex migrate:latest && knex seed:run) && jest --verbose --watch",
+		"develop": "cross-env NODE_ENV=development nodemon index.js",
+		"reload": "(knex migrate:rollback && knex migrate:latest && knex seed:run) && yarn develop",
+		"start": "node index.js"
+	},
+	"dependencies": {
+		"cors": "^2.8.5",
+		"cross-env": "^5.2.0",
+		"dotenv": "^6.2.0",
+		"express": "^4.16.4",
+		"faker": "^4.1.0",
+		"helmet": "^3.15.1",
+		"knex": "^0.16.3",
+		"morgan": "^1.9.1",
+		"pg": "^7.8.0"
+	},
+	"devDependencies": {
+		"jest": "^24.1.0",
+		"nodemon": "^1.18.10",
+		"supertest": "^3.4.2"
+	},
+	"jest": {
+		"testEnvironment": "node"
+	}
 }
