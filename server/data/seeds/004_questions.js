@@ -12,11 +12,7 @@ for (let i = 0; i < 100; i++) {
   })
 }
 
-exports.seed = function(knex, Promise) {
-  // Deletes ALL existing entries
-  return knex('questions').del()
-    .then(function () {
-      // Inserts seed entries
-      return knex('questions').insert(questions);
-    });
+exports.seed = async function(knex, Promise) {
+  await knex.raw('truncate table questions restart identity cascade');
+  await knex('questions').insert(questions);
 };
