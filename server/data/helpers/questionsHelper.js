@@ -2,7 +2,7 @@ const db = require('../../config/dbConfig');
 
 module.exports = {
 	getQuestions: async (id) => {
-		const allQuestions = await db('questions').select('id', 'date');
+		const allQuestions = await db('questions');
 		const selectedQuestion = await db('questions')
 			.select(
 				'questions.id',
