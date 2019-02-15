@@ -8,7 +8,7 @@ export default function App() {
   const [people, setPeople] = useState([]);
 
   const fetchPeople = async () => {
-    const response = await axios('https://refreshr.herokuapp.com/teachers/');
+    const response = await axios("https://refreshr.herokuapp.com/teachers/");
     setPeople(response.data);
   };
 
