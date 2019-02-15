@@ -1,68 +1,134 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# [Refreshr App](https://refreshr-app.netlify.com) (Lambda School Labs 10)
 
-## Available Scripts
+![Refreshr Logo](./logo.png "Refresh your mind")
 
-In the project directory, you can run:
+- [App Home](https://refreshr-app.netlify.com)
 
-### `npm start`
+## Contributors
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- **Chaya Otikor** | [Github](https://github.com/cotikor)
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+- **Justin Lowry** | [Github](https://github.com/dividedsky)
 
-### `npm test`
+- **Nick O'Ferrall** | [Github](https://github.com/nickoferrall) | [LinkedIn](https://www.linkedin.com/in/nickoferrall/)
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- **Sawyer Zincone** | [Github](https://github.com/szincone) | [LinkedIn](https://www.linkedin.com/in/szincone/)
 
-### `npm run build`
+- **Timothy Hoang** | [Github](https://github.com/timh1203) | [LinkedIn](https://www.linkedin.com/in/timothyhoang/)
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Project Overview
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+```
+"Learning is difficult. Teaching is hard. When learners have small triggers to remember content over a spread out period of time they retain more. Send customizable quizzes on scheduled intervals of 2 days, 2 weeks and 2 months after the initial lecture."
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- `Refreshr` aims to help students retain information through the spaced-learning method and periodic, scheduled quizzes called "refreshrs". This project was designed for our Lambda School Labs Capstone Project.
 
-### `npm run eject`
+### Key Features
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+```
+- Create a class and manage students in the class
+- Create and edit Refreshrs
+- A Refreshr should have a 2 day, 2 week, and 2 month review
+- A Refreshr review item should have text and a multiple choice question
+- Assign a Refreshr to a class with a lecture time to automate the delivery of quizzes
+- The Refreshr s should be automatically delivered via email
+- A teacher should be able to see the participation rate in dashboard
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Tech Stack
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## Frontend
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+### React (JavaScript Library)
 
-## Learn More
+- React features reusable components, fast rendering with the virtual DOM, great ecosystem with plugins, and state-management in the component
+- Drawbacks: React is slower than some frameworks, batteries not "included", and lots of boilerplate
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```
 
-### Code Splitting
+### React Hooks (Library Feature)
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+- React Hooks a new stable feature as of the v16.8 release and features the ability of functional components to have state and various life-cycle methods
+- Drawbacks: Testing with certain libraries are not established
 
-### Analyzing the Bundle Size
+```
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+```
 
-### Making a Progressive Web App
+### Material-UI Library (Styling Library)
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+- MUI features a professional UI, lends credibility due to having a similar look to other google sites, and prevent global CSS leaks
+- Drawbacks: MUI will produce designs similar to other sites
 
-### Advanced Configuration
+```
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+```
 
-### Deployment
+## Backend
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
+### NodeJS, ExpressJS (Framework/Library)
 
-### `npm run build` fails to minify
+- NodeJS features V8 JavaScript engine (particularly well suited to live updated) and has a robust NodeJS ecosystem
+- Drawbacks: NodeJS’s API changes frequently, existing codebases might needs updates, and
+  If intensive CPU was required, NodeJS’s single thread approach wouldn’t be effective
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+```
+
+```
+
+### PostgreSQL (Database)
+
+- PostgreSQL is a production grade database, blends well w/ deployment technology, and widely used (2nd most popular db package on npm, good documentation, good support)
+- Drawbacks: Set-up more involved than NoSQL
+
+```
+
+```
+
+### Data Model
+
+![Data Model](./dataModel.png "Refreshr Data Model")
+
+## Deployment
+
+### Netlify and Heroku
+
+- Well-known services, reliable support, and well-documented
+- Drawbacks: Data is hosted off-site
+
+```
+
+```
+
+## API/Services
+
+- Auth0 - authorization and authentication service
+- Stripe - payment portal service
+- Axios - Promise based HTTP client for the browser and node.js
+- SendGrid - Email service
+- Papaparse - CSV parser package
+- Jest - Testing library
+- Knex - SQL Query Builder for Javascript
+- Material-UI - UI Design library
+- Supertest - Testing library
+- Enzyme - JavaScript Testing utilities for React
+- Dotenv - load local environment variables for env
+- Cors - Cross Origin Bridge
+- Faker - Simulates fake data
+
+## Environment Variables
+
+```
+
+```
+
+## Testing
+
+## Contributions/Issues/Bugs
+
+## Additional Documentation
+
+- For the backend documentation, please visit [Backend Documentation]().

@@ -1,7 +1,7 @@
 const db = require('../../config/dbConfig');
 
 module.exports = {
-	getTeachers: async (id) => {
+	getAll: async (id) => {
 		const allTeachers = await db('teachers').select(
 			'id',
 			'firstname',
@@ -9,30 +9,31 @@ module.exports = {
 			'email'
 		);
 
+		return allTeachers;
+	},
+
+	getTeacher: async (id) => {
 		const teacher = await db('teachers')
-			.select('id', 'firstname', 'lastname', 'email')
+			.select('firstname', 'lastname', 'email')
 			.where({ id })
 			.first();
 
 		const classes = await db('classes')
 			.select('classes.name')
-			.join('classes_teachers', 'classes.id', 'classes_teachers.class_id')
+			.join('teachers_classes', 'classes.id', 'teachers_classes.class_id')
 			.where('teacher_id', id);
 
-		if (id) {
-			return Promise.all([teacher, classes]).then((response) => {
-				let [teacher, classes] = response;
-				let result = {
-					id: teacher.id,
-					firstname: teacher.firstname,
-					lastname: teacher.lastname,
-					email: teacher.email,
-					classes: classes
-				};
-				return result;
-			});
-		}
-		return allTeachers;
+		return Promise.all([teacher, classes]).then((response) => {
+			let [teacher, classes] = response;
+			let result = {
+				id: teacher.id,
+				firstname: teacher.firstname,
+				lastname: teacher.lastname,
+				email: teacher.email,
+				classes: classes
+			};
+			return result;
+		});
 	},
 
 	updateTeacher: async (id, teacher) => {
