@@ -7,28 +7,20 @@ const styles = theme => ({
     border: "2px solid black",
     borderRadius: "3px",
     height: "90vh",
-    margin: "0 1rem"
+    margin: "0 1rem",
+    padding: "0 1rem"
   }
 });
 
 const Navbar = props => {
   return (
-    <>
-      <Grid className={props.classes.wrapper}>
-        <a href="#">
-          <p>Refreshers</p>
-        </a>
-        <a href="#">
-          <p>Classes</p>
-        </a>
-        <a href="#">
-          <p>Billing</p>
-        </a>
-        <a href="#">
-          <p>Settings</p>
-        </a>
-      </Grid>
-    </>
+    <Grid className={props.classes.wrapper}>
+      <p>Refreshrs</p>
+      <p>Classes</p>
+      <p>Billing</p>
+      <p>Settings</p>
+    </Grid>
   );
 };
+
 export default withStyles(styles)(Navbar);
