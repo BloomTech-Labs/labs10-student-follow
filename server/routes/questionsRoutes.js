@@ -5,7 +5,7 @@ const jwtCheck = require('../middleware/authenticate');
 const { emptyCheck } = require('../middleware/formattingMiddleware');
 const responseStatus = require('../config/responseStatusConfig');
 
-router.get('/',   async (req, res, next) => {
+router.get('/', jwtCheck, async (req, res, next) => {
   try {
     const questions = await db.getAll();
     res.status(responseStatus.success).json(questions);
@@ -14,7 +14,7 @@ router.get('/',   async (req, res, next) => {
   }
 });
 
-router.get('/:id',   async (req, res, next) => {
+router.get('/:id', jwtCheck, async (req, res, next) => {
   const { id } = req.params;
   try {
     const specifiedQuestion = await db.getQuestion(id);
@@ -28,7 +28,7 @@ router.get('/:id',   async (req, res, next) => {
   }
 });
 
-router.post('/',   emptyCheck, async (req, res, next) => {
+router.post('/', jwtCheck, emptyCheck, async (req, res, next) => {
   const { body } = req;
   try {
     const newQuestionID = await db.addQuestion(body);
@@ -38,7 +38,7 @@ router.post('/',   emptyCheck, async (req, res, next) => {
   }
 });
 
-router.put('/:id',   emptyCheck, async (req, res, next) => {
+router.put('/:id', jwtCheck, emptyCheck, async (req, res, next) => {
   const { id } = req.params;
   const { body } = req;
   try {
@@ -49,7 +49,7 @@ router.put('/:id',   emptyCheck, async (req, res, next) => {
   }
 });
 
-router.delete('/:id',   async (req, res, next) => {
+router.delete('/:id', jwtCheck, async (req, res, next) => {
   const { id } = req.params;
   try {
     const deletedRecords = await db.deleteQuestion(id);

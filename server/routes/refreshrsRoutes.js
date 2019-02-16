@@ -4,7 +4,6 @@ const db = require('../data/helpers/refreshrHelper');
 const jwtCheck = require('../middleware/authenticate');
 const {
   emptyCheck,
-  whitespaceCheck
 } = require('../middleware/formattingMiddleware');
 const responseStatus = require('../config/responseStatusConfig');
 
