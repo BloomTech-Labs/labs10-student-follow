@@ -11,16 +11,12 @@ const styles = theme => ({
   }
 });
 
-const Navbar = props => {
+const Navcrumbs = props => {
   return (
-    <>
-      <Grid className={props.classes.wrapper}>
-        <p>
-          <a href="#">Home</a> > Refreshers
-        </p>
-      </Grid>
-    </>
+    <Grid className={props.classes.wrapper}>
+      <p>Home > Refreshers</p>
+    </Grid>
   );
 };
 
-export default withStyles(styles)(Navbar);
+export default withStyles(styles)(Navcrumbs);
