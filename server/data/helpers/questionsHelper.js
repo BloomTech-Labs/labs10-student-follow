@@ -2,30 +2,13 @@ const db = require('../../config/dbConfig');
 
 module.exports = {
 	getAll: async () => {
-		const allQuestions = await db('questions').select(
-			'id',
-			'review_text',
-			'question',
-			'wrong_answer_1',
-			'wrong_answer_2',
-			'wrong_answer_3',
-			'correct_answer'
-		);
+		const allQuestions = await db('questions')
 
 		return allQuestions;
 	},
 
 	getQuestion: async (id) => {
 		const selectedQuestion = await db('questions')
-			.select(
-				'id',
-				'review_text',
-				'question',
-				'wrong_answer_1',
-				'wrong_answer_2',
-				'wrong_answer_3',
-				'correct_answer'
-			)
 			.where({ id })
 			.first();
 

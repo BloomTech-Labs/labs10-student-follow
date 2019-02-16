@@ -2,23 +2,16 @@ const db = require('../../config/dbConfig');
 
 module.exports = {
 	getAll: async () => {
-		const allStudents = await db('students').select(
-			'id',
-			'firstname',
-			'lastname',
-			'email'
-		);
+		const allStudents = await db('students')
 		return allStudents;
 	},
 
 	getStudent: async (id) => {
 		const student = await db('students')
-			.select('id', 'firstname', 'lastname', 'email')
 			.where({ id })
 			.first();
 
 		const classes = await db('classes')
-			.select('classes.name')
 			.join('students_classes', 'classes.id', 'students_classes.class_id')
 			.where('student_id', id);
 

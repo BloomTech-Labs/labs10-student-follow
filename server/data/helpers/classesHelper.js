@@ -2,7 +2,7 @@ const db = require('../../config/dbConfig');
 
 module.exports = {
 	getAll: async () => {
-		const allClasses = await db('classes').select('id', 'name');
+		const allClasses = await db('classes');
 		return allClasses;
 	},
 
@@ -18,7 +18,6 @@ module.exports = {
 			.where('class_id', id);
 
 		const students = await db('students')
-			.select('students.firstname', 'students.lastname', 'students.email')
 			.join('students_classes', 'students.id', 'students_classes.student_id')
 			.where('class_id', id);
 

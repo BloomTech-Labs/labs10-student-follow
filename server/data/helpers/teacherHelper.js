@@ -1,7 +1,7 @@
 const db = require('../../config/dbConfig');
 
 module.exports = {
-	getAll: async (id) => {
+	getAll: async () => {
 		const allTeachers = await db('teachers').select(
 			'id',
 			'firstname',
@@ -14,12 +14,11 @@ module.exports = {
 
 	getTeacher: async (id) => {
 		const teacher = await db('teachers')
-			.select('firstname', 'lastname', 'email')
+			.select('id', 'firstname', 'lastname', 'email')
 			.where({ id })
 			.first();
 
 		const classes = await db('classes')
-			.select('classes.name')
 			.join('teachers_classes', 'classes.id', 'teachers_classes.class_id')
 			.where('teacher_id', id);
 

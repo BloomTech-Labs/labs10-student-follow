@@ -2,26 +2,17 @@ const db = require('../../config/dbConfig');
 
 module.exports = {
 	getAll: async () => {
-		const allRefreshrs = await db('refreshrs').select('id', 'date');
+		const allRefreshrs = await db('refreshrs');
 
 		return allRefreshrs;
 	},
 
 	getRefreshr: async (id) => {
 		const selectedRefreshr = await db('refreshrs')
-			.select('refreshrs.id', 'refreshrs.date')
 			.where({ id })
 			.first();
 
 		const questions = await db('questions')
-			.select(
-				'questions.review_text',
-				'questions.question',
-				'questions.wrong_answer_1',
-				'questions.wrong_answer_2',
-				'questions.wrong_answer_3',
-				'questions.correct_answer'
-			)
 			.join(
 				'questions_refreshrs',
 				'question.id',
