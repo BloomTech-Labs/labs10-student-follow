@@ -5,8 +5,10 @@ exports[`default test renders correctly 1`] = `
   <div
     class="Navcrumbs-wrapper-1"
   >
-    <p>
-      Home &gt; Refreshers
+    <p
+      data-testid="crumbTrail"
+    >
+      Home &gt; Refreshrs
     </p>
   </div>
 </div>

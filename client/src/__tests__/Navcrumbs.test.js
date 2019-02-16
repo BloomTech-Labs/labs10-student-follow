@@ -20,3 +20,12 @@ describe("default test", () => {
     expect(container).toMatchSnapshot();
   });
 });
+
+describe("crumb trail is correct", () => {
+  it("contains Home > Refreshrs", () => {
+    const { getByTestId, container } = render(
+      <Navcrumbs className={wrapper} />
+    );
+    expect(getByTestId("crumbTrail")).toHaveTextContent("Home > Refreshrs");
+  });
+});
