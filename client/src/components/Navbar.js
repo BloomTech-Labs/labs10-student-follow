@@ -15,10 +15,10 @@ const styles = theme => ({
 const Navbar = props => {
   return (
     <Grid className={props.classes.wrapper}>
-      <p>Refreshrs</p>
-      <p>Classes</p>
-      <p>Billing</p>
-      <p>Settings</p>
+      <p data-testid="firstMenuItem">Refreshrs</p>
+      <p data-testid="secondMenuItem">Classes</p>
+      <p data-testid="thirdMenuItem">Billing</p>
+      <p data-testid="fourthMenuItem">Settings</p>
     </Grid>
   );
 };

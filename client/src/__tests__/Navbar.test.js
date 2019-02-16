@@ -32,3 +32,28 @@ describe("default test", () => {
     expect(container).toMatchSnapshot();
   });
 });
+
+// tests the menu names if they are correct
+// alternative `container.firstChild` can also check against snapshot
+describe("menu items", () => {
+  it("checks first menu item is Refreshrs", () => {
+    const { getByTestId, container } = render(<Navbar className={wrapper} />);
+    expect(getByTestId("firstMenuItem")).toHaveTextContent("Refreshrs");
+    // expect(container.firstChild).toMatchSnapshot();
+  });
+
+  it("checks second menu item is Classes", () => {
+    const { getByTestId } = render(<Navbar className={wrapper} />);
+    expect(getByTestId("secondMenuItem")).toHaveTextContent("Classes");
+  });
+
+  it("checks third menu item is Billing", () => {
+    const { getByTestId } = render(<Navbar className={wrapper} />);
+    expect(getByTestId("thirdMenuItem")).toHaveTextContent("Billing");
+  });
+
+  it("checks fourth menu item is Billing", () => {
+    const { getByTestId } = render(<Navbar className={wrapper} />);
+    expect(getByTestId("fourthMenuItem")).toHaveTextContent("Settings");
+  });
+});

@@ -5,16 +5,24 @@ exports[`default test renders correctly 1`] = `
   <div
     class="Navbar-wrapper-1"
   >
-    <p>
+    <p
+      data-testid="firstMenuItem"
+    >
       Refreshrs
     </p>
-    <p>
+    <p
+      data-testid="secondMenuItem"
+    >
       Classes
     </p>
-    <p>
+    <p
+      data-testid="thirdMenuItem"
+    >
       Billing
     </p>
-    <p>
+    <p
+      data-testid="fourthMenuItem"
+    >
       Settings
     </p>
   </div>
