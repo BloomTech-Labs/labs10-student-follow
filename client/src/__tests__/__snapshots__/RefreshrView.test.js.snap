@@ -1,0 +1,76 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`default test renders correctly 1`] = `
+<div>
+  <div
+    class="Navcrumbs-wrapper-2"
+  >
+    <p
+      data-testid="crumbTrail"
+    >
+      Home &gt; Refreshrs
+    </p>
+  </div>
+  <div
+    class="MuiGrid-container-3"
+  >
+    <div
+      class="MuiGrid-item-4 MuiGrid-grid-xs-2-33"
+    >
+      <div
+        class="Navbar-wrapper-100"
+      >
+        <p
+          data-testid="firstMenuItem"
+        >
+          Refreshrs
+        </p>
+        <p
+          data-testid="secondMenuItem"
+        >
+          Classes
+        </p>
+        <p
+          data-testid="thirdMenuItem"
+        >
+          Billing
+        </p>
+        <p
+          data-testid="fourthMenuItem"
+        >
+          Settings
+        </p>
+      </div>
+    </div>
+    <div
+      class="MuiGrid-item-4 MuiGrid-grid-xs-10-41"
+    >
+      <div
+        class="RefreshrList-wrapper-101"
+      >
+        <div
+          class="RefreshrList-wrapper-102"
+        >
+          <h1>
+            Card
+          </h1>
+        </div>
+        <div
+          class="RefreshrList-wrapper-102"
+        >
+          <h1>
+            Card
+          </h1>
+        </div>
+        <div
+          class="RefreshrList-wrapper-102"
+        >
+          <h1>
+            Card
+          </h1>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
