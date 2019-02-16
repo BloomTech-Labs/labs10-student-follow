@@ -1,3 +1,5 @@
+const responseStatus = require('../config/responseStatusConfig')
+
 module.exports = {
     emptyCheck: (req, res, next) => {
 		const { body } = req;

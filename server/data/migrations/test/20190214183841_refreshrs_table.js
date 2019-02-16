@@ -6,7 +6,8 @@ exports.up = function(knex, Promise) {
       .integer('class_id')
       .unsigned()
       .references('id')
-      .inTable('classes');
+      .inTable('classes')
+      .onDelete('restrict');
   });
 };
 

@@ -8,7 +8,8 @@ exports.up = function(knex, Promise) {
       .integer('teacher_id')
       .unsigned()
       .references('id')
-      .inTable('teachers');
+      .inTable('teachers')
+      .onDelete('restrict')
   });
 };
 

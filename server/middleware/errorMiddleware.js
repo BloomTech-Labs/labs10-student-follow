@@ -3,12 +3,10 @@ const responseStatus = require('../config/responseStatusConfig');
 function errorHandler(error, req, res, next) {
   switch (error) {
     case responseStatus.badRequest:
-      res
-        .status(responseStatus.badRequest)
-        .json({
-          statusCode: error,
-          message: 'Required fields cannot be blank.'
-        });
+      res.status(responseStatus.badRequest).json({
+        statusCode: error,
+        message: 'Required fields cannot be blank.'
+      });
       break;
     case responseStatus.notFound:
       res
@@ -18,22 +16,24 @@ function errorHandler(error, req, res, next) {
     case responseStatus.serverError:
       res.status(responseStatus.serverError).json({
         statusCode: error,
-        message: `The request could not be completed. Please try again.`
+        message: `The request could not be completed. Please try again later.`
       });
 
       break;
     case responseStatus.badCredentials:
-      res
-        .status(responseStatus.badCredentials)
-        .json({
-          statusCode: error,
-          message: 'Incorrect credentials. Please try again.'
-        });
+      res.status(responseStatus.badCredentials).json({
+        statusCode: error,
+        message: 'Incorrect credentials. Please try again.'
+      });
+      break;
+
     case responseStatus.forbiddenAccess:
       res.status(responseStatus.forbiddenAccess).json({
         statusCode: error,
         message: 'You are not authorized to view this content.'
       });
+      break;
+
     default:
       //console.log(error);
       res.json({ message: error.message });

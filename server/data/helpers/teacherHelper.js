@@ -19,7 +19,6 @@ module.exports = {
       .first();
 
     const classes = await db('classes')
-      .join('teachers_classes', 'classes.id', 'teachers_classes.class_id')
       .where('teacher_id', id);
 
     return Promise.all([teacher, classes]).then((response) => {
