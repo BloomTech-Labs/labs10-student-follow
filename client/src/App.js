@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Route } from "react-router-dom";
 import axios from "axios";
 import LandingPage from "./containers/LandingPage.js";
+import BillingPage from './containers/BillingPage.js';
 import { RefreshrView } from "./components";
 
 export default function App() {
@@ -27,6 +28,7 @@ export default function App() {
         render={props => <LandingPage {...props} people={people} />}
       />
       <Route path="/refreshrs" render={props => <RefreshrView />} />
+    <Route path="/billing" render={props => <BillingPage />} />
     </>
   );
 }
