@@ -49,10 +49,11 @@ module.exports = {
   },
 
   registerTeacher: async (creds) => {
-    const IDs = await db('teachers').insert(creds);
-    const id = IDs[0];
+    const newTeacherID = await db('teachers').insert(creds).returning('id').then((id) => {
+      return id
+    });
     const query = await db('teachers')
-      .where({ id })
+      .where(newTeacherID[0], id)
       .first();
     return query;
   },

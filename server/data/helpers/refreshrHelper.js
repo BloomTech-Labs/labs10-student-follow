@@ -15,25 +15,42 @@ module.exports = {
     const questions = await db('questions')
       .join(
         'questions_refreshrs',
-        'question.id',
+        'questions.id',
         'questions_refreshrs.question_id'
       )
-      .where('questions_refreshrs.refreshr_id', id);
+      .join('refreshrs', 'refreshrs.id', 'questions_refreshrs.refreshr_id')
+      .where('refreshrs.id', id);
 
     return Promise.all([selectedRefreshr, questions]).then((response) => {
       let [selectedRefreshr, questions] = response;
       let result = {
         id: selectedRefreshr.id,
         date: selectedRefreshr.date,
-        questions: questions
+        refreshrs: questions.map((q) => {
+          return {
+            question_id: q.question_id,
+            review_text: q.review_text,
+            question: {
+              question_text: q.question,
+              wrong_answer_1: q.wrong_answer_1,
+              wrong_answer_2: q.wrong_answer_2,
+              wrong_answer_3: q.wrong_answer_3,
+              correct_answer: q.correct_answer
+            }
+          };
+        })
       };
       return result;
     });
   },
   addRefreshr: async (refreshr) => {
-    const ID = await db('refreshrs').insert(refreshr);
-
-    return { newRefreshrID: ID[0] };
+    const newRefreshr = await db('refreshrs')
+      .insert(refreshr)
+      .returning('id')
+      .then((id) => {
+        return id;
+      });
+    return newRefreshr[0];
   },
 
   updateRefreshr: async (id, refreshr) => {

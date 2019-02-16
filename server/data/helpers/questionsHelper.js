@@ -15,11 +15,14 @@ module.exports = {
     return selectedQuestion;
   },
   addQuestion: async (question) => {
-    const ID = await db('questions').insert(question);
-
-    return { newQuestionID: ID[0] };
+    const newQuestion = await db('questions')
+      .insert(question)
+      .returning('id')
+      .then((id) => {
+        return id;
+      });
+    return newQuestion[0];
   },
-
   updateQuestion: async (id, question) => {
     const updateCount = await db('questions')
       .where({ id })

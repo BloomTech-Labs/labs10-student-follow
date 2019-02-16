@@ -3,12 +3,12 @@ exports.seed = async function(knex, Promise) {
   const s_ids = [];
   const c_ids = [];
 
-  for (let i = 1; i < 101; i++) {
+  for (let i = 1; i < 501; i++) {
     s_ids.push(i);
     c_ids.push(i);
   }
 
-  for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < 500; i++) {
     const [class_id] = [
       ...c_ids.splice(Math.floor(Math.random() * c_ids.length), 1)
     ];

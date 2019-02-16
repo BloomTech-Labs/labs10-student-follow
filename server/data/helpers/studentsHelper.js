@@ -12,8 +12,16 @@ module.exports = {
       .first();
 
     const classes = await db('classes')
+      .select(
+        'teachers.firstname as first',
+        'teachers.lastname as last',
+        'classes.id as classID',
+        'classes.name'
+      )
+      .join('teachers', 'classes.teacher_id', 'teachers.id')
       .join('students_classes', 'classes.id', 'students_classes.class_id')
-      .where('student_id', id);
+      .join('students', 'students.id', 'students_classes.student_id')
+      .where('students_classes.student_id', id);
 
     return Promise.all([student, classes]).then((response) => {
       let [student, classes] = response;
@@ -22,7 +30,13 @@ module.exports = {
         firstname: student.firstname,
         lastname: student.lastname,
         email: student.email,
-        classes: classes
+        classes: classes.map((c) => {
+          return {
+            classID: c.classID,
+            classname: c.name,
+            teacher: `${c.first} ${c.last}`
+          };
+        })
       };
       return result;
     });
@@ -42,12 +56,13 @@ module.exports = {
     return deleteCount;
   },
 
-  registerStudent: async (creds) => {
-    const IDs = await db('students').insert(creds);
-    const id = IDs[0];
-    const query = await db('students')
-      .where({ id })
-      .first();
-    return query;
+  addStudent: async (student) => {
+    const newStudent = await db('students')
+      .insert(student)
+      .returning('id')
+      .then((id) => {
+        return id;
+      });
+    return newStudent[0];
   }
 };
