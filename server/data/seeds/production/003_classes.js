@@ -1,16 +1,17 @@
 const faker = require('faker');
 
 const create = () => ({
-	name: faker.hacker.ingverb()
+  name: faker.hacker.ingverb(),
+  teacher_id: Math.ceil(Math.random() * 500)
 });
 
 exports.seed = async function(knex, Promise) {
-	const classes = [];
+  const classes = [];
 
-	for (let i = 0; i < 500; i++) {
-		classes.push(create());
-	}
+  for (let i = 0; i < 500; i++) {
+    classes.push(create());
+  }
 
-	await knex.raw('TRUNCATE TABLE classes RESTART IDENTITY CASCADE');
-	await knex('classes').insert(classes);
+  await knex.raw('TRUNCATE TABLE classes RESTART IDENTITY CASCADE');
+  await knex('classes').insert(classes);
 };

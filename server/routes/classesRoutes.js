@@ -1,26 +1,24 @@
 const express = require('express');
 const router = express.Router();
 
-const knex = require('knex');
-const knexConfig = require('../../knexfile');
-const db = knex(knexConfig.production);
+const db = require('../data/helpers/classesHelper')
 
 const jwtCheck = require('../middleware/authenticate');
 
 const responseStatus = require('../config/responseStatusConfig');
 
-router.get('/', jwtCheck, async (req, res) => {
+router.get('/', jwtCheck, async (req, res, next) => {
   try {
-    const classes = await db('classes');
-    res.status(responseStatus.success).json(classes);
+    const classes = await db.getAll()
+    res.status(responseStatus.success).json({classes});
   } catch (err) {
-    res.status(responseStatus.serverError).json('Error');
+    next(responseStatus.serverError)
   }
 });
 
 router.post('/', jwtCheck, async (req, res) => {
   try {
-    const ids = await db('classes').insert(req.body);
+    const ids = await db.addClass(req.body);
     res
       .status(responseStatus.postCreated)
       .json(`Added new class with ID ${ids}`);
@@ -34,5 +32,7 @@ router.post('/', jwtCheck, async (req, res) => {
     }
   }
 });
+
+router.get('/:id', )
 
 module.exports = router;

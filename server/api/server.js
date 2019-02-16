@@ -1,6 +1,7 @@
 const express = require('express');
 const configureMiddleware = require('../middleware/globalMiddleware');
 const server = express();
+const errorHandler = require('../middleware/errorMiddleware')
 
 configureMiddleware(server);
 
@@ -15,5 +16,6 @@ server.use('/teachers', teachersRoutes);
 server.use('/students', studentsRoutes);
 server.use('/questions', questionsRoutes);
 server.use('/refreshr', refreshrRoutes);
+server.use(errorHandler)
 
 module.exports = server;
