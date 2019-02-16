@@ -2,6 +2,10 @@ const db = require('../../../config/dbConfig.js');
 const classesHelper = require('../classesHelper.js');
 
 
+// afterAll(async (done) => {
+// 	await db.raw('TRUNCATE TABLE classes RESTART IDENTITY CASCADE').then(() => db.seed.run())
+// 	done();
+// });
 
 describe('GET query to classes db', () => {
 	it('should return all 500 classes', async (done) => {
@@ -11,7 +15,7 @@ describe('GET query to classes db', () => {
 
 	});
 	it('should return 1 class', async (done) => {
-		const selectedClass = await classesHelper.getClass(1);
+		const selectedClass = await classesHelper.getClass(5);
 		expect(Object.keys(selectedClass).sort()).toEqual(
 			['id', 'teacher', 'name', 'students', 'refreshrs'].sort()
 		);
@@ -68,7 +72,4 @@ describe('DELETE query to classes db', () => {
 
 	});
 });
-afterAll(async (done) => {
-	await db.raw('TRUNCATE TABLE classes RESTART IDENTITY CASCADE').then(() => db.seed.run())
-	done();
-});
+

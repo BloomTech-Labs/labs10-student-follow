@@ -1,7 +1,10 @@
 const db = require('../../../config/dbConfig.js');
 const studentsHelper = require('../studentsHelper.js');
 
-
+// afterAll(async (done) => {
+// 	await db.raw('TRUNCATE TABLE students RESTART IDENTITY CASCADE').then(() => db.seed.run())
+// 	done();
+// });
 
 describe('GET query to students db', () => {
 	it('should return all 500 students', async (done) => {
@@ -44,7 +47,3 @@ describe('DELETE query to students db', () => {
 	});
 });
 
-afterAll(async (done) => {
-	await db.raw('TRUNCATE TABLE students RESTART IDENTITY CASCADE').then(() => db.seed.run())
-	done();
-});

@@ -1,10 +1,10 @@
 const db = require('../../../config/dbConfig.js');
 const teacherHelper = require('../teacherHelper.js');
 
-afterAll(async (done) => {
-	await db.raw('TRUNCATE TABLE teachers RESTART IDENTITY CASCADE').then(() => db.seed.run())
-	done();
-});
+// afterAll(async (done) => {
+// 	await db.raw('TRUNCATE TABLE teachers RESTART IDENTITY CASCADE').then(() => db.seed.run())
+// 	done();
+// });
 
 describe('GET query to teachers db', () => {
 	it('should return all 500 teachers', async (done) => {

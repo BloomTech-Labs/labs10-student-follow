@@ -1,7 +1,12 @@
 const db = require('../../../config/dbConfig.js');
 const questionsHelper = require('../questionsHelper.js');
 
-
+// afterAll(async (done) => {
+// 	await db
+// 		.raw('TRUNCATE TABLE questions RESTART IDENTITY CASCADE')
+// 		.then(() => db.seed.run());
+// 	done();
+// });
 
 describe('GET query to questions db', () => {
 	it('should return all questions', async (done) => {
@@ -10,7 +15,7 @@ describe('GET query to questions db', () => {
 		done();
 	});
 	it('should return 1 question', async (done) => {
-		const selectedQuestion = await questionsHelper.getQuestion(1);
+		const selectedQuestion = await questionsHelper.getQuestion(5);
 		expect(Object.keys(selectedQuestion).sort()).toEqual(
 			[
 				'id',
@@ -94,9 +99,4 @@ describe('DELETE query to question db', () => {
 	});
 });
 
-afterAll(async (done) => {
-	await db
-		.raw('TRUNCATE TABLE questions RESTART IDENTITY CASCADE')
-		.then(() => db.seed.run());
-	done();
-});
+

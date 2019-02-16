@@ -1,6 +1,14 @@
 const db = require('../../../config/dbConfig.js');
 const refreshrHelper = require('../refreshrHelper.js');
 
+// afterAll(async (done) => {
+// 	await db
+// 		.raw('TRUNCATE TABLE refreshrs RESTART IDENTITY CASCADE')
+// 		.then(() => db.seed.run());
+// 	done();
+// });
+
+
 describe('GET query to refreshrs db', () => {
 	it('should return all refreshrs', async (done) => {
 		const allRefreshrs = await refreshrHelper.getAll();
@@ -57,9 +65,3 @@ describe('DELETE query to refreshr db', () => {
 	});
 });
 
-afterAll(async (done) => {
-	await db
-		.raw('TRUNCATE TABLE refreshrs RESTART IDENTITY CASCADE')
-		.then(() => db.seed.run());
-	done();
-});
