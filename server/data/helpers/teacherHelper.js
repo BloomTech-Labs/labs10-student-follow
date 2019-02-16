@@ -53,7 +53,7 @@ module.exports = {
       return id
     });
     const query = await db('teachers')
-      .where(newTeacherID[0], id)
+      .where('id',newTeacherID[0])
       .first();
     return query;
   },

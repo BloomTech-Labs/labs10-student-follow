@@ -22,23 +22,36 @@ describe('GET query to teachers db', () => {
   });
 });
 
-describe('UPDATE query to teachers db', () => {
-  it('should update teacher with specified ID', async (done) => {
-    teacherHelper.updateTeacher(1, {
+describe('INSERT query to teachers db', () => {
+  it('should add teacher to to db', async (done) => {
+   const teacher = await teacherHelper.registerTeacher({
       firstname: 'Jane',
       lastname: 'Doe',
-      email: 'jdoe@abc.com'
+      email: 'jdoe@abc.com',
+      password: 'pass'
     });
-    const updated = await teacherHelper.getTeacher(1);
+    expect(teacher.id).toEqual(501)
+    done();
+  })
+})
 
-    expect(updated.email).toEqual('jdoe@abc.com');
+describe('UPDATE query to teachers db', () => {
+  it('should update teacher with specified ID', async (done) => {
+    teacherHelper.updateTeacher(501, {
+      firstname: 'Jane',
+      lastname: 'Doe',
+      email: 'test@abc.com'
+    });
+    const updated = await teacherHelper.getTeacher(501);
+
+    expect(updated.email).toEqual('test@abc.com');
     done();
   });
 });
 
 describe('DELETE query to teachers db', () => {
   it('should return a count of 1 when deleting specified teacher', async (done) => {
-    const count = await teacherHelper.deleteTeacher(500);
+    const count = await teacherHelper.deleteTeacher(501);
 
     expect(count).toEqual(1);
     done();

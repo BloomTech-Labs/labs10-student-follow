@@ -34,12 +34,12 @@ describe('INSERT query to classes db', () => {
 
   it('should return an object with the correct keys', async (done) => {
     const added = await classesHelper.addClass({
-      name: 'Chemistry'
+      name: 'Biology'
     });
-    const newClass = await classesHelper.getClass(added.newClassID);
+    const newClass = await classesHelper.getClass(added);
 
     expect(Object.keys(newClass).sort()).toEqual(
-      ['id', 'teacher', 'name', 'students', 'refreshers'].sort()
+      ['id', 'teacher', 'name', 'students', 'refreshrs'].sort()
     );
     done();
   });
@@ -47,19 +47,19 @@ describe('INSERT query to classes db', () => {
 
 describe('UPDATE query to class db', () => {
   it('should update class with specified ID', async (done) => {
-    classesHelper.updateClass(50, {
-      name: 'Biology'
+    classesHelper.updateClass(501, {
+      name: 'Physics'
     });
-    const updated = await classesHelper.getClass(50);
+    const updated = await classesHelper.getClass(501);
 
-    expect(updated.name).toEqual('Biology');
+    expect(updated.name).toEqual('Physics');
     done();
   });
 });
 
 describe('DELETE query to classes db', () => {
   it('should return a count of 1 when deleting specified class', async (done) => {
-    const count = await classesHelper.deleteClass(30);
+    const count = await classesHelper.deleteClass(501);
 
     expect(count).toEqual(1);
     done();

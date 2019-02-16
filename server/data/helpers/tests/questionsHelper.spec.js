@@ -41,9 +41,8 @@ describe('INSERT query to questions db', () => {
       wrong_answer_3: 'test',
       correct_answer: 'test'
     });
-    const newQuestion = await questionsHelper.getQuestion(added);
 
-    expect(newQuestion.review_text).toEqual('test');
+    expect(added).toEqual(101);
     done();
   });
 
@@ -56,7 +55,7 @@ describe('INSERT query to questions db', () => {
       wrong_answer_3: 'test',
       correct_answer: 'test'
     });
-    const newQuestion = await questionsHelper.getQuestion(added.newquestionID);
+    const newQuestion = await questionsHelper.getQuestion(added);
 
     expect(Object.keys(newQuestion).sort()).toEqual(
       [
@@ -75,7 +74,7 @@ describe('INSERT query to questions db', () => {
 
 describe('UPDATE query to question db', () => {
   it('should update question with specified ID', async (done) => {
-    questionsHelper.updateQuestion(1, {
+    questionsHelper.updateQuestion(101, {
       review_text: 'testing',
       question: 'testing',
       wrong_answer_1: 'testing',
@@ -83,7 +82,7 @@ describe('UPDATE query to question db', () => {
       wrong_answer_3: 'testing',
       correct_answer: 'testing'
     });
-    const updated = await questionsHelper.getQuestion(1);
+    const updated = await questionsHelper.getQuestion(101);
 
     expect(updated.review_text).toEqual('testing');
     done();
@@ -92,7 +91,7 @@ describe('UPDATE query to question db', () => {
 
 describe('DELETE query to question db', () => {
   it('should return a count of 1 when deleting specified question', async (done) => {
-    const count = await questionsHelper.deleteQuestion(30);
+    const count = await questionsHelper.deleteQuestion(101);
 
     expect(count).toEqual(1);
     done();
