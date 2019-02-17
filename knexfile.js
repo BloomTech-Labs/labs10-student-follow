@@ -9,7 +9,7 @@ module.exports = {
 		client: 'pg',
 		connection: {
 			host: '127.0.0.1',
-			user: 'refreshr',
+			user: 'cotikor',
 			database: 'refreshr_dev'
 		},
 		migrations: {
