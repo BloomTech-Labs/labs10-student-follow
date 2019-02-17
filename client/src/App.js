@@ -17,9 +17,9 @@ export default function App() {
     fetchPeople();
   }, []);
 
-  if (!people.length) {
-    return <>Loading...</>;
-  }
+  // if (!people.length) {
+  //   return <>Loading...</>;
+  // }
   return (
     <>
       <Route
@@ -28,7 +28,7 @@ export default function App() {
         render={props => <LandingPage {...props} people={people} />}
       />
       <Route path="/refreshrs" render={props => <RefreshrView />} />
-    <Route path="/billing" render={props => <BillingPage />} />
+      <Route path="/billing" render={props => <BillingPage />} />
     </>
   );
 }

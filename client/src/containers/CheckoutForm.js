@@ -5,6 +5,7 @@ import Button from '@material-ui/core/Button';
 
 const url = 'http://localhost:9000/billing/charge';
 
+
 const CheckoutForm = props => {
   const handleSubmit = async e => {
     const { token } = await props.stripe.createToken({ name: 'Name' });
@@ -23,8 +24,8 @@ const CheckoutForm = props => {
   return (
     <>
       <CardElement />
-      <Button onClick={handleSubmit}>Send</Button>
-    </>
+      <Button variant="contained" color="primary" onClick={handleSubmit}>Buy Now</Button>
+  </>
   );
 };
 
