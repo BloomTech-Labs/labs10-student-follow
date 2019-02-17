@@ -1,6 +1,7 @@
 import React from 'react';
 import { CardElement, injectStripe } from 'react-stripe-elements';
 import axios from 'axios';
+import Button from '@material-ui/core/Button';
 
 const url = 'http://localhost:9000/billing/charge';
 
@@ -22,7 +23,7 @@ const CheckoutForm = props => {
   return (
     <>
       <CardElement />
-      <button onClick={handleSubmit}>Send</button>
+      <Button onClick={handleSubmit}>Send</Button>
     </>
   );
 };
