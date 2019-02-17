@@ -5,21 +5,21 @@ const pg = require('pg');
 pg.defaults.ssl = false; // this needs to be false in development, true when using heroku db
 
 module.exports = {
-  development: {
-    client: 'pg',
-    connection: {
-      host: '127.0.0.1',
-      user: 'cotikor',
-      database: 'refreshr_dev'
-    },
-    migrations: {
-      directory: './server/data/migrations/test'
-    },
-    seeds: {
-      directory: './server/data/seeds/test'
-    },
-    useNullAsDefault: true
-  },
+	development: {
+		client: 'pg',
+		connection: {
+			host: '127.0.0.1',
+			user: 'refreshr',
+			database: 'refreshr_dev'
+		},
+		migrations: {
+			directory: './server/data/migrations/test'
+		},
+		seeds: {
+			directory: './server/data/seeds/test'
+		},
+		useNullAsDefault: true
+	},
 
   testing: {
     client: 'pg',
