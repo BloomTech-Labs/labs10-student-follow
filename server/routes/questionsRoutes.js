@@ -1,37 +1,61 @@
 const express = require('express');
 const router = express.Router();
-
-const knex = require('knex');
-const knexConfig = require('../../knexfile');
-const db = knex(knexConfig.production);
-
+const db = require('../data/helpers/questionsHelper');
 const jwtCheck = require('../middleware/authenticate');
-
+const { emptyCheck } = require('../middleware/formattingMiddleware');
 const responseStatus = require('../config/responseStatusConfig');
 
-router.get('/', jwtCheck, async (req, res) => {
+router.get('/', jwtCheck, async (req, res, next) => {
   try {
-    const questions = await db('questions');
+    const questions = await db.getAll();
     res.status(responseStatus.success).json(questions);
   } catch (err) {
-    res.status(responseStatus.serverError).json('Error');
+    next(err);
   }
 });
 
-router.post('/', jwtCheck, async (req, res) => {
+router.get('/:id', jwtCheck, async (req, res, next) => {
+  const { id } = req.params;
   try {
-    const ids = await db('questions').insert(req.body);
-    res
-      .status(responseStatus.postCreated)
-      .json(`Added new question set with ID ${ids}`);
-  } catch (error) {
-    if (error.errno === 19) {
-      res
-        .status(responseStatus.badRequest)
-        .json("You haven't entered the required information.");
+    const specifiedQuestion = await db.getQuestion(id);
+    res.status(responseStatus.success).json(specifiedQuestion);
+  } catch (err) {
+    if (TypeError) {
+      next(responseStatus.notFound);
     } else {
-      res.status(responseStatus.serverError).json(error);
+      next(err);
     }
+  }
+});
+
+router.post('/', jwtCheck, emptyCheck, async (req, res, next) => {
+  const { body } = req;
+  try {
+    const newQuestionID = await db.addQuestion(body);
+    res.status(responseStatus.postCreated).json({ newQuestionID });
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.put('/:id', jwtCheck, emptyCheck, async (req, res, next) => {
+  const { id } = req.params;
+  const { body } = req;
+  try {
+    const updatedRecords = await db.updateQuestion(id, body);
+    res.status(responseStatus.success).json({ updatedRecords });
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.delete('/:id', jwtCheck, async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const deletedRecords = await db.deleteQuestion(id);
+    res.status(responseStatus.success).json({ deletedRecords });
+  } catch (err) {
+    next(err);
   }
 });
 

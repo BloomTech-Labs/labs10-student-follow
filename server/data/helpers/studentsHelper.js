@@ -1,60 +1,68 @@
 const db = require('../../config/dbConfig');
 
 module.exports = {
-	getAll: async () => {
-		const allStudents = await db('students').select(
-			'id',
-			'firstname',
-			'lastname',
-			'email'
-		);
-		return allStudents;
-	},
+  getAll: async () => {
+    const allStudents = await db('students');
+    return allStudents;
+  },
 
-	getStudent: async (id) => {
-		const student = await db('students')
-			.select('id', 'firstname', 'lastname', 'email')
-			.where({ id })
-			.first();
+  getStudent: async (id) => {
+    const student = await db('students')
+      .where({ id })
+      .first();
 
-		const classes = await db('classes')
-			.select('classes.name')
-			.join('students_classes', 'classes.id', 'students_classes.class_id')
-			.where('student_id', id);
+    const classes = await db('classes')
+      .select(
+        'teachers.firstname as first',
+        'teachers.lastname as last',
+        'classes.id as classID',
+        'classes.name'
+      )
+      .join('teachers', 'classes.teacher_id', 'teachers.id')
+      .join('students_classes', 'classes.id', 'students_classes.class_id')
+      .join('students', 'students.id', 'students_classes.student_id')
+      .where('students_classes.student_id', id);
 
-		return Promise.all([student, classes]).then((response) => {
-			let [student, classes] = response;
-			let result = {
-				id: student.id,
-				firstname: student.firstname,
-				lastname: student.lastname,
-				email: student.email,
-				classes: classes
-			};
-			return result;
-		});
-	},
+    return Promise.all([student, classes]).then((response) => {
+      let [student, classes] = response;
+      let result = {
+        id: student.id,
+        firstname: student.firstname,
+        lastname: student.lastname,
+        email: student.email,
+        classes: classes.map((c) => {
+          return {
+            classID: c.classID,
+            classname: c.name,
+            teacher: `${c.first} ${c.last}`
+          };
+        })
+      };
+      return result;
+    });
+  },
 
-	updateStudent: async (id, student) => {
-		const updateCount = await db('students')
-			.where({ id })
-			.update(student);
-		return updateCount;
-	},
+  updateStudent: async (id, student) => {
+    const updateCount = await db('students')
+      .where({ id })
+      .update(student);
+    return updateCount;
+  },
 
-	deleteStudent: async (id) => {
-		const deleteCount = await db('students')
-			.where({ id })
-			.del();
-		return deleteCount;
-	},
+  deleteStudent: async (id) => {
+    const deleteCount = await db('students')
+      .where({ id })
+      .del();
+    return deleteCount;
+  },
 
-	registerStudent: async (creds) => {
-		const IDs = await db('students').insert(creds);
-		const id = IDs[0];
-		const query = await db('students')
-			.where({ id })
-			.first();
-		return query;
-	}
+  addStudent: async (student) => {
+    const newStudent = await db('students')
+      .insert(student)
+      .returning('id')
+      .then((id) => {
+        return id;
+      });
+    return newStudent[0];
+  }
 };
