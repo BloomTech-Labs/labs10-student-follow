@@ -1,4 +1,5 @@
 const expressjwt = require('express-jwt');
+const jwtAuthz = require('express-jwt-authz')
 const jwks = require('jwks-rsa');
 
 const jwtCheck = expressjwt({
@@ -6,10 +7,10 @@ const jwtCheck = expressjwt({
     cache: true,
     rateLimit: true,
     jwksRequestsPerMinute: 5,
-    jwksUri: 'https://nickoferrall.auth0.com/.well-known/jwks.json'
+    jwksUri: 'https://team-refreshr.auth0.com/.well-known/jwks.json'
   }),
-  audience: 'labs-api',
-  issuer: 'https://nickoferrall.auth0.com/',
+  audience: 'https://team-refreshr.auth0.com/api/v2/',
+  issuer: 'https://team-refreshr.auth0.com/',
   algorithms: ['RS256']
 });
 
