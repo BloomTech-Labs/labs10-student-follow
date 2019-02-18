@@ -1,63 +1,77 @@
 const express = require('express');
 const router = express.Router();
-
-const knex = require('knex');
-const knexConfig = require('../../knexfile');
-const db = knex(knexConfig.production);
-
+const db = require('../data/helpers/studentsHelper');
 const jwtCheck = require('../middleware/authenticate');
-
+const {
+  emptyCheck,
+  whitespaceCheck
+} = require('../middleware/formattingMiddleware');
 const responseStatus = require('../config/responseStatusConfig');
 
-router.get('/', jwtCheck, async (req, res) => {
+router.get('/', jwtCheck, async (req, res, next) => {
   try {
-    const students = await db('students');
+    const students = await db.getAll();
     res.status(responseStatus.success).json(students);
   } catch (err) {
-    res.status(responseStatus.serverError).json('Error');
+    next(err);
   }
 });
 
-router.post('/', jwtCheck, async (req, res) => {
+router.get('/:id', jwtCheck, async (req, res, next) => {
+  const { id } = req.params;
   try {
-    const ids = await db('students').insert(req.body);
-    res
-      .status(responseStatus.postCreated)
-      .json(`Added new student with ID ${ids}`);
-  } catch (error) {
-    if (error.errno === 19) {
-      res
-        .status(responseStatus.badRequest)
-        .json("You haven't entered the required information.");
-    } else {
-      res.status(responseStatus.serverError).json(error);
-    }
-  }
-});
-
-router.get('/classes', jwtCheck, async (req, res) => {
-  try {
-    const studentsClasses = await db('students_classes');
-    res.status(responseStatus.success).json(studentsClasses);
+    const student = await db.getStudent(id);
+    res.status(responseStatus.success).json(student);
   } catch (err) {
-    res.status(responseStatus.serverError).json('Error');
+    if (TypeError) {
+      console.log(err);
+      next(responseStatus.notFound);
+    } else {
+      next(err);
+    }
   }
 });
 
-router.post('/classes', jwtCheck, async (req, res) => {
-  try {
-    const ids = await db('students_classes').insert(req.body);
-    res
-      .status(responseStatus.postCreated)
-      .json(`Added new student class with ID ${ids}`);
-  } catch (error) {
-    if (error.errno === 19) {
-      res
-        .status(responseStatus.badRequest)
-        .json("You haven't entered the required information.");
-    } else {
-      res.status(responseStatus.serverError).json(error);
+router.post(
+  '/',
+  jwtCheck,
+  emptyCheck,
+  whitespaceCheck,
+  async (req, res, next) => {
+    const { body } = req;
+    try {
+      const newStudentID = await db.addStudent(body);
+      res.status(responseStatus.postCreated).json({ newStudentID });
+    } catch (err) {
+      next(err);
     }
+  }
+);
+
+router.put(
+  '/:id',
+  jwtCheck,
+  emptyCheck,
+  whitespaceCheck,
+  async (req, res, next) => {
+    const { id } = req.params;
+    const { body } = req;
+    try {
+      const updatedRecords = await db.updateStudent(id, body);
+      res.status(responseStatus.success).json({ updatedRecords });
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+router.delete('/:id', jwtCheck, async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const deletedRecords = await db.deleteStudent(id);
+    res.status(responseStatus.success).json({ deletedRecords });
+  } catch (err) {
+    next(err);
   }
 });
 
