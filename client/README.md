@@ -43,7 +43,6 @@
 ### React (JavaScript Library)
 
 - React features reusable components, fast rendering with the virtual DOM, great ecosystem with plugins, and state-management in the component
-- Drawbacks: React is slower than some frameworks, batteries not "included", and lots of boilerplate
 
 ```
 
@@ -52,7 +51,6 @@
 ### React Hooks (Library Feature)
 
 - React Hooks a new stable feature as of the v16.8 release and features the ability of functional components to have state and various life-cycle methods
-- Drawbacks: Testing with certain libraries are not established
 
 ```
 
@@ -61,7 +59,6 @@
 ### Material-UI Library (Styling Library)
 
 - MUI features a professional UI, lends credibility due to having a similar look to other google sites, and prevent global CSS leaks
-- Drawbacks: MUI will produce designs similar to other sites
 
 ```
 
@@ -72,8 +69,6 @@
 ### NodeJS, ExpressJS (Framework/Library)
 
 - NodeJS features V8 JavaScript engine (particularly well suited to live updated) and has a robust NodeJS ecosystem
-- Drawbacks: NodeJS’s API changes frequently, existing codebases might needs updates, and
-  If intensive CPU was required, NodeJS’s single thread approach wouldn’t be effective
 
 ```
 
@@ -82,7 +77,6 @@
 ### PostgreSQL (Database)
 
 - PostgreSQL is a production grade database, blends well w/ deployment technology, and widely used (2nd most popular db package on npm, good documentation, good support)
-- Drawbacks: Set-up more involved than NoSQL
 
 ```
 
@@ -97,7 +91,6 @@
 ### Netlify and Heroku
 
 - Well-known services, reliable support, and well-documented
-- Drawbacks: Data is hosted off-site
 
 ```
 
@@ -126,6 +119,15 @@
 ```
 
 ## Testing
+
+### React Testing Library
+
+- React Testing Library is a simple and complete React DOM testing utilities that encourage good testing practices
+- The guiding principle: The more your tests resemble the way your software is used, the more confidence [the tests] can give you
+- This tool was designed to work alongside Jest and Mocha, not to replace them
+- React Testing Library is less opinionated than Enzyme and makes the testing process more developer-friendly
+- Write tests for React components that avoid including implementation details
+- Maintain your tests so it won't break tests or slow down the team even with code refactoring when making changes to implementation but not functionality
 
 ## Contributions/Issues/Bugs
 

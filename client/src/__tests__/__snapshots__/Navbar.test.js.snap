@@ -1,0 +1,30 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`default test renders correctly 1`] = `
+<div>
+  <div
+    class="Navbar-wrapper-1"
+  >
+    <p
+      data-testid="firstMenuItem"
+    >
+      Refreshrs
+    </p>
+    <p
+      data-testid="secondMenuItem"
+    >
+      Classes
+    </p>
+    <p
+      data-testid="thirdMenuItem"
+    >
+      Billing
+    </p>
+    <p
+      data-testid="fourthMenuItem"
+    >
+      Settings
+    </p>
+  </div>
+</div>
+`;

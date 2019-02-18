@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`default test renders correctly 1`] = `
+<div>
+  <div
+    class="RefreshrList-wrapper-1"
+  >
+    <div
+      class="RefreshrList-wrapper-99"
+    >
+      <h1>
+        Card
+      </h1>
+    </div>
+    <div
+      class="RefreshrList-wrapper-99"
+    >
+      <h1>
+        Card
+      </h1>
+    </div>
+    <div
+      class="RefreshrList-wrapper-99"
+    >
+      <h1>
+        Card
+      </h1>
+    </div>
+  </div>
+</div>
+`;
