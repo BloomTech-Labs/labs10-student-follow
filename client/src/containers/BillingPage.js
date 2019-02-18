@@ -3,6 +3,8 @@ import { Elements, StripeProvider } from 'react-stripe-elements';
 import CheckoutForm from './CheckoutForm';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
+import Snackbar from '../components/Snackbar';
 
 const styles = theme => ({
   cardWrapper: {
@@ -20,6 +22,14 @@ const styles = theme => ({
 
 const BillingPage = props => {
   const [subType, setSubType] = useState('');
+  const [snackbar, setSnackbar] = useState(false);
+
+  const openSnackbar = () => {
+    setSnackbar(true);
+    setTimeout(() => {
+      setSnackbar(false);
+    }, 1000);
+  };
 
   const handleChange = e => {
     setSubType(e.target.value);
@@ -28,6 +38,10 @@ const BillingPage = props => {
   return (
     <>
       <h1>BillingPage</h1>
+      <Button variant="contained" onClick={openSnackbar}>
+        Test Snackbar
+      </Button>
+      {snackbar && <Snackbar message="testing snackbar" />}
       <Grid className={props.classes.cardWrapper}>
         <Grid>
           <StripeProvider apiKey="pk_test_6uEhds8mHz26DG95ZvUwTURp">

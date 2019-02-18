@@ -22,9 +22,6 @@ const styles = theme => ({
 
 const MySnackbar = props => {
   const { className, message } = props;
-  console.log(className);
-  console.log('sb', message);
-
   const [isOpen, setOpen] = useState(true);
 
   const handleClose = (event, reason) => {
@@ -36,18 +33,18 @@ const MySnackbar = props => {
 
   return (
     <Snackbar
-      className={`props.classes.${className}`}
+      className={props.className}
       anchorOrigin={{
         vertical: 'bottom',
         horizontal: 'right'
       }}
       open={isOpen}
-      autoHideDuration={6000}
+      autoHideDuration={1500}
       onClose={handleClose}
       ContentProps={{
         'aria-describedby': 'message-id'
       }}
-      message={<p>{message}</p>}
+      message={<span>{message}</span>}
       action={[
         <Button key="undo" color="secondary" size="small" onClick={handleClose}>
           CLOSE

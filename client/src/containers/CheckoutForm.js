@@ -34,6 +34,7 @@ const CheckoutForm = props => {
             setSnackbar(true);
           } else {
             console.log('purchase failed');
+            setSnackbarMessage('purchase failed');
           }
         })
         .catch(err => console.log());
