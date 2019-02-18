@@ -9,20 +9,13 @@ const styles = theme => ({
     display: 'flex',
     flexDirection: 'column',
     margin: '0 auto',
-
-  },
-  cardBox: {
-    border: '1px solid black',
-    transform: 'translateY(-50%) translateX(-50%)',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyConent: 'space-between',
-    position: 'absolute',
-    top: '40%',
-    left: '50%',
-    width: '50%',
-    height: '20%',
-  },
+    border: '1px solid #777',
+    width: '30%',
+    height: '50vh',
+    position: 'relative',
+    justifyContent: 'space-between',
+    padding: '5%'
+  }
 });
 
 const BillingPage = props => {
@@ -34,35 +27,35 @@ const BillingPage = props => {
 
   return (
     <>
+      <h1>BillingPage</h1>
       <Grid className={props.classes.cardWrapper}>
-        <h1>BillingPage</h1>
-        <div className={props.classes.cardBox}>
+        <Grid>
           <StripeProvider apiKey="pk_test_6uEhds8mHz26DG95ZvUwTURp">
             <Elements>
               <CheckoutForm subType={subType} />
             </Elements>
           </StripeProvider>
-        <form>
-          <label>
-            <input
-              onChange={handleChange}
-              type="radio"
-              name="subType"
-              value="yearly"
-            />
-            yearly
-          </label>
-          <label>
-            <input
-              onChange={handleChange}
-              type="radio"
-              name="subType"
-              value="monthly"
-            />
-            monthly
-          </label>
-        </form>
-        </div>
+          <form>
+            <label>
+              <input
+                onChange={handleChange}
+                type="radio"
+                name="subType"
+                value="yearly"
+              />
+              yearly
+            </label>
+            <label>
+              <input
+                onChange={handleChange}
+                type="radio"
+                name="subType"
+                value="monthly"
+              />
+              monthly
+            </label>
+          </form>
+        </Grid>
       </Grid>
     </>
   );
