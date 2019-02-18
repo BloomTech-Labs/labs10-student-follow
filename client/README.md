@@ -4,6 +4,8 @@
 
 - [App Home](https://refreshr-app.netlify.com)
 
+---
+
 ## Contributors
 
 - **Chaya Otikor** | [Github](https://github.com/cotikor)
@@ -16,6 +18,8 @@
 
 - **Timothy Hoang** | [Github](https://github.com/timh1203) | [LinkedIn](https://www.linkedin.com/in/timothyhoang/)
 
+---
+
 ## Project Overview
 
 ```
@@ -26,7 +30,7 @@
 
 ### Key Features
 
-```
+```md
 - Create a class and manage students in the class
 - Create and edit Refreshrs
 - A Refreshr should have a 2 day, 2 week, and 2 month review
@@ -36,101 +40,137 @@
 - A teacher should be able to see the participation rate in dashboard
 ```
 
+---
+
 ## Tech Stack
 
-## Frontend
+### Frontend
 
-### React (JavaScript Library)
+```md
+# React (JavaScript Library)
 
 - React features reusable components, fast rendering with the virtual DOM, great ecosystem with plugins, and state-management in the component
-
 ```
 
-```
-
-### React Hooks (Library Feature)
+```md
+# React Hooks (Library Feature)
 
 - React Hooks a new stable feature as of the v16.8 release and features the ability of functional components to have state and various life-cycle methods
-
 ```
 
-```
-
-### Material-UI Library (Styling Library)
+```md
+# Material-UI Library (Styling Library)
 
 - MUI features a professional UI, lends credibility due to having a similar look to other google sites, and prevent global CSS leaks
-
 ```
 
-```
+### Backend
 
-## Backend
-
-### NodeJS, ExpressJS (Framework/Library)
+```md
+# NodeJS
 
 - NodeJS features V8 JavaScript engine (particularly well suited to live updated) and has a robust NodeJS ecosystem
 
+# ExpressJS
+
+- ExpressJS is a library built to smooth out operations on top of the NodeJS language
 ```
 
-```
-
-### PostgreSQL (Database)
+```md
+# PostgreSQL (Database)
 
 - PostgreSQL is a production grade database, blends well w/ deployment technology, and widely used (2nd most popular db package on npm, good documentation, good support)
-
 ```
 
-```
-
-### Data Model
+#### Data Model
 
 ![Data Model](./dataModel.png "Refreshr Data Model")
 
-## Deployment
+### Deployment
 
-### Netlify and Heroku
+```md
+# Netlify
+
+# Heroku
 
 - Well-known services, reliable support, and well-documented
-
 ```
 
-```
+### API/Services
 
-## API/Services
-
+```md
 - Auth0 - authorization and authentication service
 - Stripe - payment portal service
 - Axios - Promise based HTTP client for the browser and node.js
 - SendGrid - Email service
 - Papaparse - CSV parser package
-- Jest - Testing library
 - Knex - SQL Query Builder for Javascript
 - Material-UI - UI Design library
+- Jest/React-Testing-Library/Jest-Dom - Testing libraries
 - Supertest - Testing library
-- Enzyme - JavaScript Testing utilities for React
 - Dotenv - load local environment variables for env
 - Cors - Cross Origin Bridge
 - Faker - Simulates fake data
+```
+
+---
 
 ## Environment Variables
 
+```js
 ```
 
-```
+---
 
 ## Testing
 
-### React Testing Library
+```md
+# Jest
+
+# Jest-Dom
+
+# React Testing Library
 
 - React Testing Library is a simple and complete React DOM testing utilities that encourage good testing practices
 - The guiding principle: The more your tests resemble the way your software is used, the more confidence [the tests] can give you
 - This tool was designed to work alongside Jest and Mocha, not to replace them
-- React Testing Library is less opinionated than Enzyme and makes the testing process more developer-friendly
+- React Testing Library is less opinionated than Enzyme and makes the testing process more developer-friendly, this library can also replace Enzyme
 - Write tests for React components that avoid including implementation details
 - Maintain your tests so it won't break tests or slow down the team even with code refactoring when making changes to implementation but not functionality
+```
+
+---
 
 ## Contributions/Issues/Bugs
 
+### Would you like to report an issue/bug?
+
+- Please post to the [issues section](https://github.com/Lambda-School-Labs/labs10-student-follow/issues) on our github repo as it helps us track of all tasks, enhancements, and bugs for the project!
+- Some guidelines can be found in this [document](https://github.com/necolas/issue-guidelines/blob/master/CONTRIBUTING.md#bugs).
+
+```md
+# How do you use the issues section?
+
+- By using `@mentions` and references inside of issues, you can notify other GitHub users & teams, and even cross-connect issues to each other.
+- `Title` and `Description` - decribes what the issue is all about
+- `Labels` - helps categorize and filter issues
+- `Milestone` - acts as a container for issues like Beta Launch, October Sprint, or Redesign
+- `Assignee` - developer responsible for working on the issue
+- `Comments` - allows anyone with access to the repository to provide feedback
+```
+
+### Would you like to contribute to the repository?
+
+- In short, please ask first before embarking on any significant pull request
+- Good pull requests - patches, improvements, new features - are a fantastic help. They should remain focused in scope and avoid containing unrelated commits.
+- Please follow the guidelines set out by this [document](https://github.com/necolas/issue-guidelines/blob/master/CONTRIBUTING.md#pull-requests).
+
+#### Source: https://guides.github.com/features/issues/
+
+---
+
 ## Additional Documentation
 
+```md
 - For the backend documentation, please visit [Backend Documentation]().
+```
