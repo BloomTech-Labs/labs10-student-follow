@@ -7,6 +7,21 @@ router.get('/', (req, res) => {
   res.send('billing sanity check');
 });
 
+// Below to be used for creating a custom plan:
+// const product = stripe.products.create({
+//   name: 'Monthly Subscription',
+//   type: 'service'
+// });
+
+// const plan = stripe.plans.create({
+//   currency: 'usd',
+//   interval: 'month',
+//   product: 'prod_EYoWV6h9SKDkgV',
+//   nickname: 'Refreshr Monthly Plan',
+//   trial_period_days: 30,
+//   amount: 999 // cents
+// });
+
 router.post('/charge', async (req, res) => {
   const user = req.body;
   console.log('USER', user.token.id);
@@ -20,20 +35,6 @@ router.post('/charge', async (req, res) => {
     //   source: user.token.id
     // });
     // res.json({ status });
-
-    const product = stripe.products.create({
-      name: 'Monthly Subscription',
-      type: 'service'
-    });
-
-    const plan = stripe.plans.create({
-      currency: 'usd',
-      interval: 'month',
-      product: 'prod_EYoWV6h9SKDkgV',
-      nickname: 'Monthly Plan',
-      trial_period_days: 30,
-      amount: 999 // cents
-    });
 
     console.log('PLAN', plan);
 
@@ -50,7 +51,8 @@ router.post('/charge', async (req, res) => {
         items: [
           {
             // plan: 'ruby-infinite-345'
-            plan: 'prod_EYoWV6h9SKDkgV'
+            // plan: 'prod_EYoWV6h9SKDkgV'
+            plan: 'plan_EYos5GzTTJb0w0'
           }
         ]
       },
