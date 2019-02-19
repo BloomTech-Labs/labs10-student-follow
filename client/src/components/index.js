@@ -1,9 +1,26 @@
-import RefreshrView from "./RefreshrView";
-import Navbar from "./Navbar";
-import Navcrumbs from "./Navcrumbs";
-import RefreshrList from "./RefreshrList";
-import RefreshrCard from "./RefreshrCard";
-import ClassView from "./ClassView";
-import ClassList from "./ClassList";
+/* NAV */
+import Navbar from "./navigation/Navbar";
+import Navcrumbs from "./navigation/Navcrumbs";
 
-export { RefreshrView, Navcrumbs, Navbar, RefreshrList, RefreshrCard, ClassView, ClassList };
+/* AUTH */
+import Auth from './authentication/Auth';
+import Login from './authentication/Login';
+
+/* VIEWS */
+import RefreshrView from "./views/RefreshrView";
+import LandingPage from './views/LandingPage'
+import LoadingPage from './views/LoadingPage';
+import ClassView from './views/ClassView';
+
+/* BILLING */
+import BillingPage from './billing/BillingPage'
+import CheckoutForm from './billing/CheckoutForm'
+
+/* REFRESHRS */
+import RefreshrList from "./refreshrs/RefreshrList";
+import RefreshrCard from "./refreshrs/RefreshrCard";
+
+/* CLASSES */
+import ClassList from './classes/ClassList';
+
+export {  Navcrumbs, Navbar, RefreshrList, RefreshrCard, RefreshrView, LandingPage, LoadingPage, Auth, Login ,BillingPage, CheckoutForm, ClassView, ClassList };

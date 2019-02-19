@@ -1,7 +1,7 @@
 import React from "react";
 import Grid from "@material-ui/core/Grid";
 import { withStyles } from "@material-ui/core/styles";
-import { Navcrumbs, Navbar, RefreshrList } from "./index.js";
+import { Navcrumbs, Navbar, RefreshrList } from "../index.js";
 
 const styles = theme => ({
   wrapper: {
