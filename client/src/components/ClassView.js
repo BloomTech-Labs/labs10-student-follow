@@ -11,14 +11,127 @@ const styles = theme => ({
 });
 
 function ClassView(props) {
+
   // VARIABLES
   const headers = {
     "headers": { "Authorization": `Bearer ${process.env.REACT_APP_SENDGRID_API_KEY}` },
     "content-type": "application/json"
   }
-  const listId = "7061139"
-  const recipientId = "YXN0dXJpYXN4aUBnbWFpbC5jb20="
-  const recipientIds = ["YXJlbGkuYXRoZW5zQGNvd3N0b3JlLm5ldA==", "YXN0dXJpYXN4aUBnbWFpbC5jb20="]
+  const listId = 7061139 // test3
+  const recipient_id = "YXN0dXJpYXN4aUBnbWFpbC5jb20=" // Timmy
+  const recipient_ids = ["YXJlbGkuYXRoZW5zQGNvd3N0b3JlLm5ldA==", "YXN0dXJpYXN4aUBnbWFpbC5jb20="] // Magda, Timmy
+  const sender_id = 425702 // The Refreshr Team
+
+
+
+  // SENDER OPERATIONS
+  const addSender = () => {
+    const new_sender = {
+      "nickname": "asturiasxi@gmail.com",
+      "from": {
+        "email": "asturiasxi@gmail.com",
+        "name": "asturiasxi @ Refreshr"
+      },
+      "reply_to": {
+        "email": "asturiasxi@gmail.com",
+        "name": "Refreshr Team"
+      },
+      "address": "222 West Ave",
+      "address_2": "Ste HR100",
+      "city": "Austin",
+      "state": "Texas",
+      "zip": "78701",
+      "country": "United States"
+    }
+    // const new_sender = {
+    //   "nickname": "The Refreshr Team",
+    //   "from": {
+    //     "email": "timmyturner123@refreshr.com",
+    //     "name": "Timmy Turner @ Refreshr"
+    //   },
+    //   "reply_to": {
+    //     "email": "team@refreshr.com",
+    //     "name": "Refreshr Team"
+    //   },
+    //   "address": "222 West Ave",
+    //   "address_2": "Ste HR100",
+    //   "city": "Austin",
+    //   "state": "Texas",
+    //   "zip": "78701",
+    //   "country": "United States"
+    // }
+    const url = "https://api.sendgrid.com/v3/senders"
+    axios.post(url, new_sender, headers)
+      .then(res => {
+        console.log(`===addSender: ${res.data.nickname}===`)
+        console.log(res.data)
+      })
+      .catch(err => console.log(err))
+  }
+  const getSender = () => {
+    const url = `https://api.sendgrid.com/v3/senders/${sender_id}`
+    axios.get(url, headers)
+      .then(res => {
+        console.log(`===getSender: ${res.data.nickname}===`)
+        console.log(res.data)
+      })
+      .catch(err => console.log(err))
+  }
+  const getSenders = () => {
+    const url = "https://api.sendgrid.com/v3/senders"
+    axios.get(url, headers)
+      .then(res => {
+        console.log(`===getSenders: all===`)
+        console.log(res.data)
+      })
+      .catch(err => console.log(err))
+  }
+  const updateSender = () => {
+    const url = `https://api.sendgrid.com/v3/senders/${sender_id}`
+    const updated_sender = {
+      "nickname": "123The Refreshr Team",
+      "from": {
+        "email": "123timmyturner123@refreshr.com",
+        "name": "123Timmy Turner @ Refreshr"
+      },
+      "reply_to": {
+        "email": "123team@refreshr.com",
+        "name": "123Refreshr Team"
+      },
+      "address": "222 West Ave",
+      "address_2": "Ste HR100",
+      "city": "Austin",
+      "state": "Texas",
+      "zip": "78701",
+      "country": "United States"
+    }
+    axios.patch(url, updated_sender, headers)
+      .then(res => {
+        console.log(`===updateSender: res.data.nickname===`)
+        console.log(res)
+      })
+      .catch(err => console.log(err))
+  }
+  const deleteSender = () => {
+    const url = `https://api.sendgrid.com/v3/senders/${sender_id}`
+    axios.delete(url, headers)
+      .then(res => {
+        console.log(`===deleteSender: ${res.statusText}===`)
+        console.log(res)
+      })
+      .catch(err => console.log(err))
+  }
+  const resendVerification = () => {
+    const url = `https://api.sendgrid.com/v3/senders/${sender_id}/resend_verification`
+    axios.post(url, null, headers)
+      .then(res => {
+        console.log(`===resendVerification: ${res.status}===`)
+        console.log(res)
+      })
+      .catch(err => console.log(err))
+  }
+
+
 
   // LIST OPERATIONS
   const addList = () => {
@@ -77,6 +190,8 @@ function ClassView(props) {
       .catch(err => console.log(err))
   }
 
+
+
   // LIST RECIPIENTS OPERATIONS
   const getContacts = () => {
     const url = `https://api.sendgrid.com/v3/contactdb/lists/${listId}/recipients`
@@ -88,32 +203,34 @@ function ClassView(props) {
       .catch(err => console.log(err))
   }
   const addContact = () => {
-    const url = `https://api.sendgrid.com/v3/contactdb/lists/${listId}/recipients/${recipientId}`
+    const url = `https://api.sendgrid.com/v3/contactdb/lists/${listId}/recipients/${recipient_id}`
     axios.post(url, null, headers)
       .then(res => {
-        console.log(`===addContact: recipientId ${recipientId} added to listId ${listId}===`)
+        console.log(`===addContact: recipient_id ${recipient_id} added to listId ${listId}===`)
         console.log(res.statusText)
       })
       .catch(err => console.log(err))
   }
   const addContacts = () => {
     const url = `https://api.sendgrid.com/v3/contactdb/lists/${listId}/recipients`
-    axios.post(url, recipientIds, headers)
+    axios.post(url, recipient_ids, headers)
       .then(res => {
-        console.log(`===addContacts: recipientIds ${recipientIds} added to listId ${listId}===`)
+        console.log(`===addContacts: recipient_ids ${recipient_ids} added to listId ${listId}===`)
         console.log(res.statusText)
       })
       .catch(err => console.log(err))
   }
   const deleteContact = () => {
-    const url = `https://api.sendgrid.com/v3/contactdb/lists/${listId}/recipients/${recipientId}`
+    const url = `https://api.sendgrid.com/v3/contactdb/lists/${listId}/recipients/${recipient_id}`
     axios.delete(url, headers)
       .then(res => {
-        console.log(`===deleteContact: recipientId: ${recipientId} deleted from listId ${listId}===`)
+        console.log(`===deleteContact: recipient_id: ${recipient_id} deleted from listId ${listId}===`)
         console.log(res.statusText)
       })
       .catch(err => console.log(err))
   }
+
+
 
   return (
     <>
@@ -124,6 +241,15 @@ function ClassView(props) {
         </Grid>
         <Grid item xs={10}>
           <p>ClassView</p>
+          <div>
+            <h1>SENDER OPERATIONS</h1>
+            <button onClick={addSender}>addSender</button>
+            <button onClick={getSender}>getSender</button>
+            <button onClick={getSenders}>getSenders</button>
+            <button onClick={updateSender}>updateSender</button>
+            <button onClick={deleteSender}>deleteSender</button>
+            <button onClick={resendVerification}>resendVerification</button>
+          </div>
           <div>
             <h1>LIST OPERATIONS</h1>
             <button onClick={addList}>addList</button>
