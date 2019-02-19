@@ -3,7 +3,7 @@ import { Route } from 'react-router-dom';
 import axios from 'axios';
 import LandingPage from './containers/LandingPage.js';
 import BillingPage from './containers/BillingPage.js';
-import { RefreshrView } from './components';
+import { RefreshrView, ClassView } from "./components";
 
 export default function App() {
   const [people, setPeople] = useState([]);
@@ -28,6 +28,7 @@ export default function App() {
         render={props => <LandingPage {...props} people={people} />}
       />
       <Route path="/refreshrs" render={props => <RefreshrView />} />
+      <Route path="/classes" render={props => <ClassView />} />
       <Route path="/billing" render={props => <BillingPage />} />
     </>
   );
