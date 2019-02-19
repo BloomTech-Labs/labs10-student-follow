@@ -18,33 +18,42 @@
 * GET /teachers
   * returns a list of all teachers
 
+---
 * GET /teachers/id
   * returns one teacher by id
 
+---
 * PUT /teachers/id
   * updates one teacher by id
 
+---
 * DELETE /teachers/id
   * delete teacher by id
 
+---
 * _missing:_ POST
 
 ### Students
 * GET /students
   * returns a list of all students
 
+---
 * GET /students/id
   * returns one student by id
 
+---
 * POST /students
   * adds a student
 
+---
 * PUT /students/id
   * updates one student by id
 
+---
 * DELETE /students/id
   * deletes student by id
 
+---
 ### Classes
 * GET /classes
   * returns a list of all classes
