@@ -1,34 +1,32 @@
-import React, { useState, useEffect } from 'react';
-import { Route } from 'react-router-dom';
-import axios from 'axios';
-import LandingPage from './containers/LandingPage.js';
-import BillingPage from './containers/BillingPage.js';
-import { RefreshrView } from './components';
+import React, { useEffect } from 'react';
+import { Route, withRouter, Router } from 'react-router-dom';
+import history from './history';
+import { LoadingPage, LandingPage, BillingPage, Login } from './components';
 
-export default function App() {
-  const [people, setPeople] = useState([]);
-
-  const fetchPeople = async () => {
-    const response = await axios('https://refreshr.herokuapp.com/teachers/');
-    setPeople(response.data);
+const App = (props) => {
+  console.log('APP:', props);
+  const handleAuthentication = (nextState, replace) => {
+    if (/access_token|id_token|error/.test(nextState.location.hash)) {
+      props.auth.handleAuthentication();
+    }
   };
 
-  useEffect(() => {
-    fetchPeople();
-  }, []);
-
-  // if (!people.length) {
-  //   return <>Loading...</>;
-  // }
   return (
-    <>
-      <Route
-        exact
-        path="/"
-        render={props => <LandingPage {...props} people={people} />}
-      />
-      <Route path="/refreshrs" render={props => <RefreshrView />} />
-      <Route path="/billing" render={props => <BillingPage />} />
-    </>
+    <Router history={history}>
+      <div>
+        <Route exact path="/" render={() => <Login auth={props.auth} />} />
+        <Route path="/home" render={(props) => <LandingPage {...props} />} />
+        <Route
+          path="/loading"
+          render={(props) => {
+            handleAuthentication(props);
+            return <LoadingPage {...props} />;
+          }}
+        />
+        <Route path="/billing" render={(props) => <BillingPage />} />
+      </div>
+    </Router>
   );
-}
+};
+
+export default withRouter(App);

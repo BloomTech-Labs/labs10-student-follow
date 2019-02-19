@@ -4,11 +4,12 @@ export default function LandingPage(props) {
   console.log('props lp', props);
   return (
     <>
-      {props.people.map(people => (
+      <h1>Component disabled</h1>
+      {/* {props.people.map((people) => (
         <div key={people.id}>
           <h1>{people.firstname}</h1>
         </div>
-      ))}
+      ))} */}
     </>
   );
 }
