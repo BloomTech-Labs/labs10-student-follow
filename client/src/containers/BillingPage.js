@@ -5,6 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import Snackbar from '../components/Snackbar';
+import StripeCheckout from './StripeCheckout';
 
 const styles = theme => ({
   cardWrapper: {
@@ -21,7 +22,7 @@ const styles = theme => ({
 });
 
 const BillingPage = props => {
-  const [subType, setSubType] = useState('');
+  const [subType, setSubType] = useState(999);
   const [snackbar, setSnackbar] = useState(false);
 
   const openSnackbar = () => {
@@ -32,7 +33,7 @@ const BillingPage = props => {
   };
 
   const handleChange = e => {
-    setSubType(e.target.value);
+    setSubType(parseInt(e.target.value));
   };
 
   return (
@@ -44,18 +45,13 @@ const BillingPage = props => {
       {snackbar && <Snackbar message="testing snackbar" />}
       <Grid className={props.classes.cardWrapper}>
         <Grid>
-          <StripeProvider apiKey="pk_test_6uEhds8mHz26DG95ZvUwTURp">
-            <Elements>
-              <CheckoutForm subType={subType} />
-            </Elements>
-          </StripeProvider>
           <form>
             <label>
               <input
                 onChange={handleChange}
                 type="radio"
                 name="subType"
-                value="yearly"
+                value={999}
               />
               1 Year Subscription - $9.99
             </label>
@@ -64,11 +60,16 @@ const BillingPage = props => {
                 onChange={handleChange}
                 type="radio"
                 name="subType"
-                value="monthly"
+                value={2999}
               />
               1 Year Premium Subscription - $29.99
             </label>
           </form>
+          <StripeProvider apiKey="pk_test_6uEhds8mHz26DG95ZvUwTURp">
+            <Elements>
+              <StripeCheckout subType={subType} />
+            </Elements>
+          </StripeProvider>
         </Grid>
       </Grid>
     </>

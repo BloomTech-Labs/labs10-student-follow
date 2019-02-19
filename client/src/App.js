@@ -3,7 +3,7 @@ import { Route } from 'react-router-dom';
 import axios from 'axios';
 import LandingPage from './containers/LandingPage.js';
 import BillingPage from './containers/BillingPage.js';
-import TestBilling from './containers/TestBilling.js';
+import StripeCheckout from './containers/StripeCheckout.js';
 import { RefreshrView } from './components';
 
 export default function App() {
@@ -30,7 +30,7 @@ export default function App() {
       />
       <Route path="/refreshrs" render={props => <RefreshrView />} />
       <Route path="/billing" render={props => <BillingPage />} />
-      <Route path="/test" render={props => <TestBilling />} />
+      <Route path="/test" render={props => <StripeCheckout />} />
     </>
   );
 }

@@ -15,6 +15,7 @@ export default class TakeMoney extends React.Component {
   };
 
   render() {
+    console.log('PRopping', typeof this.props.subType);
     return (
       <StripeCheckout
         token={this.onToken}
@@ -23,7 +24,7 @@ export default class TakeMoney extends React.Component {
         description="Purchase your subscription"
         panelLabel="Purchase"
         image={Image}
-        amount={999} //cents
+        amount={this.props.subType} //cents
         currency="USD"
         email="nickoferrall@gmail.com"
         bitcoin={true}
