@@ -8,6 +8,13 @@ router.get('/', (req, res) => {
 });
 
 // Below to be used for creating a custom plan:
+// stripe.customers.create({
+//   description: 'Customer for jenny.rosen@example.com',
+//   source: "tok_visa" // obtained with Stripe.js
+// }, function(err, customer) {
+//   // asynchronously called
+// });
+
 // const product = stripe.products.create({
 //   name: 'Monthly Subscription',
 //   type: 'service'
@@ -18,13 +25,16 @@ router.get('/', (req, res) => {
 //   interval: 'month',
 //   product: 'prod_EYoWV6h9SKDkgV',
 //   nickname: 'Refreshr Monthly Plan',
+//   billing: "charge_automatically",
+//   quantity: 1,
 //   trial_period_days: 30,
 //   amount: 999 // cents
 // });
 
 router.post('/charge', async (req, res) => {
   const user = req.body;
-  console.log('USER', user.token.id);
+  // console.log('USER', user);
+  console.log('USER', user);
   try {
     // let { status } = await stripe.charges.create({
     //   amount: req.body.subType,
@@ -35,6 +45,26 @@ router.post('/charge', async (req, res) => {
     //   source: user.token.id
     // });
     // res.json({ status });
+
+    const source = stripe.sources.create(
+      {
+        type: 'ach_credit_transfer',
+        currency: 'usd',
+        owner: {
+          email: 'jenny.rosen@example.com'
+        }
+      },
+      function(err, source) {
+        // asynchronously called
+        console.log('SOURCY', source.owner.email);
+        const customer = stripe.customers.create({
+          email: source.owner.email,
+          source: source.id
+        });
+        console.log('CUSTOMER', customer);
+      }
+    );
+    console.log('SOURCE', source);
 
     const sub = stripe.subscriptions.create(
       {
