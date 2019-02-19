@@ -47,21 +47,4 @@ module.exports = {
       .del();
     return deleteCount;
   },
-
-  registerTeacher: async (creds) => {
-    const newTeacherID = await db('teachers').insert(creds).returning('id').then((id) => {
-      return id
-    });
-    const query = await db('teachers')
-      .where('id',newTeacherID[0])
-      .first();
-    return query;
-  },
-  loginTeacher: async (creds) => {
-    const teacher = await db('teachers')
-      .where({ email: creds.email })
-      .first();
-
-    return teacher;
-  }
 };

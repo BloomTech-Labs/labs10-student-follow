@@ -22,18 +22,6 @@ describe('GET query to teachers db', () => {
   });
 });
 
-describe('INSERT query to teachers db', () => {
-  it('should add teacher to to db', async (done) => {
-   const teacher = await teacherHelper.registerTeacher({
-      firstname: 'Jane',
-      lastname: 'Doe',
-      email: 'jdoe@abc.com',
-      password: 'pass'
-    });
-    expect(teacher.id).toEqual(501)
-    done();
-  })
-})
 
 describe('UPDATE query to teachers db', () => {
   it('should update teacher with specified ID', async (done) => {
