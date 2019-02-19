@@ -36,8 +36,6 @@ router.post('/charge', async (req, res) => {
     // });
     // res.json({ status });
 
-    console.log('PLAN', plan);
-
     const sub = stripe.subscriptions.create(
       {
         // customer: 'cus_ETpOayu8argnJO',
