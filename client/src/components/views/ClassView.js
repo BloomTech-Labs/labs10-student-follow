@@ -2,7 +2,7 @@ import React from "react";
 import Grid from "@material-ui/core/Grid";
 import axios from 'axios';
 import { withStyles } from "@material-ui/core/styles";
-import { Navcrumbs, Navbar } from "./index.js";
+import { Navcrumbs, Navbar } from "../index.js";
 
 const styles = theme => ({
   wrapper: {
