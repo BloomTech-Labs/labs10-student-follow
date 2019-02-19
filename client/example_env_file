@@ -1,0 +1,2 @@
+SKIP_PREFLIGHT_CHECK=true
+REACT_APP_SENDGRID_API_KEY=Official Key from API (Source: https://app.sendgrid.com/settings/api_keys)
