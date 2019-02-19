@@ -31,6 +31,7 @@ router.post('/charge', async (req, res) => {
       interval: 'month',
       product: 'prod_EYoWV6h9SKDkgV',
       nickname: 'Monthly Plan',
+      trial_period_days: 30,
       amount: 999 // cents
     });
 
@@ -48,8 +49,8 @@ router.post('/charge', async (req, res) => {
         // source: user.id,
         items: [
           {
-            plan: 'ruby-infinite-345'
-            // plan: 'prod_EYoWV6h9SKDkgV'
+            // plan: 'ruby-infinite-345'
+            plan: 'prod_EYoWV6h9SKDkgV'
           }
         ]
       },
