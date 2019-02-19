@@ -10,7 +10,7 @@ import Login from './authentication/Login';
 import RefreshrView from "./views/RefreshrView";
 import LandingPage from './views/LandingPage'
 import LoadingPage from './views/LoadingPage';
-import ClassView from './classes/ClassView';
+import ClassView from './views/ClassView';
 
 /* BILLING */
 import BillingPage from './billing/BillingPage'
