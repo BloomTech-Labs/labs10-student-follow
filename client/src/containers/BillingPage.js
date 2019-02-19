@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { Elements, StripeProvider } from 'react-stripe-elements';
-import CheckoutForm from './CheckoutForm';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import Snackbar from '../components/Snackbar';
-import StripeCheckout from './StripeCheckout';
+import TakeMoney from './TakeMoney';
 
 const styles = theme => ({
   cardWrapper: {
@@ -67,7 +66,7 @@ const BillingPage = props => {
           </form>
           <StripeProvider apiKey="pk_test_6uEhds8mHz26DG95ZvUwTURp">
             <Elements>
-              <StripeCheckout subType={subType} />
+              <TakeMoney subType={subType} />
             </Elements>
           </StripeProvider>
         </Grid>

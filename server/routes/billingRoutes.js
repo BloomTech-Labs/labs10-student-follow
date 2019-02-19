@@ -1,5 +1,5 @@
 const express = require('express');
-const stripe = require('stripe')('sk_test_WjgLJcjcHXfmcGedEp7NrXRi'); // test key
+const stripe = require('stripe')('sk_test_A7BKKJLuahxyevmxtp4BZXUT'); // test key
 
 const router = express.Router();
 
@@ -8,21 +8,21 @@ router.get('/', (req, res) => {
 });
 
 router.post('/charge', async (req, res) => {
-  console.log('req', req.body);
-
+  const user = req.body.token;
   try {
     let { status } = await stripe.charges.create({
-      amount: req.body.subType === 'monthly' ? 999 : 2999, // not sure if it's better to do this here or on front end
+      amount: req.body.subType,
       currency: 'usd',
       description: 'test stripe charge',
-      source: req.body.token
+      email: user.card.email,
+      statement_descriptor: 'Refreshr Account',
+      source: user.id
     });
-
     res.json({ status });
   } catch (err) {
     res
       .status(500)
-      .json({ error: `there was an error processing the payment: ${err}` });
+      .json({ error: `There was an error processing the payment: ${err}` });
   }
 });
 
