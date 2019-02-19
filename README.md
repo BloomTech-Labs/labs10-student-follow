@@ -1,15 +1,6 @@
-## Refreshr Backend
-
-```
-"Learning is difficult. Teaching is hard. When learners have small triggers to remember content over a spread out period of time they retain more. Send customizable quizzes on scheduled intervals of 2 days, 2 weeks and 2 months after the initial lecture."
-```
-- `Refreshr` aims to help students retain information through the spaced-learning method and periodic, scheduled quizzes called "refreshrs". This project was designed for our Lambda School Labs Capstone Project.
-
-# [Refreshr App](https://refreshr-app.netlify.com) (Lambda School Labs 10)
+# [Refreshr App Backend](https://refreshr.herokuapp.com) (Lambda School Labs 10)
 
 ![Refreshr Logo](./client/logo.png "Refresh your mind")
-
-- [App Home](https://refreshr-app.netlify.com)
 
 ## Base URL: https://refreshr.herokuapp.com/
 
