@@ -1,5 +1,6 @@
 import React from 'react';
 import StripeCheckout from 'react-stripe-checkout';
+import Image from './logo.png';
 
 export default class TakeMoney extends React.Component {
   onToken = token => {
@@ -20,11 +21,13 @@ export default class TakeMoney extends React.Component {
         stripeKey="pk_test_Y6iNnz4ImmbwJDcFA982Hahf"
         name="Refreshr"
         description="Purchase your subscription"
-        // image="./logo.png"
+        panelLabel="Purchase"
+        image={Image}
         amount={999} //cents
         currency="USD"
         email="nickoferrall@gmail.com"
         bitcoin={true}
+        alipay={true}
       />
     );
   }
