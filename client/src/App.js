@@ -1,15 +1,16 @@
-import React, { useState, useEffect } from "react";
-import { Route } from "react-router-dom";
-import axios from "axios";
-import LandingPage from "./containers/LandingPage.js";
+import React, { useState, useEffect } from 'react';
+import { Route } from 'react-router-dom';
+import axios from 'axios';
+import LandingPage from './containers/LandingPage.js';
 import BillingPage from './containers/BillingPage.js';
-import { RefreshrView } from "./components";
+import TestBilling from './containers/TestBilling.js';
+import { RefreshrView } from './components';
 
 export default function App() {
   const [people, setPeople] = useState([]);
 
   const fetchPeople = async () => {
-    const response = await axios("https://refreshr.herokuapp.com/teachers/");
+    const response = await axios('https://refreshr.herokuapp.com/teachers/');
     setPeople(response.data);
   };
 
@@ -29,6 +30,7 @@ export default function App() {
       />
       <Route path="/refreshrs" render={props => <RefreshrView />} />
       <Route path="/billing" render={props => <BillingPage />} />
+      <Route path="/test" render={props => <TestBilling />} />
     </>
   );
 }

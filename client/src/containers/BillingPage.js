@@ -57,7 +57,7 @@ const BillingPage = props => {
                 name="subType"
                 value="yearly"
               />
-              yearly
+              1 Year Subscription - $9.99
             </label>
             <label>
               <input
@@ -66,7 +66,7 @@ const BillingPage = props => {
                 name="subType"
                 value="monthly"
               />
-              monthly
+              1 Year Premium Subscription - $29.99
             </label>
           </form>
         </Grid>

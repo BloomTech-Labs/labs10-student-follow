@@ -5,6 +5,7 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
 import Snackbar from '../components/Snackbar';
+// import StripeCheckout from 'react-stripe-checkout';
 
 const url = 'http://localhost:9000/billing/charge';
 
@@ -19,6 +20,7 @@ const style = theme => ({
 });
 
 const CheckoutForm = props => {
+  console.log('PROPS from checkout form', props);
   const [snackbarIsOpen, setSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState(null);
   const handleSubmit = async e => {
@@ -54,6 +56,7 @@ const CheckoutForm = props => {
       {snackbarIsOpen && (
         <Snackbar message={snackbarMessage} className="success" />
       )}
+      {/* <StripeCheckout name="test">Will it work?</StripeCheckout> */}
     </>
   );
 };
