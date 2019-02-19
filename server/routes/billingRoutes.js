@@ -1,5 +1,5 @@
 const express = require('express');
-const stripe = require('stripe')('sk_test_A7BKKJLuahxyevmxtp4BZXUT'); // test key
+const stripe = require('stripe')(process.env.REACT_APP_SECRET_KEY); // secret test key in .env
 
 const router = express.Router();
 
@@ -15,7 +15,7 @@ router.post('/charge', async (req, res) => {
       currency: 'usd',
       description: 'test stripe charge',
       email: user.card.email,
-      statement_descriptor: 'Refreshr Account',
+      statement_descriptor: 'Refreshr Payment',
       source: user.id
     });
     res.json({ status });

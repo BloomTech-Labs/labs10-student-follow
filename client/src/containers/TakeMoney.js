@@ -5,25 +5,14 @@ import axios from 'axios';
 
 export default class TakeMoney extends React.Component {
   onToken = async token => {
-    // fetch('/save-stripe-token', {
-    //   method: 'POST',
-    //   body: JSON.stringify(token)
-    // }).then(response => {
-    //   response.json().then(data => {
-    //     alert(`We are in business, ${data.email}`);
-    //   });
-    // });
-    console.log('TOKEN', token, this.props.subType);
     const url = 'http://localhost:9000/billing/charge';
     try {
-      console.log('Inside try');
-      const myResponse = await axios.post(url, {
+      await axios.post(url, {
         token: token,
         subType: this.props.subType
       });
-      console.log('MY response', myResponse);
     } catch (error) {
-      console.log('ERR', error);
+      console.log('Error:', error);
     }
   };
 
