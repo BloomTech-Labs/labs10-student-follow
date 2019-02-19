@@ -15,7 +15,6 @@ router.post('/charge', async (req, res) => {
       amount: req.body.subType === 'monthly' ? 999 : 2999, // not sure if it's better to do this here or on front end
       currency: 'usd',
       description: 'test stripe charge',
-      receipt_email: 'nickoferrall@gmail.com',
       source: req.body.token
     });
 

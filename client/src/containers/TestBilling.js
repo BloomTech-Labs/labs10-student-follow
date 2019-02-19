@@ -18,6 +18,13 @@ export default class TakeMoney extends React.Component {
       <StripeCheckout
         token={this.onToken}
         stripeKey="pk_test_Y6iNnz4ImmbwJDcFA982Hahf"
+        name="Refreshr"
+        description="Purchase your subscription"
+        // image="./logo.png"
+        amount={999} //cents
+        currency="USD"
+        email="nickoferrall@gmail.com"
+        bitcoin={true}
       />
     );
   }
