@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react';
-import { Route, withRouter, Router } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Route, withRouter, Router  } from 'react-router-dom';
+import Grid from "@material-ui/core/Grid";
 import history from './history';
-import { LoadingPage, LandingPage, BillingPage, Login } from './components';
+import { LoadingPage, LandingPage, Login,  BillingPage, Navbar, Navcrumbs, ClassView, RefreshrList } from './components';
 
 const App = (props) => {
   console.log('APP:', props);
@@ -10,10 +11,20 @@ const App = (props) => {
       props.auth.handleAuthentication();
     }
   };
+  const [page, setPage] = useState({page: 'home' });
 
+  const togglePage= (page) => {
+    setPage({page})
+  }
   return (
     <Router history={history}>
       <div>
+        <Navcrumbs page={page} />
+        <Grid container spacing={0}>
+        <Grid item xs={2}>
+          <Navbar togglePage={togglePage} />
+        </Grid>
+        <Grid item xs={10}>
         <Route exact path="/" render={() => <Login auth={props.auth} />} />
         <Route path="/home" render={(props) => <LandingPage {...props} />} />
         <Route
@@ -23,7 +34,11 @@ const App = (props) => {
             return <LoadingPage {...props} />;
           }}
         />
+        <Route path="/refreshrs" render={(props) => <RefreshrList />} />
         <Route path="/billing" render={(props) => <BillingPage />} />
+        <Route path="/classes" render={(props) => <ClassView />} />
+        </Grid>
+        </Grid>
       </div>
     </Router>
   );
