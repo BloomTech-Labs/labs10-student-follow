@@ -34,7 +34,7 @@ router.get('/', (req, res) => {
 router.post('/charge', async (req, res) => {
   const user = req.body;
   // console.log('USER', user);
-  console.log('USER', user);
+  console.log('USER', user.token);
   try {
     // let { status } = await stripe.charges.create({
     //   amount: req.body.subType,
@@ -48,20 +48,28 @@ router.post('/charge', async (req, res) => {
 
     const source = stripe.sources.create(
       {
-        type: 'ach_credit_transfer',
+        type: user.token.type,
+        card: user.token.card,
         currency: 'usd',
         owner: {
-          email: 'jenny.rosen@example.com'
+          email: user.token.email
         }
+        // type: 'ach_credit_transfer',
+        // currency: 'usd',
+        // owner: {
+        //   email: user.token.email
+        // }
       },
       function(err, source) {
+        console.log('ERR', err);
+        console.log('WITHIN SOURCE', source);
         // asynchronously called
-        console.log('SOURCY', source.owner.email);
+        // console.log('SOURCY', source.owner.email);
         const customer = stripe.customers.create({
-          email: source.owner.email,
+          // email: source.owner.email,
           source: source.id
         });
-        console.log('CUSTOMER', customer);
+        // console.log('CUSTOMER', customer);
       }
     );
     console.log('SOURCE', source);
