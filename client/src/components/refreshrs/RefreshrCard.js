@@ -15,11 +15,11 @@ const styles = theme => ({
   }
 });
 
-const RefreshrList = props => {
+const RefreshrCard = props => {
   return (
     <Grid className={props.classes.wrapper}>
       <h1>Card</h1>
     </Grid>
   );
 };
-export default withStyles(styles)(RefreshrList);
+export default withStyles(styles)(RefreshrCard);
