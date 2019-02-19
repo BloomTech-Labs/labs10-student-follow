@@ -8,7 +8,7 @@ const {
 } = require('../middleware/formattingMiddleware');
 const responseStatus = require('../config/responseStatusConfig');
 
-router.get('/', jwtCheck, async (req, res, next) => {
+router.get('/', async (req, res, next) => {
   try {
     const teachers = await db.getAll();
     res.status(responseStatus.success).json(teachers);
@@ -17,7 +17,7 @@ router.get('/', jwtCheck, async (req, res, next) => {
   }
 });
 
-router.get('/:id', jwtCheck, async (req, res, next) => {
+router.get('/:id', async (req, res, next) => {
   const { id } = req.params;
   try {
     const teachersClasses = await db.getTeacher(id);
@@ -31,16 +31,22 @@ router.get('/:id', jwtCheck, async (req, res, next) => {
   }
 });
 
-router.put('/:id', jwtCheck, emptyCheck, whitespaceCheck, async (req, res, next) => {
-  const { id } = req.params;
-  const { body } = req;
-  try {
-    const updatedRecords = await db.updateTeacher(id, body);
-    res.status(responseStatus.success).json({ updatedRecords });
-  } catch (err) {
-    next(err);
+router.put(
+  '/:id',
+  jwtCheck,
+  emptyCheck,
+  whitespaceCheck,
+  async (req, res, next) => {
+    const { id } = req.params;
+    const { body } = req;
+    try {
+      const updatedRecords = await db.updateTeacher(id, body);
+      res.status(responseStatus.success).json({ updatedRecords });
+    } catch (err) {
+      next(err);
+    }
   }
-});
+);
 
 router.delete('/:id', jwtCheck, async (req, res, next) => {
   const { id } = req.params;

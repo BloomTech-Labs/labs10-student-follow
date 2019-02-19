@@ -10,7 +10,7 @@ import Login from './authentication/Login';
 import RefreshrView from "./views/RefreshrView";
 import LandingPage from './views/LandingPage'
 import LoadingPage from './views/LoadingPage';
-
+import ClassView from './classes/ClassView';
 
 /* BILLING */
 import BillingPage from './billing/BillingPage'
@@ -20,4 +20,7 @@ import CheckoutForm from './billing/CheckoutForm'
 import RefreshrList from "./refreshrs/RefreshrList";
 import RefreshrCard from "./refreshrs/RefreshrCard";
 
-export {  Navcrumbs, Navbar, RefreshrList, RefreshrCard, RefreshrView, LandingPage, LoadingPage, Auth, Login ,BillingPage, CheckoutForm };
+/* CLASSES */
+import ClassList from './classes/ClassList';
+
+export {  Navcrumbs, Navbar, RefreshrList, RefreshrCard, RefreshrView, LandingPage, LoadingPage, Auth, Login ,BillingPage, CheckoutForm, ClassView, ClassList };

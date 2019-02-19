@@ -5,7 +5,7 @@ const jwtCheck = require('../middleware/authenticate');
 const { emptyCheck } = require('../middleware/formattingMiddleware');
 const responseStatus = require('../config/responseStatusConfig');
 
-router.get('/', jwtCheck, async (req, res, next) => {
+router.get('/', async (req, res, next) => {
   try {
     const classes = await db.getAll();
     res.status(responseStatus.success).json(classes);
@@ -14,7 +14,7 @@ router.get('/', jwtCheck, async (req, res, next) => {
   }
 });
 
-router.get('/:id', jwtCheck, async (req, res, next) => {
+router.get('/:id', async (req, res, next) => {
   const { id } = req.params;
   try {
     const specifiedClass = await db.getClass(id);
