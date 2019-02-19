@@ -13,14 +13,11 @@ export default class TakeMoney extends React.Component {
     });
   };
 
-  // ...
-
   render() {
     return (
-      // ...
       <StripeCheckout
         token={this.onToken}
-        stripeKey="my_PUBLISHABLE_stripekey"
+        stripeKey="pk_test_Y6iNnz4ImmbwJDcFA982Hahf"
       />
     );
   }
