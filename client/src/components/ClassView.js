@@ -11,66 +11,106 @@ const styles = theme => ({
 });
 
 function ClassView(props) {
-  // Variables used in multiple operations
+  // VARIABLES
   const headers = {
     "headers": { "Authorization": `Bearer ${process.env.REACT_APP_SENDGRID_API_KEY}` },
     "content-type": "application/json"
   }
-  const listId = '7061244'
+  const listId = "7061139"
+  const recipientId = "YXN0dXJpYXN4aUBnbWFpbC5jb20="
+  const recipientIds = ["YXJlbGkuYXRoZW5zQGNvd3N0b3JlLm5ldA==", "YXN0dXJpYXN4aUBnbWFpbC5jb20="]
 
-  // Basic CRUD operations
-  const createList = () => {
+  // LIST OPERATIONS
+  const addList = () => {
     const url = "https://api.sendgrid.com/v3/contactdb/lists"
     const body = {
-      "name": "test5"
+      "name": "test4"
     }
     axios.post(url, body, headers)
       .then(res => {
-        console.log(`===Create list: ${res.data.name}===`)
+        console.log(`===addList: ${res.data.name}===`)
         console.log(res.data.id)
       })
       .catch(err => console.log(err))
   }
 
-  const getAllLists = () => {
+  const getLists = () => {
     const url = "https://api.sendgrid.com/v3/contactdb/lists"
     axios.get(url, headers)
       .then(res => {
-        console.log(`===Retrieve list: all===`)
+        console.log(`===getLists: all===`)
         console.log(res.data.lists)
       })
       .catch(err => console.log(err))
   }
 
-  const getOneList = () => {
+  const getList = () => {
     const url = `https://api.sendgrid.com/v3/contactdb/lists/${listId}`
     axios.get(url, headers)
       .then(res => {
-        console.log(`===Retrieve list: ${res.data.name}===`)
+        console.log(`===getList: ${res.data.name}===`)
         console.log(res.data)
       })
       .catch(err => console.log(err))
   }
 
-  const updateOneList = () => {
+  const updateList = () => {
     const url = `https://api.sendgrid.com/v3/contactdb/lists/${listId}`
     const body = {
       "name": "modifiedListName"
     }
     axios.patch(url, body, headers)
       .then(res => {
-        console.log(`===Update list: ${res.data.name}===`)
+        console.log(`===updateList: ${res.data.name}===`)
         console.log(res)
       })
       .catch(err => console.log(err))
   }
 
-  const deleteOneList = () => {
+  const deleteList = () => {
     const url = `https://api.sendgrid.com/v3/contactdb/lists/${listId}?delete_contacts=true`
     axios.delete(url, headers)
       .then(res => {
-        console.log(`===Delete list: ${res.statusText}===`)
+        console.log(`===deleteList: ${res.statusText}===`)
         console.log(res)
+      })
+      .catch(err => console.log(err))
+  }
+
+  // LIST RECIPIENTS OPERATIONS
+  const getContacts = () => {
+    const url = `https://api.sendgrid.com/v3/contactdb/lists/${listId}/recipients`
+    axios.get(url, headers)
+      .then(res => {
+        console.log(`===getContacts: ${res.data.recipient_count}===`)
+        console.log(res.data.recipients)
+      })
+      .catch(err => console.log(err))
+  }
+  const addContact = () => {
+    const url = `https://api.sendgrid.com/v3/contactdb/lists/${listId}/recipients/${recipientId}`
+    axios.post(url, null, headers)
+      .then(res => {
+        console.log(`===addContact: recipientId ${recipientId} added to listId ${listId}===`)
+        console.log(res.statusText)
+      })
+      .catch(err => console.log(err))
+  }
+  const addContacts = () => {
+    const url = `https://api.sendgrid.com/v3/contactdb/lists/${listId}/recipients`
+    axios.post(url, recipientIds, headers)
+      .then(res => {
+        console.log(`===addContacts: recipientIds ${recipientIds} added to listId ${listId}===`)
+        console.log(res.statusText)
+      })
+      .catch(err => console.log(err))
+  }
+  const deleteContact = () => {
+    const url = `https://api.sendgrid.com/v3/contactdb/lists/${listId}/recipients/${recipientId}`
+    axios.delete(url, headers)
+      .then(res => {
+        console.log(`===deleteContact: recipientId: ${recipientId} deleted from listId ${listId}===`)
+        console.log(res.statusText)
       })
       .catch(err => console.log(err))
   }
@@ -85,11 +125,19 @@ function ClassView(props) {
         <Grid item xs={10}>
           <p>ClassView</p>
           <div>
-            <button onClick={createList}>createList</button>
-            <button onClick={getAllLists}>getAllLists</button>
-            <button onClick={getOneList}>getOneList</button>
-            <button onClick={updateOneList}>updateOneList</button>
-            <button onClick={deleteOneList}>deleteOneList</button>
+            <h1>LIST OPERATIONS</h1>
+            <button onClick={addList}>addList</button>
+            <button onClick={getLists}>getLists</button>
+            <button onClick={getList}>getList</button>
+            <button onClick={updateList}>updateList</button>
+            <button onClick={deleteList}>deleteList</button>
+          </div>
+          <div>
+            <h1>LIST RECIPIENT OPERATIONS</h1>
+            <button onClick={getContacts}>getContacts</button>
+            <button onClick={addContact}>addContact</button>
+            <button onClick={addContacts}>addContacts</button>
+            <button onClick={deleteContact}>deleteContact</button>
           </div>
         </Grid>
       </Grid>
