@@ -2,12 +2,10 @@ const express = require('express');
 const router = express.Router();
 const db = require('../data/helpers/refreshrHelper');
 const jwtCheck = require('../middleware/authenticate');
-const {
-  emptyCheck,
-} = require('../middleware/formattingMiddleware');
+const { emptyCheck } = require('../middleware/formattingMiddleware');
 const responseStatus = require('../config/responseStatusConfig');
 
-router.get('/', jwtCheck, async (req, res, next) => {
+router.get('/', async (req, res, next) => {
   try {
     const refreshrs = await db.getAll();
     res.status(responseStatus.success).json(refreshrs);
@@ -31,36 +29,26 @@ router.get('/:id', jwtCheck, async (req, res, next) => {
   }
 });
 
-router.post(
-  '/',
-  jwtCheck,
-  emptyCheck,
-  async (req, res, next) => {
-    const { body } = req;
-    try {
-      const newRefreshrID = await db.addRefreshr(body);
-      res.status(responseStatus.postCreated).json({ newRefreshrID });
-    } catch (err) {
-      next(err);
-    }
+router.post('/', jwtCheck, emptyCheck, async (req, res, next) => {
+  const { body } = req;
+  try {
+    const newRefreshrID = await db.addRefreshr(body);
+    res.status(responseStatus.postCreated).json({ newRefreshrID });
+  } catch (err) {
+    next(err);
   }
-);
+});
 
-router.put(
-  '/:id',
-  jwtCheck,
-  emptyCheck,
-  async (req, res, next) => {
-    const { id } = req.params;
-    const { body } = req;
-    try {
-      const updatedRecords = await db.updateRefreshr(id, body);
-      res.status(responseStatus.success).json({ updatedRecords });
-    } catch (err) {
-      next(err);
-    }
+router.put('/:id', jwtCheck, emptyCheck, async (req, res, next) => {
+  const { id } = req.params;
+  const { body } = req;
+  try {
+    const updatedRecords = await db.updateRefreshr(id, body);
+    res.status(responseStatus.success).json({ updatedRecords });
+  } catch (err) {
+    next(err);
   }
-);
+});
 
 router.delete('/:id', jwtCheck, async (req, res, next) => {
   const { id } = req.params;

@@ -8,7 +8,7 @@ const {
 } = require('../middleware/formattingMiddleware');
 const responseStatus = require('../config/responseStatusConfig');
 
-router.get('/', jwtCheck, async (req, res, next) => {
+router.get('/', async (req, res, next) => {
   try {
     const students = await db.getAll();
     res.status(responseStatus.success).json(students);
@@ -17,7 +17,7 @@ router.get('/', jwtCheck, async (req, res, next) => {
   }
 });
 
-router.get('/:id', jwtCheck, async (req, res, next) => {
+router.get('/:id', async (req, res, next) => {
   const { id } = req.params;
   try {
     const student = await db.getStudent(id);

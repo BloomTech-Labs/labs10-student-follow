@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { Route } from "react-router-dom";
-import axios from "axios";
-import LandingPage from "./containers/LandingPage.js";
+import React, { useState, useEffect } from 'react';
+import { Route } from 'react-router-dom';
+import axios from 'axios';
+import LandingPage from './containers/LandingPage.js';
 import BillingPage from './containers/BillingPage.js';
 import { RefreshrView, ClassView } from "./components";
 
@@ -9,7 +9,7 @@ export default function App() {
   const [people, setPeople] = useState([]);
 
   const fetchPeople = async () => {
-    const response = await axios("https://refreshr.herokuapp.com/teachers/");
+    const response = await axios('https://refreshr.herokuapp.com/teachers/');
     setPeople(response.data);
   };
 

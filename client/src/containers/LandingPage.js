@@ -1,6 +1,7 @@
 import React from 'react';
 
 export default function LandingPage(props) {
+  console.log('props lp', props);
   return (
     <>
       <h1>Component disabled</h1>
