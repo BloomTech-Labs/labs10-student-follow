@@ -51,6 +51,7 @@ function ClassView(props) {
       })
       .catch(err => console.log(err))
   }
+
   const getRefreshr = () => {
     const url = `https://api.sendgrid.com/v3/campaigns/${campaign_id}`
     axios.get(url, headers)
@@ -60,6 +61,7 @@ function ClassView(props) {
       })
       .catch(err => console.log(err))
   }
+
   const getRefreshrs = () => {
     const url = "https://api.sendgrid.com/v3/campaigns?limit=10&offset=0"
     axios.get(url, headers)
@@ -69,6 +71,7 @@ function ClassView(props) {
       })
       .catch(err => console.log(err))
   }
+
   const updateRefreshr = () => {
     const updated_refreshr = {
       "title": "123March Newsletter",
@@ -141,6 +144,7 @@ function ClassView(props) {
       })
       .catch(err => console.log(err))
   }
+
   const getSender = () => {
     const url = `https://api.sendgrid.com/v3/senders/${sender_id}`
     axios.get(url, headers)
@@ -150,6 +154,7 @@ function ClassView(props) {
       })
       .catch(err => console.log(err))
   }
+
   const getSenders = () => {
     const url = "https://api.sendgrid.com/v3/senders"
     axios.get(url, headers)
@@ -159,6 +164,7 @@ function ClassView(props) {
       })
       .catch(err => console.log(err))
   }
+
   const updateSender = () => {
     const url = `https://api.sendgrid.com/v3/senders/${sender_id}`
     const updated_sender = {
@@ -185,6 +191,7 @@ function ClassView(props) {
       })
       .catch(err => console.log(err))
   }
+
   const deleteSender = () => {
     const url = `https://api.sendgrid.com/v3/senders/${sender_id}`
     axios.delete(url, headers)
@@ -194,6 +201,7 @@ function ClassView(props) {
       })
       .catch(err => console.log(err))
   }
+
   const resendVerification = () => {
     const url = `https://api.sendgrid.com/v3/senders/${sender_id}/resend_verification`
     axios.post(url, null, headers)
@@ -220,22 +228,22 @@ function ClassView(props) {
       .catch(err => console.log(err))
   }
 
-  const getLists = () => {
-    const url = "https://api.sendgrid.com/v3/contactdb/lists"
-    axios.get(url, headers)
-      .then(res => {
-        console.log(`===getLists: all===`)
-        console.log(res.data.lists)
-      })
-      .catch(err => console.log(err))
-  }
-
   const getList = () => {
     const url = `https://api.sendgrid.com/v3/contactdb/lists/${listId}`
     axios.get(url, headers)
       .then(res => {
         console.log(`===getList: ${res.data.name}===`)
         console.log(res.data)
+      })
+      .catch(err => console.log(err))
+  }
+
+  const getLists = () => {
+    const url = "https://api.sendgrid.com/v3/contactdb/lists"
+    axios.get(url, headers)
+      .then(res => {
+        console.log(`===getLists: all===`)
+        console.log(res.data.lists)
       })
       .catch(err => console.log(err))
   }
@@ -266,15 +274,6 @@ function ClassView(props) {
 
 
   // LIST RECIPIENTS OPERATIONS
-  const getContacts = () => {
-    const url = `https://api.sendgrid.com/v3/contactdb/lists/${listId}/recipients`
-    axios.get(url, headers)
-      .then(res => {
-        console.log(`===getContacts: ${res.data.recipient_count}===`)
-        console.log(res.data.recipients)
-      })
-      .catch(err => console.log(err))
-  }
   const addContact = () => {
     const url = `https://api.sendgrid.com/v3/contactdb/lists/${listId}/recipients/${recipient_id}`
     axios.post(url, null, headers)
@@ -284,12 +283,23 @@ function ClassView(props) {
       })
       .catch(err => console.log(err))
   }
+
   const addContacts = () => {
     const url = `https://api.sendgrid.com/v3/contactdb/lists/${listId}/recipients`
     axios.post(url, recipient_ids, headers)
       .then(res => {
         console.log(`===addContacts: recipient_ids ${recipient_ids} added to listId ${listId}===`)
         console.log(res.statusText)
+      })
+      .catch(err => console.log(err))
+  }
+
+  const getContacts = () => {
+    const url = `https://api.sendgrid.com/v3/contactdb/lists/${listId}/recipients`
+    axios.get(url, headers)
+      .then(res => {
+        console.log(`===getContacts: ${res.data.recipient_count}===`)
+        console.log(res.data.recipients)
       })
       .catch(err => console.log(err))
   }
@@ -316,35 +326,35 @@ function ClassView(props) {
           <p>ClassView</p>
           <div>
             <h1>REFRESHRS OPERATIONS</h1>
-            <button onClick={addRefreshr}>addRefreshr</button>
-            <button onClick={getRefreshrs}>getRefreshrs</button>
-            <button onClick={getRefreshr}>getRefreshr</button>
-            <button onClick={updateRefreshr}>updateRefreshr</button>
-            <button onClick={deleteRefreshr}>deleteRefreshr</button>
+            <button onClick={addRefreshr} style={{ background: "limegreen" }} >addRefreshr</button>
+            <button onClick={getRefreshr} style={{ background: "goldenrod" }} >getRefreshr</button>
+            <button onClick={getRefreshrs} style={{ background: "goldenrod" }} >getRefreshrs</button>
+            <button onClick={updateRefreshr} style={{ background: "lightpink" }} >updateRefreshr</button>
+            <button onClick={deleteRefreshr} style={{ background: "crimson" }} >deleteRefreshr</button>
           </div>
           <div>
             <h1>SENDER OPERATIONS</h1>
-            <button onClick={addSender}>addSender</button>
-            <button onClick={getSender}>getSender</button>
-            <button onClick={getSenders}>getSenders</button>
-            <button onClick={updateSender}>updateSender</button>
-            <button onClick={deleteSender}>deleteSender</button>
-            <button onClick={resendVerification}>resendVerification</button>
+            <button onClick={addSender} style={{ background: "limegreen" }} >addSender</button>
+            <button onClick={getSender} style={{ background: "goldenrod" }} >getSender</button>
+            <button onClick={getSenders} style={{ background: "goldenrod" }} >getSenders</button>
+            <button onClick={updateSender} style={{ background: "lightpink" }} >updateSender</button>
+            <button onClick={deleteSender} style={{ background: "crimson" }} >deleteSender</button>
+            <button onClick={resendVerification} style={{ background: "teal" }} >resendVerification</button>
           </div>
           <div>
             <h1>LIST OPERATIONS</h1>
-            <button onClick={addList}>addList</button>
-            <button onClick={getLists}>getLists</button>
-            <button onClick={getList}>getList</button>
-            <button onClick={updateList}>updateList</button>
-            <button onClick={deleteList}>deleteList</button>
+            <button onClick={addList} style={{ background: "limegreen" }} >addList</button>
+            <button onClick={getList} style={{ background: "goldenrod" }} >getList</button>
+            <button onClick={getLists} style={{ background: "goldenrod" }} >getLists</button>
+            <button onClick={updateList} style={{ background: "lightpink" }} >updateList</button>
+            <button onClick={deleteList} style={{ background: "crimson" }} >deleteList</button>
           </div>
           <div>
             <h1>LIST RECIPIENT OPERATIONS</h1>
-            <button onClick={getContacts}>getContacts</button>
-            <button onClick={addContact}>addContact</button>
-            <button onClick={addContacts}>addContacts</button>
-            <button onClick={deleteContact}>deleteContact</button>
+            <button onClick={addContact} style={{ background: "limegreen" }} >addContact</button>
+            <button onClick={addContacts} style={{ background: "limegreen" }} > addContacts</button>
+            <button onClick={getContacts} style={{ background: "goldenrod" }} >getContacts</button>
+            <button onClick={deleteContact} style={{ background: "crimson" }} >deleteContact</button>
           </div>
         </Grid>
       </Grid>
