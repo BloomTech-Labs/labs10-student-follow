@@ -10,11 +10,11 @@ const styles = (theme) => ({
   }
 });
 
-const Callback = (props) => {
+const LoadingPage = (props) => {
   const { classes } = props;
   return (
       <CircularProgress size={100} className={classes.progress} />
   );
 };
 
-export default withStyles(styles)(Callback);
+export default withStyles(styles)(LoadingPage);

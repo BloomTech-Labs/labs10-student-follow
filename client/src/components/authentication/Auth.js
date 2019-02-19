@@ -9,10 +9,9 @@ export default class Auth {
   auth0 = new auth0.WebAuth({
     domain: 'team-refreshr.auth0.com',
     clientID: 'jNDq5B6iAnIRcrpM07Omh05uyppZ89px',
-    redirectUri: 'http://localhost:3000/callback',
+    redirectUri: 'http://localhost:3000/loading',
     responseType: 'token id_token',
     scope: 'openid',
-    sso: false
   });
 
   login = () => {
@@ -23,6 +22,7 @@ export default class Auth {
     this.auth0.parseHash((err, authResult) => {
       if (authResult && authResult.accessToken && authResult.idToken) {
         this.setSession(authResult);
+        // history.replace('/home')
       } else if (err) {
         history.replace('/');
         console.log(err);
@@ -75,7 +75,7 @@ export default class Auth {
     localStorage.removeItem('isLoggedIn');
 
     // navigate to the home route
-    history.replace('/home');
+    history.replace('/');
   }
 
   isAuthenticated =() => {
