@@ -10,7 +10,7 @@ export default class Auth {
     domain: 'team-refreshr.auth0.com',
     clientID: 'jNDq5B6iAnIRcrpM07Omh05uyppZ89px',
     audience: 'https://team-refreshr.auth0.com/api/v2/',
-    redirectUri: 'http://localhost:3000/loading',
+    redirectUri: 'https://refreshr-app.netlify.com/loading/',
     responseType: 'token id_token',
     scope: 'openid',
   });
