@@ -4,22 +4,19 @@ import { withStyles } from "@material-ui/core/styles";
 
 const styles = theme => ({
   wrapper: {
-    border: "1px solid black",
     display: "flex",
-    flexWrap: "wrap",
-    alignItems: "center",
-    justifyContent: "center",
-    margin: "1rem",
-    width: "30%",
-    height: "30%"
+    justifyContent: "flex start",
+    textAlign: "left",
+    margin: "0 1rem"
   }
 });
 
-const RefreshrList = props => {
+const Navcrumbs = props => {
   return (
     <Grid className={props.classes.wrapper}>
-      <h1>Card</h1>
+      <p data-testid="crumbTrail"> Home > {props.page} </p>
     </Grid>
   );
 };
-export default withStyles(styles)(RefreshrList);
+
+export default withStyles(styles)(Navcrumbs);
