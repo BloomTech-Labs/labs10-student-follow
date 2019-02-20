@@ -7,9 +7,11 @@ import Auth from './authentication/Auth';
 import Login from './authentication/Login';
 
 /* VIEWS */
+import ClassPage from './views/ClassPage';
 import ClassView from './views/ClassView';
 import LandingPage from './views/LandingPage';
 import LoadingPage from './views/LoadingPage';
+import CreateEditPage from './views/CreateEditPage';
 
 /* BILLING */
 import BillingPage from './billing/BillingPage';
@@ -21,6 +23,13 @@ import RefreshrCard from './refreshrs/RefreshrCard';
 
 /* CLASSES */
 import ClassList from './classes/ClassList';
+import ClassCard from './classes/ClassCard';
+import ClassCreate from './classes/ClassCreate';
+import ClassEdit from './classes/ClassEdit';
+import SenderForm from './classes/SenderForm';
+import RecipientForm from './classes/RecipientForm';
+import ListForm from './classes/ListForm';
+import CampaignForm from './classes/CampaignForm';
 
 export {
   Navcrumbs,
@@ -28,9 +37,18 @@ export {
   RefreshrList,
   RefreshrCard,
   ClassList,
+  ClassCard,
+  ClassCreate,
+  ClassEdit,
+  SenderForm,
+  RecipientForm,
+  ListForm,
+  CampaignForm,
+  ClassPage,
   ClassView,
   LandingPage,
   LoadingPage,
+  CreateEditPage,
   Auth,
   Login,
   BillingPage,
