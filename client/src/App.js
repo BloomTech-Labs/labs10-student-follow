@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Route, withRouter, Router } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import history from './history';
+import axios from 'axios';
+
 import {
   LoadingPage,
   LandingPage,
@@ -14,18 +16,37 @@ import {
 } from './components';
 
 const App = props => {
+  /* AUTHENTICATION */
   const handleAuthentication = (nextState, replace) => {
     if (/access_token|id_token|error/.test(nextState.location.hash)) {
       props.auth.handleAuthentication();
     }
   };
-  const [open, setOpen] = useState(false);
 
+  /* STATE */
+  const [open, setOpen] = useState(false);
+  const [refreshrs, setRefreshrs] = useState([]);
+
+  /* METHODS */
+  //Nav
   const togglePage = () => {
     setOpen(!open);
   };
-  console.log('PROPS:', history);
+  //Refreshrs
+  const getRefreshrs = (options) => {
+    axios
+      .get('https://refreshr.herokuapp.com/refreshrs', options)
+      .then(res => {
+        console.log('data', res.data);
+        setRefreshrs(res.data.refreshrs);
+        //console.log('re, app', refreshrs)
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
 
+  /* ROUTES */
   return (
     <Router history={history}>
       <div>
@@ -50,7 +71,15 @@ const App = props => {
                 return <LoadingPage {...props} />;
               }}
             />
-            <Route path="/refreshrs" render={props => <RefreshrList />} />
+            <Route
+              path="/refreshrs"
+              render={props => (
+                <RefreshrList
+                  getRefreshrs={getRefreshrs}
+                  refreshrs={refreshrs}
+                />
+              )}
+            />
             <Route path="/billing" render={props => <BillingPage />} />
             <Route path="/classes" render={props => <ClassView />} />
           </Grid>
