@@ -2,11 +2,10 @@ import React from "react";
 import Grid from "@material-ui/core/Grid";
 import axios from 'axios';
 import { withStyles } from "@material-ui/core/styles";
-import { Navcrumbs, Navbar } from "../index.js";
 
 const styles = theme => ({
   wrapper: {
-    textAlign: "left"
+    textAlign: "left",
   }
 });
 
@@ -316,49 +315,42 @@ function ClassView(props) {
 
 
   return (
-    <>
-      <Navcrumbs />
-      <Grid container spacing={0}>
-        <Grid item xs={2}>
-          <Navbar />
-        </Grid>
-        <Grid item xs={10}>
-          <p>ClassView</p>
-          <div>
-            <h1>REFRESHRS OPERATIONS</h1>
-            <button onClick={addRefreshr} style={{ background: "limegreen" }} >addRefreshr</button>
-            <button onClick={getRefreshr} style={{ background: "goldenrod" }} >getRefreshr</button>
-            <button onClick={getRefreshrs} style={{ background: "goldenrod" }} >getRefreshrs</button>
-            <button onClick={updateRefreshr} style={{ background: "lightpink" }} >updateRefreshr</button>
-            <button onClick={deleteRefreshr} style={{ background: "crimson" }} >deleteRefreshr</button>
-          </div>
-          <div>
-            <h1>SENDER OPERATIONS</h1>
-            <button onClick={addSender} style={{ background: "limegreen" }} >addSender</button>
-            <button onClick={getSender} style={{ background: "goldenrod" }} >getSender</button>
-            <button onClick={getSenders} style={{ background: "goldenrod" }} >getSenders</button>
-            <button onClick={updateSender} style={{ background: "lightpink" }} >updateSender</button>
-            <button onClick={deleteSender} style={{ background: "crimson" }} >deleteSender</button>
-            <button onClick={resendVerification} style={{ background: "teal" }} >resendVerification</button>
-          </div>
-          <div>
-            <h1>LIST OPERATIONS</h1>
-            <button onClick={addList} style={{ background: "limegreen" }} >addList</button>
-            <button onClick={getList} style={{ background: "goldenrod" }} >getList</button>
-            <button onClick={getLists} style={{ background: "goldenrod" }} >getLists</button>
-            <button onClick={updateList} style={{ background: "lightpink" }} >updateList</button>
-            <button onClick={deleteList} style={{ background: "crimson" }} >deleteList</button>
-          </div>
-          <div>
-            <h1>LIST RECIPIENT OPERATIONS</h1>
-            <button onClick={addContact} style={{ background: "limegreen" }} >addContact</button>
-            <button onClick={addContacts} style={{ background: "limegreen" }} > addContacts</button>
-            <button onClick={getContacts} style={{ background: "goldenrod" }} >getContacts</button>
-            <button onClick={deleteContact} style={{ background: "crimson" }} >deleteContact</button>
-          </div>
-        </Grid>
-      </Grid>
-    </>
+    <Grid container>
+      < Grid item xs={10} >
+        <div>
+          <h1>REFRESHRS OPERATIONS</h1>
+          <button onClick={addRefreshr} style={{ background: "limegreen" }} >addRefreshr</button>
+          <button onClick={getRefreshr} style={{ background: "goldenrod" }} >getRefreshr</button>
+          <button onClick={getRefreshrs} style={{ background: "goldenrod" }} >getRefreshrs</button>
+          <button onClick={updateRefreshr} style={{ background: "lightpink" }} >updateRefreshr</button>
+          <button onClick={deleteRefreshr} style={{ background: "crimson" }} >deleteRefreshr</button>
+        </div>
+        <div>
+          <h1>SENDER OPERATIONS</h1>
+          <button onClick={addSender} style={{ background: "limegreen" }} >addSender</button>
+          <button onClick={getSender} style={{ background: "goldenrod" }} >getSender</button>
+          <button onClick={getSenders} style={{ background: "goldenrod" }} >getSenders</button>
+          <button onClick={updateSender} style={{ background: "lightpink" }} >updateSender</button>
+          <button onClick={deleteSender} style={{ background: "crimson" }} >deleteSender</button>
+          <button onClick={resendVerification} style={{ background: "teal" }} >resendVerification</button>
+        </div>
+        <div>
+          <h1>LIST OPERATIONS</h1>
+          <button onClick={addList} style={{ background: "limegreen" }} >addList</button>
+          <button onClick={getList} style={{ background: "goldenrod" }} >getList</button>
+          <button onClick={getLists} style={{ background: "goldenrod" }} >getLists</button>
+          <button onClick={updateList} style={{ background: "lightpink" }} >updateList</button>
+          <button onClick={deleteList} style={{ background: "crimson" }} >deleteList</button>
+        </div>
+        <div>
+          <h1>LIST RECIPIENT OPERATIONS</h1>
+          <button onClick={addContact} style={{ background: "limegreen" }} >addContact</button>
+          <button onClick={addContacts} style={{ background: "limegreen" }} > addContacts</button>
+          <button onClick={getContacts} style={{ background: "goldenrod" }} >getContacts</button>
+          <button onClick={deleteContact} style={{ background: "crimson" }} >deleteContact</button>
+        </div>
+      </Grid >
+    </Grid >
   );
 };
 

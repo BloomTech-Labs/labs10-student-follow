@@ -1,6 +1,6 @@
 /* NAV */
-import Navbar from './navigation/Navbar';
 import Navcrumbs from './navigation/Navcrumbs';
+import Navbar from './navigation/Navbar';
 
 /* AUTH */
 import Auth from './authentication/Auth';
