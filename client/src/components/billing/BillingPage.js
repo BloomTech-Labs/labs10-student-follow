@@ -51,7 +51,6 @@ const BillingPage = props => {
                 type="radio"
                 name="subType"
                 value={999}
-                selected={true}
               />
               1 Year Subscription - $9.99
             </label>
