@@ -9,3 +9,7 @@
   base    = "./client"
   publish = "./client/build"
   command = "yarn build"
+
+[[redirects]]
+  from = "/loading"
+  to = "/home"
