@@ -1,5 +1,5 @@
 /* NAV */
-import NavCrumbs from './navigation/Navcrumbs';
+import Navcrumbs from './navigation/Navcrumbs';
 import Navbar from './navigation/Navbar';
 
 /* AUTH */
@@ -23,7 +23,7 @@ import RefreshrCard from './refreshrs/RefreshrCard';
 import ClassList from './classes/ClassList';
 
 export {
-  NavCrumbs,
+  Navcrumbs,
   Navbar,
   RefreshrList,
   RefreshrCard,
