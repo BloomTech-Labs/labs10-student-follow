@@ -11,8 +11,9 @@ import {
   BillingPage,
   Navbar,
   Navcrumbs,
-  ClassView,
-  RefreshrList
+  ClassPage,
+  RefreshrList,
+  CreateEditPage
 } from './components';
 
 const App = props => {
@@ -81,7 +82,8 @@ const App = props => {
               )}
             />
             <Route path="/billing" render={props => <BillingPage />} />
-            <Route path="/classes" render={props => <ClassView />} />
+            <Route path="/classes" render={props => <ClassPage />} />
+            <Route path="/classesCEP" render={props => <CreateEditPage />} />
           </Grid>
         </Grid>
       </div>
