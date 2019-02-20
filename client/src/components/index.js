@@ -26,6 +26,10 @@ import ClassList from './classes/ClassList';
 import ClassCard from './classes/ClassCard';
 import ClassCreate from './classes/ClassCreate';
 import ClassEdit from './classes/ClassEdit';
+import SenderForm from './classes/SenderForm';
+import RecipientForm from './classes/RecipientForm';
+import ListForm from './classes/ListForm';
+import CampaignForm from './classes/CampaignForm';
 
 export {
   Navcrumbs,
@@ -36,6 +40,10 @@ export {
   ClassCard,
   ClassCreate,
   ClassEdit,
+  SenderForm,
+  RecipientForm,
+  ListForm,
+  CampaignForm,
   ClassPage,
   ClassView,
   LandingPage,
