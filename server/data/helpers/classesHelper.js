@@ -6,7 +6,7 @@ module.exports = {
     return allClasses;
   },
 
-  getClass: async (id) => {
+  getClass: async id => {
     const selectedClass = await db('classes')
       .where({ id })
       .first();
@@ -47,26 +47,26 @@ module.exports = {
       .where('classes.id', id);
 
     return Promise.all([selectedClass, teacher, students, refreshrs]).then(
-      (response) => {
+      response => {
         let [selectedClass, teacher, students, refreshrs] = response;
         let result = {
           id: selectedClass.id,
           name: selectedClass.name,
-          teacher: teacher.map((t) => {
+          teacher: teacher.map(t => {
             return {
               teacher_id: t.t_id,
               name: `${t.t_first} ${t.t_last}`,
               email: t.t_email
             };
           }),
-          students: students.map((s) => {
+          students: students.map(s => {
             return {
               student_id: s.student_id,
               name: `${s.firstname} ${s.lastname}`,
               email: s.email
             };
           }),
-          refreshrs: refreshrs.map((r) => {
+          refreshrs: refreshrs.map(r => {
             return {
               refreshr_id: r.id,
               date: r.date,
@@ -94,11 +94,11 @@ module.exports = {
     return ID[0];
   },
 
-  addClass: async (classInfo) => {
+  addClass: async classInfo => {
     const newClassID = await db('classes')
       .insert(classInfo)
       .returning('id')
-      .then((id) => {
+      .then(id => {
         return id;
       });
     return newClassID[0];
@@ -111,7 +111,7 @@ module.exports = {
     return updateCount;
   },
 
-  deleteClass: async (id) => {
+  deleteClass: async id => {
     const deleteCount = await db('classes')
       .where({ id })
       .del();

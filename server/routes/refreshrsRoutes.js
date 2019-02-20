@@ -8,7 +8,7 @@ const responseStatus = require('../config/responseStatusConfig');
 router.get('/', async (req, res, next) => {
   try {
     const refreshrs = await db.getAll();
-    res.status(responseStatus.success).json(refreshrs);
+    res.status(responseStatus.success).json({refreshrs});
   } catch (err) {
     next(err);
   }

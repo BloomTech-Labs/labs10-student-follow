@@ -8,8 +8,6 @@ require('dotenv').config();
 
 const auth = new Auth()
 
-console.log(auth)
-
 ReactDOM.render(
   <Router>
     <App  auth={auth}/>
