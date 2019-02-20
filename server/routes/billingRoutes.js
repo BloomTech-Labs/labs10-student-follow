@@ -33,6 +33,8 @@ router.get('/', (req, res) => {
 
 router.post('/charge', async (req, res) => {
   const user = req.body;
+  console.log('USER', req.body);
+  console.log('SUBTYPE', user.subType);
   if (!user) {
     return res.send('User not found.');
   }
@@ -40,7 +42,7 @@ router.post('/charge', async (req, res) => {
     const customer = await stripe.customers.create({
       email: user.token.email,
       source: user.token.id,
-      plan: 'plan_EYov3cCBWtLgXV'
+      plan: user.subType === 999 ? 'plan_EZAJXj3x3pr3tb' : 'plan_EZAKpj7f7UWyrQ'
     });
     console.log('customer', customer);
     res.status(200).send(customer);
