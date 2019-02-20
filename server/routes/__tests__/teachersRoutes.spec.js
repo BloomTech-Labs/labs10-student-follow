@@ -3,20 +3,20 @@ const server = require('../../api/server.js');
 
 describe('server.js', () => {
   describe('teachers routes', () => {
-    describe('get all teachers', () => {
+    describe('GET all teachers', () => {
       it('should return 200', async () => {
         const expectedStatusCode = 200;
         const response = await request(server).get('/teachers');
         expect(response.status).toEqual(expectedStatusCode);
       });
     });
-    describe('get single teacher', () => {
+    describe('GET single teacher', () => {
       it('should return 200', async () => {
         const expectedStatusCode = 200;
         const response = await request(server).get('/teachers');
         expect(response.status).toEqual(expectedStatusCode);
       });
-      it('should return an array of correctly shaped teachers object', async () => {
+      it('should return a correctly shaped teachers object', async () => {
         const expectedShape = expect.objectContaining({
           classes: expect.any(Array),
           id: expect.any(Number),
