@@ -1,5 +1,6 @@
 const express = require('express');
 const stripe = require('stripe')(process.env.SECRET_KEY); // secret test key in .env
+const responseStatus = require('../config/responseStatusConfig');
 
 const router = express.Router();
 
@@ -33,8 +34,6 @@ router.get('/', (req, res) => {
 
 router.post('/charge', async (req, res) => {
   const user = req.body;
-  console.log('USER', req.body);
-  console.log('SUBTYPE', user.subType);
   if (!user) {
     return res.send('User not found.');
   }
@@ -44,10 +43,9 @@ router.post('/charge', async (req, res) => {
       source: user.token.id,
       plan: user.subType === 999 ? 'plan_EZAJXj3x3pr3tb' : 'plan_EZAKpj7f7UWyrQ'
     });
-    console.log('customer', customer);
-    res.status(200).send(customer);
+    res.status(responseStatus.postCreated).send(customer);
   } catch (error) {
-    console.log('ERR', error);
+    next(err);
   }
 });
 
