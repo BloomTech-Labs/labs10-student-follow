@@ -12,16 +12,15 @@ module.exports = {
     return allTeachers;
   },
 
-  getTeacher: async (id) => {
+  getTeacher: async id => {
     const teacher = await db('teachers')
       .select('id', 'firstname', 'lastname', 'email')
       .where({ id })
       .first();
 
-    const classes = await db('classes')
-      .where('teacher_id', id);
+    const classes = await db('teachers_classes').where('teacher_id', id);
 
-    return Promise.all([teacher, classes]).then((response) => {
+    return Promise.all([teacher, classes]).then(response => {
       let [teacher, classes] = response;
       let result = {
         id: teacher.id,
@@ -41,10 +40,10 @@ module.exports = {
     return updateCount;
   },
 
-  deleteTeacher: async (id) => {
+  deleteTeacher: async id => {
     const deleteCount = await db('teachers')
       .where({ id })
       .del();
     return deleteCount;
-  },
+  }
 };

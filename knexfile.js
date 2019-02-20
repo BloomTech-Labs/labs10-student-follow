@@ -26,8 +26,8 @@ module.exports = {
     client: 'pg',
     connection: {
       host: '127.0.0.1',
-      user: 'nickoferrall',
-      database: 'refreshr_test'
+      user: 'refreshr',
+      database: 'refreshr_dev'
     },
     migrations: {
       directory: './server/data/migrations/test'

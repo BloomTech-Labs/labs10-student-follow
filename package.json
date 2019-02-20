@@ -4,7 +4,7 @@
 	"main": "index.js",
 	"license": "MIT",
 	"scripts": {
-		"test": "cross-env NODE_ENV=testing && (knex migrate:rollback && knex migrate:latest && knex seed:run) && jest --verbose --watch",
+		"test": "cross-env NODE_ENV=testing && jest --verbose --watch",
 		"develop": "cross-env NODE_ENV=development nodemon index.js",
 		"reload": "(knex migrate:rollback && knex migrate:latest && knex seed:run) && yarn develop",
 		"start": "node index.js"
