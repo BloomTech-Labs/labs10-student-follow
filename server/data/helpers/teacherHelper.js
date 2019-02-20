@@ -18,7 +18,7 @@ module.exports = {
       .where({ id })
       .first();
 
-    const classes = await db('teachers_classes').where('teacher_id', id);
+    const classes = await db('classes').where('teacher_id', id);
 
     return Promise.all([teacher, classes]).then(response => {
       let [teacher, classes] = response;
@@ -40,6 +40,11 @@ module.exports = {
     return updateCount;
   },
 
+  /* delete teacher will currently throw a foreign key error 
+  if the teacher has any classes. do we want the class to
+  be deleted as well? we could add 'on delete cascade' to
+  teachers if so, but i dunno if that's what we want
+  */
   deleteTeacher: async id => {
     const deleteCount = await db('teachers')
       .where({ id })

@@ -18,8 +18,8 @@ module.exports = {
         'teachers.lastname as t_last',
         'teachers.email as t_email'
       )
-      .join('teachers_classes', 'teachers.id', 'teachers_classes.teacher_id')
-      .where('teachers_classes.class_id', id);
+      .join('classes', 'teachers.id', 'classes.teacher_id')
+      .where('classes.id', id);
 
     const students = await db('students')
       .join('students_classes', 'students.id', 'students_classes.student_id')

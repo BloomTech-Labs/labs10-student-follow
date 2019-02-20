@@ -47,7 +47,7 @@ describe('server.js', () => {
     });
     describe('DELETE teacher', () => {
       it('should delete a teacher', async () => {
-        const response = await request(server).delete('/teachers/500');
+        const response = await request(server).delete('/teachers/499');
         expect(response.body).toEqual({ deletedRecords: 1 });
       });
     });

@@ -18,8 +18,7 @@ module.exports = {
         'classes.id as classID',
         'classes.name'
       )
-      .join('teachers_classes', 'classes.id', 'teachers_classes.class_id')
-      .join('teachers', 'teachers_classes.teacher_id', 'teachers.id')
+      .join('teachers', 'classes.teacher_id', 'teachers.id')
       .join('students_classes', 'classes.id', 'students_classes.class_id')
       .join('students', 'students.id', 'students_classes.student_id')
       .where('students_classes.student_id', id);

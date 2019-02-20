@@ -27,7 +27,7 @@ module.exports = {
     connection: {
       host: '127.0.0.1',
       user: 'refreshr',
-      database: 'refreshr_dev'
+      database: 'refreshr_test'
     },
     migrations: {
       directory: './server/data/migrations/test'
