@@ -96,6 +96,60 @@ function ClassView(props) {
       })
       .catch(err => console.log(err))
   }
+  const scheduleRefreshr = () => {
+    const scheduleObj = {
+      "send_at": 1550671200 // Feb 20, 2019 8AM
+    }
+    const url = `https://api.sendgrid.com/v3/campaigns/${campaign_id}/schedules`
+    axios.post(url, scheduleObj, headers)
+      .then(res => {
+        console.log(`===scheduleRefreshr: ===`)
+        console.log(res)
+      })
+      .catch(err => console.log(err))
+  }
+  const rescheduleRefreshr = () => {
+    const scheduleObj = {
+      "send_at": 1550671260 // Feb 20, 2019 8:01AM
+    }
+    const url = `https://api.sendgrid.com/v3/campaigns/${campaign_id}/schedules`
+    axios.patch(url, scheduleObj, headers)
+      .then(res => {
+        console.log(`===scheduleRefreshr: ===`)
+        console.log(res)
+      })
+      .catch(err => console.log(err))
+  }
+  const getScheduleRefreshr = () => {
+    const url = `https://api.sendgrid.com/v3/campaigns/${campaign_id}/schedules`
+    axios.get(url, headers)
+      .then(res => {
+        console.log(`===getScheduleRefreshr: ===`)
+        console.log(res.data.send_at)
+      })
+      .catch(err => console.log(err))
+  }
+  const deleteScheduleRefreshr = () => {
+    const url = `https://api.sendgrid.com/v3/campaigns/${campaign_id}/schedules`
+    axios.delete(url, headers)
+      .then(res => {
+        console.log(`===deleteScheduleRefreshr: ${res.data.status}===`)
+        console.log(res)
+      })
+      .catch(err => console.log(err))
+  }
+  const sendTestRefreshr = () => {
+    const emailObj = {
+      "to": "areli.athens@cowstore.net" // Only 1 email allowed
+    }
+    const url = `https://api.sendgrid.com/v3/campaigns/${campaign_id}/schedules/test`
+    axios.post(url, emailObj, headers)
+      .then(res => {
+        console.log(`===deleteScheduleRefreshr: ${res.data.status}===`)
+        console.log(res)
+      })
+      .catch(err => console.log(err))
+  }
 
 
 
@@ -324,6 +378,13 @@ function ClassView(props) {
           <button onClick={getRefreshrs} style={{ background: "goldenrod" }} >getRefreshrs</button>
           <button onClick={updateRefreshr} style={{ background: "lightpink" }} >updateRefreshr</button>
           <button onClick={deleteRefreshr} style={{ background: "crimson" }} >deleteRefreshr</button>
+          <div>
+            <button onClick={scheduleRefreshr} style={{ background: "limegreen" }} >scheduleRefreshr</button>
+            <button onClick={getScheduleRefreshr} style={{ background: "goldenrod" }} >getScheduleRefreshr</button>
+            <button onClick={rescheduleRefreshr} style={{ background: "lightpink" }} >rescheduleRefreshr</button>
+            <button onClick={deleteScheduleRefreshr} style={{ background: "crimson" }} >deleteScheduleRefreshr</button>
+            <button onClick={sendTestRefreshr} style={{ background: "teal" }} >sendTestRefreshr</button>
+          </div>
         </div>
         <div>
           <h1>SENDER OPERATIONS</h1>
