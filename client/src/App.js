@@ -8,7 +8,7 @@ import {
   Login,
   BillingPage,
   Navbar,
-  NavCrumbs,
+  Navcrumbs,
   ClassView,
   RefreshrList
 } from './components';
@@ -29,7 +29,7 @@ const App = props => {
   return (
     <Router history={history}>
       <div>
-        <NavCrumbs open={open} {...props} />
+        <Navcrumbs open={open} {...props} />
         <Grid
           container
           spacing={0}

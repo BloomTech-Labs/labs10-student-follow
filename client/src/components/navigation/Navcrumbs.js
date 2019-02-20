@@ -26,7 +26,7 @@ const styles = theme => ({
   }
 });
 
-const NavCrumbs = props => {
+const Navcrumbs = props => {
   const { classes, location } = props;
 
   // Use NoSsr to avoid SEO issues with the documentation website.
@@ -57,15 +57,15 @@ const NavCrumbs = props => {
                         {breadcrumbNameMap[to]}
                       </Typography>
                     ) : (
-                      <Link
-                        component={RouterLink}
-                        color="inherit"
-                        to={to}
-                        key={to}
-                      >
-                        {breadcrumbNameMap[to]}
-                      </Link>
-                    );
+                        <Link
+                          component={RouterLink}
+                          color="inherit"
+                          to={to}
+                          key={to}
+                        >
+                          {breadcrumbNameMap[to]}
+                        </Link>
+                      );
                   })}
                 </Breadcrumbs>
               );
@@ -77,4 +77,4 @@ const NavCrumbs = props => {
   );
 };
 
-export default withRouter(withStyles(styles)(NavCrumbs));
+export default withRouter(withStyles(styles)(Navcrumbs));
