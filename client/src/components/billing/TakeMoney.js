@@ -29,7 +29,7 @@ export default class TakeMoney extends React.Component {
         amount={this.props.subType} //cents
         currency="USD"
         email="nickoferrall@gmail.com" // will update this to the user email
-        bitcoin={true} // looks like it's depreciated
+        // bitcoin={true} // looks like it's depreciated
         alipay={true}
       />
     );
