@@ -91,14 +91,31 @@
 ```md
 # Netlify
 
+- Features complete services for deployment including automated deployment, continuous integration, HTTPS secured with free TLS certificate
+- Multi-cloud infrastructure designed for speed, automated to scale, and intrinsically secure
+- Tool-agnostic platform allows for freedom of addons and tools
+- Has dynamic functionality with built-in applications like HTML forms
+```
+
+```md
 # Heroku
 
-- Well-known services, reliable support, and well-documented
+- Well-known service, reliable support, and well-documented
+- Works with many backend languages: NodeJS, Ruby, PHP, Python, and others
+- Features rich system of third party addons and open-sourced buildpacks
+- Simple to scale horizontally or vertically
 ```
 
 ### API/Services
 
 ```md
+# Sendgrid
+- Sendgrid is an email service, part of the Twilio company, which gives developers access to the Sendgrid V3 API to control email campaigns, set lists, set recipients, and many other features.
+- Our purposes with Refreshr is to use it to schedule refreshrs and to email students out with a magic link back to our platform in order to take their refreshr.
+```
+
+```
+# Other APIs
 - Auth0 - authorization and authentication service
 - Stripe - payment portal service
 - Axios - Promise based HTTP client for the browser and node.js
@@ -117,7 +134,8 @@
 
 ## Environment Variables
 
-```js
+```md
+SENDGRID_API_KEY=Official Key from API (Source: https://app.sendgrid.com/settings/api_keys)
 ```
 
 ---
