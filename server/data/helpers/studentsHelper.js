@@ -6,7 +6,7 @@ module.exports = {
     return allStudents;
   },
 
-  getStudent: async (id) => {
+  getStudent: async id => {
     const student = await db('students')
       .where({ id })
       .first();
@@ -23,14 +23,14 @@ module.exports = {
       .join('students', 'students.id', 'students_classes.student_id')
       .where('students_classes.student_id', id);
 
-    return Promise.all([student, classes]).then((response) => {
+    return Promise.all([student, classes]).then(response => {
       let [student, classes] = response;
       let result = {
         id: student.id,
         firstname: student.firstname,
         lastname: student.lastname,
         email: student.email,
-        classes: classes.map((c) => {
+        classes: classes.map(c => {
           return {
             classID: c.classID,
             classname: c.name,
@@ -49,18 +49,18 @@ module.exports = {
     return updateCount;
   },
 
-  deleteStudent: async (id) => {
+  deleteStudent: async id => {
     const deleteCount = await db('students')
       .where({ id })
       .del();
     return deleteCount;
   },
 
-  addStudent: async (student) => {
+  addStudent: async student => {
     const newStudent = await db('students')
       .insert(student)
       .returning('id')
-      .then((id) => {
+      .then(id => {
         return id;
       });
     return newStudent[0];
