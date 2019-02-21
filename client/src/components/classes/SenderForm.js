@@ -31,11 +31,13 @@ function SenderForm(props) {
   const handleSubmit = (e) => {
     e.preventDefault()
     props.setSenderForm((!props.onSenderForm))
+    props.setRecipientForm((!props.onRecipientForm))
   }
 
   return (
     <Grid className={props.classes.wrapper}>
       <p>SenderForm Component</p>
+      <button onClick={(e) => handleSubmit(e)}>COMPLETE</button>
       <form className={props.classes.form} onSubmit={(e) => handleSubmit(e)}>
         <input
           name="nickname"

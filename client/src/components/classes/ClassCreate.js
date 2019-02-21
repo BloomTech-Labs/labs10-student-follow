@@ -21,16 +21,19 @@ function ClassCreate(props) {
       <SenderForm
         onSenderForm={onSenderForm}
         setSenderForm={setSenderForm}
+        setRecipientForm={setRecipientForm}
       />
 
       <RecipientForm
         onRecipientForm={onRecipientForm}
         setRecipientForm={setRecipientForm}
+        setListForm={setListForm}
       />
 
       <ListForm
         onListForm={onListForm}
         setListForm={setListForm}
+        setCampaignForm={setCampaignForm}
       />
 
       <CampaignForm
