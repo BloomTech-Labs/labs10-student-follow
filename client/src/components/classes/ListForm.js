@@ -38,8 +38,8 @@ function ListForm(props) {
       .catch(err => console.log(err));
   };
 
-  const getList = () => {
-    const url = `https://api.sendgrid.com/v3/contactdb/lists/${listId}`;
+  const getListByID = item => {
+    const url = `https://api.sendgrid.com/v3/contactdb/lists/${item.id}`;
     axios
       .get(url, headers)
       .then(res => {
@@ -50,6 +50,7 @@ function ListForm(props) {
   };
 
   const getLists = () => {
+    console.log('GETTING LIST');
     const url = 'https://api.sendgrid.com/v3/contactdb/lists';
     axios
       .get(url, headers)
@@ -75,8 +76,10 @@ function ListForm(props) {
       .catch(err => console.log(err));
   };
 
-  const deleteList = () => {
-    const url = `https://api.sendgrid.com/v3/contactdb/lists/${listId}?delete_contacts=true`;
+  const deleteList = item => {
+    const url = `https://api.sendgrid.com/v3/contactdb/lists/${
+      item.id
+    }?delete_contacts=true`;
     axios
       .delete(url, headers)
       .then(res => {
@@ -94,7 +97,7 @@ function ListForm(props) {
         <button onClick={addList} style={{ background: 'limegreen' }}>
           addList
         </button>
-        <button onClick={getList} style={{ background: 'goldenrod' }}>
+        <button onClick={getListByID} style={{ background: 'goldenrod' }}>
           getList
         </button>
         <button onClick={getLists} style={{ background: 'goldenrod' }}>
@@ -108,7 +111,12 @@ function ListForm(props) {
         </button>
         <div>
           {list.map(item => (
-            <li key={item.id}>{item.name}</li>
+            <ul key={item.id}>
+              {item.name}
+              <button onClick={() => deleteList(item)}>
+                {<i className="fas fa-times" />}
+              </button>
+            </ul>
           ))}
         </div>
       </div>
