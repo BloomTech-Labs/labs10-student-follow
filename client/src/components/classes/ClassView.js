@@ -138,6 +138,16 @@ function ClassView(props) {
 
 
 
+  // RECIPIENT OPERATIONS
+  const addRecipient = () => { }
+  const getRecipient = () => { }
+  const getRecipients = () => { }
+  const updateRecipient = () => { }
+  const deleteRecipient = () => { }
+  const deleteRecipients = () => { }
+
+
+
   // LIST OPERATIONS
   const addList = () => {
     const url = "https://api.sendgrid.com/v3/contactdb/lists"
@@ -379,6 +389,15 @@ function ClassView(props) {
           <button onClick={updateSender} style={{ background: "lightpink" }} >updateSender</button>
           <button onClick={deleteSender} style={{ background: "crimson" }} >deleteSender</button>
           <button onClick={resendVerification} style={{ background: "teal" }} >resendVerification</button>
+        </div>
+        <div>
+          <h1>RECIPIENT OPERATIONS</h1>
+          <button onClick={addRecipient} style={{ background: "limegreen" }} >addRecipient</button>
+          <button onClick={getRecipient} style={{ background: "goldenrod" }} >getRecipient</button>
+          <button onClick={getRecipients} style={{ background: "goldenrod" }} >getRecipients</button>
+          <button onClick={updateRecipient} style={{ background: "lightpink" }} >updateRecipient</button>
+          <button onClick={deleteRecipient} style={{ background: "crimson" }} >deleteRecipient</button>
+          <button onClick={deleteRecipients} style={{ background: "crimson" }} >deleteRecipients</button>
         </div>
         <div>
           <h1>LIST OPERATIONS</h1>
