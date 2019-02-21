@@ -8,7 +8,7 @@ const responseStatus = require('../config/responseStatusConfig');
 router.get('/', async (req, res, next) => {
   try {
     const questions = await db.getAll();
-    res.status(responseStatus.success).json(questions);
+    res.status(responseStatus.success).json({questions});
   } catch (err) {
     next(err);
   }
@@ -18,7 +18,7 @@ router.get('/:id', async (req, res, next) => {
   const { id } = req.params;
   try {
     const specifiedQuestion = await db.getQuestion(id);
-    res.status(responseStatus.success).json(specifiedQuestion);
+    res.status(responseStatus.success).json({specifiedQuestion});
   } catch (err) {
     if (TypeError) {
       next(responseStatus.notFound);

@@ -31,6 +31,9 @@ import RecipientForm from './classes/RecipientForm';
 import ListForm from './classes/ListForm';
 import CampaignForm from './classes/CampaignForm';
 
+/* MISCDATA */
+import MiscData from './MiscData'
+
 export {
   Navcrumbs,
   Navbar,
@@ -48,6 +51,7 @@ export {
   ClassView,
   LandingPage,
   LoadingPage,
+  MiscData,
   CreateEditPage,
   Auth,
   Login,
