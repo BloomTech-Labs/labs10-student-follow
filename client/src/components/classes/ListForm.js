@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Grid from '@material-ui/core/Grid';
 import axios from 'axios';
 import { withStyles } from '@material-ui/core/styles';
@@ -39,6 +39,7 @@ function ListForm(props) {
   };
 
   const getListByID = item => {
+    // useEffect(item => {
     const url = `https://api.sendgrid.com/v3/contactdb/lists/${item.id}`;
     axios
       .get(url, headers)
@@ -49,7 +50,8 @@ function ListForm(props) {
       .catch(err => console.log(err));
   };
 
-  const getLists = () => {
+  // const getLists = () => {
+  useEffect(() => {
     console.log('GETTING LIST');
     const url = 'https://api.sendgrid.com/v3/contactdb/lists';
     axios
@@ -60,7 +62,7 @@ function ListForm(props) {
         setList(res.data.lists);
       })
       .catch(err => console.log(err));
-  };
+  });
 
   const updateList = () => {
     const url = `https://api.sendgrid.com/v3/contactdb/lists/${listId}`;
@@ -100,9 +102,9 @@ function ListForm(props) {
         <button onClick={getListByID} style={{ background: 'goldenrod' }}>
           getList
         </button>
-        <button onClick={getLists} style={{ background: 'goldenrod' }}>
+        {/* <button onClick={useEffect} style={{ background: 'goldenrod' }}>
           getLists
-        </button>
+        </button> */}
         <button onClick={updateList} style={{ background: 'lightpink' }}>
           updateList
         </button>
