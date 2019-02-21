@@ -3,6 +3,8 @@ import Grid from '@material-ui/core/Grid';
 import axios from 'axios';
 import { withStyles } from '@material-ui/core/styles';
 
+const uuidv1 = require('uuid/v1');
+
 const styles = theme => ({
   wrapper: {}
 });
@@ -96,7 +98,7 @@ function ListForm(props) {
     setInputText(event.target.value);
   };
 
-  console.log('input text=', inputText);
+  console.log('ID GEN', uuidv1());
   return (
     <Grid className={props.classes.wrapper}>
       <div>
