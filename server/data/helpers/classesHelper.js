@@ -66,10 +66,28 @@ module.exports = {
               email: s.email
             };
           }),
-          refreshrs: refreshrs.map(r => {
-            return {
-              refreshr_id: r.id,
+          
+          // refreshrs: refreshrs.map(r => {
+          //   return {
+          //     refreshr_id: r.id,
+          //     date: r.date,
+          //     review_text: r.review_text,
+          //     refreshr: {
+          //       question_id: r.question_id,
+          //       question: r.question,
+          //       wrong_answer_1: r.wrong_answer_1,
+          //       wrong_answer_2: r.wrong_answer_2,
+          //       wrong_answer_3: r.wrong_answer_3,
+          //       correct_answer: r.correct_answer
+          //     }
+          //   };
+          // })
+          refreshrs: 
+          {
+              refreshr_id: refreshrs.id,
               date: r.date,
+              questions: refreshrs.map(r => {
+            return {
               review_text: r.review_text,
               refreshr: {
                 question_id: r.question_id,
@@ -81,6 +99,7 @@ module.exports = {
               }
             };
           })
+        }
         };
         return result;
       }
