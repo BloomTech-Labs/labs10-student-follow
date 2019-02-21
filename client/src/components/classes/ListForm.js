@@ -22,7 +22,7 @@ function ListForm(props) {
   ]; // Magda, Timmy
   const sender_id = 425702; // The Refreshr Team
   const campaign_id = 5001224; // March Newsletter
-  const [list, setList] = useState(['heyyyy']);
+  const [list, setList] = useState([]);
 
   const addList = () => {
     const url = 'https://api.sendgrid.com/v3/contactdb/lists';
@@ -56,7 +56,7 @@ function ListForm(props) {
       .then(res => {
         console.log(`===getLists: all===`);
         console.log(res.data.lists);
-        setList(res.data.lists.map(item => item.name));
+        setList(res.data.lists);
       })
       .catch(err => console.log(err));
   };
@@ -106,7 +106,11 @@ function ListForm(props) {
         <button onClick={deleteList} style={{ background: 'crimson' }}>
           deleteList
         </button>
-        <div>{list}</div>
+        <div>
+          {list.map(item => (
+            <li key={item.id}>{item.name}</li>
+          ))}
+        </div>
       </div>
     </Grid>
   );
