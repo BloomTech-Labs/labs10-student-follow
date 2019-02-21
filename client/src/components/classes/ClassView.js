@@ -156,21 +156,21 @@ function ClassView(props) {
   // SENDER OPERATIONS
   const addSender = () => {
     const new_sender = {
-      "nickname": "asturiasxi@gmail.com",
+      "nickname": "asturiasxi@gmail.com", // only required for create
       "from": {
-        "email": "asturiasxi@gmail.com",
+        "email": "asturiasxi@gmail.com", // only required for create
         "name": "asturiasxi @ Refreshr"
       },
       "reply_to": {
-        "email": "asturiasxi@gmail.com",
+        "email": "asturiasxi@gmail.com", // only required for create
         "name": "Refreshr Team"
       },
-      "address": "222 West Ave",
+      "address": "222 West Ave", // only required for create
       "address_2": "Ste HR100",
-      "city": "Austin",
+      "city": "Austin", // only required for create
       "state": "Texas",
       "zip": "78701",
-      "country": "United States"
+      "country": "United States" // required
     }
     // const new_sender = {
     //   "nickname": "The Refreshr Team",

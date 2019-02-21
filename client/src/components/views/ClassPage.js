@@ -1,7 +1,7 @@
 import React from "react";
 import Grid from "@material-ui/core/Grid";
 import { withStyles } from "@material-ui/core/styles";
-import { ClassList, ClassCreate, ClassEdit } from '../index.js'
+import { ClassList, ClassCreate, ClassEdit, ClassView } from '../index.js'
 
 const styles = theme => ({
   wrapper: {
@@ -15,6 +15,7 @@ function ClassPage(props) {
       <ClassList />
       <ClassCreate />
       <ClassEdit />
+      <ClassView />
     </Grid>
   )
 }
