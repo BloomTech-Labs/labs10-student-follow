@@ -3,8 +3,6 @@ import Grid from '@material-ui/core/Grid';
 import axios from 'axios';
 import { withStyles } from '@material-ui/core/styles';
 
-const uuidv1 = require('uuid/v1');
-
 const styles = theme => ({
   wrapper: {}
 });
@@ -16,22 +14,23 @@ function ListForm(props) {
     },
     'content-type': 'application/json'
   };
-  const listId = 7061139; // test3
-  const recipient_id = 'YXN0dXJpYXN4aUBnbWFpbC5jb20='; // Timmy
-  const recipient_ids = [
-    'YXJlbGkuYXRoZW5zQGNvd3N0b3JlLm5ldA==',
-    'YXN0dXJpYXN4aUBnbWFpbC5jb20='
-  ]; // Magda, Timmy
-  const sender_id = 425702; // The Refreshr Team
-  const campaign_id = 5001224; // March Newsletter
+  // const listId = 7061139; // test3
+  // const recipient_id = 'YXN0dXJpYXN4aUBnbWFpbC5jb20='; // Timmy
+  // const recipient_ids = [
+  //   'YXJlbGkuYXRoZW5zQGNvd3N0b3JlLm5ldA==',
+  //   'YXN0dXJpYXN4aUBnbWFpbC5jb20='
+  // ]; // Magda, Timmy
+  // const sender_id = 425702; // The Refreshr Team
+  // const campaign_id = 5001224; // March Newsletter
   const [list, setList] = useState([]);
   const [inputText, setInputText] = useState([]);
 
   const addList = event => {
     event.preventDefault();
     const url = 'https://api.sendgrid.com/v3/contactdb/lists';
+    let newID = Math.floor(Math.random() * (100000 - 10000));
     const body = {
-      id: 12345,
+      id: newID,
       name: inputText,
       recipient_count: 0
     };
@@ -41,7 +40,7 @@ function ListForm(props) {
         console.log(`===addList: ${res.data.name}===`);
         console.log(res.data.id);
       })
-      .catch(err => console.log('Error:', err));
+      .catch(err => console.log(err));
   };
 
   const getListByID = item => {
@@ -67,19 +66,19 @@ function ListForm(props) {
       .catch(err => console.log(err));
   }, []);
 
-  const updateList = () => {
-    const url = `https://api.sendgrid.com/v3/contactdb/lists/${listId}`;
-    const body = {
-      name: 'modifiedListName'
-    };
-    axios
-      .patch(url, body, headers)
-      .then(res => {
-        console.log(`===updateList: ${res.data.name}===`);
-        console.log(res);
-      })
-      .catch(err => console.log(err));
-  };
+  // const updateList = () => {
+  //   const url = `https://api.sendgrid.com/v3/contactdb/lists/${listId}`;
+  //   const body = {
+  //     name: 'modifiedListName'
+  //   };
+  //   axios
+  //     .patch(url, body, headers)
+  //     .then(res => {
+  //       console.log(`===updateList: ${res.data.name}===`);
+  //       console.log(res);
+  //     })
+  //     .catch(err => console.log(err));
+  // };
 
   const deleteList = item => {
     const url = `https://api.sendgrid.com/v3/contactdb/lists/${
@@ -98,7 +97,6 @@ function ListForm(props) {
     setInputText(event.target.value);
   };
 
-  console.log('ID GEN', uuidv1());
   return (
     <Grid className={props.classes.wrapper}>
       <div>
@@ -112,9 +110,9 @@ function ListForm(props) {
         {/* <button onClick={useEffect} style={{ background: 'goldenrod' }}>
           getLists
         </button> */}
-        <button onClick={updateList} style={{ background: 'lightpink' }}>
+        {/* <button onClick={updateList} style={{ background: 'lightpink' }}>
           updateList
-        </button>
+        </button> */}
         <button onClick={deleteList} style={{ background: 'crimson' }}>
           deleteList
         </button>
