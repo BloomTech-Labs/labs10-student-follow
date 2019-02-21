@@ -27,7 +27,9 @@ function ListForm(props) {
   const addList = () => {
     const url = 'https://api.sendgrid.com/v3/contactdb/lists';
     const body = {
-      name: 'test4'
+      id: 123,
+      name: 'Nick test',
+      recipient_count: 0
     };
     axios
       .post(url, body, headers)
