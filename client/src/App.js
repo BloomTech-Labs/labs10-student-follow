@@ -13,7 +13,9 @@ import {
   Navcrumbs,
   ClassView,
   RefreshrList,
-  MiscData
+  MiscData,
+  ClassPage,
+  CreateEditPage
 } from './components';
 
 const App = props => {

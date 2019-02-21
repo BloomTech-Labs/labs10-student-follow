@@ -6,6 +6,7 @@ import axios from 'axios';
 export default class TakeMoney extends React.Component {
   onToken = async token => {
     const url = 'http://localhost:9000/billing/charge';
+    console.log('TOKEN from takemoney', token);
     try {
       await axios.post(url, {
         token: token,
@@ -28,7 +29,7 @@ export default class TakeMoney extends React.Component {
         amount={this.props.subType} //cents
         currency="USD"
         email="nickoferrall@gmail.com" // will update this to the user email
-        bitcoin={true}
+        // bitcoin={true} // looks like it's depreciated
         alipay={true}
       />
     );
