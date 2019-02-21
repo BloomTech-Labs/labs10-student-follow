@@ -66,26 +66,28 @@ const styles = theme => ({
 
 const tiers = [
   {
-    title: 'Free',
+    title: 'Standard',
     price: '9.99',
+    value: 999,
     description: [
-      '10 users included',
-      '2 GB of storage',
-      'Help center access',
+      'Up to 500 Refreshrs',
+      'Unlimited teachers',
+      'Fixed schedule times',
       'Email support'
     ],
     buttonText: 'Sign up for free',
     buttonVariant: 'outlined'
   },
   {
-    title: 'Pro',
+    title: 'Premium',
+    value: 2999,
     subheader: 'Most popular',
     price: '29.99',
     description: [
-      '20 users included',
-      '10 GB of storage',
-      'Help center access',
-      'Priority email support'
+      'Unlimited Refreshrs',
+      'Customize Refreshr schedule',
+      'Unlimited students',
+      '24/7 Phone support'
     ],
     buttonText: 'Get started',
     buttonVariant: 'contained'
@@ -144,6 +146,7 @@ const Pricing = props => {
   };
 
   const handleChange = e => {
+    console.log('VALUE', e.target.value);
     setSubType(parseInt(e.target.value));
   };
 
@@ -236,7 +239,10 @@ const Pricing = props => {
                   </Button> */}
                   <StripeProvider apiKey="pk_test_6uEhds8mHz26DG95ZvUwTURp">
                     <Elements>
-                      <TakeMoney subType={subType} />
+                      <TakeMoney
+                        className="stripe-buttons"
+                        subType={tiers.value}
+                      />
                     </Elements>
                   </StripeProvider>
                 </CardActions>

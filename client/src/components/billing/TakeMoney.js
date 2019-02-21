@@ -2,6 +2,11 @@ import React from 'react';
 import StripeCheckout from 'react-stripe-checkout';
 import Image from './logo.png';
 import axios from 'axios';
+import './payments.css';
+
+const buttonStyle = {
+  width: '100%'
+};
 
 export default class TakeMoney extends React.Component {
   onToken = async token => {
@@ -16,9 +21,17 @@ export default class TakeMoney extends React.Component {
     }
   };
 
+  handleChange = e => {
+    // setSubType(parseInt(e.target.value));
+    console.log('HANDLING CHANGE', e);
+  };
+
   render() {
+    console.log('PROPS from takemoney', this.props);
     return (
       <StripeCheckout // This component uses the token created above to make a one time payment
+        style={buttonStyle}
+        onClick={this.handleChange}
         token={this.onToken}
         stripeKey="pk_test_Y6iNnz4ImmbwJDcFA982Hahf"
         name="Refreshr"

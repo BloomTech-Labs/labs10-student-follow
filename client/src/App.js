@@ -34,7 +34,7 @@ const App = props => {
     setOpen(!open);
   };
   //Refreshrs
-  const getRefreshrs = (options) => {
+  const getRefreshrs = options => {
     axios
       .get('https://refreshr.herokuapp.com/refreshrs', options)
       .then(res => {
