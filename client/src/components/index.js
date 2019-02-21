@@ -22,6 +22,9 @@ import RefreshrCard from './refreshrs/RefreshrCard';
 /* CLASSES */
 import ClassList from './classes/ClassList';
 
+/* MISCDATA */
+import MiscData from './MiscData'
+
 export {
   Navcrumbs,
   Navbar,
@@ -31,6 +34,7 @@ export {
   ClassView,
   LandingPage,
   LoadingPage,
+  MiscData,
   Auth,
   Login,
   BillingPage,

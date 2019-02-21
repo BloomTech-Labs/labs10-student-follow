@@ -12,7 +12,8 @@ import {
   Navbar,
   Navcrumbs,
   ClassView,
-  RefreshrList
+  RefreshrList,
+  MiscData
 } from './components';
 
 const App = props => {
@@ -26,26 +27,80 @@ const App = props => {
   /* STATE */
   const [open, setOpen] = useState(false);
   const [refreshrs, setRefreshrs] = useState([]);
+  const [questions, setQuestions] = useState([]);
+  const [allClasses, setClasses] = useState([]);
+  const [students, setStudents] = useState([]);
+  const [teachers, setTeachers] = useState([]);
 
   /* METHODS */
   //Nav
   const togglePage = () => {
     setOpen(!open);
   };
-  //Refreshrs
-  const getRefreshrs = (options) => {
+  //all refreshrs
+  const getRefreshrs = options => {
     axios
-      .get('https://refreshr.herokuapp.com/refreshrs', options)
+      .get('https://refreshr-app.netlify.com/refreshrs', options)
       .then(res => {
         console.log('data', res.data);
         setRefreshrs(res.data.refreshrs);
-        //console.log('re, app', refreshrs)
       })
       .catch(err => {
         console.log(err);
       });
   };
 
+  //all Questions
+  const getQuestions = options => {
+    axios
+      .get('https://refreshr-app.netlify.com/questions', options)
+      .then(res => {
+        console.log('q', res.data.questions);
+        setQuestions(res.data.questions);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
+  //all classes
+  const getClasses = options => {
+    axios
+      .get('https://refreshr-app.netlify.com/classes', options)
+      .then(res => {
+        console.log('c', res.data.classes);
+        setClasses(res.data.classes);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
+  //all students
+  const getStudents = options => {
+    axios
+      .get('https://refreshr-app.netlify.com/students', options)
+      .then(res => {
+        console.log('s', res.data.students);
+        setStudents(res.data.students);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
+  //all teachers
+  const getTeachers = options => {
+    axios
+      .get('https://refreshr-app.netlify.com/teachers', options)
+      .then(res => {
+        console.log('t', res.data.teachers);
+        setTeachers(res.data.teachers);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
   /* ROUTES */
   return (
     <Router history={history}>
@@ -82,6 +137,21 @@ const App = props => {
             />
             <Route path="/billing" render={props => <BillingPage />} />
             <Route path="/classes" render={props => <ClassView />} />
+            <Route
+              path="/misc"
+              render={props => (
+                <MiscData
+                  allClasses={allClasses}
+                  teachers={teachers}
+                  students={students}
+                  questions={questions}
+                  getClasses={getClasses}
+                  getTeachers={getTeachers}
+                  getQuestions={getQuestions}
+                  getStudents={getStudents}
+                />
+              )}
+            />
           </Grid>
         </Grid>
       </div>
