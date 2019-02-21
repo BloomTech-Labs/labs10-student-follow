@@ -19,6 +19,7 @@ router.post('/charge', async (req, res) => {
     const customer = await stripe.customers.create({
       email: user.token.email,
       source: user.token.id,
+      // this selects a plan based on the user preference which is passed as subType
       plan:
         user.subType === standardPlan
           ? process.env.PLAN_ID_ONE
