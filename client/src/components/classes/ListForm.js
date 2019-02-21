@@ -23,12 +23,14 @@ function ListForm(props) {
   const sender_id = 425702; // The Refreshr Team
   const campaign_id = 5001224; // March Newsletter
   const [list, setList] = useState([]);
+  const [inputText, setInputText] = useState([]);
 
-  const addList = () => {
+  const addList = event => {
+    event.preventDefault();
     const url = 'https://api.sendgrid.com/v3/contactdb/lists';
     const body = {
-      id: 123,
-      name: 'Nick test',
+      id: 12345,
+      name: inputText,
       recipient_count: 0
     };
     axios
@@ -37,11 +39,10 @@ function ListForm(props) {
         console.log(`===addList: ${res.data.name}===`);
         console.log(res.data.id);
       })
-      .catch(err => console.log(err));
+      .catch(err => console.log('Error:', err));
   };
 
   const getListByID = item => {
-    // useEffect(item => {
     const url = `https://api.sendgrid.com/v3/contactdb/lists/${item.id}`;
     axios
       .get(url, headers)
@@ -52,9 +53,7 @@ function ListForm(props) {
       .catch(err => console.log(err));
   };
 
-  // const getLists = () => {
   useEffect(() => {
-    console.log('GETTING LIST');
     const url = 'https://api.sendgrid.com/v3/contactdb/lists';
     axios
       .get(url, headers)
@@ -93,14 +92,18 @@ function ListForm(props) {
       .catch(err => console.log(err));
   };
 
-  console.log('State list', list);
+  const handleChange = event => {
+    setInputText(event.target.value);
+  };
+
+  console.log('input text=', inputText);
   return (
     <Grid className={props.classes.wrapper}>
       <div>
         <h1>LIST OPERATIONS</h1>
-        <button onClick={addList} style={{ background: 'limegreen' }}>
+        {/* <button onClick={addList} style={{ background: 'limegreen' }}>
           addList
-        </button>
+        </button> */}
         <button onClick={getListByID} style={{ background: 'goldenrod' }}>
           getList
         </button>
@@ -123,6 +126,13 @@ function ListForm(props) {
             </ul>
           ))}
         </div>
+        <form onSubmit={addList}>
+          <label>
+            Add student:
+            <input type="text" name="name" onChange={handleChange} />
+          </label>
+          <input type="submit" />
+        </form>
       </div>
     </Grid>
   );
