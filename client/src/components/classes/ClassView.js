@@ -24,135 +24,6 @@ function ClassView(props) {
 
 
 
-  // REFRESHRS OPERATIONS
-  const addRefreshr = () => {
-    const new_refresher = {
-      "title": "March Newsletter",
-      "subject": "New Products for Spring!",
-      "sender_id": 424711,
-      "list_ids": [
-        7061129,
-        7061137
-      ],
-      "segment_ids": null,
-      "categories": null,
-      "suppression_group_id": null,
-      "custom_unsubscribe_url": "",
-      "ip_pool": null,
-      "html_content": "<html><head><title></title></head><body><p>Check out our spring line!</p></body></html>",
-      "plain_content": "Check out our spring line!"
-    }
-    const url = "https://api.sendgrid.com/v3/campaigns"
-    axios.post(url, new_refresher, headers)
-      .then(res => {
-        console.log(`===addRefreshr===`)
-        console.log(res)
-      })
-      .catch(err => console.log(err))
-  }
-
-  const getRefreshr = () => {
-    const url = `https://api.sendgrid.com/v3/campaigns/${campaign_id}`
-    axios.get(url, headers)
-      .then(res => {
-        console.log(`===getRefreshr: all===`)
-        console.log(res.data)
-      })
-      .catch(err => console.log(err))
-  }
-
-  const getRefreshrs = () => {
-    const url = "https://api.sendgrid.com/v3/campaigns?limit=10&offset=0"
-    axios.get(url, headers)
-      .then(res => {
-        console.log(`===getRefreshrs: all===`)
-        console.log(res.data.result)
-      })
-      .catch(err => console.log(err))
-  }
-
-  const updateRefreshr = () => {
-    const updated_refreshr = {
-      "title": "123March Newsletter",
-      "subject": "123New Products for Spring!",
-      "categories": null,
-      "html_content": "<html><head><title></title></head><body><p>123Check out our spring line!</p></body></html>",
-      "plain_content": "123Check out our spring line!"
-    }
-    const url = `https://api.sendgrid.com/v3/campaigns/${campaign_id}`
-    axios.patch(url, updated_refreshr, headers)
-      .then(res => {
-        console.log(`===updateRefreshr: ${res.data.title}===`)
-        console.log(res)
-      })
-      .catch(err => console.log(err))
-  }
-  const deleteRefreshr = () => {
-    const url = `https://api.sendgrid.com/v3/campaigns/${campaign_id}`
-    axios.delete(url, headers)
-      .then(res => {
-        console.log(`===deleteRefreshr: ===`)
-        console.log(res)
-      })
-      .catch(err => console.log(err))
-  }
-  const scheduleRefreshr = () => {
-    const scheduleObj = {
-      "send_at": 1550671200 // Feb 20, 2019 8AM
-    }
-    const url = `https://api.sendgrid.com/v3/campaigns/${campaign_id}/schedules`
-    axios.post(url, scheduleObj, headers)
-      .then(res => {
-        console.log(`===scheduleRefreshr: ===`)
-        console.log(res)
-      })
-      .catch(err => console.log(err))
-  }
-  const rescheduleRefreshr = () => {
-    const scheduleObj = {
-      "send_at": 1550671260 // Feb 20, 2019 8:01AM
-    }
-    const url = `https://api.sendgrid.com/v3/campaigns/${campaign_id}/schedules`
-    axios.patch(url, scheduleObj, headers)
-      .then(res => {
-        console.log(`===scheduleRefreshr: ===`)
-        console.log(res)
-      })
-      .catch(err => console.log(err))
-  }
-  const getScheduleRefreshr = () => {
-    const url = `https://api.sendgrid.com/v3/campaigns/${campaign_id}/schedules`
-    axios.get(url, headers)
-      .then(res => {
-        console.log(`===getScheduleRefreshr: ===`)
-        console.log(res.data.send_at)
-      })
-      .catch(err => console.log(err))
-  }
-  const deleteScheduleRefreshr = () => {
-    const url = `https://api.sendgrid.com/v3/campaigns/${campaign_id}/schedules`
-    axios.delete(url, headers)
-      .then(res => {
-        console.log(`===deleteScheduleRefreshr: ${res.data.status}===`)
-        console.log(res)
-      })
-      .catch(err => console.log(err))
-  }
-  const sendTestRefreshr = () => {
-    const emailObj = {
-      "to": "areli.athens@cowstore.net" // Only 1 email allowed
-    }
-    const url = `https://api.sendgrid.com/v3/campaigns/${campaign_id}/schedules/test`
-    axios.post(url, emailObj, headers)
-      .then(res => {
-        console.log(`===deleteScheduleRefreshr: ${res.data.status}===`)
-        console.log(res)
-      })
-      .catch(err => console.log(err))
-  }
-
-
-
   // SENDER OPERATIONS
   const addSender = () => {
     const new_sender = {
@@ -368,24 +239,138 @@ function ClassView(props) {
 
 
 
+  // REFRESHRS OPERATIONS
+  const addRefreshr = () => {
+    const new_refresher = {
+      "title": "March Newsletter",
+      "subject": "New Products for Spring!",
+      "sender_id": 424711,
+      "list_ids": [
+        7061129,
+        7061137
+      ],
+      "segment_ids": null,
+      "categories": null,
+      "suppression_group_id": null,
+      "custom_unsubscribe_url": "",
+      "ip_pool": null,
+      "html_content": "<html><head><title></title></head><body><p>Check out our spring line!</p></body></html>",
+      "plain_content": "Check out our spring line!"
+    }
+    const url = "https://api.sendgrid.com/v3/campaigns"
+    axios.post(url, new_refresher, headers)
+      .then(res => {
+        console.log(`===addRefreshr===`)
+        console.log(res)
+      })
+      .catch(err => console.log(err))
+  }
+
+  const getRefreshr = () => {
+    const url = `https://api.sendgrid.com/v3/campaigns/${campaign_id}`
+    axios.get(url, headers)
+      .then(res => {
+        console.log(`===getRefreshr: all===`)
+        console.log(res.data)
+      })
+      .catch(err => console.log(err))
+  }
+
+  const getRefreshrs = () => {
+    const url = "https://api.sendgrid.com/v3/campaigns?limit=10&offset=0"
+    axios.get(url, headers)
+      .then(res => {
+        console.log(`===getRefreshrs: all===`)
+        console.log(res.data.result)
+      })
+      .catch(err => console.log(err))
+  }
+
+  const updateRefreshr = () => {
+    const updated_refreshr = {
+      "title": "123March Newsletter",
+      "subject": "123New Products for Spring!",
+      "categories": null,
+      "html_content": "<html><head><title></title></head><body><p>123Check out our spring line!</p></body></html>",
+      "plain_content": "123Check out our spring line!"
+    }
+    const url = `https://api.sendgrid.com/v3/campaigns/${campaign_id}`
+    axios.patch(url, updated_refreshr, headers)
+      .then(res => {
+        console.log(`===updateRefreshr: ${res.data.title}===`)
+        console.log(res)
+      })
+      .catch(err => console.log(err))
+  }
+  const deleteRefreshr = () => {
+    const url = `https://api.sendgrid.com/v3/campaigns/${campaign_id}`
+    axios.delete(url, headers)
+      .then(res => {
+        console.log(`===deleteRefreshr: ===`)
+        console.log(res)
+      })
+      .catch(err => console.log(err))
+  }
+  const scheduleRefreshr = () => {
+    const scheduleObj = {
+      "send_at": 1550671200 // Feb 20, 2019 8AM
+    }
+    const url = `https://api.sendgrid.com/v3/campaigns/${campaign_id}/schedules`
+    axios.post(url, scheduleObj, headers)
+      .then(res => {
+        console.log(`===scheduleRefreshr: ===`)
+        console.log(res)
+      })
+      .catch(err => console.log(err))
+  }
+  const rescheduleRefreshr = () => {
+    const scheduleObj = {
+      "send_at": 1550671260 // Feb 20, 2019 8:01AM
+    }
+    const url = `https://api.sendgrid.com/v3/campaigns/${campaign_id}/schedules`
+    axios.patch(url, scheduleObj, headers)
+      .then(res => {
+        console.log(`===scheduleRefreshr: ===`)
+        console.log(res)
+      })
+      .catch(err => console.log(err))
+  }
+  const getScheduleRefreshr = () => {
+    const url = `https://api.sendgrid.com/v3/campaigns/${campaign_id}/schedules`
+    axios.get(url, headers)
+      .then(res => {
+        console.log(`===getScheduleRefreshr: ===`)
+        console.log(res.data.send_at)
+      })
+      .catch(err => console.log(err))
+  }
+  const deleteScheduleRefreshr = () => {
+    const url = `https://api.sendgrid.com/v3/campaigns/${campaign_id}/schedules`
+    axios.delete(url, headers)
+      .then(res => {
+        console.log(`===deleteScheduleRefreshr: ${res.data.status}===`)
+        console.log(res)
+      })
+      .catch(err => console.log(err))
+  }
+  const sendTestRefreshr = () => {
+    const emailObj = {
+      "to": "areli.athens@cowstore.net" // Only 1 email allowed
+    }
+    const url = `https://api.sendgrid.com/v3/campaigns/${campaign_id}/schedules/test`
+    axios.post(url, emailObj, headers)
+      .then(res => {
+        console.log(`===deleteScheduleRefreshr: ${res.data.status}===`)
+        console.log(res)
+      })
+      .catch(err => console.log(err))
+  }
+
+
+
   return (
     <Grid container>
       < Grid item xs={10} >
-        <div>
-          <h1>REFRESHRS OPERATIONS</h1>
-          <button onClick={addRefreshr} style={{ background: "limegreen" }} >addRefreshr</button>
-          <button onClick={getRefreshr} style={{ background: "goldenrod" }} >getRefreshr</button>
-          <button onClick={getRefreshrs} style={{ background: "goldenrod" }} >getRefreshrs</button>
-          <button onClick={updateRefreshr} style={{ background: "lightpink" }} >updateRefreshr</button>
-          <button onClick={deleteRefreshr} style={{ background: "crimson" }} >deleteRefreshr</button>
-          <div>
-            <button onClick={scheduleRefreshr} style={{ background: "limegreen" }} >scheduleRefreshr</button>
-            <button onClick={getScheduleRefreshr} style={{ background: "goldenrod" }} >getScheduleRefreshr</button>
-            <button onClick={rescheduleRefreshr} style={{ background: "lightpink" }} >rescheduleRefreshr</button>
-            <button onClick={deleteScheduleRefreshr} style={{ background: "crimson" }} >deleteScheduleRefreshr</button>
-            <button onClick={sendTestRefreshr} style={{ background: "teal" }} >sendTestRefreshr</button>
-          </div>
-        </div>
         <div>
           <h1>SENDER OPERATIONS</h1>
           <button onClick={addSender} style={{ background: "limegreen" }} >addSender</button>
@@ -409,6 +394,21 @@ function ClassView(props) {
           <button onClick={addContacts} style={{ background: "limegreen" }} > addContacts</button>
           <button onClick={getContacts} style={{ background: "goldenrod" }} >getContacts</button>
           <button onClick={deleteContact} style={{ background: "crimson" }} >deleteContact</button>
+        </div>
+        <div>
+          <h1>REFRESHRS OPERATIONS</h1>
+          <button onClick={addRefreshr} style={{ background: "limegreen" }} >addRefreshr</button>
+          <button onClick={getRefreshr} style={{ background: "goldenrod" }} >getRefreshr</button>
+          <button onClick={getRefreshrs} style={{ background: "goldenrod" }} >getRefreshrs</button>
+          <button onClick={updateRefreshr} style={{ background: "lightpink" }} >updateRefreshr</button>
+          <button onClick={deleteRefreshr} style={{ background: "crimson" }} >deleteRefreshr</button>
+          <div>
+            <button onClick={scheduleRefreshr} style={{ background: "limegreen" }} >scheduleRefreshr</button>
+            <button onClick={getScheduleRefreshr} style={{ background: "goldenrod" }} >getScheduleRefreshr</button>
+            <button onClick={rescheduleRefreshr} style={{ background: "lightpink" }} >rescheduleRefreshr</button>
+            <button onClick={deleteScheduleRefreshr} style={{ background: "crimson" }} >deleteScheduleRefreshr</button>
+            <button onClick={sendTestRefreshr} style={{ background: "teal" }} >sendTestRefreshr</button>
+          </div>
         </div>
       </Grid >
     </Grid >
