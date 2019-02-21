@@ -62,7 +62,7 @@ function ListForm(props) {
         setList(res.data.lists);
       })
       .catch(err => console.log(err));
-  });
+  }, []);
 
   const updateList = () => {
     const url = `https://api.sendgrid.com/v3/contactdb/lists/${listId}`;
