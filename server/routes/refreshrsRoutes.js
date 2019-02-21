@@ -34,9 +34,14 @@ router.get('/classes/:classId', async (req, res, next) => {
   console.log(classId);
   try {
     refreshrList = await db.getClassRefreshrs(classId);
-    res.status(200).json(refreshrList);
+    res.status(responseStatus.success).json(refreshrList);
   } catch (err) {
-    console.log(err);
+    if (TypeError) {
+      console.log(err);
+      next(responseStatus.notFound);
+    } else {
+      next(err);
+    }
   }
 });
 
