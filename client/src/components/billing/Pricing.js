@@ -86,8 +86,8 @@ const tiers = [
     description: [
       'Unlimited Refreshrs',
       'Customize Refreshr schedule',
-      'Unlimited students',
-      '24/7 Phone support'
+      '24/7 Phone support',
+      '30-day free trial'
     ],
     buttonText: 'Get started',
     buttonVariant: 'contained'
@@ -202,7 +202,7 @@ const Pricing = props => {
               item
               key={tier.title}
               xs={12}
-              sm={tier.title === 'Enterprise' ? 12 : 6}
+              sm={tier.title === 'Premium' ? 12 : 6}
               md={4}
             >
               <Card>
@@ -211,7 +211,7 @@ const Pricing = props => {
                   subheader={tier.subheader}
                   titleTypographyProps={{ align: 'center' }}
                   subheaderTypographyProps={{ align: 'center' }}
-                  action={tier.title === 'Pro' ? <StarIcon /> : null}
+                  action={tier.title === 'Premium' ? <StarIcon /> : null}
                   className={classes.cardHeader}
                 />
                 <CardContent>
@@ -239,10 +239,7 @@ const Pricing = props => {
                   </Button> */}
                   <StripeProvider apiKey="pk_test_6uEhds8mHz26DG95ZvUwTURp">
                     <Elements>
-                      <TakeMoney
-                        className="stripe-buttons"
-                        subType={tiers.value}
-                      />
+                      <TakeMoney subType={tiers.value} />
                     </Elements>
                   </StripeProvider>
                 </CardActions>
