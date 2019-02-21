@@ -18,7 +18,7 @@ router.get('/:id', jwtCheck, async (req, res, next) => {
   const { id } = req.params;
   try {
     const refreshr = await db.getRefreshr(id);
-    res.status(responseStatus.success).json(refreshr);
+    res.status(responseStatus.success).json({refreshr});
   } catch (err) {
     if (TypeError) {
       console.log(err);
