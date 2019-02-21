@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Grid from '@material-ui/core/Grid';
 import axios from 'axios';
 import { withStyles } from '@material-ui/core/styles';
@@ -22,6 +22,7 @@ function ListForm(props) {
   ]; // Magda, Timmy
   const sender_id = 425702; // The Refreshr Team
   const campaign_id = 5001224; // March Newsletter
+  const [list, setList] = useState(['heyyyy']);
 
   const addList = () => {
     const url = 'https://api.sendgrid.com/v3/contactdb/lists';
@@ -55,6 +56,7 @@ function ListForm(props) {
       .then(res => {
         console.log(`===getLists: all===`);
         console.log(res.data.lists);
+        setList(res.data.lists.map(item => item.name));
       })
       .catch(err => console.log(err));
   };
@@ -84,9 +86,28 @@ function ListForm(props) {
       .catch(err => console.log(err));
   };
 
+  console.log('State list', list);
   return (
     <Grid className={props.classes.wrapper}>
-      <p>ListForm Component</p>
+      <div>
+        <h1>LIST OPERATIONS</h1>
+        <button onClick={addList} style={{ background: 'limegreen' }}>
+          addList
+        </button>
+        <button onClick={getList} style={{ background: 'goldenrod' }}>
+          getList
+        </button>
+        <button onClick={getLists} style={{ background: 'goldenrod' }}>
+          getLists
+        </button>
+        <button onClick={updateList} style={{ background: 'lightpink' }}>
+          updateList
+        </button>
+        <button onClick={deleteList} style={{ background: 'crimson' }}>
+          deleteList
+        </button>
+        <div>{list}</div>
+      </div>
     </Grid>
   );
 }
