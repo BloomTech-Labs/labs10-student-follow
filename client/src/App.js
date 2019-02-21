@@ -39,7 +39,7 @@ const App = props => {
   const togglePage = () => {
     setOpen(!open);
   };
-  //all refreshrs
+  //Refreshrs
   const getRefreshrs = options => {
     axios
       .get('https://refreshr-app.netlify.com/refreshrs', options)

@@ -8,6 +8,8 @@ router.get('/', (req, res) => {
   res.send('billing sanity check');
 });
 
+const standardPlan = 999;
+
 router.post('/charge', async (req, res) => {
   const user = req.body;
   if (!user) {
@@ -17,8 +19,11 @@ router.post('/charge', async (req, res) => {
     const customer = await stripe.customers.create({
       email: user.token.email,
       source: user.token.id,
+      // this selects a plan based on the user preference which is passed as subType
       plan:
-        user.subType === 999 ? process.env.PLAN_ID_ONE : process.env.PLAN_ID_TWO
+        user.subType === standardPlan
+          ? process.env.PLAN_ID_ONE
+          : process.env.PLAN_ID_TWO
     });
     res.status(responseStatus.postCreated).send(customer);
   } catch (error) {
