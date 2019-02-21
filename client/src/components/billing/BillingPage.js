@@ -5,6 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import Snackbar from '../views/Snackbar';
 import TakeMoney from './TakeMoney';
+import Pricing from './Pricing';
 
 const styles = theme => ({
   cardWrapper: {
@@ -37,12 +38,13 @@ const BillingPage = props => {
 
   return (
     <>
-      <h1>BillingPage</h1>
+      {/* <h1>BillingPage</h1>
       <Button variant="contained" onClick={openSnackbar}>
         Test Snackbar
       </Button>
-      {snackbar && <Snackbar message="testing snackbar" />}
-      <Grid className={props.classes.cardWrapper}>
+      {snackbar && <Snackbar message="testing snackbar" />} */}
+      <Pricing />
+      {/* <Grid className={props.classes.cardWrapper}>
         <Grid>
           <form>
             <label>
@@ -51,7 +53,6 @@ const BillingPage = props => {
                 type="radio"
                 name="subType"
                 value={999}
-                selected={true}
               />
               1 Year Subscription - $9.99
             </label>
@@ -71,7 +72,7 @@ const BillingPage = props => {
             </Elements>
           </StripeProvider>
         </Grid>
-      </Grid>
+      </Grid> */}
     </>
   );
 };
