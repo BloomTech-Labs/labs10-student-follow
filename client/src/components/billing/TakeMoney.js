@@ -32,8 +32,9 @@ export default class TakeMoney extends React.Component {
   };
 
   sendEmail = event => {
+    // this is a temporary solution. We should create a custom form rather than opening the email client
     event.preventDefault();
-    window.location.href = `mailto:${this.props.email}`;
+    window.location.href = `mailto:hello@refreshr.com`;
   };
 
   render() {
