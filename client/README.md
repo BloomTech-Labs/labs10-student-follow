@@ -110,8 +110,10 @@
 
 ```md
 # Sendgrid
-- Sendgrid is an email service, part of the Twilio company, which gives developers access to the Sendgrid V3 API to control email campaigns, set lists, set recipients, and many other features.
+- Sendgrid is an email service, part of the Twilio company, which gives developers access to the Sendgrid V3 API to control email campaigns, set lists, set senders, set recipients, and many other features.
 - Our purposes with Refreshr is to use it to schedule refreshrs and to email students out with a magic link back to our platform in order to take their refreshr.
+- The five specific operation types involved are campaigns, list, list recipients, senders, and recipients.
+- More information on [Sendgrid V3 documentation](https://sendgrid.api-docs.io/v3.0)
 ```
 
 ```
