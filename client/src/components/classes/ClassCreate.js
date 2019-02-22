@@ -1,18 +1,17 @@
-import React, { useState } from "react";
-import Grid from "@material-ui/core/Grid";
-import { withStyles } from "@material-ui/core/styles";
-import { SenderForm, RecipientForm, ListForm, CampaignForm } from '../index.js'
+import React, { useState } from 'react';
+import Grid from '@material-ui/core/Grid';
+import { withStyles } from '@material-ui/core/styles';
+import { SenderForm, RecipientForm, ListForm, CampaignForm } from '../index.js';
 
 const styles = theme => ({
-  wrapper: {
-  }
+  wrapper: {}
 });
 
 function ClassCreate(props) {
-  const [onSenderForm, setSenderForm] = useState(true)
-  const [onRecipientForm, setRecipientForm] = useState(false)
-  const [onListForm, setListForm] = useState(false)
-  const [onCampaignForm, setCampaignForm] = useState(false)
+  const [onSenderForm, setSenderForm] = useState(true);
+  const [onRecipientForm, setRecipientForm] = useState(false);
+  const [onListForm, setListForm] = useState(false);
+  const [onCampaignForm, setCampaignForm] = useState(false);
 
   return (
     <Grid className={props.classes.wrapper}>
@@ -40,9 +39,8 @@ function ClassCreate(props) {
         onCampaignForm={onCampaignForm}
         setCampaignForm={setCampaignForm}
       />
-
     </Grid>
   );
-};
+}
 
 export default withStyles(styles)(ClassCreate);
