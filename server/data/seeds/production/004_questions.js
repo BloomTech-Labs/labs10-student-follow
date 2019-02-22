@@ -1,7 +1,6 @@
 const faker = require('faker');
 
 const create = () => ({
-  review_text: faker.lorem.sentence(20),
   question: faker.lorem.sentence(10),
   wrong_answer_1: faker.lorem.sentence(5),
   wrong_answer_2: faker.lorem.sentence(5),

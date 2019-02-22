@@ -1,11 +1,11 @@
 exports.up = function(knex, Promise) {
   return knex.schema.table('refreshrs', tbl => {
-    tbl.string('name');
+    tbl.text('review_text');
   });
 };
 
 exports.down = function(knex, Promise) {
   return knex.schema.table('refreshrs', tbl => {
-    tbl.dropColumn('name');
+    dropColumn('review_text');
   });
 };

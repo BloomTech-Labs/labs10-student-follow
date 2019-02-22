@@ -6,6 +6,6 @@ exports.up = function(knex, Promise) {
 
 exports.down = function(knex, Promise) {
   return knex.schema.table('refreshrs', tbl => {
-    tbl.dropColumn('name');
+    dropColumn('name');
   });
 };
