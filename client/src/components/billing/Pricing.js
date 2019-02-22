@@ -76,7 +76,7 @@ const tiers = [
       'Email support'
     ],
     buttonText: 'Sign up for free',
-    buttonVariant: 'standard'
+    buttonVariant: 999
   },
   {
     title: 'Premium',
@@ -90,12 +90,17 @@ const tiers = [
       '30-day free trial'
     ],
     buttonText: 'Get started',
-    buttonVariant: 'premium'
+    buttonVariant: 2999
   },
   {
     title: 'Custom',
     price: '50+',
-    description: ['We can build a solution based on your requirements.'],
+    description: [
+      'Unlimited Refreshrs',
+      'Custom solution',
+      'Tailored to your school',
+      'In-person support'
+    ],
     buttonText: 'Contact us',
     buttonVariant: 'custom'
   }

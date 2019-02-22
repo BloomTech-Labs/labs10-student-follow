@@ -31,53 +31,33 @@ export default class TakeMoney extends React.Component {
     }
   };
 
-  handleChange = e => {
-    // setSubType(parseInt(e.target.value));
-    console.log('HANDLING CHANGE', e);
+  sendEmail = event => {
+    // this is a temporary solution. We should create a custom form rather than opening the email client
+    event.preventDefault();
+    window.location.href = `mailto:hello@refreshr.com`;
   };
 
-  // <div style={{'backgroundColor': status === 'approved' ? 'blue' : status === 'pending' ? 'black' : 'red'}}>
-
   render() {
-    console.log('PROPS from takemoney', this.props.variant);
-
-    return this.props.variant === 'standard' ? (
-      <div onClick={this.handleChange} style={width}>
-        <StripeCheckout // This component uses the token created above to make a one time payment
-          style={width}
-          token={this.onToken}
-          stripeKey="pk_test_Y6iNnz4ImmbwJDcFA982Hahf"
-          name="Refreshr"
-          description="Purchase your subscription"
-          panelLabel="Purchase"
-          image={Image} // We should have a second smaller logo image without text
-          amount={999} //cents
-          currency="USD"
-          email="nickoferrall@gmail.com" // will update this to the user email
-          // bitcoin={true} // looks like it's depreciated
-          // alipay={true}
-        />
-      </div>
-    ) : this.props.variant === 'premium' ? (
-      <div onClick={this.handleChange} style={width}>
-        <StripeCheckout // This component uses the token created above to make a one time payment
-          style={width}
-          token={this.onToken}
-          stripeKey="pk_test_Y6iNnz4ImmbwJDcFA982Hahf"
-          name="Refreshr"
-          description="Purchase your subscription"
-          panelLabel="Purchase"
-          image={Image} // We should have a second smaller logo image without text
-          amount={2999} //cents
-          currency="USD"
-          email="nickoferrall@gmail.com" // will update this to the user email
-          // bitcoin={true} // looks like it's depreciated
-          // alipay={true}
-        />
+    return this.props.variant === 'custom' ? (
+      <div style={width}>
+        <button onClick={this.sendEmail} style={contactButton}>
+          Contact Us
+        </button>
       </div>
     ) : (
       <div style={width}>
-        <button style={contactButton}>Contact Us</button>
+        <StripeCheckout // This component uses the token created above to make a one time payment
+          style={width}
+          token={this.onToken}
+          stripeKey="pk_test_Y6iNnz4ImmbwJDcFA982Hahf"
+          name="Refreshr"
+          description="Purchase your subscription"
+          panelLabel="Purchase"
+          image={Image} // We should have a second smaller logo image without text
+          amount={this.props.variant} //amount passed by buttonVariant in Pricing.js
+          currency="USD"
+          email="nickoferrall@gmail.com" // will update this to the user email
+        />
       </div>
     );
   }
