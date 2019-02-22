@@ -96,9 +96,10 @@ const tiers = [
     title: 'Custom',
     price: '50+',
     description: [
+      'Unlimited Refreshrs',
       'Custom solution',
-      'Tailored to your business requirements',
-      'In-person supports'
+      'Tailored to your school',
+      'In-person support'
     ],
     buttonText: 'Contact us',
     buttonVariant: 'custom'
