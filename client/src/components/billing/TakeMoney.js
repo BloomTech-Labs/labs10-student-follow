@@ -31,18 +31,16 @@ export default class TakeMoney extends React.Component {
     }
   };
 
-  handleChange = e => {
-    // setSubType(parseInt(e.target.value));
-    console.log('HANDLING CHANGE', e);
+  sendEmail = event => {
+    event.preventDefault();
+    window.location.href = `mailto:${this.props.email}`;
   };
-
-  // <div style={{'backgroundColor': status === 'approved' ? 'blue' : status === 'pending' ? 'black' : 'red'}}>
 
   render() {
     console.log('PROPS from takemoney', this.props.variant);
 
     return this.props.variant === 'standard' ? (
-      <div onClick={this.handleChange} style={width}>
+      <div style={width}>
         <StripeCheckout // This component uses the token created above to make a one time payment
           style={width}
           token={this.onToken}
@@ -59,7 +57,7 @@ export default class TakeMoney extends React.Component {
         />
       </div>
     ) : this.props.variant === 'premium' ? (
-      <div onClick={this.handleChange} style={width}>
+      <div style={width}>
         <StripeCheckout // This component uses the token created above to make a one time payment
           style={width}
           token={this.onToken}
@@ -77,7 +75,9 @@ export default class TakeMoney extends React.Component {
       </div>
     ) : (
       <div style={width}>
-        <button style={contactButton}>Contact Us</button>
+        <button onClick={this.sendEmail} style={contactButton}>
+          Contact Us
+        </button>
       </div>
     );
   }
