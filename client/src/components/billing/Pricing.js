@@ -76,7 +76,7 @@ const tiers = [
       'Email support'
     ],
     buttonText: 'Sign up for free',
-    buttonVariant: 'standard'
+    buttonVariant: 999
   },
   {
     title: 'Premium',
@@ -90,7 +90,7 @@ const tiers = [
       '30-day free trial'
     ],
     buttonText: 'Get started',
-    buttonVariant: 'premium'
+    buttonVariant: 2999
   },
   {
     title: 'Custom',

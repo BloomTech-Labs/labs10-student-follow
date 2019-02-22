@@ -38,47 +38,26 @@ export default class TakeMoney extends React.Component {
   };
 
   render() {
-    console.log('PROPS from takemoney', this.props.variant);
-
-    return this.props.variant === 'standard' ? (
-      <div style={width}>
-        <StripeCheckout // This component uses the token created above to make a one time payment
-          style={width}
-          token={this.onToken}
-          stripeKey="pk_test_Y6iNnz4ImmbwJDcFA982Hahf"
-          name="Refreshr"
-          description="Purchase your subscription"
-          panelLabel="Purchase"
-          image={Image} // We should have a second smaller logo image without text
-          amount={999} //cents
-          currency="USD"
-          email="nickoferrall@gmail.com" // will update this to the user email
-          // bitcoin={true} // looks like it's depreciated
-          // alipay={true}
-        />
-      </div>
-    ) : this.props.variant === 'premium' ? (
-      <div style={width}>
-        <StripeCheckout // This component uses the token created above to make a one time payment
-          style={width}
-          token={this.onToken}
-          stripeKey="pk_test_Y6iNnz4ImmbwJDcFA982Hahf"
-          name="Refreshr"
-          description="Purchase your subscription"
-          panelLabel="Purchase"
-          image={Image} // We should have a second smaller logo image without text
-          amount={2999} //cents
-          currency="USD"
-          email="nickoferrall@gmail.com" // will update this to the user email
-          // bitcoin={true} // looks like it's depreciated
-          // alipay={true}
-        />
-      </div>
-    ) : (
+    return this.props.variant === 'custom' ? (
       <div style={width}>
         <button onClick={this.sendEmail} style={contactButton}>
           Contact Us
         </button>
+      </div>
+    ) : (
+      <div style={width}>
+        <StripeCheckout // This component uses the token created above to make a one time payment
+          style={width}
+          token={this.onToken}
+          stripeKey="pk_test_Y6iNnz4ImmbwJDcFA982Hahf"
+          name="Refreshr"
+          description="Purchase your subscription"
+          panelLabel="Purchase"
+          image={Image} // We should have a second smaller logo image without text
+          amount={this.props.variant} //amount passed by buttonVariant in Pricing.js
+          currency="USD"
+          email="nickoferrall@gmail.com" // will update this to the user email
+        />
       </div>
     );
   }
