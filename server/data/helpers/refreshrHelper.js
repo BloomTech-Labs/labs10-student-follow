@@ -6,8 +6,9 @@ module.exports = {
 
     return allRefreshrs;
   },
+  getClassRefreshrs: async class_id => db('refreshrs').where({ class_id }),
 
-  getRefreshr: async (id) => {
+  getRefreshr: async id => {
     const selectedRefreshr = await db('refreshrs')
       .where({ id })
       .first();
@@ -21,12 +22,12 @@ module.exports = {
       .join('refreshrs', 'refreshrs.id', 'questions_refreshrs.refreshr_id')
       .where('refreshrs.id', id);
 
-    return Promise.all([selectedRefreshr, questions]).then((response) => {
+    return Promise.all([selectedRefreshr, questions]).then(response => {
       let [selectedRefreshr, questions] = response;
       let result = {
         id: selectedRefreshr.id,
         date: selectedRefreshr.date,
-        refreshrs: questions.map((q) => {
+        refreshrs: questions.map(q => {
           return {
             question_id: q.question_id,
             review_text: q.review_text,
@@ -43,11 +44,11 @@ module.exports = {
       return result;
     });
   },
-  addRefreshr: async (refreshr) => {
+  addRefreshr: async refreshr => {
     const newRefreshr = await db('refreshrs')
       .insert(refreshr)
       .returning('id')
-      .then((id) => {
+      .then(id => {
         return id;
       });
     return newRefreshr[0];
@@ -60,7 +61,7 @@ module.exports = {
     return updateCount;
   },
 
-  deleteRefreshr: async (id) => {
+  deleteRefreshr: async id => {
     const deleteCount = await db('refreshrs')
       .where({ id })
       .del();
