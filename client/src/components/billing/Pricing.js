@@ -76,7 +76,7 @@ const tiers = [
       'Email support'
     ],
     buttonText: 'Sign up for free',
-    buttonVariant: 'outlined'
+    buttonVariant: 'standard'
   },
   {
     title: 'Premium',
@@ -90,14 +90,14 @@ const tiers = [
       '30-day free trial'
     ],
     buttonText: 'Get started',
-    buttonVariant: 'contained'
+    buttonVariant: 'premium'
   },
   {
     title: 'Custom',
     price: '50+',
     description: ['We can build a solution based on your requirements.'],
     buttonText: 'Contact us',
-    buttonVariant: 'outlined'
+    buttonVariant: 'custom'
   }
 ];
 const footers = [
@@ -188,13 +188,8 @@ const Pricing = props => {
             align="center"
             color="textSecondary"
             component="p"
-          >
-            {/* Quickly build an effective pricing table for your potential
-            customers with this layout. It&apos;s built with default Material-UI
-            components with little customization. */}
-          </Typography>
+          />
         </div>
-        {/* End hero unit */}
         <Grid container spacing={40} alignItems="flex-end">
           {tiers.map(tier => (
             // Enterprise card is full width at sm breakpoint
@@ -239,9 +234,13 @@ const Pricing = props => {
                   </Button> */}
                   <StripeProvider apiKey="pk_test_6uEhds8mHz26DG95ZvUwTURp">
                     <Elements>
-                      <TakeMoney subType={tiers.value} />
+                      <TakeMoney
+                        variant={tier.buttonVariant}
+                        subType={tiers.value}
+                      />
                     </Elements>
                   </StripeProvider>
+                  `
                 </CardActions>
               </Card>
             </Grid>
