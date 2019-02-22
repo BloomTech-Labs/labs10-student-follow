@@ -503,5 +503,4 @@ function ClassView(props) {
     </Grid>
   );
 }
-
 export default withStyles(styles)(ClassView);
