@@ -38,7 +38,9 @@ const App = props => {
   const togglePage = () => {
     setOpen(!open);
   };
-  //Refreshrs
+
+  //all refreshrs
+
   const getRefreshrs = options => {
     axios
       .get('https://refreshr.herokuapp.com/refreshrs', options)

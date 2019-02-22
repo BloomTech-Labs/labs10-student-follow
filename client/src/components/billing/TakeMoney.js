@@ -2,9 +2,20 @@ import React from 'react';
 import StripeCheckout from 'react-stripe-checkout';
 import Image from './logo.png';
 import axios from 'axios';
+import Button from '@material-ui/core/Button';
+import Icon from '@material-ui/core/Icon';
+import classNames from 'classnames';
 
 const width = {
   width: '100%'
+};
+
+const contactButton = {
+  padding: '3%',
+  width: '100%',
+  borderRadius: '5%',
+  backgroundColor: '#F5F5F5',
+  fontSize: '0.8rem'
 };
 
 export default class TakeMoney extends React.Component {
@@ -25,9 +36,12 @@ export default class TakeMoney extends React.Component {
     console.log('HANDLING CHANGE', e);
   };
 
+  // <div style={{'backgroundColor': status === 'approved' ? 'blue' : status === 'pending' ? 'black' : 'red'}}>
+
   render() {
-    console.log('PROPS from takemoney', this.props.subType);
-    return (
+    console.log('PROPS from takemoney', this.props.variant);
+
+    return this.props.variant === 'standard' ? (
       <div onClick={this.handleChange} style={width}>
         <StripeCheckout // This component uses the token created above to make a one time payment
           style={width}
@@ -37,12 +51,33 @@ export default class TakeMoney extends React.Component {
           description="Purchase your subscription"
           panelLabel="Purchase"
           image={Image} // We should have a second smaller logo image without text
-          amount={this.props.subType} //cents
+          amount={999} //cents
           currency="USD"
           email="nickoferrall@gmail.com" // will update this to the user email
           // bitcoin={true} // looks like it's depreciated
           // alipay={true}
         />
+      </div>
+    ) : this.props.variant === 'premium' ? (
+      <div onClick={this.handleChange} style={width}>
+        <StripeCheckout // This component uses the token created above to make a one time payment
+          style={width}
+          token={this.onToken}
+          stripeKey="pk_test_Y6iNnz4ImmbwJDcFA982Hahf"
+          name="Refreshr"
+          description="Purchase your subscription"
+          panelLabel="Purchase"
+          image={Image} // We should have a second smaller logo image without text
+          amount={2999} //cents
+          currency="USD"
+          email="nickoferrall@gmail.com" // will update this to the user email
+          // bitcoin={true} // looks like it's depreciated
+          // alipay={true}
+        />
+      </div>
+    ) : (
+      <div style={width}>
+        <button style={contactButton}>Contact Us</button>
       </div>
     );
   }

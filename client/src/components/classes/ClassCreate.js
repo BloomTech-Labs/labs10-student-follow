@@ -5,8 +5,7 @@ import { SenderForm, RecipientForm, ListForm, CampaignForm } from '../index.js'
 import axios from 'axios';
 
 const styles = theme => ({
-  wrapper: {
-  }
+  wrapper: {}
 });
 
 
@@ -55,9 +54,8 @@ function ClassCreate(props) {
         setCampaignForm={setCampaignForm}
         refreshrs={classData && classData.refreshrs.length ? classData.refreshrs : null}
       />
-
     </Grid>
   );
-};
+}
 
 export default withStyles(styles)(ClassCreate);
