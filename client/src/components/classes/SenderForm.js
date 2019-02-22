@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Grid from "@material-ui/core/Grid";
 import { withStyles } from "@material-ui/core/styles";
 
@@ -16,17 +16,28 @@ const styles = theme => ({
 });
 
 function SenderForm(props) {
-  const [nickname, setNickname] = useState("")
-  const [senderName, setSenderName] = useState("")
-  const [senderEmail, setSenderEmail] = useState("")
-  const [replyName, setReplyName] = useState("")
-  const [replyEmail, setReplyEmail] = useState("")
-  const [address, setAddress] = useState("")
-  const [address2, setAddress2] = useState("")
-  const [state, setState] = useState("")
-  const [zip, setZip] = useState("")
-  const [city, setCity] = useState("")
-  const [country, setCountry] = useState("")
+
+  const [senderInfo, setSenderInfo] = useState({
+    nickname: '',
+    senderName: '',
+    senderEmail: '',
+    replyName: '',
+    replyEmail: '',
+    address: '',
+    address2: '',
+    state: '',
+    zip: '',
+    city: '',
+    country: ''
+  })
+
+  useEffect(() => {
+    console.log(senderInfo);
+  }, [senderInfo])
+
+  const handleChange = e => {
+    setSenderInfo({ ...senderInfo, [e.target.name]: e.target.value });
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -42,79 +53,79 @@ function SenderForm(props) {
         <input
           name="nickname"
           type="text"
-          value={nickname}
+          value={senderInfo.nickname}
           placeholder="Nickname"
-          onChange={(e) => setNickname(e.target.value)}
+          onChange={handleChange}
         />
         <input
           name="senderName"
           type="text"
-          value={senderName}
+          value={senderInfo.senderName}
           placeholder="Sender's Name"
-          onChange={(e) => setSenderName(e.target.value)}
+          onChange={handleChange}
         />
         <input
           name="senderEmail"
           type="email"
-          value={senderEmail}
+          value={senderInfo.senderEmail}
           placeholder="Sender's Email"
-          onChange={(e) => setSenderEmail(e.target.value)}
+          onChange={handleChange}
         />
         <input
           name="replyName"
           type="text"
-          value={replyName}
+          value={senderInfo.replyName}
           placeholder="Reply To Name"
-          onChange={(e) => setReplyName(e.target.value)}
+          onChange={handleChange}
         />
         <input
           name="replyEmail"
           type="email"
-          value={replyEmail}
+          value={senderInfo.replyEmail}
           placeholder="Reply To Email"
-          onChange={(e) => setReplyEmail(e.target.value)}
+          onChange={handleChange}
         />
         <input
           name="address"
           type="text"
-          value={address}
+          value={senderInfo.address}
           placeholder="Address"
-          onChange={(e) => setAddress(e.target.value)}
+          onChange={handleChange}
         />
         <input
           name="address2"
           type="text"
-          value={address2}
+          value={senderInfo.address2}
           placeholder="Address2"
-          onChange={(e) => setAddress2(e.target.value)}
+          onChange={handleChange}
         />
         <input
           name="state"
           type="text"
-          value={state}
+          value={senderInfo.state}
           placeholder="State"
-          onChange={(e) => setState(e.target.value)}
+          onChange={handleChange}
         />
         <input
           name="zip"
           type="number"
-          value={zip}
+          value={senderInfo.zip}
           placeholder="Zip Code"
-          onChange={(e) => setZip(e.target.value)}
+          onChange={handleChange}
         />
         <input
           name="city"
           type="text"
-          value={city}
+          value={senderInfo.city}
           placeholder="City"
-          onChange={(e) => setCity(e.target.value)}
+          onChange={handleChange}
         />
         <input
           name="country"
           type="text"
-          value={country}
+          value={senderInfo.country}
           placeholder="Country"
-          onChange={(e) => setCountry(e.target.value)}
+          onChange={handleChange}
         />
         <button type="submit">Next</button>
       </form>
