@@ -16,25 +16,25 @@ function ClassView(props) {
     "headers": { "Authorization": `Bearer ${process.env.REACT_APP_SENDGRID_API_KEY}` },
     "content-type": "application/json"
   }
-  const listId = 7061139 // test3
+  const listId = 7100282 // Students2
   const recipient_id = "YXN0dXJpYXN4aUBnbWFpbC5jb20=" // Timmy
-  const recipient_ids = ["YXJlbGkuYXRoZW5zQGNvd3N0b3JlLm5ldA==", "YXN0dXJpYXN4aUBnbWFpbC5jb20="] // Magda, Timmy
-  const sender_id = 425702 // The Refreshr Team
-  const campaign_id = 5001224 // March Newsletter
+  const recipient_ids = ["YnJpYW5AbWVuZG96YS5jb20=", "am9uYXRoYW5AaXZhbi5jb20=", "anVhbkBzaWVycmEuY29t"] // Juan, Brian, Jonathan
+  const sender_id = 428223 // The Refreshr Team
+  const campaign_id = 5033203 // March Newsletter
 
 
 
   // SENDER OPERATIONS
   const addSender = () => {
     const new_sender = {
-      "nickname": "asturiasxi@gmail.com", // only required for create
+      "nickname": "The Refreshr Team", // only required for create
       "from": {
         "email": "asturiasxi@gmail.com", // only required for create
-        "name": "asturiasxi @ Refreshr"
+        "name": "Timmy @ Refreshr"
       },
       "reply_to": {
-        "email": "asturiasxi@gmail.com", // only required for create
-        "name": "Refreshr Team"
+        "email": "team@refreshr.com", // only required for create
+        "name": "Refreshr Team Main"
       },
       "address": "222 West Ave", // only required for create
       "address_2": "Ste HR100",
@@ -43,23 +43,6 @@ function ClassView(props) {
       "zip": "78701",
       "country": "United States" // required
     }
-    // const new_sender = {
-    //   "nickname": "The Refreshr Team",
-    //   "from": {
-    //     "email": "timmyturner123@refreshr.com",
-    //     "name": "Timmy Turner @ Refreshr"
-    //   },
-    //   "reply_to": {
-    //     "email": "team@refreshr.com",
-    //     "name": "Refreshr Team"
-    //   },
-    //   "address": "222 West Ave",
-    //   "address_2": "Ste HR100",
-    //   "city": "Austin",
-    //   "state": "Texas",
-    //   "zip": "78701",
-    //   "country": "United States"
-    // }
     const url = "https://api.sendgrid.com/v3/senders"
     axios.post(url, new_sender, headers)
       .then(res => {
@@ -139,12 +122,138 @@ function ClassView(props) {
 
 
   // RECIPIENT OPERATIONS
-  const addRecipient = () => { }
-  const getRecipient = () => { }
-  const getRecipients = () => { }
-  const updateRecipient = () => { }
-  const deleteRecipient = () => { }
-  const deleteRecipients = () => { }
+  const addRecipient = () => {
+    const recipient = [
+      {
+        "email": "jonathan@ivan.com",
+        "first_name": "Jonathan",
+        "last_name": "Ivan",
+      }
+    ]
+    const url = `https://api.sendgrid.com/v3/contactdb/recipients`
+    axios.post(url, recipient, headers)
+      .then(res => {
+        console.log(`===addRecipient===`)
+        console.log(res)
+      })
+      .catch(err => console.log(err))
+  }
+
+  const addRecipients = () => {
+    const recipients = [
+      {
+        "email": "juan@sierra.com",
+        "first_name": "Juan",
+        "last_name": "Sierra",
+      },
+      {
+        "email": "brian@mendoza.com",
+        "first_name": "Brian",
+        "last_name": "Mendoza",
+      }
+    ]
+    const url = `https://api.sendgrid.com/v3/contactdb/recipients`
+    axios.post(url, recipients, headers)
+      .then(res => {
+        console.log(`===addRecipients===`)
+        console.log(res)
+      })
+      .catch(err => console.log(err))
+  }
+
+  const getRecipient = () => {
+    const recipient_id = 'am9uYXRoYW5AaXZhbi5jb20=' // Jonathan Ivan
+    const url = `https://api.sendgrid.com/v3/contactdb/recipients/${recipient_id}`
+    axios.get(url, headers)
+      .then(res => {
+        console.log(`===getRecipient: ${res.status}===`)
+        console.log(res.data)
+      })
+      .catch(err => console.log(err))
+  }
+
+  const getRecipients = () => {
+    const url = `https://api.sendgrid.com/v3/contactdb/recipients`
+    axios.get(url, headers)
+      .then(res => {
+        console.log(`===addRecipient: ${res.status}===`)
+        console.log(res.data)
+      })
+      .catch(err => console.log(err))
+  }
+
+  const updateRecipient = () => {
+    // NON-FUNCTIONAL, IS THIS NEEDED?
+    // const url = `https://api.sendgrid.com/v3/contactdb/recipients/`
+    // const update_recipient = [
+    //   {
+    //     "email": "brian@sierra.com",
+    //     "last_name": "SDFOK",
+    //     "first_name": "asdf"
+    //   }
+    // ]
+    // const header = {
+    //   "headers": { "Authorization": `Bearer ${process.env.REACT_APP_SENDGRID_API_KEY}` },
+    // }
+
+    // axios.patch(url, update_recipient, header)
+    //   .then(res => {
+    //     console.log(`===updateRecipient===`)
+    //     console.log(res)
+    //   })
+    //   .catch(err => console.log(err))
+  }
+
+  const deleteRecipient = () => {
+    const recipient_id = `am9uYXRoYW5AaXZhbi5jb20=` // jonathan ivan
+    const url = `https://api.sendgrid.com/v3/contactdb/recipients/${recipient_id}`
+    // const headers = {
+    //   "headers": { "Authorization": `Bearer ${process.env.REACT_APP_SENDGRID_API_KEY}` }
+    // } // DO NOT REMOVE, this header does not need content-type
+    axios.delete(url, headers)
+      .then(res => {
+        console.log(`===deleteRecipient: ${res.status}===`)
+        console.log(res.statusText)
+      })
+      .catch(err => console.log(err))
+  }
+
+  const deleteRecipients = () => {
+    // NON-FUNCTIONAL, IS THIS NEEDED?
+    // https://github.com/axios/axios#axiosdeleteurl-config
+    // https://stackoverflow.com/questions/50215619/axios-delete-method-not-working-in-react
+    // https://stackoverflow.com/questions/51069552/axios-delete-request-with-body-and-headers
+    // https://github.com/axios/axios/issues/897
+
+    // const url = `https://api.sendgrid.com/v3/contactdb/recipients`
+    // const data = {
+    //   data: [
+    //     "YnJpYW5Ac2llcnJhLmNvbQ==",
+    //     "anVhbkBtZW5kb3phLmNvbQ=="
+    //   ]
+    // }
+    // const headers = {
+    //   "Authorization": `Bearer ${process.env.REACT_APP_SENDGRID_API_KEY}`,
+    //   "Content-Type": "application/json"
+    // }
+    // const options = {
+    //   url: 'https://api.sendgrid.com/v3/contactdb/recipients',
+    //   method: 'DELETE',
+    //   headers:
+    //   {
+    //     'content-type': 'application/json',
+    //     'authorization': `Bearer ${process.env.REACT_APP_SENDGRID_API_KEY}`
+    //   },
+    //   data: ['YnJpYW5Ac2llcnJhLmNvbQ==', 'anVhbkBtZW5kb3phLmNvbQ==']
+    // };
+
+    // axios.delete(url, { options })
+    //   .then(res => {
+    //     console.log(`===deleteRecipients===`)
+    //     console.log(res)
+    //   })
+    //   .catch(err => console.log(err))
+  }
 
 
 
@@ -152,7 +261,7 @@ function ClassView(props) {
   const addList = () => {
     const url = "https://api.sendgrid.com/v3/contactdb/lists"
     const body = {
-      "name": "test4"
+      "name": "Students2"
     }
     axios.post(url, body, headers)
       .then(res => {
@@ -252,20 +361,20 @@ function ClassView(props) {
   // REFRESHRS OPERATIONS
   const addRefreshr = () => {
     const new_refresher = {
-      "title": "March Newsletter",
+      "title": "March Refreshr",
       "subject": "New Products for Spring!",
-      "sender_id": 424711,
+      "sender_id": 428251,
       "list_ids": [
-        7061129,
-        7061137
+        7050057,
+        7100282
       ],
       "segment_ids": null,
-      "categories": null,
-      "suppression_group_id": null,
+      "categories": [],
+      "suppression_group_id": 9332,
       "custom_unsubscribe_url": "",
-      "ip_pool": null,
-      "html_content": "<html><head><title></title></head><body><p>Check out our spring line!</p></body></html>",
-      "plain_content": "Check out our spring line!"
+      "ip_pool": "",
+      "html_content": "<html><head><title></title></head><body><p>Check out our spring line! [unsubscribe]</p></body></html>",
+      "plain_content": "Check out our spring line! [unsubscribe]"
     }
     const url = "https://api.sendgrid.com/v3/campaigns"
     axios.post(url, new_refresher, headers)
@@ -323,7 +432,7 @@ function ClassView(props) {
   }
   const scheduleRefreshr = () => {
     const scheduleObj = {
-      "send_at": 1550671200 // Feb 20, 2019 8AM
+      "send_at": 1551103200 // Feb 25, 2019 8AM
     }
     const url = `https://api.sendgrid.com/v3/campaigns/${campaign_id}/schedules`
     axios.post(url, scheduleObj, headers)
@@ -335,7 +444,7 @@ function ClassView(props) {
   }
   const rescheduleRefreshr = () => {
     const scheduleObj = {
-      "send_at": 1550671260 // Feb 20, 2019 8:01AM
+      "send_at": 1551103260 // Feb 25, 2019 8:01AM
     }
     const url = `https://api.sendgrid.com/v3/campaigns/${campaign_id}/schedules`
     axios.patch(url, scheduleObj, headers)
@@ -358,14 +467,14 @@ function ClassView(props) {
     const url = `https://api.sendgrid.com/v3/campaigns/${campaign_id}/schedules`
     axios.delete(url, headers)
       .then(res => {
-        console.log(`===deleteScheduleRefreshr: ${res.data.status}===`)
+        console.log(`===deleteScheduleRefreshr: ${res.status}===`)
         console.log(res)
       })
       .catch(err => console.log(err))
   }
   const sendTestRefreshr = () => {
     const emailObj = {
-      "to": "areli.athens@cowstore.net" // Only 1 email allowed
+      "to": "magdalena.aurelia@cowstore.net" // Only 1 email allowed
     }
     const url = `https://api.sendgrid.com/v3/campaigns/${campaign_id}/schedules/test`
     axios.post(url, emailObj, headers)
@@ -393,6 +502,7 @@ function ClassView(props) {
         <div>
           <h1>RECIPIENT OPERATIONS</h1>
           <button onClick={addRecipient} style={{ background: "limegreen" }} >addRecipient</button>
+          <button onClick={addRecipients} style={{ background: "limegreen" }} >addRecipients</button>
           <button onClick={getRecipient} style={{ background: "goldenrod" }} >getRecipient</button>
           <button onClick={getRecipients} style={{ background: "goldenrod" }} >getRecipients</button>
           <button onClick={updateRecipient} style={{ background: "lightpink" }} >updateRecipient</button>
