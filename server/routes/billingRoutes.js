@@ -1,5 +1,6 @@
 const express = require('express');
-const stripe = require('stripe')(process.env.REACT_APP_SECRET_KEY); // secret test key in .env
+const stripe = require('stripe')(process.env.SECRET_KEY); // secret test key in .env
+const responseStatus = require('../config/responseStatusConfig');
 
 const router = express.Router();
 
@@ -7,22 +8,26 @@ router.get('/', (req, res) => {
   res.send('billing sanity check');
 });
 
+const standardPlan = 999;
+
 router.post('/charge', async (req, res) => {
-  const user = req.body.token;
+  const user = req.body;
+  if (!user) {
+    return res.send('User not found.');
+  }
   try {
-    let { status } = await stripe.charges.create({
-      amount: req.body.subType,
-      currency: 'usd',
-      description: 'test stripe charge',
-      email: user.card.email,
-      statement_descriptor: 'Refreshr Payment',
-      source: user.id
+    const customer = await stripe.customers.create({
+      email: user.token.email,
+      source: user.token.id,
+      // this selects a plan based on the user preference which is passed as subType
+      plan:
+        user.subType === standardPlan
+          ? process.env.PLAN_ID_ONE
+          : process.env.PLAN_ID_TWO
     });
-    res.json({ status });
-  } catch (err) {
-    res
-      .status(500)
-      .json({ error: `There was an error processing the payment: ${err}` });
+    res.status(responseStatus.postCreated).send(customer);
+  } catch (error) {
+    next(err);
   }
 });
 

@@ -11,7 +11,7 @@ const responseStatus = require('../config/responseStatusConfig');
 router.get('/', async (req, res, next) => {
   try {
     const teachers = await db.getAll();
-    res.status(responseStatus.success).json(teachers);
+    res.status(responseStatus.success).json({teachers});
   } catch (err) {
     next(err);
   }
@@ -21,7 +21,7 @@ router.get('/:id', async (req, res, next) => {
   const { id } = req.params;
   try {
     const teachersClasses = await db.getTeacher(id);
-    res.status(responseStatus.success).json(teachersClasses);
+    res.status(responseStatus.success).json({teachersClasses});
   } catch (err) {
     if (TypeError) {
       next(responseStatus.notFound);

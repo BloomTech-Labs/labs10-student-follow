@@ -9,19 +9,23 @@ export default class Auth {
   auth0 = new auth0.WebAuth({
     domain: 'team-refreshr.auth0.com',
     clientID: 'jNDq5B6iAnIRcrpM07Omh05uyppZ89px',
-    redirectUri: 'http://localhost:3000/loading',
+    audience: 'https://team-refreshr.auth0.com/api/v2/',
+    redirectUri: 'https://refreshr-app.netlify.com/loading',
     responseType: 'token id_token',
     scope: 'openid',
   });
 
   login = () => {
     this.auth0.authorize();
+    
   }
 
   handleAuthentication = () => {
     this.auth0.parseHash((err, authResult) => {
       if (authResult && authResult.accessToken && authResult.idToken) {
         this.setSession(authResult);
+        localStorage.setItem('token', authResult)
+      
         // history.replace('/home')
       } else if (err) {
         history.replace('/');
