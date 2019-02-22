@@ -95,7 +95,11 @@ const tiers = [
   {
     title: 'Custom',
     price: '50+',
-    description: ['We can build a solution based on your requirements.'],
+    description: [
+      'Custom solution',
+      'Tailored to your business requirements',
+      'In-person supports'
+    ],
     buttonText: 'Contact us',
     buttonVariant: 'custom'
   }
