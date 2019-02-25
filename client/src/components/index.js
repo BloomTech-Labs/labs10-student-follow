@@ -14,7 +14,7 @@ import CreateEditPage from './views/CreateEditPage';
 
 /* BILLING */
 import BillingPage from './billing/BillingPage';
-import CheckoutForm from './billing/CheckoutForm';
+import TakeMoney from './billing/TakeMoney';
 
 /* REFRESHRS */
 import RefreshrList from './refreshrs/RefreshrList';
@@ -32,7 +32,7 @@ import ListForm from './classes/ListForm';
 import CampaignForm from './classes/CampaignForm';
 
 /* MISCDATA */
-import MiscData from './MiscData'
+import MiscData from './MiscData';
 
 export {
   Navcrumbs,
@@ -56,5 +56,5 @@ export {
   Auth,
   Login,
   BillingPage,
-  CheckoutForm
+  TakeMoney
 };

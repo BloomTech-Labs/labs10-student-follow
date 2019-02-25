@@ -15,7 +15,7 @@ import {
   ClassView,
   RefreshrList,
   MiscData,
-  ClassPage,
+  ClassPage
 } from './components';
 
 const App = props => {
@@ -157,7 +157,7 @@ const App = props => {
                 />
               )}
             />
-              <Route path="/classes" render={props => <ClassView />} />
+            <Route path="/classes" render={props => <ClassView />} />
           </Grid>
         </Grid>
       </div>
