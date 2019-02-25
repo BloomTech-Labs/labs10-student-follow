@@ -20,8 +20,8 @@ const LandingPage = props => {
         <div className="text">
           <h1>Refreshr</h1>
           <p>
-            Test your students over weeks or months. Help them learn for the
-            long-term.
+            Send tests to your students over weeks or months. Help them learn
+            for the long-term.
           </p>
         </div>
       </div>

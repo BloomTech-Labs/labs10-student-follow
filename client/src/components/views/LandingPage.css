@@ -23,6 +23,7 @@
 
 .text p {
   font-size: 1.4rem;
-  width: 50%;
+  width: 40%;
   font-family: Arial, Helvetica, sans-serif;
+  line-height: 35px;
 }
