@@ -2,9 +2,20 @@ import React from 'react';
 import StripeCheckout from 'react-stripe-checkout';
 import Image from './logo.png';
 import axios from 'axios';
+import Button from '@material-ui/core/Button';
+import Icon from '@material-ui/core/Icon';
+import classNames from 'classnames';
 
 const width = {
   width: '100%'
+};
+
+const contactButton = {
+  padding: '3%',
+  width: '100%',
+  borderRadius: '5%',
+  backgroundColor: '#F5F5F5',
+  fontSize: '0.8rem'
 };
 
 export default class TakeMoney extends React.Component {
@@ -20,15 +31,21 @@ export default class TakeMoney extends React.Component {
     }
   };
 
-  handleChange = e => {
-    // setSubType(parseInt(e.target.value));
-    console.log('HANDLING CHANGE', e);
+  sendEmail = event => {
+    // this is a temporary solution. We should create a custom form rather than opening the email client
+    event.preventDefault();
+    window.location.href = `mailto:hello@refreshr.com`;
   };
 
   render() {
-    console.log('PROPS from takemoney', this.props.subType);
-    return (
-      <div onClick={this.handleChange} style={width}>
+    return this.props.variant === 'custom' ? (
+      <div style={width}>
+        <button onClick={this.sendEmail} style={contactButton}>
+          Contact Us
+        </button>
+      </div>
+    ) : (
+      <div style={width}>
         <StripeCheckout // This component uses the token created above to make a one time payment
           style={width}
           token={this.onToken}
@@ -37,11 +54,9 @@ export default class TakeMoney extends React.Component {
           description="Purchase your subscription"
           panelLabel="Purchase"
           image={Image} // We should have a second smaller logo image without text
-          amount={this.props.subType} //cents
+          amount={this.props.variant} //amount passed by buttonVariant in Pricing.js
           currency="USD"
           email="nickoferrall@gmail.com" // will update this to the user email
-          // bitcoin={true} // looks like it's depreciated
-          // alipay={true}
         />
       </div>
     );

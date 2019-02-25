@@ -15,7 +15,6 @@ import {
   RefreshrList,
   MiscData,
   ClassPage,
-  CreateEditPage
 } from './components';
 
 const App = props => {
@@ -39,7 +38,9 @@ const App = props => {
   const togglePage = () => {
     setOpen(!open);
   };
-  //Refreshrs
+
+  //all refreshrs
+
   const getRefreshrs = options => {
     axios
       .get('https://refreshr.herokuapp.com/refreshrs', options)
@@ -138,7 +139,7 @@ const App = props => {
               )}
             />
             <Route path="/billing" render={props => <BillingPage />} />
-            <Route path="/classes" render={props => <ClassView />} />
+            <Route path="/classesCEP" render={props => <ClassPage />} />
             <Route
               path="/misc"
               render={props => (
@@ -154,6 +155,7 @@ const App = props => {
                 />
               )}
             />
+              <Route path="/classes" render={props => <ClassView />} />
           </Grid>
         </Grid>
       </div>

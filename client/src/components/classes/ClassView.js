@@ -1,16 +1,16 @@
-import React from "react";
-import Grid from "@material-ui/core/Grid";
+import React from 'react';
+import Grid from '@material-ui/core/Grid';
 import axios from 'axios';
-import { withStyles } from "@material-ui/core/styles";
+import { withStyles } from '@material-ui/core/styles';
+import ListForm from './ListForm';
 
 const styles = theme => ({
   wrapper: {
-    textAlign: "left",
+    textAlign: 'left'
   }
 });
 
 function ClassView(props) {
-
   // VARIABLES
   const headers = {
     "headers": { "Authorization": `Bearer ${process.env.REACT_APP_SENDGRID_API_KEY}` },
@@ -46,80 +46,83 @@ function ClassView(props) {
     const url = "https://api.sendgrid.com/v3/senders"
     axios.post(url, new_sender, headers)
       .then(res => {
-        console.log(`===addSender: ${res.data.nickname}===`)
-        console.log(res.data)
+        console.log(`===addSender: ${res.data.nickname}===`);
+        console.log(res.data);
       })
-      .catch(err => console.log(err))
-  }
+      .catch(err => console.log(err));
+  };
 
   const getSender = () => {
-    const url = `https://api.sendgrid.com/v3/senders/${sender_id}`
-    axios.get(url, headers)
+    const url = `https://api.sendgrid.com/v3/senders/${sender_id}`;
+    axios
+      .get(url, headers)
       .then(res => {
-        console.log(`===getSender: ${res.data.nickname}===`)
-        console.log(res.data)
+        console.log(`===getSender: ${res.data.nickname}===`);
+        console.log(res.data);
       })
-      .catch(err => console.log(err))
-  }
+      .catch(err => console.log(err));
+  };
 
   const getSenders = () => {
-    const url = "https://api.sendgrid.com/v3/senders"
-    axios.get(url, headers)
+    const url = 'https://api.sendgrid.com/v3/senders';
+    axios
+      .get(url, headers)
       .then(res => {
-        console.log(`===getSenders: all===`)
-        console.log(res.data)
+        console.log(`===getSenders: all===`);
+        console.log(res.data);
       })
-      .catch(err => console.log(err))
-  }
+      .catch(err => console.log(err));
+  };
 
   const updateSender = () => {
-    const url = `https://api.sendgrid.com/v3/senders/${sender_id}`
+    const url = `https://api.sendgrid.com/v3/senders/${sender_id}`;
     const updated_sender = {
-      "nickname": "123The Refreshr Team",
-      "from": {
-        "email": "123timmyturner123@refreshr.com",
-        "name": "123Timmy Turner @ Refreshr"
+      nickname: '123The Refreshr Team',
+      from: {
+        email: '123timmyturner123@refreshr.com',
+        name: '123Timmy Turner @ Refreshr'
       },
-      "reply_to": {
-        "email": "123team@refreshr.com",
-        "name": "123Refreshr Team"
+      reply_to: {
+        email: '123team@refreshr.com',
+        name: '123Refreshr Team'
       },
-      "address": "222 West Ave",
-      "address_2": "Ste HR100",
-      "city": "Austin",
-      "state": "Texas",
-      "zip": "78701",
-      "country": "United States"
-    }
-    axios.patch(url, updated_sender, headers)
+      address: '222 West Ave',
+      address_2: 'Ste HR100',
+      city: 'Austin',
+      state: 'Texas',
+      zip: '78701',
+      country: 'United States'
+    };
+    axios
+      .patch(url, updated_sender, headers)
       .then(res => {
-        console.log(`===updateSender: res.data.nickname===`)
-        console.log(res)
+        console.log(`===updateSender: res.data.nickname===`);
+        console.log(res);
       })
-      .catch(err => console.log(err))
-  }
+      .catch(err => console.log(err));
+  };
 
   const deleteSender = () => {
-    const url = `https://api.sendgrid.com/v3/senders/${sender_id}`
-    axios.delete(url, headers)
+    const url = `https://api.sendgrid.com/v3/senders/${sender_id}`;
+    axios
+      .delete(url, headers)
       .then(res => {
-        console.log(`===deleteSender: ${res.statusText}===`)
-        console.log(res)
+        console.log(`===deleteSender: ${res.statusText}===`);
+        console.log(res);
       })
-      .catch(err => console.log(err))
-  }
+      .catch(err => console.log(err));
+  };
 
   const resendVerification = () => {
-    const url = `https://api.sendgrid.com/v3/senders/${sender_id}/resend_verification`
-    axios.post(url, null, headers)
+    const url = `https://api.sendgrid.com/v3/senders/${sender_id}/resend_verification`;
+    axios
+      .post(url, null, headers)
       .then(res => {
-        console.log(`===resendVerification: ${res.status}===`)
-        console.log(res)
+        console.log(`===resendVerification: ${res.status}===`);
+        console.log(res);
       })
-      .catch(err => console.log(err))
-  }
-
-
+      .catch(err => console.log(err));
+  };
 
   // RECIPIENT OPERATIONS
   const addRecipient = () => {
@@ -303,45 +306,53 @@ function ClassView(props) {
 
   // LIST RECIPIENTS OPERATIONS
   const addContact = () => {
-    const url = `https://api.sendgrid.com/v3/contactdb/lists/${listId}/recipients/${recipient_id}`
-    axios.post(url, null, headers)
+    const url = `https://api.sendgrid.com/v3/contactdb/lists/${listId}/recipients/${recipient_id}`;
+    axios
+      .post(url, null, headers)
       .then(res => {
-        console.log(`===addContact: recipient_id ${recipient_id} added to listId ${listId}===`)
-        console.log(res.statusText)
+        console.log(
+          `===addContact: recipient_id ${recipient_id} added to listId ${listId}===`
+        );
+        console.log(res.statusText);
       })
-      .catch(err => console.log(err))
-  }
+      .catch(err => console.log(err));
+  };
 
   const addContacts = () => {
-    const url = `https://api.sendgrid.com/v3/contactdb/lists/${listId}/recipients`
-    axios.post(url, recipient_ids, headers)
+    const url = `https://api.sendgrid.com/v3/contactdb/lists/${listId}/recipients`;
+    axios
+      .post(url, recipient_ids, headers)
       .then(res => {
-        console.log(`===addContacts: recipient_ids ${recipient_ids} added to listId ${listId}===`)
-        console.log(res.statusText)
+        console.log(
+          `===addContacts: recipient_ids ${recipient_ids} added to listId ${listId}===`
+        );
+        console.log(res.statusText);
       })
-      .catch(err => console.log(err))
-  }
+      .catch(err => console.log(err));
+  };
 
   const getContacts = () => {
-    const url = `https://api.sendgrid.com/v3/contactdb/lists/${listId}/recipients`
-    axios.get(url, headers)
+    const url = `https://api.sendgrid.com/v3/contactdb/lists/${listId}/recipients`;
+    axios
+      .get(url, headers)
       .then(res => {
-        console.log(`===getContacts: ${res.data.recipient_count}===`)
-        console.log(res.data.recipients)
+        console.log(`===getContacts: ${res.data.recipient_count}===`);
+        console.log(res.data.recipients);
       })
-      .catch(err => console.log(err))
-  }
+      .catch(err => console.log(err));
+  };
   const deleteContact = () => {
-    const url = `https://api.sendgrid.com/v3/contactdb/lists/${listId}/recipients/${recipient_id}`
-    axios.delete(url, headers)
+    const url = `https://api.sendgrid.com/v3/contactdb/lists/${listId}/recipients/${recipient_id}`;
+    axios
+      .delete(url, headers)
       .then(res => {
-        console.log(`===deleteContact: recipient_id: ${recipient_id} deleted from listId ${listId}===`)
-        console.log(res.statusText)
+        console.log(
+          `===deleteContact: recipient_id: ${recipient_id} deleted from listId ${listId}===`
+        );
+        console.log(res.statusText);
       })
-      .catch(err => console.log(err))
-  }
-
-
+      .catch(err => console.log(err));
+  };
 
   // REFRESHRS OPERATIONS
   const addRefreshr = () => {
@@ -474,15 +485,27 @@ function ClassView(props) {
 
   return (
     <Grid container>
-      < Grid item xs={10} >
+      <Grid item xs={10}>
         <div>
           <h1>SENDER OPERATIONS</h1>
-          <button onClick={addSender} style={{ background: "limegreen" }} >addSender</button>
-          <button onClick={getSender} style={{ background: "goldenrod" }} >getSender</button>
-          <button onClick={getSenders} style={{ background: "goldenrod" }} >getSenders</button>
-          <button onClick={updateSender} style={{ background: "lightpink" }} >updateSender</button>
-          <button onClick={deleteSender} style={{ background: "crimson" }} >deleteSender</button>
-          <button onClick={resendVerification} style={{ background: "teal" }} >resendVerification</button>
+          <button onClick={addSender} style={{ background: 'limegreen' }}>
+            addSender
+          </button>
+          <button onClick={getSender} style={{ background: 'goldenrod' }}>
+            getSender
+          </button>
+          <button onClick={getSenders} style={{ background: 'goldenrod' }}>
+            getSenders
+          </button>
+          <button onClick={updateSender} style={{ background: 'lightpink' }}>
+            updateSender
+          </button>
+          <button onClick={deleteSender} style={{ background: 'crimson' }}>
+            deleteSender
+          </button>
+          <button onClick={resendVerification} style={{ background: 'teal' }}>
+            resendVerification
+          </button>
         </div>
         <div>
           <h1>RECIPIENT OPERATIONS</h1>
@@ -496,18 +519,38 @@ function ClassView(props) {
         </div>
         <div>
           <h1>LIST OPERATIONS</h1>
-          <button onClick={addList} style={{ background: "limegreen" }} >addList</button>
-          <button onClick={getList} style={{ background: "goldenrod" }} >getList</button>
-          <button onClick={getLists} style={{ background: "goldenrod" }} >getLists</button>
-          <button onClick={updateList} style={{ background: "lightpink" }} >updateList</button>
-          <button onClick={deleteList} style={{ background: "crimson" }} >deleteList</button>
+          <button onClick={addList} style={{ background: 'limegreen' }}>
+            addList
+          </button>
+          <button onClick={getList} style={{ background: 'goldenrod' }}>
+            getList
+          </button>
+          <button onClick={getLists} style={{ background: 'goldenrod' }}>
+            getLists
+          </button>
+          <button onClick={updateList} style={{ background: 'lightpink' }}>
+            updateList
+          </button>
+          <button onClick={deleteList} style={{ background: 'crimson' }}>
+            deleteList
+          </button>
         </div>
+        <ListForm />
         <div>
           <h1>LIST RECIPIENT OPERATIONS</h1>
-          <button onClick={addContact} style={{ background: "limegreen" }} >addContact</button>
-          <button onClick={addContacts} style={{ background: "limegreen" }} > addContacts</button>
-          <button onClick={getContacts} style={{ background: "goldenrod" }} >getContacts</button>
-          <button onClick={deleteContact} style={{ background: "crimson" }} >deleteContact</button>
+          <button onClick={addContact} style={{ background: 'limegreen' }}>
+            addContact
+          </button>
+          <button onClick={addContacts} style={{ background: 'limegreen' }}>
+            {' '}
+            addContacts
+          </button>
+          <button onClick={getContacts} style={{ background: 'goldenrod' }}>
+            getContacts
+          </button>
+          <button onClick={deleteContact} style={{ background: 'crimson' }}>
+            deleteContact
+          </button>
         </div>
         <div>
           <h1>REFRESHRS OPERATIONS</h1>
@@ -527,6 +570,5 @@ function ClassView(props) {
       </Grid >
     </Grid >
   );
-};
-
+}
 export default withStyles(styles)(ClassView);
