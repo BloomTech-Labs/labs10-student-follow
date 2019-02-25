@@ -1,0 +1,28 @@
+.container {
+  height: 100%;
+  width: 100%;
+}
+
+.background-img {
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+}
+
+.text {
+  position: absolute;
+  z-index: 100;
+  top: 140%;
+  left: 12%;
+}
+
+.text h1 {
+  font-size: 4rem;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.text p {
+  font-size: 1.4rem;
+  width: 50%;
+  font-family: Arial, Helvetica, sans-serif;
+}
