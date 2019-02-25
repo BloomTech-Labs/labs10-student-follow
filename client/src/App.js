@@ -15,6 +15,7 @@ import {
   RefreshrList,
   MiscData,
   ClassPage,
+  CampaignForm
 } from './components';
 
 const App = props => {
@@ -155,7 +156,9 @@ const App = props => {
                 />
               )}
             />
-              <Route path="/classes" render={props => <ClassView />} />
+            <Route path="/classes" render={props => <ClassView />} />
+            <Route path="/campaign" render={props => <CampaignForm />} />{' '}
+            {/* for testing */}
           </Grid>
         </Grid>
       </div>
