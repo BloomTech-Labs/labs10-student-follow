@@ -183,25 +183,28 @@ function ClassView(props) {
   }
 
   const updateRecipient = () => {
-    // NON-FUNCTIONAL. NECESSARY FEATURE? REVISIT LATER.
-    // const url = `https://api.sendgrid.com/v3/contactdb/recipients/`
-    // const update_recipient = [
-    //   {
-    //     "email": "brian@sierra.com",
-    //     "last_name": "SDFOK",
-    //     "first_name": "asdf"
-    //   }
-    // ]
-    // const header = {
-    //   "headers": { "Authorization": `Bearer ${process.env.REACT_APP_SENDGRID_API_KEY}` },
-    // }
+    const config = {
+      'method': 'PATCH',
+      'url': 'https://api.sendgrid.com/v3/contactdb/recipients',
+      'headers': {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${process.env.REACT_APP_SENDGRID_API_KEY}`
+      },
+      'data': [
+        {
+          "email": "jonathan@ivan.com",
+          "first_name": "123Jonathan",
+          "last_name": "123Ivan",
+        }
+      ]
+    };
 
-    // axios.patch(url, update_recipient, header)
-    //   .then(res => {
-    //     console.log(`===updateRecipient===`)
-    //     console.log(res)
-    //   })
-    //   .catch(err => console.log(err))
+    axios(config)
+      .then(res => {
+        console.log(`===updateRecipient===`)
+        console.log(res)
+      })
+      .catch(err => console.log(err))
   }
 
   const deleteRecipient = () => {
