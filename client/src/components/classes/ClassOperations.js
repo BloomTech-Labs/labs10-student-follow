@@ -10,7 +10,7 @@ const styles = theme => ({
   }
 });
 
-function ClassView(props) {
+function ClassOperations(props) {
   // VARIABLES
   const headers = {
     "headers": { "Authorization": `Bearer ${process.env.REACT_APP_SENDGRID_API_KEY}` },
@@ -571,4 +571,4 @@ function ClassView(props) {
     </Grid >
   );
 }
-export default withStyles(styles)(ClassView);
+export default withStyles(styles)(ClassOperations);

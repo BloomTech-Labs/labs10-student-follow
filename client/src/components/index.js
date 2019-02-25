@@ -21,9 +21,10 @@ import RefreshrList from './refreshrs/RefreshrList';
 import RefreshrCard from './refreshrs/RefreshrCard';
 
 /* CLASSES */
-import ClassView from './classes/ClassView';
+import ClassOperations from './classes/ClassOperations';
 import ClassList from './classes/ClassList';
-import ClassCard from './classes/ClassCard';
+import NewClassCard from './classes/NewClassCard';
+import ExistingClassCard from './classes/ExistingClassCard';
 import ClassCreate from './classes/ClassCreate';
 import ClassEdit from './classes/ClassEdit';
 import SenderForm from './classes/SenderForm';
@@ -40,7 +41,8 @@ export {
   RefreshrList,
   RefreshrCard,
   ClassList,
-  ClassCard,
+  NewClassCard,
+  ExistingClassCard,
   ClassCreate,
   ClassEdit,
   SenderForm,
@@ -48,7 +50,7 @@ export {
   ListForm,
   CampaignForm,
   ClassPage,
-  ClassView,
+  ClassOperations,
   LandingPage,
   LoadingPage,
   MiscData,

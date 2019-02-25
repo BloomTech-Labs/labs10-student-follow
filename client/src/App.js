@@ -11,7 +11,6 @@ import {
   BillingPage,
   Navbar,
   Navcrumbs,
-  ClassView,
   RefreshrList,
   MiscData,
   ClassPage,
@@ -140,7 +139,7 @@ const App = props => {
               )}
             />
             <Route path="/billing" render={props => <BillingPage />} />
-            <Route path="/classesCEP" render={props => <ClassPage />} />
+            <Route path="/classes" render={props => <ClassPage />} />
             <Route
               path="/misc"
               render={props => (
@@ -156,7 +155,6 @@ const App = props => {
                 />
               )}
             />
-            <Route path="/classes" render={props => <ClassView />} />
             <Route path="/campaign" render={props => <CampaignForm />} />{' '}
             {/* for testing */}
           </Grid>
