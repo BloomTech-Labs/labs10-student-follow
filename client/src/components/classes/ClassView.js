@@ -183,7 +183,7 @@ function ClassView(props) {
   }
 
   const updateRecipient = () => {
-    // NON-FUNCTIONAL, IS THIS NEEDED?
+    // NON-FUNCTIONAL. NECESSARY FEATURE? REVISIT LATER.
     // const url = `https://api.sendgrid.com/v3/contactdb/recipients/`
     // const update_recipient = [
     //   {
@@ -207,9 +207,6 @@ function ClassView(props) {
   const deleteRecipient = () => {
     const recipient_id = `am9uYXRoYW5AaXZhbi5jb20=` // jonathan ivan
     const url = `https://api.sendgrid.com/v3/contactdb/recipients/${recipient_id}`
-    // const headers = {
-    //   "headers": { "Authorization": `Bearer ${process.env.REACT_APP_SENDGRID_API_KEY}` }
-    // } // DO NOT REMOVE, this header does not need content-type
     axios.delete(url, headers)
       .then(res => {
         console.log(`===deleteRecipient: ${res.status}===`)
@@ -219,40 +216,25 @@ function ClassView(props) {
   }
 
   const deleteRecipients = () => {
-    // NON-FUNCTIONAL, IS THIS NEEDED?
-    // https://github.com/axios/axios#axiosdeleteurl-config
-    // https://stackoverflow.com/questions/50215619/axios-delete-method-not-working-in-react
-    // https://stackoverflow.com/questions/51069552/axios-delete-request-with-body-and-headers
-    // https://github.com/axios/axios/issues/897
+    const config = {
+      'method': 'DELETE',
+      'url': 'https://api.sendgrid.com/v3/contactdb/recipients',
+      'headers': {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${process.env.REACT_APP_SENDGRID_API_KEY}`
+      },
+      'data': [
+        "YnJpYW5AbWVuZG96YS5jb20=", // Brian Mendoza
+        "anVhbkBzaWVycmEuY29t" // Juan Sierra
+      ]
+    };
 
-    // const url = `https://api.sendgrid.com/v3/contactdb/recipients`
-    // const data = {
-    //   data: [
-    //     "YnJpYW5Ac2llcnJhLmNvbQ==",
-    //     "anVhbkBtZW5kb3phLmNvbQ=="
-    //   ]
-    // }
-    // const headers = {
-    //   "Authorization": `Bearer ${process.env.REACT_APP_SENDGRID_API_KEY}`,
-    //   "Content-Type": "application/json"
-    // }
-    // const options = {
-    //   url: 'https://api.sendgrid.com/v3/contactdb/recipients',
-    //   method: 'DELETE',
-    //   headers:
-    //   {
-    //     'content-type': 'application/json',
-    //     'authorization': `Bearer ${process.env.REACT_APP_SENDGRID_API_KEY}`
-    //   },
-    //   data: ['YnJpYW5Ac2llcnJhLmNvbQ==', 'anVhbkBtZW5kb3phLmNvbQ==']
-    // };
-
-    // axios.delete(url, { options })
-    //   .then(res => {
-    //     console.log(`===deleteRecipients===`)
-    //     console.log(res)
-    //   })
-    //   .catch(err => console.log(err))
+    axios(config)
+      .then(res => {
+        console.log(`===deleteRecipients===`)
+        console.log(res)
+      })
+      .catch(err => console.log(err))
   }
 
 
