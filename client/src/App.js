@@ -16,7 +16,6 @@ import {
   RefreshrList,
   MiscData,
   ClassPage,
-  CreateEditPage
 } from './components';
 
 const App = props => {
@@ -45,7 +44,7 @@ const App = props => {
 
   const getRefreshrs = options => {
     axios
-      .get('https://refreshr-app.netlify.com/refreshrs', options)
+      .get('https://refreshr.herokuapp.com/refreshrs', options)
       .then(res => {
         console.log('data', res.data);
         setRefreshrs(res.data.refreshrs);
@@ -58,7 +57,7 @@ const App = props => {
   //all Questions
   const getQuestions = options => {
     axios
-      .get('https://refreshr-app.netlify.com/questions', options)
+      .get('https://refreshr.herokuapp.com/questions', options)
       .then(res => {
         console.log('q', res.data.questions);
         setQuestions(res.data.questions);
@@ -71,7 +70,7 @@ const App = props => {
   //all classes
   const getClasses = options => {
     axios
-      .get('https://refreshr-app.netlify.com/classes', options)
+      .get('https://refreshr.herokuapp.com/classes', options)
       .then(res => {
         console.log('c', res.data.classes);
         setClasses(res.data.classes);
@@ -84,7 +83,7 @@ const App = props => {
   //all students
   const getStudents = options => {
     axios
-      .get('https://refreshr-app.netlify.com/students', options)
+      .get('https://refreshr.herokuapp.com/students', options)
       .then(res => {
         console.log('s', res.data.students);
         setStudents(res.data.students);
@@ -97,7 +96,7 @@ const App = props => {
   //all teachers
   const getTeachers = options => {
     axios
-      .get('https://refreshr-app.netlify.com/teachers', options)
+      .get('https://refreshr.herokuapp.com/teachers', options)
       .then(res => {
         console.log('t', res.data.teachers);
         setTeachers(res.data.teachers);
@@ -142,7 +141,7 @@ const App = props => {
               )}
             />
             <Route path="/billing" render={props => <BillingPage />} />
-            <Route path="/classes" render={props => <ClassView />} />
+            <Route path="/classesCEP" render={props => <ClassPage />} />
             <Route
               path="/misc"
               render={props => (
@@ -158,6 +157,7 @@ const App = props => {
                 />
               )}
             />
+              <Route path="/classes" render={props => <ClassView />} />
           </Grid>
         </Grid>
       </div>
