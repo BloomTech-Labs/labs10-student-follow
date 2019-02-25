@@ -3,6 +3,7 @@ import { Route, withRouter, Router } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import history from './history';
 import axios from 'axios';
+import Typeform from './Typeform';
 
 import {
   LoadingPage,
@@ -109,7 +110,7 @@ const App = props => {
   return (
     <Router history={history}>
       <div>
-        <Navcrumbs open={open} {...props} />
+        {/* <Navcrumbs open={open} {...props} /> */}
         <Grid
           container
           spacing={0}
@@ -117,9 +118,9 @@ const App = props => {
           justify="space-between"
           alignItems="center"
         >
-          <Grid item xs={2}>
+          {/* <Grid item xs={2}>
             <Navbar open={open} togglePage={togglePage} />
-          </Grid>
+          </Grid> */}
           <Grid item xs={10}>
             <Route exact path="/" render={() => <Login auth={props.auth} />} />
             <Route path="/home" render={props => <LandingPage {...props} />} />
@@ -130,6 +131,7 @@ const App = props => {
                 return <LoadingPage {...props} />;
               }}
             />
+            <Route path="/typeform" component={Typeform} />
             <Route
               path="/refreshrs"
               render={props => (
