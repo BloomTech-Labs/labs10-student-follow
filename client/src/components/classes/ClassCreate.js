@@ -43,11 +43,11 @@ function ClassCreate(props) {
         setListForm={setListForm}
       />
 
-      <ListForm
+      {/* <ListForm
         onListForm={onListForm}
         setListForm={setListForm}
         setCampaignForm={setCampaignForm}
-      />
+      /> */}
 
       <CampaignForm
         onCampaignForm={onCampaignForm}

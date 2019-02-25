@@ -14,7 +14,7 @@ function ListForm(props) {
     },
     'content-type': 'application/json'
   };
-  // const listId = 7061139; // test3
+  const listId = 7061139; // test3
   // const recipient_id = 'YXN0dXJpYXN4aUBnbWFpbC5jb20='; // Timmy
   // const recipient_ids = [
   //   'YXJlbGkuYXRoZW5zQGNvd3N0b3JlLm5ldA==',
@@ -66,24 +66,24 @@ function ListForm(props) {
       .catch(err => console.log(err));
   }, []);
 
-  // const updateList = () => {
-  //   const url = `https://api.sendgrid.com/v3/contactdb/lists/${listId}`;
-  //   const body = {
-  //     name: 'modifiedListName'
-  //   };
-  //   axios
-  //     .patch(url, body, headers)
-  //     .then(res => {
-  //       console.log(`===updateList: ${res.data.name}===`);
-  //       console.log(res);
-  //     })
-  //     .catch(err => console.log(err));
-  // };
+  const updateList = () => {
+    const url = `https://api.sendgrid.com/v3/contactdb/lists/${listId}`;
+    const body = {
+      name: 'modifiedListName'
+    };
+    axios
+      .patch(url, body, headers)
+      .then(res => {
+        console.log(`===updateList: ${res.data.name}===`);
+        console.log(res);
+      })
+      .catch(err => console.log(err));
+  };
 
   const deleteList = item => {
     const url = `https://api.sendgrid.com/v3/contactdb/lists/${
       item.id
-    }?delete_contacts=true`;
+      }?delete_contacts=true`;
     axios
       .delete(url, headers)
       .then(res => {
@@ -99,20 +99,20 @@ function ListForm(props) {
 
   return (
     <Grid className={props.classes.wrapper}>
-      <div>
+      {/* <div>
         <h1>LIST OPERATIONS</h1>
-        {/* <button onClick={addList} style={{ background: 'limegreen' }}>
+        <button onClick={addList} style={{ background: 'limegreen' }}>
           addList
-        </button> */}
+        </button>
         <button onClick={getListByID} style={{ background: 'goldenrod' }}>
           getList
         </button>
-        {/* <button onClick={useEffect} style={{ background: 'goldenrod' }}>
+        <button onClick={useEffect} style={{ background: 'goldenrod' }}>
           getLists
-        </button> */}
-        {/* <button onClick={updateList} style={{ background: 'lightpink' }}>
+        </button>
+        <button onClick={updateList} style={{ background: 'lightpink' }}>
           updateList
-        </button> */}
+        </button>
         <button onClick={deleteList} style={{ background: 'crimson' }}>
           deleteList
         </button>
@@ -133,7 +133,7 @@ function ListForm(props) {
           </label>
           <input type="submit" />
         </form>
-      </div>
+      </div> */}
     </Grid>
   );
 }
