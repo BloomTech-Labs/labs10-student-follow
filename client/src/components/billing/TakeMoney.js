@@ -2,9 +2,9 @@ import React from 'react';
 import StripeCheckout from 'react-stripe-checkout';
 import Image from './logo.png';
 import axios from 'axios';
-import Button from '@material-ui/core/Button';
-import Icon from '@material-ui/core/Icon';
-import classNames from 'classnames';
+// import Button from '@material-ui/core/Button';
+// import Icon from '@material-ui/core/Icon';
+// import classNames from 'classnames';
 
 const width = {
   width: '100%'
