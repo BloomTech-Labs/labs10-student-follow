@@ -14,7 +14,8 @@ import {
   RefreshrList,
   MiscData,
   ClassPage,
-  CampaignForm
+  CampaignForm,
+  ClassCreate
 } from './components';
 
 const App = props => {
@@ -139,7 +140,8 @@ const App = props => {
               )}
             />
             <Route path="/billing" render={props => <BillingPage />} />
-            <Route path="/classes" render={props => <ClassPage />} />
+            <Route exact path="/classes" render={props => <ClassPage />} />
+            <Route exact path="/classes/create" render={props => <ClassCreate />} />
             <Route
               path="/misc"
               render={props => (

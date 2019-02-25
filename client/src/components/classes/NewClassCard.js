@@ -1,6 +1,7 @@
 import React from "react";
 import Grid from "@material-ui/core/Grid";
 import { withStyles } from "@material-ui/core/styles";
+import { Link } from 'react-router-dom'
 
 const styles = theme => ({
   wrapper: {
@@ -18,7 +19,9 @@ const styles = theme => ({
 const NewClassCard = props => {
   return (
     <Grid className={props.classes.wrapper}>
-      <h1>New Class</h1>
+      <Link to="/classes/create">
+        <h1>New Class</h1>
+      </Link>
     </Grid>
   );
 };

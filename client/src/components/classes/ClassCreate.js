@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Grid from "@material-ui/core/Grid";
 import { withStyles } from "@material-ui/core/styles";
-import { SenderForm, RecipientForm, ListForm, CampaignForm } from '../index.js'
+// import { SenderForm, RecipientForm, ListForm, CampaignForm } from '../index.js'
 import axios from 'axios';
 
 const styles = theme => ({
@@ -31,7 +31,7 @@ function ClassCreate(props) {
     <Grid className={props.classes.wrapper}>
       <h1>ClassCreate Component</h1>
 
-      <SenderForm
+      {/* <SenderForm
         onSenderForm={onSenderForm}
         setSenderForm={setSenderForm}
         setRecipientForm={setRecipientForm}
@@ -43,17 +43,17 @@ function ClassCreate(props) {
         setListForm={setListForm}
       />
 
-      {/* <ListForm
+      <ListForm
         onListForm={onListForm}
         setListForm={setListForm}
         setCampaignForm={setCampaignForm}
-      /> */}
+      />
 
       <CampaignForm
         onCampaignForm={onCampaignForm}
         setCampaignForm={setCampaignForm}
         refreshrs={classData && classData.refreshrs.length ? classData.refreshrs : null}
-      />
+      /> */}
     </Grid>
   );
 }
