@@ -7,13 +7,13 @@ const styles = theme => ({
   }
 });
 
-function ClassEdit(props) {
+function ClassEditView(props) {
 
   return (
     <Grid className={props.classes.wrapper}>
-      <h1>ClassEdit Component</h1>
+      <h1>ClassEditView Component</h1>
     </Grid>
   );
 };
 
-export default withStyles(styles)(ClassEdit);
+export default withStyles(styles)(ClassEditView);

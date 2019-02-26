@@ -4,7 +4,7 @@ import BigPapa from 'papaparse';
 // TODO ===== REFACTOR TO USE MATERIAL-UI
 // TODO ===== BREAK METHODS AND COMPONENTS INTO OWN FOLDERS?
 
-class CreateEditPage extends Component {
+class ListForm extends Component {
   constructor() {
     super();
     this.state = {
@@ -108,4 +108,4 @@ class CreateEditPage extends Component {
   }
 }
 
-export default CreateEditPage;
+export default ListForm;

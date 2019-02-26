@@ -10,11 +10,11 @@ const styles = (theme) => ({
   }
 });
 
-const LoadingPage = (props) => {
+const Loading = (props) => {
   const { classes } = props;
   return (
-      <CircularProgress size={100} className={classes.progress} />
+    <CircularProgress size={100} className={classes.progress} />
   );
 };
 
-export default withStyles(styles)(LoadingPage);
+export default withStyles(styles)(Loading);
