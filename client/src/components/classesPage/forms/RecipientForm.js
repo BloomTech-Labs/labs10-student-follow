@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Grid from "@material-ui/core/Grid";
 import { withStyles } from "@material-ui/core/styles";
 import TextField from '@material-ui/core/TextField';
@@ -9,10 +9,16 @@ const styles = theme => ({
 });
 
 function RecipientForm(props) {
+  const [recipient, setRecipient] = useState({
+    email: "",
+    first_name: "",
+    last_name: "",
+  })
+
   const handleChange = (e) => {
     e.preventDefault()
-    props.setRecipientData({
-      ...props.recipientData,
+    setRecipient({
+      ...recipient,
       [e.target.name]: e.target.value
     })
   }
@@ -20,14 +26,19 @@ function RecipientForm(props) {
   const handleSubmit = (e) => {
     e.preventDefault()
     const new_recipient = {
-      email: props.recipientData.email,
-      first_name: props.recipientData.first_name,
-      last_name: props.recipientData.last_name,
+      email: recipient.email,
+      first_name: recipient.first_name,
+      last_name: recipient.last_name,
     }
 
     props.setRecipientData({
-      ...props.recipientData,
-      addedRecipients: props.recipientData.addedRecipients.concat(new_recipient)
+      recipients: props.recipientData.recipients.concat(new_recipient)
+    })
+
+    setRecipient({
+      email: "",
+      first_name: "",
+      last_name: "",
     })
   }
 
@@ -49,7 +60,6 @@ function RecipientForm(props) {
     })
   }
 
-  const { addedRecipients } = props.recipientData
   return (
     <Grid className={props.classes.wrapper}>
       <p>RecipientForm Component</p>
@@ -61,7 +71,7 @@ function RecipientForm(props) {
           name="email"
           type="email"
           variant="outlined"
-          value={props.recipientData.email}
+          value={recipient.email}
           placeholder="email"
           onChange={(e) => handleChange(e)}
         />
@@ -69,7 +79,7 @@ function RecipientForm(props) {
           name="first_name"
           type="text"
           variant="outlined"
-          value={props.recipientData.first_name}
+          value={recipient.first_name}
           placeholder="first name"
           onChange={(e) => handleChange(e)}
         />
@@ -77,7 +87,7 @@ function RecipientForm(props) {
           name="last_name"
           type="text"
           variant="outlined"
-          value={props.recipientData.last_name}
+          value={recipient.last_name}
           placeholder="last name"
           onChange={(e) => handleChange(e)}
         />
@@ -85,8 +95,8 @@ function RecipientForm(props) {
       </form>
 
       <h1>Added Recipients</h1>
-      {addedRecipients.length > 0 ? (
-        addedRecipients.map((recipient, i) => (
+      {props.recipientData.recipients ? (
+        props.recipientData.recipients.map((recipient, i) => (
           <div key={`${recipient.first_name}-${i}`}>
             <p>recipient-{i + 1}: {recipient.email}, {recipient.first_name}, {recipient.last_name}</p>
           </div>

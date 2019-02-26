@@ -22,10 +22,7 @@ function ClassCreateView(props) {
   })
 
   const [recipientData, setRecipientData] = useState({
-    email: "",
-    first_name: "",
-    last_name: "",
-    addedRecipients: []
+    recipients: []
   })
 
   const [campaignData, setCampaignData] = useState({
