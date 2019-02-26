@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Grid from "@material-ui/core/Grid";
 import { withStyles } from "@material-ui/core/styles";
 import { ListForm, RecipientForm, SelectionForm, CampaignForm } from '../index.js'
-import axios from 'axios';
 
 const styles = theme => ({
   wrapper: {}
@@ -10,8 +9,6 @@ const styles = theme => ({
 
 
 function ClassCreateView(props) {
-  const [classData, setClassData] = useState()
-
   const [stage, setStage] = useState({
     onListForm: true,
     onRecipientForm: false,
@@ -19,40 +16,30 @@ function ClassCreateView(props) {
     onCampaignForm: false
   })
 
-  const [formData, setFormData] = useState({
-    "list": {
-      "name": ""
-    },
-    "recipient": {
-      "email": "",
-      "first_name": "",
-      "last_name": ""
-    },
-    "campaign": {
-      "title": "",
-      "subject": "",
-      "sender_id": "",
-      "list_id": "",
-      "segment_ids": null,
-      "categories": [],
-      "suppression_group_id": 9332,
-      "custom_unsubscribe_url": "",
-      "ip_pool": "",
-      "html_content": "",
-      "plain_content": ""
-    }
-  });
+  const [listData, setListData] = useState({
+    "name": "",
+    "ccBool": false
+  })
 
-  useEffect(() => {
-    getClassData();
-  }, []);
+  const [recipientData, setRecipientData] = useState({
+    "email": "",
+    "first_name": "",
+    "last_name": ""
+  })
 
-  const getClassData = async () => {
-    const response = await axios.get('https://refreshr.herokuapp.com/classes/13');
-    console.log(`response: ${response}`)
-    setClassData(response.data);
-    console.log('class daata', classData)
-  }
+  const [campaignData, setCampaignData] = useState({
+    "title": "",
+    "subject": "",
+    "sender_id": "",
+    "list_id": "",
+    "segment_ids": null,
+    "categories": [],
+    "suppression_group_id": 9332,
+    "custom_unsubscribe_url": "",
+    "ip_pool": "",
+    "html_content": "",
+    "plain_content": ""
+  })
 
   return (
     <Grid className={props.classes.wrapper}>
@@ -60,7 +47,8 @@ function ClassCreateView(props) {
 
       {stage.onListForm ? (
         <ListForm
-          formData={formData}
+          listData={listData}
+          setListData={setListData}
           stage={stage}
           setStage={setStage}
         />
@@ -69,7 +57,8 @@ function ClassCreateView(props) {
 
       {stage.onRecipientForm ? (
         <RecipientForm
-          formData={formData}
+          recipientData={recipientData}
+          setRecipientData={setRecipientData}
           stage={stage}
           setStage={setStage}
         />
@@ -78,7 +67,8 @@ function ClassCreateView(props) {
 
       {stage.onSelectionForm ? (
         <SelectionForm
-          formData={formData}
+          listData={listData}
+          recipientData={recipientData}
           stage={stage}
           setStage={setStage}
         />
@@ -87,7 +77,8 @@ function ClassCreateView(props) {
 
       {stage.onCampaignForm ? (
         <CampaignForm
-          formData={formData}
+          campaignData={campaignData}
+          setCampaignData={setCampaignData}
           stage={stage}
           setStage={setStage}
         />
