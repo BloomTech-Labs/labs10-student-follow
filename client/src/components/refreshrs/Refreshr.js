@@ -85,25 +85,25 @@ function Refreshr(props) {
         <FormGroup className={props.classes.formGroup}>
           <FormControlLabel
             control={
-              <Checkbox checked={a1} onChange={(e) => setA1(e.target.checked)} value="gilad" />
+              <Checkbox checked={a1} onChange={(e) => setA1(e.target.checked)}/>
             }
             label="Answer 1"
           />
           <FormControlLabel
             control={
-              <Checkbox checked={a2} onChange={(e) => setA2(e.target.checked)} value="jason" />
+              <Checkbox checked={a2} onChange={(e) => setA2(e.target.checked)}/>
             }
             label="Answer 2"
           />
           <FormControlLabel
             control={
-              <Checkbox checked={a3} onChange={(e) => setA3(e.target.checked)} value="jason" />
+              <Checkbox checked={a3} onChange={(e) => setA3(e.target.checked)}/>
             }
             label="Answer 3"
           />
           <FormControlLabel
             control={
-              <Checkbox checked={a4} onChange={(e) => setA4(e.target.checked)} value="jason" />
+              <Checkbox checked={a4} onChange={(e) => setA4(e.target.checked)}/>
             }
             label="Answer 4"
           />
