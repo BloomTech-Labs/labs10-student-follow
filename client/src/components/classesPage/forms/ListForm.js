@@ -1,17 +1,25 @@
 import React, { Component } from 'react';
-import BigPapa from 'papaparse';
+// import BigPapa from 'papaparse';
 
 function ListForm(props) {
   const handleSubmit = (e) => {
   };
 
-  const handleChange = (e) => {
-  };
-
   const importCSV = () => {
   };
 
+  const handleChange = (e) => {
+    props.setListData({
+      ...props.listData,
+      [e.target.name]: e.target.value
+    })
+  };
+
   const handleCheckBox = () => {
+    props.setListData({
+      ...props.listData,
+      ccBool: !props.listData.ccBool
+    })
   };
 
   const handleNext = (e) => {
@@ -37,11 +45,12 @@ function ListForm(props) {
       <button onClick={(e) => handleNext(e)}>NEXT</button>
       <form onSubmit={handleSubmit}>
         <input
+          name="name"
           type="text"
+          value={props.listData.name}
           placeholder="Enter Class Name"
-          name="classListTextInput"
-          required
           onChange={handleChange}
+          required
         />
       </form>
       <div

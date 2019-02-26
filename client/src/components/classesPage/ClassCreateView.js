@@ -17,8 +17,8 @@ function ClassCreateView(props) {
   })
 
   const [listData, setListData] = useState({
-    "name": "",
-    "ccBool": false
+    name: "",
+    ccBool: false
   })
 
   const [recipientData, setRecipientData] = useState({
@@ -44,7 +44,6 @@ function ClassCreateView(props) {
   return (
     <Grid className={props.classes.wrapper}>
       <h1>ClassCreateView Component</h1>
-
       {stage.onListForm ? (
         <ListForm
           listData={listData}
