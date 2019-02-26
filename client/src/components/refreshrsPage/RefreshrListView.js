@@ -61,7 +61,8 @@ const RefreshrListView = props => {
     // };
     // props.getRefreshrs(options);
 
-    getTeacherRefreshrs(1);
+    // 133 will display two refreshrs, 1 will display empty list
+    getTeacherRefreshrs(133);
   }, []);
 
   // just for logging, can be deleted
