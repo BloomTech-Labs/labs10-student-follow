@@ -4,9 +4,10 @@ import BigPapa from 'papaparse';
 // TODO ===== REFACTOR TO USE MATERIAL-UI
 // TODO ===== BREAK METHODS AND COMPONENTS INTO OWN FOLDERS?
 
+
 class ListForm extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       csvFile: undefined,
       students: [],
@@ -54,10 +55,13 @@ class ListForm extends Component {
     this.setState({ students: list });
   };
 
-  handleComplete = (e) => {
+  handleNext = (e) => {
     e.preventDefault()
-    this.props.setListForm(!this.props.onListForm)
-    this.props.setRecipientForm(!this.props.onRecipientForm)
+    this.props.setStage({
+      ...this.props.stage,
+      onListForm: !this.props.stage.onListForm,
+      onRecipientForm: !this.props.stage.onRecipientForm
+    })
   }
 
   render() {
@@ -72,7 +76,7 @@ class ListForm extends Component {
           justifyContent: 'space-evenly',
         }}
       >
-        <button onClick={(e) => this.handleComplete(e)}>TEMP</button>
+        <button onClick={(e) => this.handleNext(e)}>NEXT</button>
         <form onSubmit={this.handleSubmit}>
           <input
             type="text"

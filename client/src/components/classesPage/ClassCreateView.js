@@ -10,11 +10,38 @@ const styles = theme => ({
 
 
 function ClassCreateView(props) {
-  const [onListForm, setListForm] = useState(true)
-  const [onRecipientForm, setRecipientForm] = useState(false)
-  const [onSelectionForm, setSelectionForm] = useState(false)
-  const [onCampaignForm, setCampaignForm] = useState(false)
-  const [classData, setClassData] = useState(null);
+  const [classData, setClassData] = useState()
+
+  const [stage, setStage] = useState({
+    onListForm: true,
+    onRecipientForm: false,
+    onSelectionForm: false,
+    onCampaignForm: false
+  })
+
+  const [formData, setFormData] = useState({
+    "list": {
+      "name": ""
+    },
+    "recipient": {
+      "email": "",
+      "first_name": "",
+      "last_name": ""
+    },
+    "campaign": {
+      "title": "",
+      "subject": "",
+      "sender_id": "",
+      "list_id": "",
+      "segment_ids": null,
+      "categories": [],
+      "suppression_group_id": 9332,
+      "custom_unsubscribe_url": "",
+      "ip_pool": "",
+      "html_content": "",
+      "plain_content": ""
+    }
+  });
 
   useEffect(() => {
     getClassData();
@@ -31,41 +58,38 @@ function ClassCreateView(props) {
     <Grid className={props.classes.wrapper}>
       <h1>ClassCreateView Component</h1>
 
-      {onListForm ? (
+      {stage.onListForm ? (
         <ListForm
-          onListForm={onListForm}
-          setListForm={setListForm}
-          onRecipientFor={onRecipientForm}
-          setRecipientForm={setRecipientForm}
+          formData={formData}
+          stage={stage}
+          setStage={setStage}
         />
       ) : null
       }
 
-      {onRecipientForm ? (
+      {stage.onRecipientForm ? (
         <RecipientForm
-          onRecipientForm={onRecipientForm}
-          setRecipientForm={setRecipientForm}
-          onSelectionForm={onSelectionForm}
-          setSelectionForm={setSelectionForm}
+          formData={formData}
+          stage={stage}
+          setStage={setStage}
         />
       ) : null
       }
 
-      {onSelectionForm ? (
+      {stage.onSelectionForm ? (
         <SelectionForm
-          onSelectionForm={onSelectionForm}
-          setSelectionForm={setSelectionForm}
-          onCampaignForm={onCampaignForm}
-          setCampaignForm={setCampaignForm}
+          formData={formData}
+          stage={stage}
+          setStage={setStage}
         />
       ) : null
       }
 
-      {onCampaignForm ? (
+      {stage.onCampaignForm ? (
         <CampaignForm
-          onCampaignForm={onCampaignForm}
-          setCampaignForm={setCampaignForm}
-          refreshrs={classData && classData.refreshrs.length ? classData.refreshrs : null}
+          formData={formData}
+          stage={stage}
+          setStage={setStage}
         />
       ) : null
       }

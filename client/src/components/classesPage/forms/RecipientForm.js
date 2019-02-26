@@ -17,14 +17,30 @@ function RecipientForm(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    props.setRecipientForm((!props.onRecipientForm))
-    props.setSelectionForm((!props.onSelectionForm))
+  }
+
+  const handlePrev = (e) => {
+    e.preventDefault()
+    props.setStage({
+      ...props.stage,
+      onListForm: !props.stage.onListForm,
+      onRecipientForm: !props.stage.onRecipientForm
+    })
+  }
+  const handleNext = (e) => {
+    e.preventDefault()
+    props.setStage({
+      ...props.stage,
+      onRecipientForm: !props.stage.onRecipientForm,
+      onSelectionForm: !props.stage.onSelectionForm
+    })
   }
 
   return (
     <Grid className={props.classes.wrapper}>
       <p>RecipientForm Component</p>
-      <Button onClick={(e) => handleSubmit(e)}>TEMP</Button>
+      <button onClick={(e) => handlePrev(e)}>PREV</button>
+      <button onClick={(e) => handleNext(e)}>NEXT</button>
       <form className={props.classes.form} onSubmit={(e) => handleSubmit(e)}>
         <TextField
           name="contactName"
