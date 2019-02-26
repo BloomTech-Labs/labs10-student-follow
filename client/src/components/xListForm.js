@@ -1,3 +1,5 @@
+// NOT SURE WHOSE BUT SAVING THIS CODE -tim
+
 import React, { useState, useEffect } from 'react';
 import Grid from '@material-ui/core/Grid';
 import axios from 'axios';
@@ -99,41 +101,24 @@ function ListForm(props) {
 
   return (
     <Grid className={props.classes.wrapper}>
-      {/* <div>
-        <h1>LIST OPERATIONS</h1>
-        <button onClick={addList} style={{ background: 'limegreen' }}>
-          addList
-        </button>
-        <button onClick={getListByID} style={{ background: 'goldenrod' }}>
-          getList
-        </button>
-        <button onClick={useEffect} style={{ background: 'goldenrod' }}>
-          getLists
-        </button>
-        <button onClick={updateList} style={{ background: 'lightpink' }}>
-          updateList
-        </button>
-        <button onClick={deleteList} style={{ background: 'crimson' }}>
-          deleteList
-        </button>
-        <div>
-          {list.map(item => (
-            <ul key={item.id}>
-              {item.name}
-              <button onClick={() => deleteList(item)}>
-                {<i className="fas fa-times" />}
-              </button>
-            </ul>
-          ))}
-        </div>
-        <form onSubmit={addList}>
-          <label>
-            Add student:
+      <div>
+        {list.map(item => (
+          <ul key={item.id}>
+            {item.name}
+            <button onClick={() => deleteList(item)}>
+              {<i className="fas fa-times" />}
+            </button>
+          </ul>
+        ))}
+      </div>
+
+      <form onSubmit={addList}>
+        <label>
+          Add student:
             <input type="text" name="name" onChange={handleChange} />
-          </label>
-          <input type="submit" />
-        </form>
-      </div> */}
+        </label>
+        <input type="submit" />
+      </form>
     </Grid>
   );
 }

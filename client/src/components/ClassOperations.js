@@ -2,7 +2,6 @@ import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import axios from 'axios';
 import { withStyles } from '@material-ui/core/styles';
-import ListForm from './ListForm';
 
 const styles = theme => ({
   wrapper: {
@@ -10,7 +9,7 @@ const styles = theme => ({
   }
 });
 
-function ClassView(props) {
+function ClassOperations(props) {
   // VARIABLES
   const headers = {
     "headers": { "Authorization": `Bearer ${process.env.REACT_APP_SENDGRID_API_KEY}` },
@@ -535,7 +534,6 @@ function ClassView(props) {
             deleteList
           </button>
         </div>
-        <ListForm />
         <div>
           <h1>LIST RECIPIENT OPERATIONS</h1>
           <button onClick={addContact} style={{ background: 'limegreen' }}>
@@ -571,4 +569,4 @@ function ClassView(props) {
     </Grid >
   );
 }
-export default withStyles(styles)(ClassView);
+export default withStyles(styles)(ClassOperations);

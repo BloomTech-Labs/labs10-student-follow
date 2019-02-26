@@ -21,7 +21,7 @@ const styles = {
   }
 };
 
-function ButtonAppBar(props) {
+function OtherNavBar(props) {
   const { classes } = props;
   return (
     <div className={classes.root}>
@@ -44,8 +44,8 @@ function ButtonAppBar(props) {
   );
 }
 
-ButtonAppBar.propTypes = {
+OtherNavBar.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(ButtonAppBar);
+export default withStyles(styles)(OtherNavBar);

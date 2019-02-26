@@ -8,7 +8,7 @@ import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import { withStyles } from '@material-ui/core/styles';
 import { Link as RouterLink, withRouter } from 'react-router-dom';
-import { breadcrumbNameMap } from './Navcrumbs';
+import { breadcrumbNameMap } from '../common/Navcrumbs';
 
 const ListItemLink = props => {
   const { to, open, ...other } = props;
