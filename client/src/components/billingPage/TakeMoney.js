@@ -2,9 +2,9 @@ import React from 'react';
 import StripeCheckout from 'react-stripe-checkout';
 import Image from './logo.png';
 import axios from 'axios';
-import Button from '@material-ui/core/Button';
-import Icon from '@material-ui/core/Icon';
-import classNames from 'classnames';
+// import Button from '@material-ui/core/Button';
+// import Icon from '@material-ui/core/Icon';
+// import classNames from 'classnames';
 
 const width = {
   width: '100%'
@@ -54,7 +54,7 @@ export default class TakeMoney extends React.Component {
           description="Purchase your subscription"
           panelLabel="Purchase"
           image={Image} // We should have a second smaller logo image without text
-          amount={this.props.variant} //amount passed by buttonVariant in Pricing.js
+          amount={this.props.variant} // Amount passed by buttonVariant in Pricing.js
           currency="USD"
           email="nickoferrall@gmail.com" // will update this to the user email
         />

@@ -3,6 +3,7 @@ import { Route, withRouter, Router } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import history from './history';
 import axios from 'axios';
+import Typeform from './Typeform';
 
 import {
   Loading,
@@ -130,6 +131,7 @@ const App = props => {
                 return <Loading {...props} />;
               }}
             />
+            <Route path="/typeform" component={Typeform} />
             <Route
               path="/refreshrs"
               render={props => (

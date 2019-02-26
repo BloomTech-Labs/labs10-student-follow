@@ -4,10 +4,6 @@ const responseStatus = require('../config/responseStatusConfig');
 
 const router = express.Router();
 
-router.get('/', (req, res) => {
-  res.send('billing sanity check');
-});
-
 const standardPlan = 999;
 
 router.post('/charge', async (req, res) => {

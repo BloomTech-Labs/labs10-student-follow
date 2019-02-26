@@ -6,6 +6,7 @@ import Login from './authentication/Login';
 import Loading from './common/Loading';
 import Navcrumbs from './common/Navcrumbs';
 import Navbar from './common/Navbar';
+import OtherNavBar from './common/OtherNavBar';
 
 /* PAGES */
 import BillingPage from './pages/BillingPage';
@@ -15,29 +16,29 @@ import RefreshrsPage from './pages/RefreshrsPage';
 import SettingsPage from './pages/SettingsPage';
 
 /* BILLING */
-import CheckoutForm from './billing/CheckoutForm';
-import Pricing from './billing/Pricing';
-import TakeMoney from './billing/TakeMoney';
+import CheckoutForm from './billingPage/CheckoutForm';
+import Pricing from './billingPage/Pricing';
+import TakeMoney from './billingPage/TakeMoney';
 
 /* CLASSES */
-import ClassCreateView from './classes/ClassCreateView';
-import ClassEditView from './classes/ClassEditView';
-import ClassListView from './classes/ClassListView';
-import ExistingClassCard from './classes/components/ExistingClassCard';
-import NewClassCard from './classes/components/NewClassCard';
-import CampaignForm from './classes/forms/CampaignForm';
-import ListForm from './classes/forms/ListForm';
-import RecipientForm from './classes/forms/RecipientForm';
-import SenderForm from './classes/forms/SenderForm';
+import ClassCreateView from './classesPage/ClassCreateView';
+import ClassEditView from './classesPage/ClassEditView';
+import ClassListView from './classesPage/ClassListView';
+import ExistingClassCard from './classesPage/components/ExistingClassCard';
+import NewClassCard from './classesPage/components/NewClassCard';
+import CampaignForm from './classesPage/forms/CampaignForm';
+import ListForm from './classesPage/forms/ListForm';
+import RecipientForm from './classesPage/forms/RecipientForm';
+import SenderForm from './classesPage/forms/SenderForm';
 
 /* REFRESHRS */
-import RefreshrListView from './refreshrs/RefreshrListView';
-import RefreshrCard from './refreshrs/RefreshrCard';
+import RefreshrListView from './refreshrsPage/RefreshrListView';
+import RefreshrCard from './refreshrsPage/RefreshrCard';
 
 /* MISC DATA */
 import ClassOperations from './ClassOperations';
 import MiscData from './MiscData'
-import Snackbar from './Snackbar'
+import Snackbar from './billingPage/Snackbar'
 
 export {
   Auth,
@@ -46,6 +47,7 @@ export {
   Loading,
   Navcrumbs,
   Navbar,
+  OtherNavBar,
 
   BillingPage,
   ClassesPage,
@@ -55,6 +57,7 @@ export {
 
   CheckoutForm,
   Pricing,
+  Snackbar,
   TakeMoney,
 
   ClassCreateView,
@@ -72,5 +75,4 @@ export {
 
   ClassOperations,
   MiscData,
-  Snackbar,
 };
