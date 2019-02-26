@@ -1,9 +1,13 @@
 import React, { useState } from "react";
-import Grid from "@material-ui/core/Grid";
 import { withStyles } from "@material-ui/core/styles";
+import Grid from "@material-ui/core/Grid";
 import TextField from '@material-ui/core/TextField';
+import FormGroup from '@material-ui/core/FormGroup';
+import Checkbox from '@material-ui/core/Checkbox';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Button from '@material-ui/core/Button';
 
-const styles = theme => ({
+const styles = (theme) => ({
   wrapper: {
     border: '2px solid black',
     borderRadius: '3px',
@@ -12,20 +16,31 @@ const styles = theme => ({
     width: '600px',
     display: 'flex',
     flexDirection: 'column',
-    padding: '0 1rem',
+    padding: '0 1rem'
   },
   studentName: {
     maxWidth: '250px',
     width: '100%',
     height: '100%',
-    maxHeight: '35px',
+    maxHeight: '35px'
   },
+  formGroup: {
+    maxHeight: '120px', // needed for 4 question look on balsamic
+    marginLeft: '1rem'
+  },
+  subheaders: {
+    marginTop: '.5rem'
+  }
 });
 
-function PracticeRefreshrQuiz(props) {
+function Refreshr(props) {
   const [ studentName, addStudentName ] = useState("");
   const [ reviewText, setReviewText ] = useState("This is a short section of text that describes or reminds about one part of the topic. It is not intended to be a complete review of the material, just a reminder of the most important parts. This section is limited to 512 characters.");
   const [ questionText, setQuestionText ] = useState("This is a multiple choice question related to the topic. Again the goal is not to be exhaustive, just to call the material to mind. A good question will not simply call for the recollection of information, but will require the application of knowledge.");
+  const [ a1, setA1 ] = useState(false);
+  const [ a2, setA2 ] = useState(false);
+  const [ a3, setA3 ] = useState(false);
+  const [ a4, setA4 ] = useState(false);
   
   return (
     <Grid className={props.classes.wrapper}>
@@ -42,10 +57,10 @@ function PracticeRefreshrQuiz(props) {
           }}
           onChange={(e) => addStudentName(e.target.value)}
         />
-        <h4>Two Days - Review Text</h4>
+        {/* start 2 days */}
+        <h4 className={props.classes.subheaders}>Two Days - Review Text</h4>
         <TextField
           value={reviewText}
-          id="outlined"
           label="Review Text"
           name="reviewText"
           multiline
@@ -55,10 +70,9 @@ function PracticeRefreshrQuiz(props) {
             shrink: true,
           }}
         />
-        <h4>Two Days - Question</h4>
+        <h4 className={props.classes.subheaders}>Two Days - Question</h4>
         <TextField
           value={questionText}
-          id="outlined"
           label="Question"
           name="question"
           multiline
@@ -68,8 +82,38 @@ function PracticeRefreshrQuiz(props) {
             shrink: true,
           }}
         />
+        <FormGroup className={props.classes.formGroup}>
+          <FormControlLabel
+            control={
+              <Checkbox checked={a1} onChange={(e) => setA1(e.target.checked)} value="gilad" />
+            }
+            label="Answer 1"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox checked={a2} onChange={(e) => setA2(e.target.checked)} value="jason" />
+            }
+            label="Answer 2"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox checked={a3} onChange={(e) => setA3(e.target.checked)} value="jason" />
+            }
+            label="Answer 3"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox checked={a4} onChange={(e) => setA4(e.target.checked)} value="jason" />
+            }
+            label="Answer 4"
+          />
+        </FormGroup>
+        {/* end 2 days */}
+        <Button variant="contained" color="primary">
+          Submit
+        </Button>
     </Grid>
   );
 };
 
-export default withStyles(styles)(PracticeRefreshrQuiz);
+export default withStyles(styles)(Refreshr);
