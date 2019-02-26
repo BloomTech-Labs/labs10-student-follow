@@ -3,19 +3,20 @@ import { Route, withRouter, Router } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import history from './history';
 import axios from 'axios';
+import Typeform from './Typeform';
 
 import {
-  LoadingPage,
+  Loading,
   LandingPage,
   Login,
   BillingPage,
   Navbar,
   Navcrumbs,
-  ClassView,
-  RefreshrList,
+  RefreshrListView,
   MiscData,
-  ClassPage,
-  CampaignForm
+  ClassesPage,
+  CampaignForm,
+  ClassCreateView
 } from './components';
 
 const App = props => {
@@ -127,20 +128,22 @@ const App = props => {
               path="/loading"
               render={props => {
                 handleAuthentication(props);
-                return <LoadingPage {...props} />;
+                return <Loading {...props} />;
               }}
             />
+            <Route path="/typeform" component={Typeform} />
             <Route
               path="/refreshrs"
               render={props => (
-                <RefreshrList
+                <RefreshrListView
                   getRefreshrs={getRefreshrs}
                   refreshrs={refreshrs}
                 />
               )}
             />
             <Route path="/billing" render={props => <BillingPage />} />
-            <Route path="/classesCEP" render={props => <ClassPage />} />
+            <Route exact path="/classes" render={props => <ClassesPage />} />
+            <Route exact path="/classes/create" render={props => <ClassCreateView />} />
             <Route
               path="/misc"
               render={props => (
@@ -156,7 +159,6 @@ const App = props => {
                 />
               )}
             />
-            <Route path="/classes" render={props => <ClassView />} />
             <Route path="/campaign" render={props => <CampaignForm />} />{' '}
             {/* for testing */}
           </Grid>
