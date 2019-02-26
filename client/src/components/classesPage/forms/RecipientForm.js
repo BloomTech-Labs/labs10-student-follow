@@ -10,20 +10,21 @@ const styles = theme => ({
 });
 
 function RecipientForm(props) {
-  const [ contactName, addContactName ] = useState("")
-  const [ contactsName, addContactsName ] = useState("")
-  const [ contacts, getContacts ] = useState("")
-  const [ contact, deleteContact] = useState("")
+  const [contactName, addContactName] = useState("")
+  const [contactsName, addContactsName] = useState("")
+  const [contacts, getContacts] = useState("")
+  const [contact, deleteContact] = useState("")
 
   const handleSubmit = (e) => {
     e.preventDefault()
     props.setRecipientForm((!props.onRecipientForm))
+    props.setSelectionForm((!props.onSelectionForm))
   }
-  
+
   return (
     <Grid className={props.classes.wrapper}>
       <p>RecipientForm Component</p>
-      <Button onClick={(e) => handleSubmit(e)}>COMPLETE</Button>
+      <Button onClick={(e) => handleSubmit(e)}>TEMP</Button>
       <form className={props.classes.form} onSubmit={(e) => handleSubmit(e)}>
         <TextField
           name="contactName"

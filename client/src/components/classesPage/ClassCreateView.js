@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Grid from "@material-ui/core/Grid";
 import { withStyles } from "@material-ui/core/styles";
-import { ListForm } from '../index.js'
+import { ListForm, RecipientForm } from '../index.js'
 import axios from 'axios';
 
 const styles = theme => ({
@@ -12,7 +12,7 @@ const styles = theme => ({
 function ClassCreateView(props) {
   const [onListForm, setListForm] = useState(true)
   const [onRecipientForm, setRecipientForm] = useState(false)
-  // const [onSenderForm, setSenderForm] = useState(false)
+  const [onSelectionForm, setSelectionForm] = useState(false)
   // const [onCampaignForm, setCampaignForm] = useState(false)
   const [classData, setClassData] = useState(null);
 
@@ -41,20 +41,23 @@ function ClassCreateView(props) {
       ) : null
       }
 
+      {onRecipientForm ? (
+        <RecipientForm
+          onRecipientForm={onRecipientForm}
+          setRecipientForm={setRecipientForm}
+          onSelectionForm={onSelectionForm}
+          setSelectionForm={setSelectionForm}
+        />
+      ) : null
+      }
+
       {/* <SenderForm
         onSenderForm={onSenderForm}
         setSenderForm={setSenderForm}
         setRecipientForm={setRecipientForm}
-      />
+      /> */}
 
-      <RecipientForm
-        onRecipientForm={onRecipientForm}
-        setRecipientForm={setRecipientForm}
-        setListForm={setListForm}
-      />
-
-
-      <CampaignForm
+      {/* <CampaignForm
         onCampaignForm={onCampaignForm}
         setCampaignForm={setCampaignForm}
         refreshrs={classData && classData.refreshrs.length ? classData.refreshrs : null}
