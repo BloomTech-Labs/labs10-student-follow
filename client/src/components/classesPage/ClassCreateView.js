@@ -31,11 +31,15 @@ function ClassCreateView(props) {
     <Grid className={props.classes.wrapper}>
       <h1>ClassCreateView Component</h1>
 
-      <ListForm
-        onListForm={onListForm}
-        setListForm={setListForm}
-        setRecipientForm={setRecipientForm}
-      />
+      {onListForm ? (
+        <ListForm
+          onListForm={onListForm}
+          setListForm={setListForm}
+          onRecipientFor={onRecipientForm}
+          setRecipientForm={setRecipientForm}
+        />
+      ) : null
+      }
 
       {/* <SenderForm
         onSenderForm={onSenderForm}

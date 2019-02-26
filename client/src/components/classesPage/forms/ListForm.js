@@ -54,6 +54,12 @@ class ListForm extends Component {
     this.setState({ students: list });
   };
 
+  handleComplete = (e) => {
+    e.preventDefault()
+    this.props.setListForm(!this.props.onListForm)
+    this.props.setRecipientForm(!this.props.onRecipientForm)
+  }
+
   render() {
     return (
       <div
@@ -66,6 +72,7 @@ class ListForm extends Component {
           justifyContent: 'space-evenly',
         }}
       >
+        <button onClick={(e) => this.handleComplete(e)}>TEMP</button>
         <form onSubmit={this.handleSubmit}>
           <input
             type="text"
