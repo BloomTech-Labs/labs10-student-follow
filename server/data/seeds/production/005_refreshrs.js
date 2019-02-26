@@ -2,8 +2,6 @@ const faker = require('faker');
 
 const create = () => ({
   review_text: faker.lorem.sentence(20),
-  date: faker.date.future(),
-  class_id: Math.ceil(Math.random() * 500),
   name: faker.random.words(2)
 });
 
