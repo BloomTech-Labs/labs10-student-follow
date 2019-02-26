@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import Image from './LandingImage.jpg';
+import MobileImage from './mobile-img.jpg';
 import Logo from './logo.png';
 import './LandingPage.css';
 import OtherNavBar from '../navigation/OtherNavBar';
@@ -26,6 +27,7 @@ const LandingPage = props => {
         </div>
       </div>
       <img className="background-img" alt="image" src={Image} />
+      <img className="mobile-img" alt="image" src={MobileImage} />
     </div>
   );
 };

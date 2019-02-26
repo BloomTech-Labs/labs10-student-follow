@@ -8,6 +8,23 @@
   height: 100vh;
   z-index: -1;
 }
+@media (max-width: 600px) {
+  .background-img {
+    display: none;
+  }
+}
+
+.mobile-img {
+  display: none;
+}
+@media (max-width: 600px) {
+  .mobile-img {
+    display: block;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+  }
+}
 
 .text {
   position: absolute;
@@ -26,4 +43,10 @@
   width: 40%;
   font-family: Arial, Helvetica, sans-serif;
   line-height: 35px;
+}
+
+@media (max-width: 600px) {
+  .text p {
+    width: 80%;
+  }
 }

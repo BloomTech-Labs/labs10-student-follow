@@ -106,6 +106,7 @@ const App = props => {
         console.log(err);
       });
   };
+
   /* ROUTES */
   return (
     <Router history={history}>
