@@ -22,7 +22,7 @@ export const breadcrumbNameMap = {
 const styles = theme => ({
   root: {
     display: 'flex',
-    flexDirection: 'column'
+    flexFlow: 'row nowrap'
   }
 });
 
