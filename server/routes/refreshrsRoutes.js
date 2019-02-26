@@ -14,6 +14,24 @@ router.get('/', async (req, res, next) => {
   }
 });
 
+// gets all refreshrs belonging to a teacher
+// gonna come back and add authentication middleware later
+router.get('/teachers/:teacherId', async (req, res, next) => {
+  try {
+    const { teacherId } = req.params;
+    const refreshrList = await db.getTeacherRefreshrs(teacherId);
+    console.log(refreshrList);
+    res.status(responseStatus.success).json(refreshrList);
+  } catch (err) {
+    console.log(err);
+    if (TypeError) {
+      next(responseStatus.notFound);
+    } else {
+      next(err);
+    }
+  }
+});
+
 router.get('/:id', jwtCheck, async (req, res, next) => {
   const { id } = req.params;
   try {
