@@ -23,8 +23,9 @@ const styles = theme => ({
 });
 
 function PracticeRefreshrQuiz(props) {
-  const [ studentName, addStudentName ] = useState("")
-  const [ reviewText, addReviewText ] = useState("This is a short section of text that describes or reminds about one part of the topic. It is not intended to be a complete review of the material, just a reminder of the most important parts. This section is limited to 512 characters.")
+  const [ studentName, addStudentName ] = useState("");
+  const [ reviewText, setReviewText ] = useState("This is a short section of text that describes or reminds about one part of the topic. It is not intended to be a complete review of the material, just a reminder of the most important parts. This section is limited to 512 characters.");
+  const [ questionText, setQuestionText ] = useState("This is a multiple choice question related to the topic. Again the goal is not to be exhaustive, just to call the material to mind. A good question will not simply call for the recollection of information, but will require the application of knowledge.");
   
   return (
     <Grid className={props.classes.wrapper}>
@@ -41,7 +42,7 @@ function PracticeRefreshrQuiz(props) {
           }}
           onChange={(e) => addStudentName(e.target.value)}
         />
-        <h3>Two Days - Review Text</h3>
+        <h4>Two Days - Review Text</h4>
         <TextField
           value={reviewText}
           id="outlined"
@@ -49,7 +50,19 @@ function PracticeRefreshrQuiz(props) {
           name="reviewText"
           multiline
           readonly
-          margin="normal"
+          variant="outlined"
+          InputLabelProps={{
+            shrink: true,
+          }}
+        />
+        <h4>Two Days - Question</h4>
+        <TextField
+          value={questionText}
+          id="outlined"
+          label="Question"
+          name="question"
+          multiline
+          readonly
           variant="outlined"
           InputLabelProps={{
             shrink: true,
