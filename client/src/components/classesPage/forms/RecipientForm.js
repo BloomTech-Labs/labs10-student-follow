@@ -17,6 +17,20 @@ function RecipientForm(props) {
     })
   }
 
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    const new_recipient = {
+      email: props.recipientData.email,
+      first_name: props.recipientData.first_name,
+      last_name: props.recipientData.last_name,
+    }
+
+    props.setRecipientData({
+      ...props.recipientData,
+      addedRecipients: props.recipientData.addedRecipients.concat(new_recipient)
+    })
+  }
+
   const handlePrev = (e) => {
     e.preventDefault()
     props.setStage({
@@ -35,8 +49,7 @@ function RecipientForm(props) {
     })
   }
 
-  const handleSubmit = () => { }
-
+  const { addedRecipients } = props.recipientData
   return (
     <Grid className={props.classes.wrapper}>
       <p>RecipientForm Component</p>
@@ -68,8 +81,17 @@ function RecipientForm(props) {
           placeholder="last name"
           onChange={(e) => handleChange(e)}
         />
-        <Button variant="outlined" color="secondary" type="submit">Next</Button>
+        <Button variant="outlined" color="secondary" type="submit">Add Recipient</Button>
       </form>
+
+      <h1>Added Recipients</h1>
+      {addedRecipients.length > 0 ? (
+        addedRecipients.map((recipient, i) => (
+          <div key={`${recipient.first_name}-${i}`}>
+            <p>recipient-{i + 1}: {recipient.email}, {recipient.first_name}, {recipient.last_name}</p>
+          </div>
+        ))
+      ) : <p>You need to add new recipients.</p>}
     </Grid>
   );
 };
