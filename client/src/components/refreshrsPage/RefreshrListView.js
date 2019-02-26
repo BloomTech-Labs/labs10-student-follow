@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Grid, Card, Typography } from '@material-ui/core';
-import { withRouter } from 'react-router-dom';
+import { Grid, Card, Typography, Icon, CardContent } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import axios from 'axios';
 import RefreshrCard from './RefreshrCard';
@@ -9,11 +8,31 @@ import RefreshrCard from './RefreshrCard';
 const styles = theme => ({
   wrapper: {
     display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
     height: '90vh',
     margin: '0 5rem',
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
+    border: '1px solid red'
+  },
+  card: {
+    margin: 20,
+    width: 200,
+    height: 200,
+    padding: theme.spacing.unit * 3,
+    display: 'flex',
+    border: '1px solid blue',
+    position: 'relative'
+  },
+  icon: {
+    margin: '0 auto',
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -40%)'
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 15
   }
 });
 
@@ -24,6 +43,8 @@ const ax = axios.create({
 const RefreshrListView = props => {
   const [refreshrs, setRefreshrs] = useState([]);
   useEffect(() => {
+    /*** Commenting code below out instead of deleting bc I didn't write it -jl ***/
+
     // const token = localStorage.getItem('token');
     // console.log('TOKEN:', token);
     //dtaRnjvXFK65as2iOgVhLwuIaOUYqrOu
@@ -33,32 +54,52 @@ const RefreshrListView = props => {
     //   }
     // };
     // props.getRefreshrs(options);
-    getTeacherRefreshrs(239);
+
+    getTeacherRefreshrs(133);
   }, []);
 
+  // just for logging, can be deleted
   useEffect(() => {
     console.log(refreshrs);
-  });
+  }, [refreshrs]);
 
-  // after we add auth0 management, this would take the id of the logged-in teacher
+  // after we add auth0 management, this would take the id of the logged-in teacher. for now it's just a random teacher with two refreshrs
   async function getTeacherRefreshrs(id) {
     const res = await ax.get(`/refreshrs/teachers/${id}`);
     setRefreshrs(res.data);
   }
+
   const { classes } = props;
 
-  // console.log('r', refreshrs)
-
   // <RefreshrCard refreshrs={refreshrs} />
-  return (
-    //console.log(refreshrs),
-    <Grid className={classes.wrapper}>
-      {refreshrs.map(r => (
-        <Card key={r.id} raised>
-          <Typography variant="h1">{r.name}</Typography>
+  if (!refreshrs.length) {
+    return <h1>loading</h1>;
+  } else {
+    return (
+      <Grid className={classes.wrapper}>
+        {refreshrs.map(r => (
+          <Card key={r.id} className={classes.card} raised>
+            <CardContent>
+              <Typography className={classes.title}>{r.name}</Typography>
+              <Typography variant="body1">{r.review_text}</Typography>
+            </CardContent>
+          </Card>
+        ))}
+        <Card className={classes.card} raised>
+          <CardContent>
+            <Typography className={classes.title}>New Refreshr</Typography>
+            <Icon
+              className={classes.icon}
+              color="action"
+              style={{ fontSize: 60 }}
+            >
+              add_circle
+            </Icon>
+          </CardContent>
         </Card>
-      ))}
-    </Grid>
-  );
+      </Grid>
+    );
+  }
 };
-export default withRouter(withStyles(styles)(RefreshrListView));
+
+export default withStyles(styles)(RefreshrListView);
