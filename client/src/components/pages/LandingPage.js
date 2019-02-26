@@ -52,5 +52,4 @@ const LandingPage = props => {
   );
 };
 
-// export default withRouter(LandingPage);
 export default withStyles(styles)(LandingPage);
