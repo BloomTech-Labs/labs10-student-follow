@@ -1,6 +1,7 @@
 import React from "react";
 import Grid from "@material-ui/core/Grid";
 import { withStyles } from "@material-ui/core/styles";
+import { Link } from 'react-router-dom'
 
 const styles = theme => ({
   wrapper: {
@@ -11,15 +12,17 @@ const styles = theme => ({
     justifyContent: "center",
     margin: "1rem",
     width: "30%",
-    height: "30%"
+    height: "200px"
   }
 });
 
-const RefreshrCard = props => {
+const NewClassCard = props => {
   return (
     <Grid className={props.classes.wrapper}>
-      <h1>Class Card</h1>
+      <Link to="/classes/create">
+        <h1>New Class</h1>
+      </Link>
     </Grid>
   );
 };
-export default withStyles(styles)(RefreshrCard);
+export default withStyles(styles)(NewClassCard);

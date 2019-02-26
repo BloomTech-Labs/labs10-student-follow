@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
-import Image from './LandingImage.jpg';
-import Logo from './logo.png';
-import './LandingPage.css';
-import OtherNavBar from '../navigation/OtherNavBar';
+import Image from '../landingPage/LandingImage.jpg';
+import Logo from '../landingPage/logo.png';
+import '../landingPage/LandingPage.css';
+import { OtherNavBar } from '../index.js';
 
 const style = {
   position: 'absolute',

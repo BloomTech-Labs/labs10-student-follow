@@ -8,7 +8,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import IconButton from '@material-ui/core/IconButton';
 import { withStyles } from '@material-ui/core/styles';
 import { Link as RouterLink, withRouter } from 'react-router-dom';
-import { breadcrumbNameMap } from './Navcrumbs';
+import { breadcrumbNameMap } from '../common/Navcrumbs';
 
 
 

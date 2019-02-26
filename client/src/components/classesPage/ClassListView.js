@@ -1,7 +1,7 @@
 import React from "react";
 import Grid from "@material-ui/core/Grid";
 import { withStyles } from "@material-ui/core/styles";
-import { ClassCard } from '../index.js'
+import { NewClassCard, ExistingClassCard } from '../index.js'
 
 const styles = theme => ({
   wrapper: {
@@ -12,15 +12,15 @@ const styles = theme => ({
   }
 });
 
-function ClassList(props) {
+function ClassListView(props) {
 
   return (
     <Grid className={props.classes.wrapper}>
-      <ClassCard />
-      <ClassCard />
-      <ClassCard />
+      <ExistingClassCard />
+      <ExistingClassCard />
+      <NewClassCard />
     </Grid>
   );
 };
 
-export default withStyles(styles)(ClassList);
+export default withStyles(styles)(ClassListView);
