@@ -1,22 +1,20 @@
-import React, { useState } from "react";
+import React from "react";
 import Grid from "@material-ui/core/Grid";
 import { withStyles } from "@material-ui/core/styles";
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
 const styles = theme => ({
-  wrapper: {
-  }
+  wrapper: {}
 });
 
 function RecipientForm(props) {
-  const [contactName, addContactName] = useState("")
-  const [contactsName, addContactsName] = useState("")
-  const [contacts, getContacts] = useState("")
-  const [contact, deleteContact] = useState("")
-
-  const handleSubmit = (e) => {
+  const handleChange = (e) => {
     e.preventDefault()
+    props.setRecipientData({
+      ...props.recipientData,
+      [e.target.name]: e.target.value
+    })
   }
 
   const handlePrev = (e) => {
@@ -27,6 +25,7 @@ function RecipientForm(props) {
       onRecipientForm: !props.stage.onRecipientForm
     })
   }
+
   const handleNext = (e) => {
     e.preventDefault()
     props.setStage({
@@ -36,43 +35,38 @@ function RecipientForm(props) {
     })
   }
 
+  const handleSubmit = () => { }
+
   return (
     <Grid className={props.classes.wrapper}>
       <p>RecipientForm Component</p>
       <button onClick={(e) => handlePrev(e)}>PREV</button>
       <button onClick={(e) => handleNext(e)}>NEXT</button>
+
       <form className={props.classes.form} onSubmit={(e) => handleSubmit(e)}>
         <TextField
-          name="contactName"
-          type="text"
+          name="email"
+          type="email"
           variant="outlined"
-          value={contactName}
-          placeholder="Add Contact Name"
-          onChange={(e) => addContactName(e.target.value)}
+          value={props.recipientData.email}
+          placeholder="email"
+          onChange={(e) => handleChange(e)}
         />
         <TextField
-          name="contactsName"
+          name="first_name"
           type="text"
           variant="outlined"
-          value={contactsName}
-          placeholder="Add Contacts Names"
-          onChange={(e) => addContactsName(e.target.value)}
+          value={props.recipientData.first_name}
+          placeholder="first name"
+          onChange={(e) => handleChange(e)}
         />
         <TextField
-          name="contacts"
+          name="last_name"
           type="text"
           variant="outlined"
-          value={contacts}
-          placeholder="Find Contact Name"
-          onChange={(e) => getContacts(e.target.value)}
-        />
-        <TextField
-          name="contact"
-          type="text"
-          variant="outlined"
-          value={contact}
-          placeholder="Find Contact Name"
-          onChange={(e) => deleteContact(e.target.value)}
+          value={props.recipientData.last_name}
+          placeholder="last name"
+          onChange={(e) => handleChange(e)}
         />
         <Button variant="outlined" color="secondary" type="submit">Next</Button>
       </form>
