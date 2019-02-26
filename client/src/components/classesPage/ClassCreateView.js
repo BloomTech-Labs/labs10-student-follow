@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Grid from "@material-ui/core/Grid";
 import { withStyles } from "@material-ui/core/styles";
-import { ListForm, RecipientForm } from '../index.js'
+import { ListForm, RecipientForm, SelectionForm } from '../index.js'
 import axios from 'axios';
 
 const styles = theme => ({
@@ -13,7 +13,7 @@ function ClassCreateView(props) {
   const [onListForm, setListForm] = useState(true)
   const [onRecipientForm, setRecipientForm] = useState(false)
   const [onSelectionForm, setSelectionForm] = useState(false)
-  // const [onCampaignForm, setCampaignForm] = useState(false)
+  const [onCampaignForm, setCampaignForm] = useState(false)
   const [classData, setClassData] = useState(null);
 
   useEffect(() => {
@@ -51,11 +51,15 @@ function ClassCreateView(props) {
       ) : null
       }
 
-      {/* <SenderForm
-        onSenderForm={onSenderForm}
-        setSenderForm={setSenderForm}
-        setRecipientForm={setRecipientForm}
-      /> */}
+      {onSelectionForm ? (
+        <SelectionForm
+          onSelectionForm={onSelectionForm}
+          setSelectionForm={setSelectionForm}
+          onCampaignForm={onCampaignForm}
+          setCampaignForm={setCampaignForm}
+        />
+      ) : null
+      }
 
       {/* <CampaignForm
         onCampaignForm={onCampaignForm}

@@ -29,7 +29,7 @@ import NewClassCard from './classesPage/components/NewClassCard';
 import CampaignForm from './classesPage/forms/CampaignForm';
 import ListForm from './classesPage/forms/ListForm';
 import RecipientForm from './classesPage/forms/RecipientForm';
-import SenderForm from './classesPage/forms/SenderForm';
+import SelectionForm from './classesPage/forms/SelectionForm';
 
 /* REFRESHRS */
 import RefreshrListView from './refreshrsPage/RefreshrListView';
@@ -68,7 +68,7 @@ export {
   CampaignForm,
   ListForm,
   RecipientForm,
-  SenderForm,
+  SelectionForm,
 
   RefreshrListView,
   RefreshrCard,

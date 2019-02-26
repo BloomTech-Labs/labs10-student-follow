@@ -15,7 +15,7 @@ const styles = theme => ({
   }
 });
 
-function SenderForm(props) {
+function SelectionForm(props) {
 
   const [senderInfo, setSenderInfo] = useState({
     nickname: '',
@@ -41,8 +41,8 @@ function SenderForm(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    props.setSenderForm((!props.onSenderForm))
-    props.setRecipientForm((!props.onRecipientForm))
+    props.setSelectionForm((!props.onSelectionForm))
+    props.setCampaignForm((!props.onCampaignForm))
   }
 
   return (
@@ -133,4 +133,4 @@ function SenderForm(props) {
   );
 };
 
-export default withStyles(styles)(SenderForm);
+export default withStyles(styles)(SelectionForm);
