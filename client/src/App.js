@@ -28,7 +28,6 @@ const App = props => {
   };
 
   /* STATE */
-  const [open, setOpen] = useState(false);
   const [refreshrs, setRefreshrs] = useState([]);
   const [questions, setQuestions] = useState([]);
   const [allClasses, setClasses] = useState([]);
@@ -36,11 +35,7 @@ const App = props => {
   const [teachers, setTeachers] = useState([]);
 
   /* METHODS */
-  //Nav
-  const togglePage = () => {
-    setOpen(!open);
-  };
-
+  
   //all refreshrs
 
   const getRefreshrs = options => {
@@ -109,8 +104,10 @@ const App = props => {
   /* ROUTES */
   return (
     <Router history={history}>
-      <div>
-        {/* <Navcrumbs open={open} {...props} /> */}
+      <div >
+      <Navbar  />
+
+        <Navcrumbs  {...props} />
         <Grid
           container
           spacing={0}
@@ -118,11 +115,7 @@ const App = props => {
           justify="space-between"
           alignItems="center"
         >
-          {/* <Grid item xs={2}>
-            <Navbar open={open} togglePage={togglePage} />
-          </Grid> */}
           <Grid item xs={10}>
-            <Route exact path="/" render={() => <Login auth={props.auth} />} />
             <Route path="/home" render={props => <LandingPage {...props} />} />
             <Route
               path="/loading"
