@@ -3,9 +3,7 @@ import { Elements, StripeProvider } from 'react-stripe-elements';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
-import Snackbar from '../views/Snackbar';
-import TakeMoney from './TakeMoney';
-import Pricing from './Pricing';
+import { Pricing } from '../index.js';
 
 const styles = theme => ({
   cardWrapper: {

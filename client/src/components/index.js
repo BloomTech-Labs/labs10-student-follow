@@ -1,62 +1,76 @@
-/* NAV */
-import Navcrumbs from './navigation/Navcrumbs';
-import Navbar from './navigation/Navbar';
-
 /* AUTH */
 import Auth from './authentication/Auth';
 import Login from './authentication/Login';
 
-/* VIEWS */
-import ClassPage from './views/ClassPage';
-import LandingPage from './views/LandingPage';
-import LoadingPage from './views/LoadingPage';
-import CreateEditPage from './views/CreateEditPage';
+/* COMMON */
+import Loading from './common/Loading';
+import Navcrumbs from './common/Navcrumbs';
+import Navbar from './common/Navbar';
+
+/* PAGES */
+import BillingPage from './pages/BillingPage';
+import ClassesPage from './pages/ClassesPage';
+import LandingPage from './pages/LandingPage';
+import RefreshrsPage from './pages/RefreshrsPage';
+import SettingsPage from './pages/SettingsPage';
 
 /* BILLING */
-import BillingPage from './billing/BillingPage';
 import CheckoutForm from './billing/CheckoutForm';
-
-/* REFRESHRS */
-import RefreshrList from './refreshrs/RefreshrList';
-import RefreshrCard from './refreshrs/RefreshrCard';
+import Pricing from './billing/Pricing';
+import TakeMoney from './billing/TakeMoney';
 
 /* CLASSES */
-import ClassOperations from './classes/ClassOperations';
-import ClassList from './classes/ClassList';
-import NewClassCard from './classes/NewClassCard';
-import ExistingClassCard from './classes/ExistingClassCard';
-import ClassCreate from './classes/ClassCreate';
-import ClassEdit from './classes/ClassEdit';
-import SenderForm from './classes/SenderForm';
-import RecipientForm from './classes/RecipientForm';
-import ListForm from './classes/ListForm';
-import CampaignForm from './classes/CampaignForm';
+import ClassCreateView from './classes/ClassCreateView';
+import ClassEditView from './classes/ClassEditView';
+import ClassListView from './classes/ClassListView';
+import ExistingClassCard from './classes/components/ExistingClassCard';
+import NewClassCard from './classes/components/NewClassCard';
+import CampaignForm from './classes/forms/CampaignForm';
+import ListForm from './classes/forms/ListForm';
+import RecipientForm from './classes/forms/RecipientForm';
+import SenderForm from './classes/forms/SenderForm';
 
-/* MISCDATA */
+/* REFRESHRS */
+import RefreshrListView from './refreshrs/RefreshrListView';
+import RefreshrCard from './refreshrs/RefreshrCard';
+
+/* MISC DATA */
+import ClassOperations from './ClassOperations';
 import MiscData from './MiscData'
+import Snackbar from './Snackbar'
 
 export {
-  Navcrumbs,
-  Navbar,
-  RefreshrList,
-  RefreshrCard,
-  ClassList,
-  NewClassCard,
-  ExistingClassCard,
-  ClassCreate,
-  ClassEdit,
-  SenderForm,
-  RecipientForm,
-  ListForm,
-  CampaignForm,
-  ClassPage,
-  ClassOperations,
-  LandingPage,
-  LoadingPage,
-  MiscData,
-  CreateEditPage,
   Auth,
   Login,
+
+  Loading,
+  Navcrumbs,
+  Navbar,
+
   BillingPage,
-  CheckoutForm
+  ClassesPage,
+  LandingPage,
+  RefreshrsPage,
+  SettingsPage,
+
+  CheckoutForm,
+  Pricing,
+  TakeMoney,
+
+  ClassCreateView,
+  ClassEditView,
+  ClassListView,
+  ExistingClassCard,
+  NewClassCard,
+  CampaignForm,
+  ListForm,
+  RecipientForm,
+  SenderForm,
+
+  RefreshrListView,
+  RefreshrCard,
+
+  ClassOperations,
+  MiscData,
+  Snackbar,
 };

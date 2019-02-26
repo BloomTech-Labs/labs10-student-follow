@@ -5,17 +5,17 @@ import history from './history';
 import axios from 'axios';
 
 import {
-  LoadingPage,
+  Loading,
   LandingPage,
   Login,
   BillingPage,
   Navbar,
   Navcrumbs,
-  RefreshrList,
+  RefreshrListView,
   MiscData,
-  ClassPage,
+  ClassesPage,
   CampaignForm,
-  ClassCreate
+  ClassCreateView
 } from './components';
 
 const App = props => {
@@ -127,21 +127,21 @@ const App = props => {
               path="/loading"
               render={props => {
                 handleAuthentication(props);
-                return <LoadingPage {...props} />;
+                return <Loading {...props} />;
               }}
             />
             <Route
               path="/refreshrs"
               render={props => (
-                <RefreshrList
+                <RefreshrListView
                   getRefreshrs={getRefreshrs}
                   refreshrs={refreshrs}
                 />
               )}
             />
             <Route path="/billing" render={props => <BillingPage />} />
-            <Route exact path="/classes" render={props => <ClassPage />} />
-            <Route exact path="/classes/create" render={props => <ClassCreate />} />
+            <Route exact path="/classes" render={props => <ClassesPage />} />
+            <Route exact path="/classes/create" render={props => <ClassCreateView />} />
             <Route
               path="/misc"
               render={props => (

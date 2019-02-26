@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Grid from "@material-ui/core/Grid";
 import { withStyles } from "@material-ui/core/styles";
-import { ClassList, } from '../index.js'
+import { RefreshrListView } from '../index.js'
 
 const styles = theme => ({
   wrapper: {
@@ -9,16 +9,13 @@ const styles = theme => ({
   }
 });
 
-function ClassPage(props) {
+function RefreshrsPage(props) {
 
   return (
     <Grid>
-      <ClassList />
-      {/* <ClassCreate /> */}
-      {/* <ClassEdit /> */}
-      {/* <ClassOperations /> */}
+      <RefreshrListView />
     </Grid>
   )
 }
 
-export default withStyles(styles)(ClassPage);
+export default withStyles(styles)(RefreshrsPage);

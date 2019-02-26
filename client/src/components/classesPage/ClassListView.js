@@ -12,7 +12,7 @@ const styles = theme => ({
   }
 });
 
-function ClassList(props) {
+function ClassListView(props) {
 
   return (
     <Grid className={props.classes.wrapper}>
@@ -23,4 +23,4 @@ function ClassList(props) {
   );
 };
 
-export default withStyles(styles)(ClassList);
+export default withStyles(styles)(ClassListView);

@@ -1,6 +1,6 @@
-import React, {useEffect}  from 'react';
+import React, { useEffect } from 'react';
 import Grid from '@material-ui/core/Grid';
-import {withRouter} from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 import { withStyles } from '@material-ui/core/styles';
 import RefreshrCard from './RefreshrCard';
 /* STYLES */
@@ -14,24 +14,24 @@ const styles = theme => ({
   }
 });
 
-const RefreshrList = props => {
+const RefreshrListView = props => {
   useEffect(() => {
     const token = localStorage.getItem('token');
     console.log('TOKEN:', token)
     //dtaRnjvXFK65as2iOgVhLwuIaOUYqrOu
-		const options = {
-			headers: {
-				Authorization: `Bearer ${token}`
-			}
-		};
+    const options = {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    };
     props.getRefreshrs(options)
-  
+
   }, [])
 
-  const {classes, refreshrs} = props
-  
+  const { classes, refreshrs } = props
+
   // console.log('r', refreshrs)
-  
+
 
   return (
     //console.log(refreshrs),
@@ -40,4 +40,4 @@ const RefreshrList = props => {
     </Grid>
   );
 };
-export default withRouter(withStyles(styles)(RefreshrList));
+export default withRouter(withStyles(styles)(RefreshrListView));
