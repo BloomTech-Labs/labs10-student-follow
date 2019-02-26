@@ -33,6 +33,12 @@ const styles = theme => ({
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 15
+  },
+  emptyList: {
+    display: 'flex',
+    alignItems: 'center',
+    flexDirection: 'column',
+    justifyContent: 'center'
   }
 });
 
@@ -55,7 +61,7 @@ const RefreshrListView = props => {
     // };
     // props.getRefreshrs(options);
 
-    getTeacherRefreshrs(133);
+    getTeacherRefreshrs(1);
   }, []);
 
   // just for logging, can be deleted
@@ -73,7 +79,14 @@ const RefreshrListView = props => {
 
   // <RefreshrCard refreshrs={refreshrs} />
   if (!refreshrs.length) {
-    return <h1>loading</h1>;
+    return (
+      <Grid className={classes.emptyList}>
+        <Typography variant="h2">Add a New Refreshr</Typography>
+        <Icon color="action" style={{ fontSize: 60 }}>
+          add_circle
+        </Icon>
+      </Grid>
+    );
   } else {
     return (
       <Grid className={classes.wrapper}>
