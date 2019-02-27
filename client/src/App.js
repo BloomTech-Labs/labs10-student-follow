@@ -152,7 +152,11 @@ const App = props => {
             <Route path="/billing" render={props => <BillingPage />} />
             <Route exact path="/classes" render={props => <ClassesPage />} />
             <Route exact path="/classes/create" render={props => <ClassCreateView />} />
-            <Route exact path="/test" render={props => <Refreshr />} />
+            <Route exact path="/questions/create" render={props => (
+            <Refreshr 
+              addQuestions={addQuestions}
+            />
+            )} />
             <Route
               path="/misc"
               render={props => (
