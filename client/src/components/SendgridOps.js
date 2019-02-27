@@ -21,7 +21,7 @@ const headers = {
 const listId = 7100282 // Students2
 const recipient_id = "YXN0dXJpYXN4aUBnbWFpbC5jb20=" // Timmy
 const recipient_ids = ["YnJpYW5AbWVuZG96YS5jb20=", "am9uYXRoYW5AaXZhbi5jb20=", "anVhbkBzaWVycmEuY29t"] // Juan, Brian, Jonathan
-const sender_id = 428223 // The Refreshr Team
+// const sender_id = 428251 // Refreshr Team
 const campaign_id = 5033203 // March Newsletter
 
 /////////////////////
@@ -36,9 +36,9 @@ export function addList(name) {
   return new Promise(function (resolve, reject) {
     axios.post(url, body, headers)
       .then(res => {
-        console.log(`===addList: ${res.data.name}===`)
-        console.log(res.data.id)
-        resolve(res)
+        console.log(`===addList: resolves with id of new list===`)
+        console.log(res)
+        resolve(res.data.id)
       })
       .catch(err => console.log(err))
   })

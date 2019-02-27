@@ -1,7 +1,7 @@
 import React from "react";
 import Grid from "@material-ui/core/Grid";
 import { withStyles } from "@material-ui/core/styles";
-import { addContact, addContacts, getContacts, deleteContact } from "../../SendgridOps"
+// import { addContact, addContacts, getContacts, deleteContact } from "../../SendgridOps"
 
 const styles = theme => ({
   wrapper: {
@@ -54,6 +54,7 @@ function SelectionForm(props) {
           </div>
         ))
       ) : <p>You need to add new recipients.</p>}
+      <button onClick={(e) => handleSubmit(e)}>Submit</button>
     </Grid >
   );
 };

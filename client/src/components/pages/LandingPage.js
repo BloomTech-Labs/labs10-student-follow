@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react';
-import { withRouter } from 'react-router-dom';
+import React from 'react';
 import Image from '../landingPage/LandingImage.jpg';
 import MobileImage from '../landingPage/mobile-img.jpg';
 import '../landingPage/LandingPage.css';
