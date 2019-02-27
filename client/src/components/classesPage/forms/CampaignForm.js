@@ -74,21 +74,28 @@ function CampaignForm(props) {
     refreshr.date = date;
   };
 
-  const handlePrev = (e) => {
-    e.preventDefault()
+  const handlePrev = e => {
+    e.preventDefault();
     props.setStage({
       ...props.stage,
       onSelectionForm: !props.stage.onSelectionForm,
       onCampaignForm: !props.stage.onCampaignForm
-    })
-  }
+    });
+  };
 
-  const handleNext = (e) => {
-    e.preventDefault()
+  const handleNext = e => {
+    e.preventDefault();
     props.setStage({
       ...props.stage,
       onCampaignForm: !props.stage.onCampaignForm,
       onListForm: !props.stage.onListForm
+/* kelfro: I'm pretty sure we should go with the sendgrid update here but I left the part Justin wrote as a comment in case you wanted to keep this.      
+   jl_classform_axios
+    });
+    props.submitClassData(); // submit all form data to back end
+    alert("You're all done!");
+  };
+*/  
     })
     alert("Saving to DB and sending to the SendGrid Server!")
   }

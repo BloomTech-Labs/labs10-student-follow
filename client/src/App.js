@@ -39,6 +39,7 @@ const App = props => {
   const [allClasses, setClasses] = useState([]);
   const [students, setStudents] = useState([]);
   const [teachers, setTeachers] = useState([]);
+  
 
   /* METHODS */
 
@@ -116,18 +117,18 @@ const App = props => {
         className={classes.container}
           container
           direction="column"
-          spacing={40}
+          spacing={0}
           justify="space-between"
           alignItems="stretch"
         >
           <Grid
             item
           >
-            <Navbar theme={props.theme} />
+            <Navbar theme={props.theme} {...props} />
             <Navcrumbs  {...props} />
           </Grid>
           <Grid item xs={10}>
-            <Route path="/home" render={props => <LandingPage {...props} />} />
+            <Route exact path="/" render={props => <LandingPage {...props} />} />
             <Route
               path="/loading"
               render={props => {

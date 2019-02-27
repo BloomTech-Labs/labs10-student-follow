@@ -13,6 +13,7 @@ import {
   scheduleRefreshr
   // getRefreshr, getRefreshrs, updateRefreshr, deleteRefreshr, , rescheduleRefreshr, getScheduleRefreshr, deleteScheduleRefreshr, sendTestRefreshr
 } from '../SendgridOps'
+import axios from 'axios';
 
 const styles = theme => ({
   wrapper: {}
@@ -24,30 +25,30 @@ function ClassCreateView(props) {
     onRecipientForm: false,
     onSelectionForm: false,
     onCampaignForm: false
-  })
+  });
 
   const [listData, setListData] = useState({
-    name: "",
+    name: '',
     ccBool: false
-  })
+  });
 
   const [recipientData, setRecipientData] = useState({
     recipients: []
-  })
+  });
 
   const [campaignData, setCampaignData] = useState({
-    title: "",
-    subject: "",
-    sender_id: "",
-    list_ids: "",
+    title: '',
+    subject: '',
+    sender_id: '',
+    list_id: '',
     segment_ids: null,
     categories: [],
     suppression_group_id: 9332,
-    custom_unsubscribe_url: "",
-    ip_pool: "",
-    html_content: "",
-    plain_content: ""
-  })
+    custom_unsubscribe_url: '',
+    ip_pool: '',
+    html_content: '',
+    plain_content: ''
+  });
 
   const sendAllToSendgrid = () => {
     let validated = {
@@ -132,8 +133,7 @@ function ClassCreateView(props) {
           stage={stage}
           setStage={setStage}
         />
-      ) : null
-      }
+      ) : null}
 
       {stage.onRecipientForm ? (
         <RecipientForm
@@ -142,8 +142,7 @@ function ClassCreateView(props) {
           stage={stage}
           setStage={setStage}
         />
-      ) : null
-      }
+      ) : null}
 
       {stage.onSelectionForm ? (
         <SelectionForm
@@ -152,8 +151,7 @@ function ClassCreateView(props) {
           stage={stage}
           setStage={setStage}
         />
-      ) : null
-      }
+      ) : null}
 
       {stage.onCampaignForm ? (
         <CampaignForm
@@ -163,8 +161,7 @@ function ClassCreateView(props) {
           setStage={setStage}
           sendAllToSendgrid={sendAllToSendgrid}
         />
-      ) : null
-      }
+      ) : null}
     </Grid>
   );
 }
