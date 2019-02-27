@@ -1,3 +1,4 @@
+/* eslint-disable no-lone-blocks */
 /* eslint-disable no-sequences */
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
@@ -11,25 +12,15 @@ import CardContent from '@material-ui/core/CardContent';
 //import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
-// const lazyImg = () => {
-//   return (
-//     <LazyLoadImage alt="image" src={Image} />
-//   )
-// }
+
 
 const style = (theme) => ({
   container: {
-    height: `calc(100vh - ${64}px)`,
-    width: '100vw',
-    overflow: 'hidden',
-    [theme.breakpoints.between('xs', 'sm')]: {
-      width: '100vw'
-    },
-
+    width: '100%', 
   },
   subcontainer: {
     position: 'absolute',
-    width: '100vw',
+    width: '100%',
     margin: 0,
     padding: 0
   },
@@ -64,29 +55,19 @@ const style = (theme) => ({
   backgroundImg: {
     zIndex: -1,
     width: '100vw',
-    height: `calc(100vh - ${64}px)`,
-    marginTop: 0,
+    height: '100vh',
   }
 
 });
 
-// const styles = theme => ({
-//   margin: {
-//     margin: theme.spacing.unit
-//   },
-//   extendedIcon: {
-//     marginRight: theme.spacing.unit
-//   }
-// });
-
 const LandingPage = props => {
   const { classes } = props
   return (
-    <Grid container spacing={40} alignItems='stretch' className={classes.container}>
+    <Grid container spacing={0} alignItems='stretch' className={classes.container}>
       <Card className={classes.subcontainer}>
         <CardContent className={classes.text}>
           <Typography variant='h1' gutterBottom className={classes.textH1} >Refreshr</Typography>
-          <Typography variant='body1' className={classes.textP} >
+          <Typography variant='body2' className={classes.textP} >
             Send tests to your students over weeks or months. Help them learn
             for the long-term.
             </Typography>
@@ -99,8 +80,7 @@ const LandingPage = props => {
 
 export default withRouter(withStyles(style)(LandingPage));
 
-//Will add tomorrow
-          {/* </p> */}
+//Call to Action?
           {/* <Button
             variant="contained"
             size="large"
@@ -118,4 +98,4 @@ export default withRouter(withStyles(style)(LandingPage));
 };
 
 export default withStyles(styles)(LandingPage); */}
-          
+

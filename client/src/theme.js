@@ -10,7 +10,8 @@ import { createMuiTheme } from '@material-ui/core/styles';
 export default createMuiTheme({
     typography: {
         htmlFontSize: 10,
-        useNextVariants: true
+        useNextVariants: true,
+        body1: {color: "inherit"}
     },
     palette: {
         primary: {
@@ -27,8 +28,5 @@ export default createMuiTheme({
          paper: '#0b2742'  
         },
         tonalOffset: 0.2
-    },
-    
-      
-    
+    },  
 })

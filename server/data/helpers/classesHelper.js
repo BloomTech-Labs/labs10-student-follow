@@ -109,6 +109,19 @@ module.exports = {
     return newClassID[0];
   },
 
+  addStudentsToClass: async (class_id, students) => {
+    console.log('students', students);
+    console.log('cid', class_id);
+    try {
+      for (let student of students) {
+        console.log(`adding ${student} to ${class_id}`);
+        await db('students_classes').insert({ student_id: student, class_id });
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  },
+
   updateClass: async (id, updatedClass) => {
     const updateCount = await db('classes')
       .where({ id })
