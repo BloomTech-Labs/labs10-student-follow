@@ -89,7 +89,7 @@ function CampaignForm(props) {
       onCampaignForm: !props.stage.onCampaignForm,
       onListForm: !props.stage.onListForm
     })
-    alert("You're all done!")
+    alert("Saving to DB and sending to the SendGrid Server!")
   }
 
   return (
