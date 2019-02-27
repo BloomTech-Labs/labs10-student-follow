@@ -51,8 +51,7 @@ function ClassCreateView(props) {
 
   const submitClassData = async () => {
     try {
-      // add class to classes and tcr
-      // teacher_id should be user id, using 1 for now
+      // add class to classes
       const classRes = await ax.post('/classes', {
         name: listData.name
       }); // need to add cc field to classes, leaving it out for now
@@ -82,6 +81,7 @@ function ClassCreateView(props) {
 
       // add refreshrs to tcr
       // refreshrs will already be created and so will have an id
+      // add teacher(user) id, class id, and refreshr id
     } catch (err) {
       console.log(`error: ${err}`);
     }
