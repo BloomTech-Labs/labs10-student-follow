@@ -18,6 +18,7 @@ import {
   CampaignForm,
   ClassCreateView
 } from './components';
+import Refreshr from './components/refreshrs/Refreshr';
 
 const App = props => {
   /* AUTHENTICATION */
@@ -54,6 +55,19 @@ const App = props => {
   const getQuestions = options => {
     axios
       .get('https://refreshr.herokuapp.com/questions', options)
+      .then(res => {
+        console.log('q', res.data.questions);
+        setQuestions(res.data.questions);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
+  // add questions
+  const addQuestions = question => {
+    axios
+      .post('https://refreshr.herokuapp.com/questions', question)
       .then(res => {
         console.log('q', res.data.questions);
         setQuestions(res.data.questions);
@@ -138,6 +152,7 @@ const App = props => {
             <Route path="/billing" render={props => <BillingPage />} />
             <Route exact path="/classes" render={props => <ClassesPage />} />
             <Route exact path="/classes/create" render={props => <ClassCreateView />} />
+            <Route exact path="/test" render={props => <Refreshr />} />
             <Route
               path="/misc"
               render={props => (
