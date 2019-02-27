@@ -42,6 +42,7 @@ function Refreshr(props) {
   const [ a3, setA3 ] = useState(false);
   const [ a4, setA4 ] = useState(false);
   
+  console.log('"state"', {studentName, reviewText, questionText, a1, a2, a3, a4}, 'Props', props)
   return (
     <Grid className={props.classes.wrapper}>
         <TextField
@@ -58,19 +59,19 @@ function Refreshr(props) {
           onChange={(e) => addStudentName(e.target.value)}
         />
         {/* start 2 days */}
-        <h4 className={props.classes.subheaders}>Two Days - Review Text</h4>
+        <h4 className={props.classes.subheaders}>Review Text</h4>
         <TextField
           value={reviewText}
           label="Review Text"
           name="reviewText"
           multiline
-          readonly
           variant="outlined"
           InputLabelProps={{
             shrink: true,
           }}
+          onChange={(e) => setReviewText(e.target.value)}
         />
-        <h4 className={props.classes.subheaders}>Two Days - Question</h4>
+        <h4 className={props.classes.subheaders}>Question</h4>
         <TextField
           value={questionText}
           label="Question"
