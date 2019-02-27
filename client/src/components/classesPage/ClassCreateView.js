@@ -5,7 +5,8 @@ import { ListForm, RecipientForm, SelectionForm, CampaignForm } from '../index.j
 import {
   addList,
   // getList, getLists, updateList, deleteList,
-  // addRecipient, addRecipients, getRecipient, getRecipients, updateRecipient, deleteRecipient, deleteRecipients,
+  addRecipients,
+  // addRecipient, getRecipient, getRecipients, updateRecipient, deleteRecipient, deleteRecipients,
   // addContact, addContacts, getContacts, deleteContact,
   // addRefreshr, getRefreshr, getRefreshrs, updateRefreshr, deleteRefreshr, scheduleRefreshr, rescheduleRefreshr, getScheduleRefreshr, deleteScheduleRefreshr, sendTestRefreshr
 } from '../SendgridOps'
@@ -50,13 +51,16 @@ function ClassCreateView(props) {
   })
 
   const sendAllToSendgrid = () => {
-    addList(listData.name) // send name of list
-      .then(res => { // res returns the id validated by SendGrid
+
+    // send new name to SG, get validated id, save it to be used last form
+    addList(listData.name)
+      .then(res => {
         setValidatedList({
           ...validatedList,
-          list_ids: validatedList.list_ids.push(res) // save the id of the list for later use
+          list_ids: validatedList.list_ids.push(res.data.id)
         })
         console.log(validatedList)
+        return addRecipients(recipientData.recipients)
       })
       .catch(err => console.log(err))
 

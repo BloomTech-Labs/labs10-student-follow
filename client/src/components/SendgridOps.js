@@ -36,9 +36,9 @@ export function addList(name) {
   return new Promise(function (resolve, reject) {
     axios.post(url, body, headers)
       .then(res => {
-        console.log(`===addList: resolves with id of new list===`)
+        console.log(`===addList===`)
         console.log(res)
-        resolve(res.data.id)
+        resolve(res)
       })
       .catch(err => console.log(err))
   })
@@ -110,6 +110,7 @@ export function addRecipient() {
 }
 
 export function addRecipients() {
+  const url = `https://api.sendgrid.com/v3/contactdb/recipients`
   const recipients = [
     {
       "email": "juan@sierra.com",
@@ -122,13 +123,14 @@ export function addRecipients() {
       "last_name": "Mendoza",
     }
   ]
-  const url = `https://api.sendgrid.com/v3/contactdb/recipients`
-  axios.post(url, recipients, headers)
-    .then(res => {
-      console.log(`===addRecipients===`)
-      console.log(res)
-    })
-    .catch(err => console.log(err))
+  return new Promise(function (resolve, reject) {
+    axios.post(url, recipients, headers)
+      .then(res => {
+        console.log(`===addRecipients===`)
+        console.log(res)
+      })
+      .catch(err => console.log(err))
+  })
 }
 
 export function getRecipient() {
@@ -264,7 +266,7 @@ export function deleteContact() {
 
 //////////////////////////
 //////////////////////////
-// 4. REFRESHRS OPERATIONS
+// 4. CAMPAIGN OPERATIONS
 //////////////////////////
 //////////////////////////
 export function addRefreshr() {
