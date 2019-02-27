@@ -5,10 +5,10 @@ import history from './history';
 import axios from 'axios';
 import Typeform from './Typeform';
 
+
 import {
   Loading,
   LandingPage,
-  Login,
   BillingPage,
   Navbar,
   Navcrumbs,
@@ -19,7 +19,13 @@ import {
   ClassCreateView
 } from './components';
 
+
+
+
+
 const App = props => {
+  const classes = { props }
+
   /* AUTHENTICATION */
   const handleAuthentication = (nextState, replace) => {
     if (/access_token|id_token|error/.test(nextState.location.hash)) {
@@ -35,7 +41,7 @@ const App = props => {
   const [teachers, setTeachers] = useState([]);
 
   /* METHODS */
-  
+
   //all refreshrs
 
   const getRefreshrs = options => {
@@ -104,18 +110,22 @@ const App = props => {
 
   /* ROUTES */
   return (
-    <Router history={history}>
-      <div >
-      <Navbar  />
-
-        <Navcrumbs  {...props} />
+    <>
+      <Router history={history} >
         <Grid
+        className={classes.container}
           container
-          spacing={0}
-          direction="row"
+          direction="column"
+          spacing={40}
           justify="space-between"
-          alignItems="center"
+          alignItems="stretch"
         >
+          <Grid
+            item
+          >
+            <Navbar theme={props.theme} />
+            <Navcrumbs  {...props} />
+          </Grid>
           <Grid item xs={10}>
             <Route path="/home" render={props => <LandingPage {...props} />} />
             <Route
@@ -157,8 +167,8 @@ const App = props => {
             {/* for testing */}
           </Grid>
         </Grid>
-      </div>
-    </Router>
+      </Router>
+    </>
   );
 };
 
