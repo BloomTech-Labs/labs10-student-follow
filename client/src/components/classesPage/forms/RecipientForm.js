@@ -3,6 +3,7 @@ import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+// import { addRecipient, addRecipients, getRecipient, getRecipients, updateRecipient, deleteRecipient, deleteRecipients } from "../../SendgridOps"
 
 const styles = theme => ({
   wrapper: {}
@@ -73,7 +74,8 @@ function RecipientForm(props) {
           variant="outlined"
           value={recipient.email}
           placeholder="email"
-          onChange={e => handleChange(e)}
+          onChange={(e) => handleChange(e)}
+          required
         />
         <TextField
           name="first_name"
@@ -81,7 +83,8 @@ function RecipientForm(props) {
           variant="outlined"
           value={recipient.first_name}
           placeholder="first name"
-          onChange={e => handleChange(e)}
+          onChange={(e) => handleChange(e)}
+          required
         />
         <TextField
           name="last_name"
@@ -89,7 +92,8 @@ function RecipientForm(props) {
           variant="outlined"
           value={recipient.last_name}
           placeholder="last name"
-          onChange={e => handleChange(e)}
+          onChange={(e) => handleChange(e)}
+          required
         />
         <Button variant="outlined" color="secondary" type="submit">
           Add Recipient
@@ -97,7 +101,7 @@ function RecipientForm(props) {
       </form>
 
       <h1>Added Recipients</h1>
-      {props.recipientData.recipients ? (
+      {props.recipientData.recipients.length > 0 ? (
         props.recipientData.recipients.map((recipient, i) => (
           <div key={`${recipient.first_name}-${i}`}>
             <p>
