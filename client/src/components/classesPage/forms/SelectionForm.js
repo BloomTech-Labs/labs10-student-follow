@@ -15,7 +15,7 @@ const styles = theme => ({
   }
 });
 
-function SenderForm(props) {
+function SelectionForm(props) {
 
   const [senderInfo, setSenderInfo] = useState({
     nickname: '',
@@ -39,16 +39,33 @@ function SenderForm(props) {
     setSenderInfo({ ...senderInfo, [e.target.name]: e.target.value });
   }
 
+  const handlePrev = (e) => {
+    e.preventDefault()
+    props.setStage({
+      ...props.stage,
+      onRecipientForm: !props.stage.onRecipientForm,
+      onSelectionForm: !props.stage.onSelectionForm
+    })
+  }
+
+  const handleNext = (e) => {
+    e.preventDefault()
+    props.setStage({
+      ...props.stage,
+      onSelectionForm: !props.stage.onSelectionForm,
+      onCampaignForm: !props.stage.onCampaignForm
+    })
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault()
-    props.setSenderForm((!props.onSenderForm))
-    props.setRecipientForm((!props.onRecipientForm))
   }
 
   return (
     <Grid className={props.classes.wrapper}>
-      <p>SenderForm Component</p>
-      <button onClick={(e) => handleSubmit(e)}>COMPLETE</button>
+      <p>SelectionForm Component</p>
+      <button onClick={(e) => handlePrev(e)}>PREV</button>
+      <button onClick={(e) => handleNext(e)}>NEXT</button>
       <form className={props.classes.form} onSubmit={(e) => handleSubmit(e)}>
         <input
           name="nickname"
@@ -133,4 +150,4 @@ function SenderForm(props) {
   );
 };
 
-export default withStyles(styles)(SenderForm);
+export default withStyles(styles)(SelectionForm);
