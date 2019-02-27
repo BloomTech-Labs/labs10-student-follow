@@ -89,7 +89,7 @@ function CampaignForm(props) {
       onCampaignForm: !props.stage.onCampaignForm,
       onListForm: !props.stage.onListForm
     });
-    props.submitClassData();
+    props.submitClassData(); // submit all form data to back end
     alert("You're all done!");
   };
 

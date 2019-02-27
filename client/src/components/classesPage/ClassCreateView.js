@@ -54,17 +54,16 @@ function ClassCreateView(props) {
       // add class to classes and tcr
       // teacher_id should be user id, using 1 for now
       const classRes = await ax.post('/classes', {
-        classInfo: {
-          name: listData.name
-        },
-        teacher_id: 1
+        name: listData.name
       }); // need to add cc field to classes, leaving it out for now
       const { newClassID } = classRes.data;
 
       // add students
       // assuming students don't exist in db for now
+      const newStudents = []; // save as array to add to students_classes table
+
       for (const recipient of recipientData.recipients) {
-        // should probably change these names on back or front end so they're consistent
+        // should probably change these column names on back or front end so they're consistent
         const studentsRes = await ax.post('/students', {
           firstname: recipient.first_name,
           lastname: recipient.last_name,
@@ -72,7 +71,15 @@ function ClassCreateView(props) {
         });
         // we are not accounting yet for students already in db. will have to throw an error if one is found? or just add that student to the class
         const { newStudentID } = studentsRes.data;
+        console.log('sid', newStudentID);
+        newStudents.push(newStudentID);
       }
+      // add students and class to students_classes table
+      const scRes = await ax.post(`/classes/${newClassID}`, {
+        students: newStudents
+      });
+      console.log('response:', scRes);
+
       // add refreshrs to tcr
       // refreshrs will already be created and so will have an id
     } catch (err) {

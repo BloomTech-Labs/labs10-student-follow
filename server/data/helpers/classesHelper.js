@@ -94,22 +94,24 @@ module.exports = {
     return ID[0];
   },
 
-  addClass: async (classInfo, teacher_id) => {
-    try {
-      console.log(classInfo, teacher_id);
-
-      const [newClassID] = await db('classes')
-        .insert({ name: classInfo.name })
-        .returning('id');
-      console.log(newClassID, 'ncid');
-      console.log(typeof newClassID);
-
-      // add a record to the teachers_classes_refreshrs tbl
-      await db('teachers_classes_refreshrs').insert({
-        class_id: newClassID,
-        teacher_id
+  addClass: async classInfo => {
+    const newClassID = await db('classes')
+      .insert(classInfo)
+      .returning('id')
+      .then(id => {
+        return id;
       });
-      return newClassID;
+    return newClassID[0];
+  },
+
+  addStudentsToClass: async (class_id, students) => {
+    console.log('students', students);
+    console.log('cid', class_id);
+    try {
+      for (let student of students) {
+        console.log(`adding ${student} to ${class_id}`);
+        await db('students_classes').insert({ student_id: student, class_id });
+      }
     } catch (err) {
       console.log(err);
     }

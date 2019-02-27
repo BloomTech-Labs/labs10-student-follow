@@ -29,14 +29,23 @@ router.get('/:id', async (req, res, next) => {
 });
 
 router.post('/', /*jwtCheck,*/ emptyCheck, async (req, res, next) => {
-  const { classInfo, teacher_id } = req.body;
+  const { body } = req;
   try {
-    const newClassID = await db.addClass(classInfo, teacher_id);
+    const newClassID = await db.addClass(body);
     res.status(responseStatus.postCreated).json({ newClassID });
   } catch (err) {
-    console.log(error);
-
     next(err);
+  }
+});
+
+// add student to class, takes an array of student ids and adds them to class
+router.post('/:id', async (req, res, next) => {
+  const { students } = req.body;
+  const classId = req.params.id;
+  try {
+    await db.addStudentsToClass(classId, students);
+  } catch (err) {
+    console.log(err);
   }
 });
 
