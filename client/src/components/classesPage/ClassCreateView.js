@@ -1,12 +1,17 @@
-import React, { useState } from "react";
-import Grid from "@material-ui/core/Grid";
-import { withStyles } from "@material-ui/core/styles";
-import { ListForm, RecipientForm, SelectionForm, CampaignForm } from '../index.js'
+import React, { useState } from 'react';
+import Grid from '@material-ui/core/Grid';
+import { withStyles } from '@material-ui/core/styles';
+import {
+  ListForm,
+  RecipientForm,
+  SelectionForm,
+  CampaignForm
+} from '../index.js';
+import axios from 'axios';
 
 const styles = theme => ({
   wrapper: {}
 });
-
 
 function ClassCreateView(props) {
   const [stage, setStage] = useState({
@@ -14,30 +19,66 @@ function ClassCreateView(props) {
     onRecipientForm: false,
     onSelectionForm: false,
     onCampaignForm: false
-  })
+  });
 
   const [listData, setListData] = useState({
-    name: "",
+    name: '',
     ccBool: false
-  })
+  });
 
   const [recipientData, setRecipientData] = useState({
     recipients: []
-  })
+  });
 
   const [campaignData, setCampaignData] = useState({
-    "title": "",
-    "subject": "",
-    "sender_id": "",
-    "list_id": "",
-    "segment_ids": null,
-    "categories": [],
-    "suppression_group_id": 9332,
-    "custom_unsubscribe_url": "",
-    "ip_pool": "",
-    "html_content": "",
-    "plain_content": ""
-  })
+    title: '',
+    subject: '',
+    sender_id: '',
+    list_id: '',
+    segment_ids: null,
+    categories: [],
+    suppression_group_id: 9332,
+    custom_unsubscribe_url: '',
+    ip_pool: '',
+    html_content: '',
+    plain_content: ''
+  });
+
+  const ax = axios.create({
+    // baseURL: 'https://refreshr.herokuapp.com' // production
+    baseURL: 'http://localhost:9000' // development
+  });
+
+  const submitClassData = async () => {
+    try {
+      // add class to classes and tcr
+      // teacher_id should be user id, using 1 for now
+      const classRes = await ax.post('/classes', {
+        classInfo: {
+          name: listData.name
+        },
+        teacher_id: 1
+      }); // need to add cc field to classes, leaving it out for now
+      const { newClassID } = classRes.data;
+
+      // add students
+      // assuming students don't exist in db for now
+      for (const recipient of recipientData.recipients) {
+        // should probably change these names on back or front end so they're consistent
+        const studentsRes = await ax.post('/students', {
+          firstname: recipient.first_name,
+          lastname: recipient.last_name,
+          email: recipient.email
+        });
+        // we are not accounting yet for students already in db. will have to throw an error if one is found? or just add that student to the class
+        const { newStudentID } = studentsRes.data;
+      }
+      // add refreshrs to tcr
+      // refreshrs will already be created and so will have an id
+    } catch (err) {
+      console.log(`error: ${err}`);
+    }
+  };
 
   return (
     <Grid className={props.classes.wrapper}>
@@ -49,8 +90,7 @@ function ClassCreateView(props) {
           stage={stage}
           setStage={setStage}
         />
-      ) : null
-      }
+      ) : null}
 
       {stage.onRecipientForm ? (
         <RecipientForm
@@ -59,8 +99,7 @@ function ClassCreateView(props) {
           stage={stage}
           setStage={setStage}
         />
-      ) : null
-      }
+      ) : null}
 
       {stage.onSelectionForm ? (
         <SelectionForm
@@ -69,8 +108,7 @@ function ClassCreateView(props) {
           stage={stage}
           setStage={setStage}
         />
-      ) : null
-      }
+      ) : null}
 
       {stage.onCampaignForm ? (
         <CampaignForm
@@ -78,9 +116,9 @@ function ClassCreateView(props) {
           setCampaignData={setCampaignData}
           stage={stage}
           setStage={setStage}
+          submitClassData={submitClassData}
         />
-      ) : null
-      }
+      ) : null}
     </Grid>
   );
 }

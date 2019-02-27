@@ -11,7 +11,7 @@ const responseStatus = require('../config/responseStatusConfig');
 router.get('/', async (req, res, next) => {
   try {
     const students = await db.getAll();
-    res.status(responseStatus.success).json({students});
+    res.status(responseStatus.success).json({ students });
   } catch (err) {
     next(err);
   }
@@ -21,7 +21,7 @@ router.get('/:id', async (req, res, next) => {
   const { id } = req.params;
   try {
     const student = await db.getStudent(id);
-    res.status(responseStatus.success).json({student});
+    res.status(responseStatus.success).json({ student });
   } catch (err) {
     if (TypeError) {
       console.log(err);
@@ -34,7 +34,7 @@ router.get('/:id', async (req, res, next) => {
 
 router.post(
   '/',
-  jwtCheck,
+  // jwtCheck,
   emptyCheck,
   whitespaceCheck,
   async (req, res, next) => {

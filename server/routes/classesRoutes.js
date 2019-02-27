@@ -8,7 +8,7 @@ const responseStatus = require('../config/responseStatusConfig');
 router.get('/', async (req, res, next) => {
   try {
     const classes = await db.getAll();
-    res.status(responseStatus.success).json({classes});
+    res.status(responseStatus.success).json({ classes });
   } catch (err) {
     next(err);
   }
@@ -18,7 +18,7 @@ router.get('/:id', async (req, res, next) => {
   const { id } = req.params;
   try {
     const specifiedClass = await db.getClass(id);
-    res.status(responseStatus.success).json({specifiedClass});
+    res.status(responseStatus.success).json({ specifiedClass });
   } catch (err) {
     if (TypeError) {
       next(responseStatus.notFound);
@@ -28,12 +28,14 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
-router.post('/', jwtCheck, emptyCheck, async (req, res, next) => {
-  const { body } = req;
+router.post('/', /*jwtCheck,*/ emptyCheck, async (req, res, next) => {
+  const { classInfo, teacher_id } = req.body;
   try {
-    const newClassID = await db.addClass(body);
+    const newClassID = await db.addClass(classInfo, teacher_id);
     res.status(responseStatus.postCreated).json({ newClassID });
   } catch (err) {
+    console.log(error);
+
     next(err);
   }
 });
