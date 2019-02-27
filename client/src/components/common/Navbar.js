@@ -11,7 +11,7 @@ import IconButton from '@material-ui/core/IconButton';
 import { withStyles } from '@material-ui/core/styles';
 import { Link as RouterLink, withRouter } from 'react-router-dom';
 import { breadcrumbNameMap } from '../common/Navcrumbs';
-import Logo from '../landingPage/logo.png';
+import Logo from '../logo.png'
 
 
 const ListItemLink = props => {
@@ -44,14 +44,15 @@ const styles = theme => ({
     [theme.breakpoints.up('sm')]: {
       width: 200,
       flexShrink: 0,
+      zIndex: 50
     },
   },
   appBar: {
     background: theme.palette.secondary.main,
     color: theme.palette.secondary.contrastText,
     [theme.breakpoints.up('sm')]: {
-      width: `calc(100% - ${200}px)`,
-      marginRight: 200
+      width: '100%',
+      zIndex: 200
     },
   },
   menuButton: {
@@ -80,7 +81,7 @@ const styles = theme => ({
     flexFlow: 'column nowrap',
     justifyContent: 'space-around',
     alignItems: 'stretch',
-    textAlign: 'center'
+    textAlign: 'center',
   },
   text: {
     textAlign: 'center'
@@ -147,6 +148,7 @@ const Navbar = props => {
             classes={{
               paper: classes.drawerPaper,
             }}
+            
             variant="permanent"
             open
           >

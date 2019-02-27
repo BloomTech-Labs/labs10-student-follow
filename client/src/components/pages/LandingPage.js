@@ -4,13 +4,18 @@ import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
 import { withRouter } from 'react-router-dom';
 import Image from '../landingPage/LandingImage.jpg';
-import MobileImage from '../landingPage/mobile-img.jpg';
-import '../landingPage/LandingPage.css';
-import OtherNavBar from '../common/OtherNavBar';
-import { LazyLoadImage } from 'react-lazy-load-image-component';
-import { withStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
+//import '../landingPage/LandingPage.css';
+import Card from '@material-ui/core/Card';
+import CardMedia from '@material-ui/core/CardMedia';
+import CardContent from '@material-ui/core/CardContent';
+//import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+
+// const lazyImg = () => {
+//   return (
+//     <LazyLoadImage alt="image" src={Image} />
+//   )
+// }
 
 const style = (theme) => ({
   container: {
@@ -59,36 +64,35 @@ const style = (theme) => ({
   backgroundImg: {
     zIndex: -1,
     width: '100vw',
-    height: '100vh',
+    height: `calc(100vh - ${64}px)`,
     marginTop: 0,
-
   }
 
 });
 
-const styles = theme => ({
-  margin: {
-    margin: theme.spacing.unit
-  },
-  extendedIcon: {
-    marginRight: theme.spacing.unit
-  }
-});
+// const styles = theme => ({
+//   margin: {
+//     margin: theme.spacing.unit
+//   },
+//   extendedIcon: {
+//     marginRight: theme.spacing.unit
+//   }
+// });
 
 const LandingPage = props => {
   const { classes } = props
   return (
     <Grid container spacing={40} alignItems='stretch' className={classes.container}>
-      <div className={classes.subcontainer}>
-        <div className={classes.text}>
+      <Card className={classes.subcontainer}>
+        <CardContent className={classes.text}>
           <Typography variant='h1' gutterBottom className={classes.textH1} >Refreshr</Typography>
           <Typography variant='body1' className={classes.textP} >
             Send tests to your students over weeks or months. Help them learn
             for the long-term.
             </Typography>
-        </div>
-      </div>
-      <img className={classes.backgroundImg} alt="desk with plant on it" src={Image} />
+        </CardContent>
+        <CardMedia className={classes.backgroundImg} alt="desk with plant on it" image={Image} />
+      </Card>
     </Grid>
   );
 };
