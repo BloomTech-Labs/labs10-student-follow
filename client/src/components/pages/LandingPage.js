@@ -100,8 +100,8 @@ const LandingPage = props => {
 export default withRouter(withStyles(style)(LandingPage));
 
 //Will add tomorrow
-          {/* </p> */}
-          {/* <Button
+{/* </p> */ }
+{/* <Button
             variant="contained"
             size="large"
             color="primary"
@@ -118,4 +118,4 @@ export default withRouter(withStyles(style)(LandingPage));
 };
 
 export default withStyles(styles)(LandingPage); */}
-          
+

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Grid, TextField, Card, Typography, Icon } from '@material-ui/core/';
 import { withStyles } from '@material-ui/core/styles';
 import axios from 'axios';
+// import { addRefreshr, getRefreshr, getRefreshrs, updateRefreshr, deleteRefreshr, scheduleRefreshr, rescheduleRefreshr, getScheduleRefreshr, deleteScheduleRefreshr, sendTestRefreshr, addList } from "../../SendgridOps"
 
 const styles = theme => ({
   wrapper: {
@@ -89,7 +90,12 @@ function CampaignForm(props) {
       onCampaignForm: !props.stage.onCampaignForm,
       onListForm: !props.stage.onListForm
     })
-    alert("You're all done!")
+    alert("Saving to DB and sending to the SendGrid Server!")
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    props.sendAllToSendgrid()
   }
 
   return (
@@ -97,6 +103,7 @@ function CampaignForm(props) {
       <Grid container className={classes.wrapper}>
         <button onClick={(e) => handlePrev(e)}>PREV</button>
         <button onClick={(e) => handleNext(e)}>NEXT</button>
+        <button onClick={(e) => handleSubmit(e)}>SUBMIT</button>
         <Typography variant="h6">Refreshrs(campaign)</Typography>
         <Grid container className={classes.cardList}>
           {refreshrs.map(refreshr => (
