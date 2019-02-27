@@ -38,7 +38,7 @@ router.post('/', /*jwtCheck,*/ emptyCheck, async (req, res, next) => {
   }
 });
 
-// add student to class, takes an array of student ids and adds them to class
+// add students to class, takes an array of student ids and adds them to class
 router.post('/:id', async (req, res, next) => {
   const { students } = req.body;
   const classId = req.params.id;
