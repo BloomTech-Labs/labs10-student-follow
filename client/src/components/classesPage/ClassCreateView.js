@@ -9,8 +9,9 @@ import {
   // addRecipient, getRecipient, getRecipients, updateRecipient, deleteRecipient, deleteRecipients,
   addContacts,
   // addContact, , getContacts, deleteContact,
-  addRefreshr
-  // getRefreshr, getRefreshrs, updateRefreshr, deleteRefreshr, scheduleRefreshr, rescheduleRefreshr, getScheduleRefreshr, deleteScheduleRefreshr, sendTestRefreshr
+  addRefreshr,
+  scheduleRefreshr
+  // getRefreshr, getRefreshrs, updateRefreshr, deleteRefreshr, , rescheduleRefreshr, getScheduleRefreshr, deleteScheduleRefreshr, sendTestRefreshr
 } from '../SendgridOps'
 
 const styles = theme => ({
@@ -53,7 +54,7 @@ function ClassCreateView(props) {
       list_ids: [],
       recipient_ids: [],
       selectionCode: null,
-      refreshr_id: null
+      campaign_id: null
     };
 
     const new_refresher = {
@@ -68,6 +69,10 @@ function ClassCreateView(props) {
       ip_pool: "",
       html_content: "<html><head><title></title></head><body><p>React is a JavaScript library! [unsubscribe]</p></body></html>", // INPUT REQUIRED
       plain_content: "Check out our spring line! [unsubscribe]" // INPUT REQUIRED
+    }
+
+    const scheduleObj = {
+      "send_at": 1551448800 // March 1st 8AM CST
     }
 
     // Add new list name, get validated id, push into list_ids
@@ -101,10 +106,16 @@ function ClassCreateView(props) {
       // Send new_refreshr object to SG, expect 201 for success
       .then(res => {
         if (res.status === 201) {
-          validated.refreshr_id = res.data.id
-          return
+          validated.campaign_id = res.data.id
+          return scheduleRefreshr(scheduleObj, validated.campaign_id)
         }
         console.log(validated)
+      })
+
+      .then(res => {
+        if (res.status === 201) {
+          console.log(`Success! Your campaign ${res.data.id} is scheduled for ${res.data.send_at}. Status is "${res.data.status}"!`)
+        }
       })
 
       .catch(err => console.log(err))

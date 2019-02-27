@@ -336,17 +336,17 @@ export function deleteRefreshr() {
     .catch(err => console.log(err))
 }
 
-export function scheduleRefreshr() {
-  const scheduleObj = {
-    "send_at": 1551103200 // Feb 25, 2019 8AM
-  }
+export function scheduleRefreshr(scheduleObj, campaign_id) {
   const url = `https://api.sendgrid.com/v3/campaigns/${campaign_id}/schedules`
-  axios.post(url, scheduleObj, headers)
-    .then(res => {
-      console.log(`===scheduleRefreshr: ===`)
-      console.log(res)
-    })
-    .catch(err => console.log(err))
+  return new Promise(function (resolve, reject) {
+    axios.post(url, scheduleObj, headers)
+      .then(res => {
+        console.log(`===scheduleRefreshr===`)
+        console.log(res)
+        resolve(res)
+      })
+      .catch(err => console.log(err))
+  })
 }
 
 export function rescheduleRefreshr() {
