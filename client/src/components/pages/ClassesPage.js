@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import Grid from "@material-ui/core/Grid";
 import { withStyles } from "@material-ui/core/styles";
-import { ClassListView, ClassCreateView } from '../index.js'
-import { Route } from 'react-router-dom'
+import { ClassListView, ClassOperations } from '../index.js'
 
 const styles = theme => ({
   wrapper: {
@@ -11,14 +10,25 @@ const styles = theme => ({
 });
 
 function ClassesPage(props) {
+  // FOR FUTURE USE
+  // const [classData, setClassData] = useState()
+  // useEffect(() => {
+  //   getClassData();
+  // }, []);
+
+  // const getClassData = async () => {
+  //   const response = await axios.get('https://refreshr.herokuapp.com/classes/13');
+  //   console.log(`response: ${response}`)
+  //   setClassData(response.data);
+  //   console.log('class daata', classData)
+  // }
 
   return (
     <Grid>
       <ClassListView />
-      {/* <Route exact path="/classes/create" render={props => <ClassCreateView />} /> */}
-      {/* <ClassCreate /> */}
-      {/* <ClassEdit /> */}
-      {/* <ClassOperations /> */}
+      {/* <ClassCreateView /> */}
+      {/* <ClassEditView /> */}
+      <ClassOperations />
     </Grid>
   )
 }

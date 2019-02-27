@@ -73,9 +73,30 @@ function CampaignForm(props) {
     refreshr.date = date;
   };
 
+  const handlePrev = (e) => {
+    e.preventDefault()
+    props.setStage({
+      ...props.stage,
+      onSelectionForm: !props.stage.onSelectionForm,
+      onCampaignForm: !props.stage.onCampaignForm
+    })
+  }
+
+  const handleNext = (e) => {
+    e.preventDefault()
+    props.setStage({
+      ...props.stage,
+      onCampaignForm: !props.stage.onCampaignForm,
+      onListForm: !props.stage.onListForm
+    })
+    alert("You're all done!")
+  }
+
   return (
     <>
       <Grid container className={classes.wrapper}>
+        <button onClick={(e) => handlePrev(e)}>PREV</button>
+        <button onClick={(e) => handleNext(e)}>NEXT</button>
         <Typography variant="h6">Refreshrs(campaign)</Typography>
         <Grid container className={classes.cardList}>
           {refreshrs.map(refreshr => (

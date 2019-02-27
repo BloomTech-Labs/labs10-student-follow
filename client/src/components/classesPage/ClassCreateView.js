@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Grid from "@material-ui/core/Grid";
 import { withStyles } from "@material-ui/core/styles";
-import { ListForm } from '../index.js'
-import axios from 'axios';
+import { ListForm, RecipientForm, SelectionForm, CampaignForm } from '../index.js'
 
 const styles = theme => ({
   wrapper: {}
@@ -10,51 +9,78 @@ const styles = theme => ({
 
 
 function ClassCreateView(props) {
-  const [onListForm, setListForm] = useState(true)
-  const [onRecipientForm, setRecipientForm] = useState(false)
-  // const [onSenderForm, setSenderForm] = useState(false)
-  // const [onCampaignForm, setCampaignForm] = useState(false)
-  const [classData, setClassData] = useState(null);
+  const [stage, setStage] = useState({
+    onListForm: true,
+    onRecipientForm: false,
+    onSelectionForm: false,
+    onCampaignForm: false
+  })
 
-  useEffect(() => {
-    getClassData();
-  }, []);
+  const [listData, setListData] = useState({
+    name: "",
+    ccBool: false
+  })
 
-  const getClassData = async () => {
-    const response = await axios.get('https://refreshr.herokuapp.com/classes/13');
-    console.log(`response: ${response}`)
-    setClassData(response.data);
-    console.log('class daata', classData)
-  }
+  const [recipientData, setRecipientData] = useState({
+    recipients: []
+  })
+
+  const [campaignData, setCampaignData] = useState({
+    "title": "",
+    "subject": "",
+    "sender_id": "",
+    "list_id": "",
+    "segment_ids": null,
+    "categories": [],
+    "suppression_group_id": 9332,
+    "custom_unsubscribe_url": "",
+    "ip_pool": "",
+    "html_content": "",
+    "plain_content": ""
+  })
 
   return (
     <Grid className={props.classes.wrapper}>
       <h1>ClassCreateView Component</h1>
+      {stage.onListForm ? (
+        <ListForm
+          listData={listData}
+          setListData={setListData}
+          stage={stage}
+          setStage={setStage}
+        />
+      ) : null
+      }
 
-      <ListForm
-        onListForm={onListForm}
-        setListForm={setListForm}
-        setRecipientForm={setRecipientForm}
-      />
+      {stage.onRecipientForm ? (
+        <RecipientForm
+          recipientData={recipientData}
+          setRecipientData={setRecipientData}
+          stage={stage}
+          setStage={setStage}
+        />
+      ) : null
+      }
 
-      {/* <SenderForm
-        onSenderForm={onSenderForm}
-        setSenderForm={setSenderForm}
-        setRecipientForm={setRecipientForm}
-      />
+      {stage.onSelectionForm ? (
+        <SelectionForm
+          listData={listData}
+          recipientData={recipientData}
+          stage={stage}
+          setStage={setStage}
+        />
+      ) : null
+      }
 
-      <RecipientForm
-        onRecipientForm={onRecipientForm}
-        setRecipientForm={setRecipientForm}
-        setListForm={setListForm}
-      />
-
-
-      <CampaignForm
-        onCampaignForm={onCampaignForm}
-        setCampaignForm={setCampaignForm}
-        refreshrs={classData && classData.refreshrs.length ? classData.refreshrs : null}
-      /> */}
+      {stage.onCampaignForm ? (
+        <CampaignForm
+          campaignData={campaignData}
+          setCampaignData={setCampaignData}
+          stage={stage}
+          setStage={setStage}
+        />
+      ) : null
+      }
     </Grid>
   );
 }

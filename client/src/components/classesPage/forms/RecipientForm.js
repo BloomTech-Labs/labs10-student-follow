@@ -5,60 +5,103 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
 const styles = theme => ({
-  wrapper: {
-  }
+  wrapper: {}
 });
 
 function RecipientForm(props) {
-  const [ contactName, addContactName ] = useState("")
-  const [ contactsName, addContactsName ] = useState("")
-  const [ contacts, getContacts ] = useState("")
-  const [ contact, deleteContact] = useState("")
+  const [recipient, setRecipient] = useState({
+    email: "",
+    first_name: "",
+    last_name: "",
+  })
+
+  const handleChange = (e) => {
+    e.preventDefault()
+    setRecipient({
+      ...recipient,
+      [e.target.name]: e.target.value
+    })
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    props.setRecipientForm((!props.onRecipientForm))
+    const new_recipient = {
+      email: recipient.email,
+      first_name: recipient.first_name,
+      last_name: recipient.last_name,
+    }
+
+    props.setRecipientData({
+      recipients: props.recipientData.recipients.concat(new_recipient)
+    })
+
+    setRecipient({
+      email: "",
+      first_name: "",
+      last_name: "",
+    })
   }
-  
+
+  const handlePrev = (e) => {
+    e.preventDefault()
+    props.setStage({
+      ...props.stage,
+      onListForm: !props.stage.onListForm,
+      onRecipientForm: !props.stage.onRecipientForm
+    })
+  }
+
+  const handleNext = (e) => {
+    e.preventDefault()
+    props.setStage({
+      ...props.stage,
+      onRecipientForm: !props.stage.onRecipientForm,
+      onSelectionForm: !props.stage.onSelectionForm
+    })
+  }
+
   return (
     <Grid className={props.classes.wrapper}>
       <p>RecipientForm Component</p>
-      <Button onClick={(e) => handleSubmit(e)}>COMPLETE</Button>
+      <button onClick={(e) => handlePrev(e)}>PREV</button>
+      <button onClick={(e) => handleNext(e)}>NEXT</button>
+
       <form className={props.classes.form} onSubmit={(e) => handleSubmit(e)}>
         <TextField
-          name="contactName"
-          type="text"
+          name="email"
+          type="email"
           variant="outlined"
-          value={contactName}
-          placeholder="Add Contact Name"
-          onChange={(e) => addContactName(e.target.value)}
+          value={recipient.email}
+          placeholder="email"
+          onChange={(e) => handleChange(e)}
         />
         <TextField
-          name="contactsName"
+          name="first_name"
           type="text"
           variant="outlined"
-          value={contactsName}
-          placeholder="Add Contacts Names"
-          onChange={(e) => addContactsName(e.target.value)}
+          value={recipient.first_name}
+          placeholder="first name"
+          onChange={(e) => handleChange(e)}
         />
         <TextField
-          name="contacts"
+          name="last_name"
           type="text"
           variant="outlined"
-          value={contacts}
-          placeholder="Find Contact Name"
-          onChange={(e) => getContacts(e.target.value)}
+          value={recipient.last_name}
+          placeholder="last name"
+          onChange={(e) => handleChange(e)}
         />
-        <TextField
-          name="contact"
-          type="text"
-          variant="outlined"
-          value={contact}
-          placeholder="Find Contact Name"
-          onChange={(e) => deleteContact(e.target.value)}
-        />
-        <Button variant="outlined" color="secondary" type="submit">Next</Button>
+        <Button variant="outlined" color="secondary" type="submit">Add Recipient</Button>
       </form>
+
+      <h1>Added Recipients</h1>
+      {props.recipientData.recipients ? (
+        props.recipientData.recipients.map((recipient, i) => (
+          <div key={`${recipient.first_name}-${i}`}>
+            <p>recipient-{i + 1}: {recipient.email}, {recipient.first_name}, {recipient.last_name}</p>
+          </div>
+        ))
+      ) : <p>You need to add new recipients.</p>}
     </Grid>
   );
 };
