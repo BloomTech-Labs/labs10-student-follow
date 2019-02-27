@@ -28,7 +28,18 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
-router.post('/', /*jwtCheck,*/ emptyCheck, async (req, res, next) => {
+router.get('/teachers/:teacherId', async (req, res, next) => {
+  try {
+    const { teacherId } = req.params;
+    const classList = await db.getTeacherClasses(teacherId);
+    res.status(responseStatus.success).json(classList);
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+});
+
+router.post('/', jwtCheck, emptyCheck, async (req, res, next) => {
   const { body } = req;
   try {
     const newClassID = await db.addClass(body);

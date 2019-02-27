@@ -87,6 +87,11 @@ module.exports = {
     );
   },
 
+  getTeacherClasses: async teacher_id =>
+    db('teachers_classes_refreshrs as tcr')
+      .join('classes as c', 'c.id', 'tcr.class_id')
+      .where({ teacher_id }),
+
   addStudent: async (classID, studentID) => {
     const body = { classID, studentID };
     const ID = await db('students_classes').insert(body);
