@@ -109,25 +109,26 @@ export function addRecipient() {
     .catch(err => console.log(err))
 }
 
-export function addRecipients() {
+export function addRecipients(recipients) {
   const url = `https://api.sendgrid.com/v3/contactdb/recipients`
-  const recipients = [
-    {
-      "email": "juan@sierra.com",
-      "first_name": "Juan",
-      "last_name": "Sierra",
-    },
-    {
-      "email": "brian@mendoza.com",
-      "first_name": "Brian",
-      "last_name": "Mendoza",
-    }
-  ]
+  // const recipients = [
+  //   {
+  //     "email": "juan@sierra.com",
+  //     "first_name": "Juan",
+  //     "last_name": "Sierra",
+  //   },
+  //   {
+  //     "email": "brian@mendoza.com",
+  //     "first_name": "Brian",
+  //     "last_name": "Mendoza",
+  //   }
+  // ]
   return new Promise(function (resolve, reject) {
     axios.post(url, recipients, headers)
       .then(res => {
         console.log(`===addRecipients===`)
         console.log(res)
+        resolve(res)
       })
       .catch(err => console.log(err))
   })

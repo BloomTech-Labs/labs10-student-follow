@@ -46,24 +46,30 @@ function ClassCreateView(props) {
     plain_content: ""
   })
 
-  const [validatedList, setValidatedList] = useState({
-    list_ids: []
-  })
-
   const sendAllToSendgrid = () => {
+    let validated = {
+      list_ids: [123],
+      recipient_ids: ["abc123"]
+    };
 
-    // send new name to SG, get validated id, save it to be used last form
+    // Add new list name, get validated id, push into list_ids
     addList(listData.name)
       .then(res => {
-        setValidatedList({
-          ...validatedList,
-          list_ids: validatedList.list_ids.push(res.data.id)
-        })
-        console.log(validatedList)
+        validated.list_ids.push(res.data.id)
+        console.log(validated)
         return addRecipients(recipientData.recipients)
       })
-      .catch(err => console.log(err))
 
+      // Add new recipients, get validated ids, spread into recipient_ids
+      .then(res => {
+        validated.recipient_ids = [
+          ...validated.recipient_ids,
+          ...res.data.persisted_recipients
+        ]
+        console.log(validated)
+      })
+
+      .catch(err => console.log(err))
   }
 
   return (
