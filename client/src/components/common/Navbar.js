@@ -6,36 +6,14 @@ import ListItemText from '@material-ui/core/ListItemText'; import AppBar from '@
 import MenuIcon from '@material-ui/icons/Menu';
 import Drawer from '@material-ui/core/Drawer';
 import Hidden from '@material-ui/core/Hidden';
-import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import { withStyles } from '@material-ui/core/styles';
 import { Link as RouterLink, withRouter } from 'react-router-dom';
 import { breadcrumbNameMap } from '../common/Navcrumbs';
 import Logo from '../logo.png'
+import Button from '@material-ui/core/Button';
 
-
-const ListItemLink = props => {
-  const { to, open, ...other } = props;
-  const primary = breadcrumbNameMap[to];
-
-  return (
-    <li>
-      <ListItem button component={RouterLink} to={to} {...other}>
-        <ListItemText primary={primary} />
-      </ListItem>
-    </li>
-  );
-};
-
-const HomeLink = props => {
-  const { to, open, ...other } = props;
-  const primary = breadcrumbNameMap[to];
-  return (
-    <RouterLink to={to}><img src={Logo} alt='refreshr logo' {...other} primary={primary} /></RouterLink>
-
-  )
-}
-
+/*-------- STYLES --------*/
 const styles = theme => ({
   root: {
     display: 'flex',
@@ -44,7 +22,7 @@ const styles = theme => ({
     [theme.breakpoints.up('sm')]: {
       width: 200,
       flexShrink: 0,
-      zIndex: 50
+      zIndex: 5,
     },
   },
   appBar: {
@@ -52,7 +30,6 @@ const styles = theme => ({
     color: theme.palette.secondary.contrastText,
     [theme.breakpoints.up('sm')]: {
       width: '100%',
-      zIndex: 200
     },
   },
   menuButton: {
@@ -64,7 +41,15 @@ const styles = theme => ({
     display: 'flex',
     justifyContent: 'space-between',
   },
-
+  btn: {
+    background: theme.palette.primary.main,
+    color: theme.palette.secondary.main,
+    '&:hover': {
+      background: theme.palette.secondary.main,
+      color: theme.palette.primary.main,
+      borderColor: theme.palette.primary.main,
+    }
+  },
 
   drawerPaper: {
     width: 200,
@@ -74,8 +59,11 @@ const styles = theme => ({
     padding: theme.spacing.unit * 3,
   },
   list: {
-    background: theme.palette.secondary.main,
-    color: theme.palette.secondary.contrastText,
+    [theme.breakpoints.up('sm')]: {
+     borderLeft: '1px solid #FFFFFF',
+    },
+    background: theme.palette.primary.dark,
+    color: theme.palette.primary.contrastText,
     height: '100vh',
     display: 'flex',
     flexFlow: 'column nowrap',
@@ -84,7 +72,8 @@ const styles = theme => ({
     textAlign: 'center',
   },
   text: {
-    textAlign: 'center'
+    textAlign: 'center',
+    color: theme.palette.primary.contrastText,
   },
   logo: {
     width: '64px',
@@ -97,8 +86,35 @@ const styles = theme => ({
 
 
 const Navbar = props => {
-  const { classes, theme } = props;
-  console.log('THEME', theme)
+  console.log(props.theme)
+  const { classes, location } = props;
+
+  /*-------- NAV BUTTONS --------*/
+  const ListItemLink = props => {
+    const { to, open, ...other } = props;
+    const primary = breadcrumbNameMap[to];
+
+    return (
+      <li className={classes.text} >
+        <ListItem button component={RouterLink} to={to} {...other}>
+          <ListItemText primary={primary} />
+        </ListItem>
+      </li>
+    );
+  };
+
+  /*-------- LOGO HOME BUTTON --------*/
+
+  const HomeLink = props => {
+    const { to, open, ...other } = props;
+    const primary = breadcrumbNameMap[to];
+    return (
+      <RouterLink to={to}><img src={Logo} alt='refreshr logo' {...other} primary={primary} /></RouterLink>
+
+    )
+  }
+
+  /*-------- NAV DRAWER --------*/
   const [open, setOpen] = useState(false)
 
   const toggleDrawer = () => {
@@ -107,57 +123,79 @@ const Navbar = props => {
 
   const drawer = (
     <List component="nav" className={classes.list} >
-      <ListItemLink to="/dashboard" className={classes.text} />
       <ListItemLink to="/refreshrs" className={classes.text} />
       <ListItemLink to="/classes" className={classes.text} />
       <ListItemLink to="/billing" className={classes.text} />
     </List>
   )
 
-  return (
-    <div className={classes.root}>
-      <AppBar position="fixed" className={classes.appBar}>
-        <Toolbar className={classes.toolbar}>
-          <Typography variant="h6" color="inherit" noWrap>
-            Logout
-          </Typography>
-          <HomeLink className={classes.logo} to='/home' />
-          <IconButton color="inherit" aria-label="Open Nav" onClick={toggleDrawer} className={classes.menuButton}>
-            <MenuIcon />
-          </IconButton>
-        </Toolbar>
-      </AppBar>
-      <nav className={classes.drawer}>
-        <Hidden smUp implementation="js">
-          <Drawer
-            variant="temporary"
-            anchor='right'
-            open={open}
-            onClose={toggleDrawer}
-            classes={{
-              paper: classes.drawerPaper,
-            }}
-          >
-            {drawer}
-          </Drawer>
-        </Hidden>
-        <Hidden xsDown implementation="css">
-          <Drawer
-            anchor='right'
+  /*-------- LOGIN/LOGOUT BUTTON --------*/
 
-            classes={{
-              paper: classes.drawerPaper,
-            }}
-            
-            variant="permanent"
-            open
-          >
-            {drawer}
-          </Drawer>
-        </Hidden>
-      </nav>
-    </div>
-  );
+  const handleLogIn = () => {
+    if (localStorage.getItem('isLoggedIn')) {
+      console.log('logging out')
+      props.auth.logout()
+    } else {
+      console.log('logging in')
+      props.auth.login()
+    }
+  }
+
+  //RENDER REMOVING NAV DRAWER FROM LANDING PAGE
+
+  if (location.pathname !== '/') {
+    return (
+      <div className={classes.root}>
+        <AppBar position="fixed"  elevation={20} className={classes.appBar}>
+          <Toolbar className={classes.toolbar}>
+            <Button variant="outlined" className={classes.btn} onClick={(e) => { e.preventDefault(); handleLogIn() }}>{localStorage.getItem('isLoggedIn') ? 'Logout' : 'Login'}</Button>
+            <HomeLink className={classes.logo} to='/dashboard' />
+            <IconButton color="inherit" aria-label="Open Nav" onClick={toggleDrawer} className={classes.menuButton}>
+              <MenuIcon />
+            </IconButton>
+          </Toolbar>
+        </AppBar>
+        <nav className={classes.drawer}>
+          <Hidden smUp implementation="js">
+            <Drawer
+              variant="temporary"
+              anchor='right'
+              open={open}
+              onClose={toggleDrawer}
+              classes={{
+                paper: classes.drawerPaper,
+              }}
+            >
+              {drawer}
+            </Drawer>
+          </Hidden>
+          <Hidden xsDown implementation="css" >
+            <Drawer
+              anchor='right'
+              classes={{
+                paper: classes.drawerPaper,
+              }}
+              variant="permanent"
+              open
+            >
+              {drawer}
+            </Drawer>
+          </Hidden>
+        </nav>
+      </div>
+    );
+  } else {
+    return (
+      <div className={classes.root}>
+        <AppBar position="fixed" className={classes.appBar}>
+          <Toolbar className={classes.toolbar}>
+            <Button variant="outlined" className={classes.btn} onClick={(e) => { e.preventDefault(); handleLogIn() }}>{localStorage.getItem('isLoggedIn') ? 'Logout' : 'Login'}</Button>
+          </Toolbar>
+        </AppBar>
+      </div>
+    )
+  }
+
 };
 
 export default withRouter(withStyles(styles, { withTheme: true })(Navbar));
