@@ -19,7 +19,7 @@ server.use('/students', studentsRoutes);
 server.use('/questions', questionsRoutes);
 server.use('/billing', billingRoutes);
 server.use('/refreshrs', refreshrsRoutes);
-server.use('', managementRoutes);
+server.use('/api', managementRoutes);
 server.use(errorHandler);
 
 module.exports = server;
