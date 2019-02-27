@@ -58,7 +58,6 @@ function Refreshr(props) {
           }}
           onChange={(e) => addStudentName(e.target.value)}
         />
-        {/* start 2 days */}
         <h4 className={props.classes.subheaders}>Review Text</h4>
         <TextField
           value={reviewText}
@@ -77,11 +76,11 @@ function Refreshr(props) {
           label="Question"
           name="question"
           multiline
-          readonly
           variant="outlined"
           InputLabelProps={{
             shrink: true,
           }}
+          onChange={(e) => setQuestionText(e.target.value)}
         />
         <FormGroup className={props.classes.formGroup}>
           <FormControlLabel
@@ -109,7 +108,6 @@ function Refreshr(props) {
             label="Answer 4"
           />
         </FormGroup>
-        {/* end 2 days */}
         <Button variant="contained" color="primary">
           Submit
         </Button>
