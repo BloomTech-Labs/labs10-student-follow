@@ -275,30 +275,18 @@ export function deleteContact() {
 // 4. CAMPAIGN OPERATIONS
 //////////////////////////
 //////////////////////////
-export function addRefreshr() {
-  const new_refresher = {
-    "title": "March Refreshr",
-    "subject": "New Products for Spring!",
-    "sender_id": 428251,
-    "list_ids": [
-      7050057,
-      7100282
-    ],
-    "segment_ids": null,
-    "categories": [],
-    "suppression_group_id": 9332,
-    "custom_unsubscribe_url": "",
-    "ip_pool": "",
-    "html_content": "<html><head><title></title></head><body><p>Check out our spring line! [unsubscribe]</p></body></html>",
-    "plain_content": "Check out our spring line! [unsubscribe]"
-  }
+export function addRefreshr(new_refresher) {
   const url = "https://api.sendgrid.com/v3/campaigns"
-  axios.post(url, new_refresher, headers)
-    .then(res => {
-      console.log(`===addRefreshr===`)
-      console.log(res)
-    })
-    .catch(err => console.log(err))
+
+  return new Promise(function (resolve, reject) {
+    axios.post(url, new_refresher, headers)
+      .then(res => {
+        console.log(`===addRefreshr===`)
+        console.log(res)
+        resolve(res)
+      })
+      .catch(err => console.log(err))
+  })
 }
 
 export function getRefreshr() {

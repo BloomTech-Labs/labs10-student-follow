@@ -7,9 +7,10 @@ import {
   // getList, getLists, updateList, deleteList,
   addRecipients,
   // addRecipient, getRecipient, getRecipients, updateRecipient, deleteRecipient, deleteRecipients,
-  addContacts
+  addContacts,
   // addContact, , getContacts, deleteContact,
-  // addRefreshr, getRefreshr, getRefreshrs, updateRefreshr, deleteRefreshr, scheduleRefreshr, rescheduleRefreshr, getScheduleRefreshr, deleteScheduleRefreshr, sendTestRefreshr
+  addRefreshr
+  // getRefreshr, getRefreshrs, updateRefreshr, deleteRefreshr, scheduleRefreshr, rescheduleRefreshr, getScheduleRefreshr, deleteScheduleRefreshr, sendTestRefreshr
 } from '../SendgridOps'
 
 const styles = theme => ({
@@ -52,7 +53,22 @@ function ClassCreateView(props) {
       list_ids: [],
       recipient_ids: [],
       selectionCode: null,
+      refreshr_id: null
     };
+
+    const new_refresher = {
+      title: "March Refreshr", // INPUT REQUIRED
+      subject: "React Refreshr", // INPUT REQUIRED
+      sender_id: 428251, // Refreshr Team, constant
+      list_ids: validated.list_ids, // INPUT REQUIRED
+      segment_ids: null,
+      categories: [],
+      suppression_group_id: 9332, // Unsubscribe ID, constant
+      custom_unsubscribe_url: "",
+      ip_pool: "",
+      html_content: "<html><head><title></title></head><body><p>React is a JavaScript library! [unsubscribe]</p></body></html>", // INPUT REQUIRED
+      plain_content: "Check out our spring line! [unsubscribe]" // INPUT REQUIRED
+    }
 
     // Add new list name, get validated id, push into list_ids
     addList(listData.name)
@@ -76,7 +92,17 @@ function ClassCreateView(props) {
       .then(res => {
         validated.selectionCode = res.status
         if (res.status === 201) {
-          console.log("success")
+          console.log("addContacts 201")
+          return addRefreshr(new_refresher)
+        }
+        console.log(validated)
+      })
+
+      // Send new_refreshr object to SG, expect 201 for success
+      .then(res => {
+        if (res.status === 201) {
+          validated.refreshr_id = res.data.id
+          return
         }
         console.log(validated)
       })
