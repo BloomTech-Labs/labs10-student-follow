@@ -2,11 +2,16 @@ import React, { useState } from "react";
 import Grid from "@material-ui/core/Grid";
 import { withStyles } from "@material-ui/core/styles";
 import { ListForm, RecipientForm, SelectionForm, CampaignForm } from '../index.js'
+import {
+  addList, getList, getLists, updateList, deleteList,
+  addRecipient, addRecipients, getRecipient, getRecipients, updateRecipient, deleteRecipient, deleteRecipients,
+  addContact, addContacts, getContacts, deleteContact,
+  addRefreshr, getRefreshr, getRefreshrs, updateRefreshr, deleteRefreshr, scheduleRefreshr, rescheduleRefreshr, getScheduleRefreshr, deleteScheduleRefreshr, sendTestRefreshr
+} from '../SendgridOps'
 
 const styles = theme => ({
   wrapper: {}
 });
-
 
 function ClassCreateView(props) {
   const [stage, setStage] = useState({
@@ -39,9 +44,20 @@ function ClassCreateView(props) {
     "plain_content": ""
   })
 
+  const sendAllToSendgrid = () => {
+    const sendList = addList(listData.name)
+
+    sendList
+      .then(res => {
+        console.log('res', res);
+      })
+      .catch(err => console.log(err))
+  }
+
   return (
     <Grid className={props.classes.wrapper}>
       <h1>ClassCreateView Component</h1>
+      <button onClick={(e) => sendAllToSendgrid(e)}>sendAllToSendgrid</button>
       {stage.onListForm ? (
         <ListForm
           listData={listData}
@@ -78,6 +94,7 @@ function ClassCreateView(props) {
           setCampaignData={setCampaignData}
           stage={stage}
           setStage={setStage}
+          sendAllToSendgrid={sendAllToSendgrid}
         />
       ) : null
       }

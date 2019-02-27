@@ -29,17 +29,19 @@ const campaign_id = 5033203 // March Newsletter
 // 1. LIST OPERATIONS
 /////////////////////
 /////////////////////
-export function addList() {
+export function addList(name) {
   const url = "https://api.sendgrid.com/v3/contactdb/lists"
-  const body = {
-    "name": "Students2"
-  }
-  axios.post(url, body, headers)
-    .then(res => {
-      console.log(`===addList: ${res.data.name}===`)
-      console.log(res.data.id)
-    })
-    .catch(err => console.log(err))
+  const body = { name }
+
+  return new Promise(function (resolve, reject) {
+    axios.post(url, body, headers)
+      .then(res => {
+        console.log(`===addList: ${res.data.name}===`)
+        console.log(res.data.id)
+        resolve(res)
+      })
+      .catch(err => console.log(err))
+  })
 }
 
 export function getList() {
