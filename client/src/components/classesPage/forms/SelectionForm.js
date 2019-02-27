@@ -46,7 +46,7 @@ function SelectionForm(props) {
       <button onClick={(e) => handlePrev(e)}>PREV</button>
       <button onClick={(e) => handleNext(e)}>NEXT</button>
 
-      <p>Add students to: {props.listData.name}?</p>
+      <p>Add these students to: {props.listData.name}?</p>
       {props.recipientData.recipients.length > 0 ? (
         props.recipientData.recipients.map((recipient, i) => (
           <div key={`${recipient.first_name}-${i}`}>

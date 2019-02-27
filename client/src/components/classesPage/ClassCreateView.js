@@ -7,7 +7,8 @@ import {
   // getList, getLists, updateList, deleteList,
   addRecipients,
   // addRecipient, getRecipient, getRecipients, updateRecipient, deleteRecipient, deleteRecipients,
-  // addContact, addContacts, getContacts, deleteContact,
+  addContacts
+  // addContact, , getContacts, deleteContact,
   // addRefreshr, getRefreshr, getRefreshrs, updateRefreshr, deleteRefreshr, scheduleRefreshr, rescheduleRefreshr, getScheduleRefreshr, deleteScheduleRefreshr, sendTestRefreshr
 } from '../SendgridOps'
 
@@ -48,8 +49,9 @@ function ClassCreateView(props) {
 
   const sendAllToSendgrid = () => {
     let validated = {
-      list_ids: [123],
-      recipient_ids: ["abc123"]
+      list_ids: [],
+      recipient_ids: [],
+      selectionCode: null,
     };
 
     // Add new list name, get validated id, push into list_ids
@@ -66,6 +68,16 @@ function ClassCreateView(props) {
           ...validated.recipient_ids,
           ...res.data.persisted_recipients
         ]
+        console.log(validated)
+        return addContacts(validated.list_ids[0], validated.recipient_ids)
+      })
+
+      // Add selected recipients to list, expect 201 for success
+      .then(res => {
+        validated.selectionCode = res.status
+        if (res.status === 201) {
+          console.log("success")
+        }
         console.log(validated)
       })
 

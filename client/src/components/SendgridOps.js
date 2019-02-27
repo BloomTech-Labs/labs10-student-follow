@@ -229,17 +229,22 @@ export function addContact() {
     .catch(err => console.log(err));
 };
 
-export function addContacts() {
+export function addContacts(listId, recipient_ids) {
   const url = `https://api.sendgrid.com/v3/contactdb/lists/${listId}/recipients`;
-  axios
-    .post(url, recipient_ids, headers)
-    .then(res => {
-      console.log(
-        `===addContacts: recipient_ids ${recipient_ids} added to listId ${listId}===`
-      );
-      console.log(res.statusText);
-    })
-    .catch(err => console.log(err));
+
+  console.log("===")
+  console.log(listId)
+  console.log(recipient_ids)
+  return new Promise(function (resolve, reject) {
+    axios
+      .post(url, recipient_ids, headers)
+      .then(res => {
+        console.log(`===addContacts===`);
+        console.log(res)
+        resolve(res)
+      })
+      .catch(err => console.log(err));
+  })
 };
 
 export function getContacts() {
