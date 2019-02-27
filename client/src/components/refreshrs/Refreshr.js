@@ -108,7 +108,7 @@ function Refreshr(props) {
             label="Answer 4"
           />
         </FormGroup>
-        <Button variant="contained" color="primary">
+        <Button variant="contained" color="primary" onClick={() => props.addQuestions()}>
           Submit
         </Button>
     </Grid>
