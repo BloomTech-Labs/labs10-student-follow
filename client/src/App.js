@@ -8,6 +8,7 @@ import Typeform from './Typeform';
 import {
   Loading,
   LandingPage,
+  Login,
   BillingPage,
   Navbar,
   Navcrumbs,
@@ -64,6 +65,18 @@ const App = props => {
       });
   };
 
+  // add questions
+  const addQuestions = question => {
+    axios
+      .post('https://refreshr.herokuapp.com/questions', question)
+      .then(res => {
+        setQuestions([]);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
   //all classes
   const getClasses = options => {
     axios
@@ -110,10 +123,10 @@ const App = props => {
         <Grid
           className={classes.container}
           container
-          direction="column"
           spacing={0}
+          direction="row"
           justify="space-between"
-          alignItems="stretch"
+          alignItems="center"
         >
           <Grid item>
             <Navbar theme={props.theme} {...props} />
@@ -168,8 +181,8 @@ const App = props => {
             {/* for testing */}
           </Grid>
         </Grid>
-      </Router>
-    </>
+      </div>
+    </Router>
   );
 };
 

@@ -1,12 +1,10 @@
-import React, { useState } from 'react';
-import Toolbar from '@material-ui/core/Toolbar';
+import React from 'react';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import Toolbar from '@material-ui/core/Toolbar';
 import AppBar from '@material-ui/core/AppBar';
 import MenuIcon from '@material-ui/icons/Menu';
-import Drawer from '@material-ui/core/Drawer';
-import Hidden from '@material-ui/core/Hidden';
 import IconButton from '@material-ui/core/IconButton';
 import { withStyles } from '@material-ui/core/styles';
 import { Link as RouterLink, withRouter } from 'react-router-dom';
@@ -218,6 +216,7 @@ const Navbar = props => {
       </div>
     );
   }
+
 };
 
-export default withRouter(withStyles(styles, { withTheme: true })(Navbar));
+export default withRouter(withStyles(styles)(Navbar));
