@@ -72,6 +72,24 @@ function ClassCreateView(props) {
       send_at: timeData.send_at
     };
 
+    const new_refresher = {
+      title: "March Refreshr", // INPUT REQUIRED
+      subject: "React Refreshr", // INPUT REQUIRED
+      sender_id: 428251, // Refreshr Team, constant
+      list_ids: validated.list_ids, // INPUT REQUIRED
+      segment_ids: null,
+      categories: [],
+      suppression_group_id: 9332, // Unsubscribe ID, constant
+      custom_unsubscribe_url: "",
+      ip_pool: "",
+      html_content: "<html><head><title></title></head><body><p>React is a JavaScript library! [unsubscribe]</p></body></html>", // INPUT REQUIRED
+      plain_content: "Check out our spring line! [unsubscribe]" // INPUT REQUIRED
+    }
+
+    const scheduleObj = {
+      "send_at": 1551448800 // March 1st 8AM CST
+    }
+
     // Add new list name, get validated id, push into list_ids
     addList(listData.name)
       .then(res => {
