@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Grid, TextField, Card, Typography, Icon } from '@material-ui/core/';
 import { withStyles } from '@material-ui/core/styles';
 import axios from 'axios';
-// import { addRefreshr, getRefreshr, getRefreshrs, updateRefreshr, deleteRefreshr, scheduleRefreshr, rescheduleRefreshr, getScheduleRefreshr, deleteScheduleRefreshr, sendTestRefreshr, addList } from "../../SendgridOps"
 
 const styles = theme => ({
   wrapper: {
@@ -74,35 +73,23 @@ function CampaignForm(props) {
     refreshr.date = date;
   };
 
-  const handlePrev = e => {
-    e.preventDefault();
+  const handlePrev = (e) => {
+    e.preventDefault()
     props.setStage({
       ...props.stage,
       onSelectionForm: !props.stage.onSelectionForm,
       onCampaignForm: !props.stage.onCampaignForm
-    });
-  };
+    })
+  }
 
-  const handleNext = e => {
-    e.preventDefault();
+  const handleNext = (e) => {
+    e.preventDefault()
     props.setStage({
       ...props.stage,
       onCampaignForm: !props.stage.onCampaignForm,
       onListForm: !props.stage.onListForm
-/* kelfro: I'm pretty sure we should go with the sendgrid update here but I left the part Justin wrote as a comment in case you wanted to keep this.      
-   jl_classform_axios
-    });
-    props.submitClassData(); // submit all form data to back end
-    alert("You're all done!");
-  };
-*/  
     })
-    alert("Saving to DB and sending to the SendGrid Server!")
-  }
-
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    props.sendAllToSendgrid()
+    alert("You're all done!")
   }
 
   return (
@@ -110,7 +97,6 @@ function CampaignForm(props) {
       <Grid container className={classes.wrapper}>
         <button onClick={(e) => handlePrev(e)}>PREV</button>
         <button onClick={(e) => handleNext(e)}>NEXT</button>
-        <button onClick={(e) => handleSubmit(e)}>SUBMIT</button>
         <Typography variant="h6">Refreshrs(campaign)</Typography>
         <Grid container className={classes.cardList}>
           {refreshrs.map(refreshr => (

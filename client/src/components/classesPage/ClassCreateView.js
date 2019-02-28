@@ -7,93 +7,90 @@ import {
   // getList, getLists, updateList, deleteList,
   addRecipients,
   // addRecipient, getRecipient, getRecipients, updateRecipient, deleteRecipient, deleteRecipients,
-  // addContact, addContacts, getContacts, deleteContact,
-  // addRefreshr, getRefreshr, getRefreshrs, updateRefreshr, deleteRefreshr, scheduleRefreshr, rescheduleRefreshr, getScheduleRefreshr, deleteScheduleRefreshr, sendTestRefreshr
+  addContacts,
+  // addContact, , getContacts, deleteContact,
+  addRefreshr,
+  scheduleRefreshr
+  // getRefreshr, getRefreshrs, updateRefreshr, deleteRefreshr, , rescheduleRefreshr, getScheduleRefreshr, deleteScheduleRefreshr, sendTestRefreshr
 } from '../SendgridOps'
-import axios from 'axios';
+//import axios from 'axios';
 
 const styles = theme => ({
-  wrapper: {}
+  wrapper: {
+    display: 'flex',
+    flexFlow: 'column nowrap',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    //NEEDED TO CENTER VIEWS:
+    [theme.breakpoints.up('sm')]: {
+      width: `100% - ${200}px`,
+      marginRight: 200
+      },
+  }
 });
 
+
 function ClassCreateView(props) {
+  const [file, setFile] = useState({filename:'No File Chosen', content:{}});
+  const [classlist, setClasslist] = useState({});
+
   const [stage, setStage] = useState({
     onListForm: true,
     onRecipientForm: false,
     onSelectionForm: false,
     onCampaignForm: false
-  });
+  })
 
   const [listData, setListData] = useState({
-    name: '',
+    name: "",
     ccBool: false
-  });
+  })
 
   const [recipientData, setRecipientData] = useState({
     recipients: []
-  });
+  })
 
   const [campaignData, setCampaignData] = useState({
-    title: '',
-    subject: '',
-    sender_id: '',
-    list_id: '',
-    segment_ids: null,
-    categories: [],
-    suppression_group_id: 9332,
-    custom_unsubscribe_url: '',
-    ip_pool: '',
-    html_content: '',
-    plain_content: ''
-  });
-
-  const sendAllToSendgrid = () => {
-    let validated = {
-      list_ids: [123],
-      recipient_ids: ["abc123"]
-    };
-
-    // Add new list name, get validated id, push into list_ids
-    addList(listData.name)
-      .then(res => {
-        validated.list_ids.push(res.data.id)
-        console.log(validated)
-        return addRecipients(recipientData.recipients)
-      })
-
-      // Add new recipients, get validated ids, spread into recipient_ids
-      .then(res => {
-        validated.recipient_ids = [
-          ...validated.recipient_ids,
-          ...res.data.persisted_recipients
-        ]
-        console.log(validated)
-      })
-
-      .catch(err => console.log(err))
-  }
+    "title": "",
+    "subject": "",
+    "sender_id": "",
+    "list_id": "",
+    "segment_ids": null,
+    "categories": [],
+    "suppression_group_id": 9332,
+    "custom_unsubscribe_url": "",
+    "ip_pool": "",
+    "html_content": "",
+    "plain_content": ""
+  })
 
   return (
     <Grid className={props.classes.wrapper}>
       <h1>ClassCreateView Component</h1>
-      <button onClick={(e) => sendAllToSendgrid(e)}>sendAllToSendgrid</button>
       {stage.onListForm ? (
         <ListForm
+          file={file}
+          setFile={setFile}
+          classlist={classlist}
+          setClasslist={setClasslist}
           listData={listData}
           setListData={setListData}
           stage={stage}
           setStage={setStage}
         />
-      ) : null}
+      ) : null
+      }
 
       {stage.onRecipientForm ? (
         <RecipientForm
+          classlist={classlist}
           recipientData={recipientData}
           setRecipientData={setRecipientData}
           stage={stage}
           setStage={setStage}
         />
-      ) : null}
+      ) : null
+      }
 
       {stage.onSelectionForm ? (
         <SelectionForm
@@ -102,7 +99,8 @@ function ClassCreateView(props) {
           stage={stage}
           setStage={setStage}
         />
-      ) : null}
+      ) : null
+      }
 
       {stage.onCampaignForm ? (
         <CampaignForm
@@ -110,9 +108,9 @@ function ClassCreateView(props) {
           setCampaignData={setCampaignData}
           stage={stage}
           setStage={setStage}
-          sendAllToSendgrid={sendAllToSendgrid}
         />
-      ) : null}
+      ) : null
+      }
     </Grid>
   );
 }
