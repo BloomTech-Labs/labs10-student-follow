@@ -6,20 +6,22 @@ import axios from 'axios';
 import Typeform from './Typeform';
 
 import {
-  LoadingPage,
+  Loading,
   LandingPage,
-  Login,
   BillingPage,
   Navbar,
   Navcrumbs,
-  ClassView,
-  RefreshrList,
+  RefreshrListView,
   MiscData,
-  ClassPage,
-  CreateEditPage
+  ClassesPage,
+  CampaignForm,
+  ClassCreateView,
+  ClassEditView
 } from './components';
 
 const App = props => {
+  const classes = { props };
+
   /* AUTHENTICATION */
   const handleAuthentication = (nextState, replace) => {
     if (/access_token|id_token|error/.test(nextState.location.hash)) {
@@ -28,7 +30,6 @@ const App = props => {
   };
 
   /* STATE */
-  const [open, setOpen] = useState(false);
   const [refreshrs, setRefreshrs] = useState([]);
   const [questions, setQuestions] = useState([]);
   const [allClasses, setClasses] = useState([]);
@@ -36,16 +37,12 @@ const App = props => {
   const [teachers, setTeachers] = useState([]);
 
   /* METHODS */
-  //Nav
-  const togglePage = () => {
-    setOpen(!open);
-  };
 
   //all refreshrs
 
   const getRefreshrs = options => {
     axios
-      .get('https://refreshr-app.netlify.com/refreshrs', options)
+      .get('https://refreshr.herokuapp.com/refreshrs', options)
       .then(res => {
         console.log('data', res.data);
         setRefreshrs(res.data.refreshrs);
@@ -58,7 +55,7 @@ const App = props => {
   //all Questions
   const getQuestions = options => {
     axios
-      .get('https://refreshr-app.netlify.com/questions', options)
+      .get('https://refreshr.herokuapp.com/questions', options)
       .then(res => {
         console.log('q', res.data.questions);
         setQuestions(res.data.questions);
@@ -71,7 +68,7 @@ const App = props => {
   //all classes
   const getClasses = options => {
     axios
-      .get('https://refreshr-app.netlify.com/classes', options)
+      .get('https://refreshr.herokuapp.com/classes', options)
       .then(res => {
         console.log('c', res.data.classes);
         setClasses(res.data.classes);
@@ -84,7 +81,7 @@ const App = props => {
   //all students
   const getStudents = options => {
     axios
-      .get('https://refreshr-app.netlify.com/students', options)
+      .get('https://refreshr.herokuapp.com/students', options)
       .then(res => {
         console.log('s', res.data.students);
         setStudents(res.data.students);
@@ -97,7 +94,7 @@ const App = props => {
   //all teachers
   const getTeachers = options => {
     axios
-      .get('https://refreshr-app.netlify.com/teachers', options)
+      .get('https://refreshr.herokuapp.com/teachers', options)
       .then(res => {
         console.log('t', res.data.teachers);
         setTeachers(res.data.teachers);
@@ -106,43 +103,58 @@ const App = props => {
         console.log(err);
       });
   };
+
   /* ROUTES */
   return (
-    <Router history={history}>
-      <div>
-        <Navcrumbs open={open} {...props} />
+    <>
+      <Router history={history}>
         <Grid
+          className={classes.container}
           container
+          direction="column"
           spacing={0}
-          direction="row"
           justify="space-between"
-          alignItems="center"
+          alignItems="stretch"
         >
-          <Grid item xs={2}>
-            <Navbar open={open} togglePage={togglePage} />
+          <Grid item>
+            <Navbar theme={props.theme} {...props} />
+            <Navcrumbs {...props} />
           </Grid>
           <Grid item xs={10}>
-            <Route exact path="/" render={() => <Login auth={props.auth} />} />
-            <Route path="/home" render={props => <LandingPage {...props} />} />
+            <Route
+              exact
+              path="/"
+              render={props => <LandingPage {...props} />}
+            />
             <Route
               path="/loading"
               render={props => {
                 handleAuthentication(props);
-                return <LoadingPage {...props} />;
+                return <Loading {...props} />;
               }}
             />
             <Route path="/typeform" component={Typeform} />
             <Route
               path="/refreshrs"
               render={props => (
-                <RefreshrList
+                <RefreshrListView
                   getRefreshrs={getRefreshrs}
                   refreshrs={refreshrs}
                 />
               )}
             />
             <Route path="/billing" render={props => <BillingPage />} />
-            <Route path="/classes" render={props => <ClassView />} />
+            <Route exact path="/classes" render={props => <ClassesPage />} />
+            <Route
+              exact
+              path="/classes/create"
+              render={props => <ClassCreateView />}
+            />
+            <Route
+              exact
+              path="/classes/edit/:id"
+              render={props => <ClassEditView {...props} />}
+            />
             <Route
               path="/misc"
               render={props => (
@@ -158,10 +170,12 @@ const App = props => {
                 />
               )}
             />
+            <Route path="/campaign" render={props => <CampaignForm />} />{' '}
+            {/* for testing */}
           </Grid>
         </Grid>
-      </div>
-    </Router>
+      </Router>
+    </>
   );
 };
 

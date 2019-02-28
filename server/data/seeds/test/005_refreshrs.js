@@ -1,8 +1,8 @@
 const faker = require('faker');
 
 const create = () => ({
-  date: faker.date.future(),
-  class_id: Math.ceil(Math.random() * 500)
+  review_text: faker.lorem.sentence(20),
+  name: faker.random.words(2)
 });
 
 exports.seed = async function(knex, Promise) {

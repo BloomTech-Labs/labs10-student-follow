@@ -1,8 +1,8 @@
 const faker = require('faker');
 
 const create = () => ({
-  firstname: faker.name.firstName(),
-  lastname: faker.name.lastName(),
+  first_name: faker.name.firstName(),
+  last_name: faker.name.lastName(),
   email: faker.internet.email(),
   password: 'pass' // should encrypt after we add bcrypt
 });

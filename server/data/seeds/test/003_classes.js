@@ -2,7 +2,7 @@ const faker = require('faker');
 
 const create = () => ({
   name: faker.hacker.ingverb(),
-  teacher_id: Math.ceil(Math.random() * 500)
+  sg_list_id: faker.lorem.word()
 });
 
 exports.seed = async function(knex, Promise) {

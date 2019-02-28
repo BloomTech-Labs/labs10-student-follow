@@ -10,7 +10,11 @@ export default class Auth {
     domain: 'team-refreshr.auth0.com',
     clientID: 'jNDq5B6iAnIRcrpM07Omh05uyppZ89px',
     audience: 'https://team-refreshr.auth0.com/api/v2/',
+    //PRODUCTION
     redirectUri: 'https://refreshr-app.netlify.com/loading',
+    //DEVELOPMENT
+    //redirectUri: 'http://localhost:3000/loading',
+
     responseType: 'token id_token',
     scope: 'openid',
   });
@@ -54,7 +58,7 @@ export default class Auth {
     this.expiresAt = expiresAt;
 
     // navigate to the home route
-    history.replace('/home');
+    history.replace('/dashboard');
   }
 
   renewSession = () => {

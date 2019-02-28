@@ -14,8 +14,8 @@ module.exports = {
     const teacher = await db('teachers')
       .select(
         'teachers.id as t_id',
-        'teachers.firstname as t_first',
-        'teachers.lastname as t_last',
+        'teachers.first_name as t_first',
+        'teachers.last_name as t_last',
         'teachers.email as t_email'
       )
       .join('classes', 'teachers.id', 'classes.teacher_id')
@@ -62,7 +62,7 @@ module.exports = {
           students: students.map(s => {
             return {
               student_id: s.student_id,
-              name: `${s.firstname} ${s.lastname}`,
+              name: `${s.first_name} ${s.last_name}`,
               email: s.email
             };
           }),
@@ -87,12 +87,33 @@ module.exports = {
     );
   },
 
+  getTeacherClasses: async teacher_id =>
+    db('teachers_classes_refreshrs as tcr')
+      .join('classes as c', 'c.id', 'tcr.class_id')
+      .where({ teacher_id }),
+
   addStudent: async (classID, studentID) => {
     const body = { classID, studentID };
     const ID = await db('students_classes').insert(body);
 
     return ID[0];
   },
+  removeStudent: (classId, studentId) =>
+    db('students_classes')
+      .where({ student_id: studentId, class_id: classId })
+      .delete(),
+
+  getClassStudents: classId =>
+    db('students_classes as sc')
+      .join('students as s', 's.id', 'sc.student_id')
+      .select('s.first_name', 's.last_name', 's.id')
+      .where({ 'sc.class_id': classId }),
+
+  getClassRefreshrs: classId =>
+    db('teachers_classes_refreshrs as tcr')
+      .join('refreshrs as r', 'r.id', 'tcr.refreshr_id')
+      .select('r.name', 'r.id')
+      .where('tcr.class_id', classId),
 
   addClass: async classInfo => {
     const newClassID = await db('classes')
@@ -102,6 +123,19 @@ module.exports = {
         return id;
       });
     return newClassID[0];
+  },
+
+  addStudentsToClass: async (class_id, students) => {
+    console.log('students', students);
+    console.log('cid', class_id);
+    try {
+      for (let student of students) {
+        console.log(`adding ${student} to ${class_id}`);
+        await db('students_classes').insert({ student_id: student, class_id });
+      }
+    } catch (err) {
+      console.log(err);
+    }
   },
 
   updateClass: async (id, updatedClass) => {
