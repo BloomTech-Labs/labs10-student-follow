@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Grid, Checkbox, Card, Select } from '@material-ui/core';
+import { Grid, Checkbox, Card, Select, MenuItem  } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import axios from 'axios';
 
@@ -23,12 +23,14 @@ function ClassEditView(props) {
   });
   const [students, setStudents] = useState([]);
   const [refreshrs, setRefreshrs] = useState([]);
+  const [teacherRefs, setTeacherRefs] = useState([]);
   // const [classDetails, setClassDetails] = useState([]);
 
   // get class details on mount
   useEffect(() => {
     fetchStudents();
     fetchRefreshrs();
+    fetchTeacherRefreshrs();
   }, []);
 
   useEffect(() => {
@@ -38,6 +40,10 @@ function ClassEditView(props) {
   useEffect(() => {
     console.log('refreshrs:', refreshrs);
   }, [refreshrs]);
+
+  useEffect(() => {
+    console.log('teacherRefs:', teacherRefs);
+  }, [teacherRefs]);
 
   async function fetchStudents() {
     console.log(classId);
@@ -50,6 +56,20 @@ function ClassEditView(props) {
     const res = await ax.get(`/classes/${classId}/refreshrs`);
     console.log(res);
     setRefreshrs(res.data);
+  }
+
+  async function fetchTeacherRefreshrs(id) {
+    // this should be user id, not 35
+    const res = await ax.get('/refreshrs/teachers/35');
+    const unassignedRefreshrs = res.data.filter(r => !refreshrs.includes(r)); // unsure if this filter will work, need to test
+    setTeacherRefs(unassignedRefreshrs);
+  }
+
+   function addRefreshr(id) {
+    const addedRefreshr = teacherRefs.filter(r => r.id === id);
+    const updatedRefreshrs = refreshrs.concat(addedRefreshr); // kinda messy, can make it cleaner later
+    setRefreshrs(updatedRefreshrs);
+    setTeacherRefs(teacherRefs.filter(r => r.id !== id));
   }
 
   return (
@@ -65,6 +85,11 @@ function ClassEditView(props) {
         ))}
         <h1>Refreshrs</h1>
         <span>Add a refreshr to this class</span>
+        <Select onChange={e => addRefreshr(e.target.value)}>
+          {teacherRefs.map(r => (
+            <MenuItem value={r.id}>{r.name}</MenuItem>
+          ))}
+        </Select>
         {refreshrs.map(r => (
           <Card className={classes.card} key={r.id} raised>
             {r.name}
