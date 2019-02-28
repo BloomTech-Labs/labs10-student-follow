@@ -7,8 +7,11 @@ import {
   // getList, getLists, updateList, deleteList,
   addRecipients,
   // addRecipient, getRecipient, getRecipients, updateRecipient, deleteRecipient, deleteRecipients,
-  // addContact, addContacts, getContacts, deleteContact,
-  // addRefreshr, getRefreshr, getRefreshrs, updateRefreshr, deleteRefreshr, scheduleRefreshr, rescheduleRefreshr, getScheduleRefreshr, deleteScheduleRefreshr, sendTestRefreshr
+  addContacts,
+  // addContact, getContacts, deleteContact,
+  addRefreshr,
+  scheduleRefreshr
+  // , getRefreshr, getRefreshrs, updateRefreshr, deleteRefreshr, rescheduleRefreshr, getScheduleRefreshr, deleteScheduleRefreshr, sendTestRefreshr
 } from '../SendgridOps'
 import axios from 'axios';
 
