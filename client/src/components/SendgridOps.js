@@ -230,7 +230,7 @@ export function addContact() {
     .catch(err => console.log(err));
 };
 
-export function addContacts() {
+export function addContacts(recipient_ids) {
   const url = `https://api.sendgrid.com/v3/contactdb/lists/${listId}/recipients`;
   axios
     .post(url, recipient_ids, headers)
