@@ -13,8 +13,8 @@ module.exports = {
 
     const classes = await db('classes')
       .select(
-        'teachers.firstname as first',
-        'teachers.lastname as last',
+        'teachers.first_name as first',
+        'teachers.last_name as last',
         'classes.id as classID',
         'classes.name'
       )
@@ -27,8 +27,8 @@ module.exports = {
       let [student, classes] = response;
       let result = {
         id: student.id,
-        firstname: student.firstname,
-        lastname: student.lastname,
+        first_name: student.first_name,
+        last_name: student.last_name,
         email: student.email,
         classes: classes.map(c => {
           return {

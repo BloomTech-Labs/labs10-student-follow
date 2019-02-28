@@ -10,6 +10,7 @@ const styles = theme => ({
 });
 
 function RecipientForm(props) {
+  const { recipientData } = props;
   const [recipient, setRecipient] = useState({
     email: '',
     first_name: '',
@@ -32,9 +33,7 @@ function RecipientForm(props) {
       last_name: recipient.last_name
     };
 
-    props.setRecipientData({
-      recipients: props.recipientData.recipients.concat(new_recipient)
-    });
+    props.setRecipientData(recipientData.concat(new_recipient));
 
     setRecipient({
       email: '',
@@ -92,28 +91,33 @@ function RecipientForm(props) {
           variant="outlined"
           value={recipient.last_name}
           placeholder="last name"
-          onChange={(e) => handleChange(e)}
-          required
-        />
+          onChange={(e) => handleChange(e)} />
         <Button variant="outlined" color="secondary" type="submit">
           Add Recipient
         </Button>
       </form>
 
       <h1>Added Recipients</h1>
-      {props.recipientData.recipients.length > 0 ? (
-        props.recipientData.recipients.map((recipient, i) => (
-          <div key={`${recipient.first_name}-${i}`}>
-            <p>
-              recipient-{i + 1}: {recipient.email}, {recipient.first_name},{' '}
-              {recipient.last_name}
-            </p>
-          </div>
-        ))
-      ) : (
-        <p>You need to add new recipients.</p>
-      )}
-    </Grid>
+      {
+        recipientData.length > 0 ? (
+          recipientData.map(
+            (recipient, i) => (
+              // console.log(recipient),
+              (
+                <div key={i}>
+                  <p style={{ color: 'white' }}>
+                    recipient-{i}: {recipient.email}, {recipient.first_name},{' '}
+                    {recipient.last_name}
+                  </p>
+                </div>
+              )
+            )
+          )
+        ) : (
+            <p>You need to add new recipients.</p>
+          )
+      }
+    </Grid >
   );
 }
 

@@ -14,8 +14,8 @@ module.exports = {
     const teacher = await db('teachers')
       .select(
         'teachers.id as t_id',
-        'teachers.firstname as t_first',
-        'teachers.lastname as t_last',
+        'teachers.first_name as t_first',
+        'teachers.last_name as t_last',
         'teachers.email as t_email'
       )
       .join('classes', 'teachers.id', 'classes.teacher_id')
@@ -62,7 +62,7 @@ module.exports = {
           students: students.map(s => {
             return {
               student_id: s.student_id,
-              name: `${s.firstname} ${s.lastname}`,
+              name: `${s.first_name} ${s.last_name}`,
               email: s.email
             };
           }),
@@ -106,7 +106,7 @@ module.exports = {
   getClassStudents: classId =>
     db('students_classes as sc')
       .join('students as s', 's.id', 'sc.student_id')
-      .select('s.firstname', 's.lastname', 's.id')
+      .select('s.first_name', 's.last_name', 's.id')
       .where({ 'sc.class_id': classId }),
 
   getClassRefreshrs: classId =>

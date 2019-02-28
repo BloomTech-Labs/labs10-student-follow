@@ -17,7 +17,7 @@ const styles = theme => ({
 });
 
 function SelectionForm(props) {
-
+  console.log(props.recipientData)
   const handlePrev = (e) => {
     e.preventDefault()
     props.setStage({
@@ -46,9 +46,9 @@ function SelectionForm(props) {
       <button onClick={(e) => handlePrev(e)}>PREV</button>
       <button onClick={(e) => handleNext(e)}>NEXT</button>
 
-      <p>Add students to: {props.listData.name}?</p>
-      {props.recipientData.recipients.length > 0 ? (
-        props.recipientData.recipients.map((recipient, i) => (
+      <p>Add these students to: {props.listData.classnameInput}?</p>
+      {props.recipientData.length > 0 ? (
+        props.recipientData.map((recipient, i) => (
           <div key={`${recipient.first_name}-${i}`}>
             <p>recipient-{i + 1}: {recipient.email}, {recipient.first_name}, {recipient.last_name}</p>
           </div>

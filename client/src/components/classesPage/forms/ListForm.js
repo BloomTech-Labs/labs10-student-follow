@@ -1,26 +1,41 @@
 import React from 'react';
-// import BigPapa from 'papaparse';
+import BigPapa from 'papaparse';
 // import { addList, getList, getLists, updateList, deleteList } from "../../SendgridOps"
 
 function ListForm(props) {
-  const handleSubmit = (e) => {
-  };
+  console.log('theme', props.theme);
+  const { classes, file, setFile, setRecipientData } = props;
+
+  const handleSubmit = e => { };
 
   const importCSV = () => {
+    BigPapa.parse(file.content, {
+      header: true,
+      complete: function (results, file) {
+        console.log("Parsing complete:", results, file);
+        // setClasslist(results.data);
+        setRecipientData(results.data)
+      }
+    });
   };
 
-  const handleChange = (e) => {
+  const handleChange = ({ target: { name, value } }) => {
     props.setListData({
       ...props.listData,
-      [e.target.name]: e.target.value
-    })
+      [name]: value
+    });
+  };
+
+  const handleFile = ({ target: { files } }) => {
+    console.log(files[0])
+    setFile({ content: files[0], filename: files[0].name });
   };
 
   const handleCheckBox = () => {
     props.setListData({
       ...props.listData,
       ccBool: !props.listData.ccBool
-    })
+    });
   };
 
   const handleNext = (e) => {
