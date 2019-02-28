@@ -36,50 +36,42 @@ function ClassCreateView(props) {
     recipients: []
   });
 
+  const [timeData, setTimeData] = useState({
+    send_at: 1551448800 // March 1st 8AM CST
+    // send_at: null
+  })
+
   const [campaignData, setCampaignData] = useState({
-    title: '',
-    subject: '',
-    sender_id: '',
-    list_id: '',
+    title: "March Refreshr", // INPUT REQUIRED
+    subject: "React Refreshr", // INPUT REQUIRED
+    sender_id: 428251, // Refreshr Team, constant
+    list_ids: [],
     segment_ids: null,
     categories: [],
-    suppression_group_id: 9332,
+    suppression_group_id: 9332, // Unsubscribe ID, constant
     custom_unsubscribe_url: '',
     ip_pool: '',
-    html_content: '',
-    plain_content: ''
+    html_content: "<html><head><title></title></head><body><p>React is a JavaScript library! [unsubscribe]</p></body></html>", // INPUT REQUIRED
+    plain_content: "React is a JavaScript library! [unsubscribe]" // INPUT REQUIRED
   });
+
 
   const sendAllToSendgrid = () => {
     let validated = {
-      list_ids: [],
       recipient_ids: [],
       selectionCode: null,
       campaign_id: null
     };
 
-    const new_refresher = {
-      title: "March Refreshr", // INPUT REQUIRED
-      subject: "React Refreshr", // INPUT REQUIRED
-      sender_id: 428251, // Refreshr Team, constant
-      list_ids: validated.list_ids, // INPUT REQUIRED
-      segment_ids: null,
-      categories: [],
-      suppression_group_id: 9332, // Unsubscribe ID, constant
-      custom_unsubscribe_url: "",
-      ip_pool: "",
-      html_content: "<html><head><title></title></head><body><p>React is a JavaScript library! [unsubscribe]</p></body></html>", // INPUT REQUIRED
-      plain_content: "Check out our spring line! [unsubscribe]" // INPUT REQUIRED
-    }
-
     const scheduleObj = {
-      "send_at": 1551448800 // March 1st 8AM CST
+      "send_at": timeData.send_at
     }
 
     // Add new list name, get validated id, push into list_ids
     addList(listData.name)
       .then(res => {
-        validated.list_ids.push(res.data.id)
+        // campaignData.list_ids = res.data.id
+        campaignData.list_ids.push(res.data.id)
         console.log(validated)
         return addRecipients(recipientData.recipients)
       })
@@ -91,7 +83,7 @@ function ClassCreateView(props) {
           ...res.data.persisted_recipients
         ]
         console.log(validated)
-        return addContacts(validated.list_ids[0], validated.recipient_ids)
+        return addContacts(campaignData.list_ids[0], validated.recipient_ids)
       })
 
       // Add selected recipients to list, expect 201 for success
@@ -99,7 +91,8 @@ function ClassCreateView(props) {
         validated.selectionCode = res.status
         if (res.status === 201) {
           console.log("addContacts 201")
-          return addRefreshr(new_refresher)
+          console.log(campaignData)
+          return addRefreshr(campaignData)
         }
         console.log(validated)
       })
@@ -160,6 +153,7 @@ function ClassCreateView(props) {
           stage={stage}
           setStage={setStage}
           sendAllToSendgrid={sendAllToSendgrid}
+          setTimeData={setTimeData}
         />
       ) : null}
     </Grid>
