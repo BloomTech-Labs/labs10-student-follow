@@ -37,6 +37,8 @@ const styles = theme => ({
 
 function CampaignForm(props) {
   const [refreshrs, setRefreshrs] = useState([]);
+  const [activeRefreshr, setActiveRefreshr] = useState(null);
+
   const { classes } = props;
   let today = new Date(); // to set default for date inputs
   today = dateMapper(today);
@@ -52,8 +54,9 @@ function CampaignForm(props) {
     try {
       /* this should fetch the class's refreshrs from /refreshrs/classes/:classId,
         but the endpoint is not live yet so I'm using this for testing */
-      const res = await axios.get('https://refreshr.herokuapp.com/refreshrs');
-      setRefreshrs(res.data.refreshrs.slice(0, 6));
+      // const res = await axios.get('https://refreshr.herokuapp.com/refreshrs');
+      const res = await axios.get('http://localhost:9000/refreshrs/teachers/35')
+      setRefreshrs(res.data);
     } catch (err) {
       console.log(err);
     }
@@ -69,9 +72,10 @@ function CampaignForm(props) {
   }
 
   // updates the refreshr's date when date input is changed
-  const setDate = (date, id) => {
-    const [refreshr] = refreshrs.filter(r => r.id === id);
-    refreshr.date = date;
+  const setDate = (date) => {
+    // const [refreshr] = refreshrs.filter(r => r.id === id);
+    activeRefreshr.date = Date.parse(date); // not in utc time, bug list 
+    props.setTimeData(Date.parse(date));
   };
 
   const handlePrev = e => {
@@ -100,6 +104,12 @@ function CampaignForm(props) {
     alert("Saving to DB and sending to the SendGrid Server!")
   }
 
+  const handleClick = id => {
+    const [ active ] = refreshrs.filter(r => r.id === id);
+    console.log(active);
+    setActiveRefreshr(active);
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault()
     props.sendAllToSendgrid()
@@ -112,21 +122,30 @@ function CampaignForm(props) {
         <button onClick={(e) => handleNext(e)}>NEXT</button>
         <button onClick={(e) => handleSubmit(e)}>SUBMIT</button>
         <Typography variant="h6">Refreshrs(campaign)</Typography>
+        {activeRefreshr ? ( 
+        <Card className={classes.card}>
+          <h1>{activeRefreshr.name}</h1>
+              <TextField
+                variant="outlined"
+                type="date"
+                defaultValue={today}
+                onChange={e => props.setTimeData(Date.parse(e.target.value))}
+              />
+        </Card>
+        ) : <Card className={classes.card}>
+          <h1>pick a card, any card</h1>
+        </Card>
+        }
         <Grid container className={classes.cardList}>
           {refreshrs.map(refreshr => (
             <Card
+            onClick={() => handleClick(refreshr.id)}
               className={classes.card}
               key={refreshr.id}
               id={refreshr.id}
               raised
             >
               <Typography variant="subtitle2">{refreshr.name}</Typography>
-              <TextField
-                variant="outlined"
-                type="date"
-                defaultValue={today}
-                onChange={e => setDate(e.target.value, refreshr.id)}
-              />
             </Card>
           ))}
           <Card className={`${classes.card} ${classes.iconCard}`}>

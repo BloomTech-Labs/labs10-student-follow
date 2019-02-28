@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Grid from "@material-ui/core/Grid";
 import { withStyles } from "@material-ui/core/styles";
 import { ListForm, RecipientForm, SelectionForm, CampaignForm } from '../index.js'
@@ -10,7 +10,6 @@ import {
   // addContact, addContacts, getContacts, deleteContact,
   // addRefreshr, getRefreshr, getRefreshrs, updateRefreshr, deleteRefreshr, scheduleRefreshr, rescheduleRefreshr, getScheduleRefreshr, deleteScheduleRefreshr, sendTestRefreshr
 } from '../SendgridOps'
-import axios from 'axios';
 
 const styles = theme => ({
   wrapper: {}
@@ -46,6 +45,20 @@ function ClassCreateView(props) {
     html_content: '',
     plain_content: ''
   });
+
+
+  const [timeData, setTimeData] = useState({
+    send_at: null
+  })
+
+  useEffect(() => {
+    console.log(timeData);
+  }, [timeData])
+
+  const scheduleObj = {
+      // "send_at": 1551448800 // March 1st 8AM CST      
+      "send_at": timeData.send_at // March 1st 8AM CST      
+    }
 
   const sendAllToSendgrid = () => {
     let validated = {
@@ -111,6 +124,7 @@ function ClassCreateView(props) {
           stage={stage}
           setStage={setStage}
           sendAllToSendgrid={sendAllToSendgrid}
+          setTimeData={setTimeData}
         />
       ) : null}
     </Grid>
