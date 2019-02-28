@@ -28,8 +28,7 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
-router.post('/', async (req, res, next) => {
-  //  jwtCheck, emptyCheck, 
+router.post('/', jwtCheck, emptyCheck, async (req, res, next) => {
   const { body } = req;
   try {
     const newQuestionID = await db.addQuestion(body);

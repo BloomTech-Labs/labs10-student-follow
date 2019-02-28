@@ -8,7 +8,6 @@ import Typeform from './Typeform';
 import {
   Loading,
   LandingPage,
-  Login,
   BillingPage,
   Navbar,
   Navcrumbs,
@@ -16,7 +15,8 @@ import {
   MiscData,
   ClassesPage,
   CampaignForm,
-  ClassCreateView
+  ClassCreateView,
+  ClassEditView
 } from './components';
 
 const App = props => {
@@ -59,18 +59,6 @@ const App = props => {
       .then(res => {
         console.log('q', res.data.questions);
         setQuestions(res.data.questions);
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  };
-
-  // add questions
-  const addQuestions = question => {
-    axios
-      .post('https://refreshr.herokuapp.com/questions', question)
-      .then(res => {
-        setQuestions([]);
       })
       .catch(err => {
         console.log(err);
@@ -123,16 +111,16 @@ const App = props => {
         <Grid
           className={classes.container}
           container
+          direction="column"
           spacing={0}
-          direction="row"
           justify="space-between"
-          alignItems="center"
+          alignItems="stretch"
         >
           <Grid item>
             <Navbar theme={props.theme} {...props} />
             <Navcrumbs {...props} />
           </Grid>
-          <Grid item>
+          <Grid item xs={10}>
             <Route
               exact
               path="/"
@@ -163,6 +151,11 @@ const App = props => {
               render={props => <ClassCreateView />}
             />
             <Route
+              exact
+              path="/classes/edit/:id"
+              render={props => <ClassEditView {...props} />}
+            />
+            <Route
               path="/misc"
               render={props => (
                 <MiscData
@@ -181,8 +174,8 @@ const App = props => {
             {/* for testing */}
           </Grid>
         </Grid>
-      </div>
-    </Router>
+      </Router>
+    </>
   );
 };
 

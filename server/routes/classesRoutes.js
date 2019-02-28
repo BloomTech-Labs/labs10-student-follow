@@ -8,7 +8,7 @@ const responseStatus = require('../config/responseStatusConfig');
 router.get('/', async (req, res, next) => {
   try {
     const classes = await db.getAll();
-    res.status(responseStatus.success).json({classes});
+    res.status(responseStatus.success).json({ classes });
   } catch (err) {
     next(err);
   }
@@ -18,13 +18,66 @@ router.get('/:id', async (req, res, next) => {
   const { id } = req.params;
   try {
     const specifiedClass = await db.getClass(id);
-    res.status(responseStatus.success).json({specifiedClass});
+    res.status(responseStatus.success).json({ specifiedClass });
   } catch (err) {
     if (TypeError) {
       next(responseStatus.notFound);
     } else {
       next(err);
     }
+  }
+});
+
+router.get('/:id/students', async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const students = await db.getClassStudents(id);
+    res.status(responseStatus.success).json(students);
+  } catch (err) {
+    if (TypeError) {
+      next(responseStatus.notFound);
+    } else {
+      next(err);
+    }
+  }
+});
+
+// drop a student from a class
+router.post('/:id/drop/:studentId', async (req, res, next) => {
+  try {
+    const { id, studentId } = req.params;
+    const result = await db.removeStudent(id, studentId);
+    res.status(responseStatus.success).json({ droppedStudents: result });
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+});
+
+router.get('/:id/refreshrs', async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const refreshrs = await db.getClassRefreshrs(id);
+    res.status(responseStatus.success).json(refreshrs);
+  } catch (err) {
+    console.log(err);
+
+    if (TypeError) {
+      next(responseStatus.notFound);
+    } else {
+      next(err);
+    }
+  }
+});
+
+router.get('/teachers/:teacherId', async (req, res, next) => {
+  try {
+    const { teacherId } = req.params;
+    const classList = await db.getTeacherClasses(teacherId);
+    res.status(responseStatus.success).json(classList);
+  } catch (err) {
+    console.log(err);
+    next(err);
   }
 });
 
@@ -35,6 +88,17 @@ router.post('/', jwtCheck, emptyCheck, async (req, res, next) => {
     res.status(responseStatus.postCreated).json({ newClassID });
   } catch (err) {
     next(err);
+  }
+});
+
+// add students to class, takes an array of student ids and adds them to class
+router.post('/:id', async (req, res, next) => {
+  const { students } = req.body;
+  const classId = req.params.id;
+  try {
+    await db.addStudentsToClass(classId, students);
+  } catch (err) {
+    console.log(err);
   }
 });
 
