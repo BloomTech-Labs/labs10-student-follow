@@ -4,14 +4,20 @@ import App from './App';
 import { Auth } from './components';
 import * as serviceWorker from './serviceWorker';
 import { BrowserRouter as Router } from 'react-router-dom';
-require('dotenv').config();
+import theme from './theme'
+import { MuiThemeProvider } from '@material-ui/core/styles';
+import CssBaseline from '@material-ui/core/CssBaseline';
+
 
 const auth = new Auth();
 
 ReactDOM.render(
-  <Router>
-    <App auth={auth} />
-  </Router>,
+  <MuiThemeProvider theme={theme}>
+    <CssBaseline />
+    <Router>
+      <App auth={auth} />
+    </Router>
+  </MuiThemeProvider>,
   document.getElementById('root')
 );
 

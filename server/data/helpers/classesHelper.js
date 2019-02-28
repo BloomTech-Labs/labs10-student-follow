@@ -87,6 +87,11 @@ module.exports = {
     );
   },
 
+  getTeacherClasses: async teacher_id =>
+    db('teachers_classes_refreshrs as tcr')
+      .join('classes as c', 'c.id', 'tcr.class_id')
+      .where({ teacher_id }),
+
   addStudent: async (classID, studentID) => {
     const body = { classID, studentID };
     const ID = await db('students_classes').insert(body);
@@ -102,6 +107,19 @@ module.exports = {
         return id;
       });
     return newClassID[0];
+  },
+
+  addStudentsToClass: async (class_id, students) => {
+    console.log('students', students);
+    console.log('cid', class_id);
+    try {
+      for (let student of students) {
+        console.log(`adding ${student} to ${class_id}`);
+        await db('students_classes').insert({ student_id: student, class_id });
+      }
+    } catch (err) {
+      console.log(err);
+    }
   },
 
   updateClass: async (id, updatedClass) => {

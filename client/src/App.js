@@ -5,10 +5,10 @@ import history from './history';
 import axios from 'axios';
 import Typeform from './Typeform';
 
+
 import {
   Loading,
   LandingPage,
-  Login,
   BillingPage,
   Navbar,
   Navcrumbs,
@@ -20,7 +20,13 @@ import {
 } from './components';
 import Refreshr from './components/refreshrs/Refreshr';
 
+
+
+
+
 const App = props => {
+  const classes = { props }
+
   /* AUTHENTICATION */
   const handleAuthentication = (nextState, replace) => {
     if (/access_token|id_token|error/.test(nextState.location.hash)) {
@@ -34,6 +40,7 @@ const App = props => {
   const [allClasses, setClasses] = useState([]);
   const [students, setStudents] = useState([]);
   const [teachers, setTeachers] = useState([]);
+  
 
   /* METHODS */
 
@@ -122,15 +129,23 @@ const App = props => {
         <Navbar />
 
         <Navcrumbs {...props} />
+
         <Grid
+        className={classes.container}
           container
+          direction="column"
           spacing={0}
-          direction="row"
           justify="space-between"
-          alignItems="center"
+          alignItems="stretch"
         >
+          <Grid
+            item
+          >
+            <Navbar theme={props.theme} {...props} />
+            <Navcrumbs  {...props} />
+          </Grid>
           <Grid item xs={10}>
-            <Route path="/home" render={props => <LandingPage {...props} />} />
+            <Route exact path="/" render={props => <LandingPage {...props} />} />
             <Route
               path="/loading"
               render={props => {
@@ -179,8 +194,8 @@ const App = props => {
             {/* for testing */}
           </Grid>
         </Grid>
-      </div>
-    </Router>
+      </Router>
+    </>
   );
 };
 
