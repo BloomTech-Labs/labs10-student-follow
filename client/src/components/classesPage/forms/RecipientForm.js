@@ -10,17 +10,19 @@ const styles = theme => ({
 });
 
 function RecipientForm(props) {
+  const { classlist } = props;
+
   const [recipient, setRecipient] = useState({
+    id: '',
     email: '',
     first_name: '',
     last_name: ''
   });
 
-  const handleChange = e => {
-    e.preventDefault();
+  const handleChange = ({ target: { name, value } }) => {
     setRecipient({
       ...recipient,
-      [e.target.name]: e.target.value
+      [name]: value
     });
   };
 
@@ -33,7 +35,7 @@ function RecipientForm(props) {
     };
 
     props.setRecipientData({
-      recipients: props.recipientData.recipients.concat(new_recipient)
+      recipients: classlist.concat(new_recipient)
     });
 
     setRecipient({
@@ -74,7 +76,7 @@ function RecipientForm(props) {
           variant="outlined"
           value={recipient.email}
           placeholder="email"
-          onChange={(e) => handleChange(e)}
+          onChange={e => handleChange(e)}
           required
         />
         <TextField
@@ -83,7 +85,7 @@ function RecipientForm(props) {
           variant="outlined"
           value={recipient.first_name}
           placeholder="first name"
-          onChange={(e) => handleChange(e)}
+          onChange={e => handleChange(e)}
           required
         />
         <TextField
@@ -92,7 +94,7 @@ function RecipientForm(props) {
           variant="outlined"
           value={recipient.last_name}
           placeholder="last name"
-          onChange={(e) => handleChange(e)}
+          onChange={e => handleChange(e)}
           required
         />
         <Button variant="outlined" color="secondary" type="submit">
@@ -101,15 +103,20 @@ function RecipientForm(props) {
       </form>
 
       <h1>Added Recipients</h1>
-      {props.recipientData.recipients.length > 0 ? (
-        props.recipientData.recipients.map((recipient, i) => (
-          <div key={`${recipient.first_name}-${i}`}>
-            <p>
-              recipient-{i + 1}: {recipient.email}, {recipient.first_name},{' '}
-              {recipient.last_name}
-            </p>
-          </div>
-        ))
+      {classlist.length > 0 ? (
+        classlist.map(
+          (recipient, i) => (
+            //console.log(recipient),
+            (
+              <div key={recipient.id}>
+                <p style={{ color: 'white' }}>
+                  recipient-{i + 1}: {recipient.email}, {recipient.first_name},{' '}
+                  {recipient.last_name}
+                </p>
+              </div>
+            )
+          )
+        )
       ) : (
         <p>You need to add new recipients.</p>
       )}
