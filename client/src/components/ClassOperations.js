@@ -18,110 +18,110 @@ function ClassOperations(props) {
   const listId = 7100282 // Students2
   const recipient_id = "YXN0dXJpYXN4aUBnbWFpbC5jb20=" // Timmy
   const recipient_ids = ["YnJpYW5AbWVuZG96YS5jb20=", "am9uYXRoYW5AaXZhbi5jb20=", "anVhbkBzaWVycmEuY29t"] // Juan, Brian, Jonathan
-  const sender_id = 428223 // The Refreshr Team
+  const sender_id = 428251 // Refreshr Team
   const campaign_id = 5033203 // March Newsletter
 
 
 
   // SENDER OPERATIONS
-  // const addSender = () => {
-  //   const new_sender = {
-  //     "nickname": "The Refreshr Team", // only required for create
-  //     "from": {
-  //       "email": "asturiasxi@gmail.com", // only required for create
-  //       "name": "Timmy @ Refreshr"
-  //     },
-  //     "reply_to": {
-  //       "email": "team@refreshr.com", // only required for create
-  //       "name": "Refreshr Team Main"
-  //     },
-  //     "address": "222 West Ave", // only required for create
-  //     "address_2": "Ste HR100",
-  //     "city": "Austin", // only required for create
-  //     "state": "Texas",
-  //     "zip": "78701",
-  //     "country": "United States" // required
-  //   }
-  //   const url = "https://api.sendgrid.com/v3/senders"
-  //   axios.post(url, new_sender, headers)
-  //     .then(res => {
-  //       console.log(`===addSender: ${res.data.nickname}===`);
-  //       console.log(res.data);
-  //     })
-  //     .catch(err => console.log(err));
-  // };
+  const addSender = () => {
+    const new_sender = {
+      "nickname": "The Refreshr Team", // only required for create
+      "from": {
+        "email": "asturiasxi@gmail.com", // only required for create
+        "name": "Timmy @ Refreshr"
+      },
+      "reply_to": {
+        "email": "team@refreshr.com", // only required for create
+        "name": "Refreshr Team Main"
+      },
+      "address": "222 West Ave", // only required for create
+      "address_2": "Ste HR100",
+      "city": "Austin", // only required for create
+      "state": "Texas",
+      "zip": "78701",
+      "country": "United States" // required
+    }
+    const url = "https://api.sendgrid.com/v3/senders"
+    axios.post(url, new_sender, headers)
+      .then(res => {
+        console.log(`===addSender: ${res.data.nickname}===`);
+        console.log(res.data);
+      })
+      .catch(err => console.log(err));
+  };
 
-  // const getSender = () => {
-  //   const url = `https://api.sendgrid.com/v3/senders/${sender_id}`;
-  //   axios
-  //     .get(url, headers)
-  //     .then(res => {
-  //       console.log(`===getSender: ${res.data.nickname}===`);
-  //       console.log(res.data);
-  //     })
-  //     .catch(err => console.log(err));
-  // };
+  const getSender = () => {
+    const url = `https://api.sendgrid.com/v3/senders/${sender_id}`;
+    axios
+      .get(url, headers)
+      .then(res => {
+        console.log(`===getSender: ${res.data.nickname}===`);
+        console.log(res.data);
+      })
+      .catch(err => console.log(err));
+  };
 
-  // const getSenders = () => {
-  //   const url = 'https://api.sendgrid.com/v3/senders';
-  //   axios
-  //     .get(url, headers)
-  //     .then(res => {
-  //       console.log(`===getSenders: all===`);
-  //       console.log(res.data);
-  //     })
-  //     .catch(err => console.log(err));
-  // };
+  const getSenders = () => {
+    const url = 'https://api.sendgrid.com/v3/senders';
+    axios
+      .get(url, headers)
+      .then(res => {
+        console.log(`===getSenders: all===`);
+        console.log(res.data);
+      })
+      .catch(err => console.log(err));
+  };
 
-  // const updateSender = () => {
-  //   const url = `https://api.sendgrid.com/v3/senders/${sender_id}`;
-  //   const updated_sender = {
-  //     nickname: '123The Refreshr Team',
-  //     from: {
-  //       email: '123timmyturner123@refreshr.com',
-  //       name: '123Timmy Turner @ Refreshr'
-  //     },
-  //     reply_to: {
-  //       email: '123team@refreshr.com',
-  //       name: '123Refreshr Team'
-  //     },
-  //     address: '222 West Ave',
-  //     address_2: 'Ste HR100',
-  //     city: 'Austin',
-  //     state: 'Texas',
-  //     zip: '78701',
-  //     country: 'United States'
-  //   };
-  //   axios
-  //     .patch(url, updated_sender, headers)
-  //     .then(res => {
-  //       console.log(`===updateSender: res.data.nickname===`);
-  //       console.log(res);
-  //     })
-  //     .catch(err => console.log(err));
-  // };
+  const updateSender = () => {
+    const url = `https://api.sendgrid.com/v3/senders/${sender_id}`;
+    const updated_sender = {
+      nickname: '123The Refreshr Team',
+      from: {
+        email: '123timmyturner123@refreshr.com',
+        name: '123Timmy Turner @ Refreshr'
+      },
+      reply_to: {
+        email: '123team@refreshr.com',
+        name: '123Refreshr Team'
+      },
+      address: '222 West Ave',
+      address_2: 'Ste HR100',
+      city: 'Austin',
+      state: 'Texas',
+      zip: '78701',
+      country: 'United States'
+    };
+    axios
+      .patch(url, updated_sender, headers)
+      .then(res => {
+        console.log(`===updateSender: res.data.nickname===`);
+        console.log(res);
+      })
+      .catch(err => console.log(err));
+  };
 
-  // const deleteSender = () => {
-  //   const url = `https://api.sendgrid.com/v3/senders/${sender_id}`;
-  //   axios
-  //     .delete(url, headers)
-  //     .then(res => {
-  //       console.log(`===deleteSender: ${res.statusText}===`);
-  //       console.log(res);
-  //     })
-  //     .catch(err => console.log(err));
-  // };
+  const deleteSender = () => {
+    const url = `https://api.sendgrid.com/v3/senders/${sender_id}`;
+    axios
+      .delete(url, headers)
+      .then(res => {
+        console.log(`===deleteSender: ${res.statusText}===`);
+        console.log(res);
+      })
+      .catch(err => console.log(err));
+  };
 
-  // const resendVerification = () => {
-  //   const url = `https://api.sendgrid.com/v3/senders/${sender_id}/resend_verification`;
-  //   axios
-  //     .post(url, null, headers)
-  //     .then(res => {
-  //       console.log(`===resendVerification: ${res.status}===`);
-  //       console.log(res);
-  //     })
-  //     .catch(err => console.log(err));
-  // };
+  const resendVerification = () => {
+    const url = `https://api.sendgrid.com/v3/senders/${sender_id}/resend_verification`;
+    axios
+      .post(url, null, headers)
+      .then(res => {
+        console.log(`===resendVerification: ${res.status}===`);
+        console.log(res);
+      })
+      .catch(err => console.log(err));
+  };
 
   // RECIPIENT OPERATIONS
   const addRecipient = () => {
@@ -485,7 +485,7 @@ function ClassOperations(props) {
   return (
     <Grid container>
       <Grid item xs={10}>
-        {/* <div>
+        <div>
           <h1>SENDER OPERATIONS</h1>
           <button onClick={addSender} style={{ background: 'limegreen' }}>
             addSender
@@ -505,7 +505,7 @@ function ClassOperations(props) {
           <button onClick={resendVerification} style={{ background: 'teal' }}>
             resendVerification
           </button>
-        </div> */}
+        </div>
         <div>
           <h1>RECIPIENT OPERATIONS</h1>
           <button onClick={addRecipient} style={{ background: "limegreen" }} >addRecipient</button>
