@@ -52,8 +52,8 @@ function ClassCreateView(props) {
   })
 
   useEffect(() => {
-    console.log(timeData);
-  }, [timeData])
+    console.log(campaignData);
+  }, [campaignData])
 
   const scheduleObj = {
       // "send_at": 1551448800 // March 1st 8AM CST      
