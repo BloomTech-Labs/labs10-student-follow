@@ -15,8 +15,8 @@ function RecipientForm(props) {
   const [recipient, setRecipient] = useState({
     id: '',
     email: '',
-    firstname: '',
-    lastname: ''
+    first_name: '',
+    last_name: ''
   });
 
   const handleChange = ({ target: { name, value } }) => {
@@ -29,10 +29,9 @@ function RecipientForm(props) {
   const handleSubmit = e => {
     e.preventDefault();
     const new_recipient = {
-      id: classlist.length + 2,
       email: recipient.email,
-      firstname: recipient.firstname,
-      lastname: recipient.lastname
+      first_name: recipient.first_name,
+      last_name: recipient.last_name
     };
 
     props.setRecipientData({
@@ -41,8 +40,8 @@ function RecipientForm(props) {
 
     setRecipient({
       email: '',
-      firstname: '',
-      lastname: ''
+      first_name: '',
+      last_name: ''
     });
   };
 
@@ -81,19 +80,19 @@ function RecipientForm(props) {
           required
         />
         <TextField
-          name="firstname"
+          name="first_name"
           type="text"
           variant="outlined"
-          value={recipient.firstname}
+          value={recipient.first_name}
           placeholder="first name"
           onChange={e => handleChange(e)}
           required
         />
         <TextField
-          name="lastname"
+          name="last_name"
           type="text"
           variant="outlined"
-          value={recipient.lastname}
+          value={recipient.last_name}
           placeholder="last name"
           onChange={e => handleChange(e)}
           required
@@ -111,8 +110,8 @@ function RecipientForm(props) {
             (
               <div key={recipient.id}>
                 <p style={{ color: 'white' }}>
-                  recipient-{i + 1}: {recipient.email}, {recipient.firstname},{' '}
-                  {recipient.lastname}
+                  recipient-{i + 1}: {recipient.email}, {recipient.first_name},{' '}
+                  {recipient.last_name}
                 </p>
               </div>
             )
