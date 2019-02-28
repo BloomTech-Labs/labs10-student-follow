@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { Grid, Checkbox, Card, Select, MenuItem } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+import DeleteIcon from '@material-ui/icons/Delete';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 const styles = theme => ({
   wrapper: {
     color: 'white'
+  },
+  cardList: {
+    display: 'flex'
   },
   card: {
     width: 200,
@@ -67,9 +72,15 @@ function ClassEditView(props) {
 
   function addRefreshr(id) {
     const addedRefreshr = teacherRefs.filter(r => r.id === id);
-    const updatedRefreshrs = refreshrs.concat(addedRefreshr); // kinda messy, can make it cleaner later
-    setRefreshrs(updatedRefreshrs);
+    // const updatedRefreshrs = refreshrs.concat(addedRefreshr); // this is messy :(
+    setRefreshrs([...refreshrs, ...addedRefreshr]);
     setTeacherRefs(teacherRefs.filter(r => r.id !== id));
+  }
+
+  function removeRefreshr(id) {
+    const removedRefreshr = refreshrs.filter(r => r.id === id);
+    setTeacherRefs([...teacherRefs, ...removedRefreshr]);
+    setRefreshrs(refreshrs.filter(r => r.id !== id));
   }
 
   return (
@@ -84,17 +95,27 @@ function ClassEditView(props) {
           </Grid>
         ))}
         <h1>Refreshrs</h1>
-        <span>Add a refreshr to this class</span>
+        {teacherRefs.length ? (
+          <span>Add a refreshr to this class</span>
+        ) : (
+          <Link to="/refreshrs">
+            Create a new refreshr to assign it to the class
+          </Link>
+        ) // this link should go to the create refreshr page, but not sure what the route is
+        }
         <Select onChange={e => addRefreshr(e.target.value)}>
           {teacherRefs.map(r => (
             <MenuItem value={r.id}>{r.name}</MenuItem>
           ))}
         </Select>
-        {refreshrs.map(r => (
-          <Card className={classes.card} key={r.id} raised>
-            {r.name}
-          </Card>
-        ))}
+        <Grid className={classes.cardList}>
+          {refreshrs.map(r => (
+            <Card className={classes.card} key={r.id} raised>
+              {r.name}
+              <DeleteIcon onClick={() => removeRefreshr(r.id)} />
+            </Card>
+          ))}
+        </Grid>
       </Grid>
     </Grid>
   );
