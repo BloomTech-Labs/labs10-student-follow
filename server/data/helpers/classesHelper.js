@@ -99,6 +99,18 @@ module.exports = {
     return ID[0];
   },
 
+  getClassStudents: classId =>
+    db('students_classes as sc')
+      .join('students as s', 's.id', 'sc.student_id')
+      .select('s.firstname', 's.lastname', 's.id')
+      .where({ 'sc.class_id': classId }),
+
+  getClassRefreshrs: classId =>
+    db('teachers_classes_refreshrs as tcr')
+      .join('refreshrs as r', 'r.id', 'tcr.refreshr_id')
+      .select('r.name', 'r.id')
+      .where('tcr.class_id', classId),
+
   addClass: async classInfo => {
     const newClassID = await db('classes')
       .insert(classInfo)

@@ -5,7 +5,6 @@ import history from './history';
 import axios from 'axios';
 import Typeform from './Typeform';
 
-
 import {
   Loading,
   LandingPage,
@@ -16,15 +15,12 @@ import {
   MiscData,
   ClassesPage,
   CampaignForm,
-  ClassCreateView
+  ClassCreateView,
+  ClassEditView
 } from './components';
 
-
-
-
-
 const App = props => {
-  const classes = { props }
+  const classes = { props };
 
   /* AUTHENTICATION */
   const handleAuthentication = (nextState, replace) => {
@@ -39,7 +35,6 @@ const App = props => {
   const [allClasses, setClasses] = useState([]);
   const [students, setStudents] = useState([]);
   const [teachers, setTeachers] = useState([]);
-  
 
   /* METHODS */
 
@@ -112,23 +107,25 @@ const App = props => {
   /* ROUTES */
   return (
     <>
-      <Router history={history} >
+      <Router history={history}>
         <Grid
-        className={classes.container}
+          className={classes.container}
           container
           direction="column"
           spacing={0}
           justify="space-between"
           alignItems="stretch"
         >
-          <Grid
-            item
-          >
+          <Grid item>
             <Navbar theme={props.theme} {...props} />
-            <Navcrumbs  {...props} />
+            <Navcrumbs {...props} />
           </Grid>
           <Grid item xs={10}>
-            <Route exact path="/" render={props => <LandingPage {...props} />} />
+            <Route
+              exact
+              path="/"
+              render={props => <LandingPage {...props} />}
+            />
             <Route
               path="/loading"
               render={props => {
@@ -148,7 +145,16 @@ const App = props => {
             />
             <Route path="/billing" render={props => <BillingPage />} />
             <Route exact path="/classes" render={props => <ClassesPage />} />
-            <Route exact path="/classes/create" render={props => <ClassCreateView />} />
+            <Route
+              exact
+              path="/classes/create"
+              render={props => <ClassCreateView />}
+            />
+            <Route
+              exact
+              path="/classes/edit/:id"
+              render={props => <ClassEditView {...props} />}
+            />
             <Route
               path="/misc"
               render={props => (
