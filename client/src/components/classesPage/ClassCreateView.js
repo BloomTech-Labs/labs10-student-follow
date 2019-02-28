@@ -160,6 +160,17 @@ function ClassCreateView(props) {
       {stage.onRecipientForm ? (
         <RecipientForm
           recipientData={recipientData}
+          recipientData={recipientData}
+          recipientData={recipientData}
+          recipientData={recipientData}
+          recipientData={recipientData}
+          recipientData={recipientData}
+          recipientData={recipientData}
+          recipientData={recipientData}
+          recipientData={recipientData}
+          recipientData={recipientData}
+          recipientData={recipientData}
+          recipientData={recipientData}
           setRecipientData={setRecipientData}
           stage={stage}
           setStage={setStage}

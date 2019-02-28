@@ -1,5 +1,5 @@
 import React from 'react';
-// import BigPapa from 'papaparse';
+import BigPapa from 'papaparse';
 // import { addList, getList, getLists, updateList, deleteList } from "../../SendgridOps"
 
 function ListForm(props) {
@@ -19,7 +19,7 @@ function ListForm(props) {
     });
   };
 
-  const handleChange = (e) => {
+  const handleChange = ({ target: { name, value } }) => {
     props.setListData({
       ...props.listData,
       [name]: value
