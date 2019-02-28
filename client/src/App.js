@@ -36,7 +36,7 @@ const App = props => {
   const [teachers, setTeachers] = useState([]);
 
   /* METHODS */
-  
+
   //all refreshrs
 
   const getRefreshrs = options => {
@@ -69,8 +69,7 @@ const App = props => {
     axios
       .post('https://refreshr.herokuapp.com/questions', question)
       .then(res => {
-        console.log('q', res.data.questions);
-        setQuestions(res.data.questions);
+        setQuestions([]);
       })
       .catch(err => {
         console.log(err);
@@ -119,10 +118,10 @@ const App = props => {
   /* ROUTES */
   return (
     <Router history={history}>
-      <div >
-      <Navbar  />
+      <div>
+        <Navbar />
 
-        <Navcrumbs  {...props} />
+        <Navcrumbs {...props} />
         <Grid
           container
           spacing={0}
@@ -151,12 +150,16 @@ const App = props => {
             />
             <Route path="/billing" render={props => <BillingPage />} />
             <Route exact path="/classes" render={props => <ClassesPage />} />
-            <Route exact path="/classes/create" render={props => <ClassCreateView />} />
-            <Route exact path="/questions/create" render={props => (
-            <Refreshr 
-              addQuestions={addQuestions}
+            <Route
+              exact
+              path="/classes/create"
+              render={props => <ClassCreateView />}
             />
-            )} />
+            <Route
+              exact
+              path="/questions/create"
+              render={props => <Refreshr addQuestions={addQuestions} />}
+            />
             <Route
               path="/misc"
               render={props => (
