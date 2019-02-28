@@ -42,6 +42,18 @@ router.get('/:id/students', async (req, res, next) => {
   }
 });
 
+// drop a student from a class
+router.post('/:id/drop/:studentId', async (req, res, next) => {
+  try {
+    const { id, studentId } = req.params;
+    const result = await db.removeStudent(id, studentId);
+    res.status(responseStatus.success).json({ droppedStudents: result });
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+});
+
 router.get('/:id/refreshrs', async (req, res, next) => {
   const { id } = req.params;
   try {

@@ -98,6 +98,10 @@ module.exports = {
 
     return ID[0];
   },
+  removeStudent: (classId, studentId) =>
+    db('students_classes')
+      .where({ student_id: studentId, class_id: classId })
+      .delete(),
 
   getClassStudents: classId =>
     db('students_classes as sc')

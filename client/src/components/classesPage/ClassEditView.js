@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Grid, Checkbox, Card, Select, MenuItem } from '@material-ui/core';
+import {
+  Grid,
+  Checkbox,
+  Card,
+  Select,
+  MenuItem,
+  Button
+} from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { Link } from 'react-router-dom';
@@ -29,6 +36,7 @@ function ClassEditView(props) {
   const [students, setStudents] = useState([]);
   const [refreshrs, setRefreshrs] = useState([]);
   const [teacherRefs, setTeacherRefs] = useState([]);
+  const [selectedStudents, setSelectedStudents] = useState([]);
   // const [classDetails, setClassDetails] = useState([]);
 
   // get class details on mount
@@ -49,6 +57,10 @@ function ClassEditView(props) {
   useEffect(() => {
     console.log('teacherRefs:', teacherRefs);
   }, [teacherRefs]);
+
+  useEffect(() => {
+    console.log('selectedStudents:', selectedStudents);
+  }, [selectedStudents]);
 
   async function fetchStudents() {
     console.log(classId);
@@ -83,15 +95,44 @@ function ClassEditView(props) {
     setRefreshrs(refreshrs.filter(r => r.id !== id));
   }
 
+  function selectStudent(e) {
+    console.log('val', e.target.value);
+
+    const studentId = Number(e.target.value);
+
+    if (e.target.checked) {
+      console.log('add');
+
+      setSelectedStudents([...selectedStudents, studentId]);
+    } else {
+      setSelectedStudents(selectedStudents.filter(s => s.id === studentId));
+    }
+
+    // const student = students.filter(s => s.id === id);
+    // setSelectedStudents([...selectedStudents, student]);
+    // console.log(selectedStudents);
+  }
+
+  function dropStudents() {
+    // change endpoint to accept array
+    // endpoint is /classes/:id/drop/studentId
+    // clear selectedStudents
+  }
+
   return (
     <Grid className={props.classes.wrapper}>
       <h1>ClassEditView Component</h1>
       <Grid>
         <h1>Students</h1>
+        {selectedStudents.length ? (
+          <Button variant="outlined" onClick={dropStudents}>
+            Remove selected from class
+          </Button>
+        ) : null}
         {students.map(s => (
           <Grid key={s.id}>
             <span>{`${s.firstname} ${s.lastname}`}</span>
-            <Checkbox />
+            <Checkbox value={s.id} onClick={e => selectStudent(e)} />
           </Grid>
         ))}
         <h1>Refreshrs</h1>
@@ -117,6 +158,7 @@ function ClassEditView(props) {
           ))}
         </Grid>
       </Grid>
+      <Button variant="outlined">Save Changes</Button>
     </Grid>
   );
 }
