@@ -11,9 +11,9 @@ export default class Auth {
     clientID: 'jNDq5B6iAnIRcrpM07Omh05uyppZ89px',
     audience: 'https://team-refreshr.auth0.com/api/v2/',
     //PRODUCTION
-    redirectUri: 'https://refreshr-app.netlify.com/loading',
+    //redirectUri: 'https://refreshr-app.netlify.com/loading',
     //DEVELOPMENT
-    //redirectUri: 'http://localhost:3000/loading',
+    redirectUri: 'http://localhost:3000/loading',
 
     responseType: 'token id_token',
     scope: 'openid',
@@ -32,7 +32,7 @@ export default class Auth {
       
         // history.replace('/home')
       } else if (err) {
-        history.replace('/');
+        history.replace('/home');
         console.log(err);
         alert(`Error: ${err.error}. Check the console for further details.`);
       }
@@ -83,7 +83,7 @@ export default class Auth {
     localStorage.removeItem('isLoggedIn');
 
     // navigate to the home route
-    history.replace('/');
+    history.replace('/home');
   }
 
   isAuthenticated =() => {

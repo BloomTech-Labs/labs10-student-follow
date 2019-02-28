@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { Component } from 'react';
 // import BigPapa from 'papaparse';
-// import { addList, getList, getLists, updateList, deleteList } from "../../SendgridOps"
 
 function ListForm(props) {
   const handleSubmit = (e) => {
