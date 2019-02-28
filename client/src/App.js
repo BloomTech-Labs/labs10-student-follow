@@ -16,7 +16,8 @@ import {
   MiscData,
   ClassesPage,
   CampaignForm,
-  ClassCreateView
+  ClassCreateView,
+  ClassEditView
 } from './components';
 
 const App = props => {
@@ -157,6 +158,11 @@ const App = props => {
             />
             <Route path="/billing" render={props => <BillingPage />} />
             <Route exact path="/classes" render={props => <ClassesPage />} />
+            <Route
+              exact
+              path="/classes/edit/:id"
+              render={props => <ClassEditView {...props} />}
+            />
             <Route
               exact
               path="/classes/create"

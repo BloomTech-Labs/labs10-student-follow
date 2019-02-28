@@ -28,6 +28,36 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
+router.get('/:id/students', async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const students = await db.getClassStudents(id);
+    res.status(responseStatus.success).json(students);
+  } catch (err) {
+    if (TypeError) {
+      next(responseStatus.notFound);
+    } else {
+      next(err);
+    }
+  }
+});
+
+ router.get('/:id/refreshrs', async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const refreshrs = await db.getClassRefreshrs(id);
+    res.status(responseStatus.success).json(refreshrs);
+  } catch (err) {
+    console.log(err);
+
+     if (TypeError) {
+      next(responseStatus.notFound);
+    } else {
+      next(err);
+    }
+  }
+});
+
 router.get('/teachers/:teacherId', async (req, res, next) => {
   try {
     const { teacherId } = req.params;
