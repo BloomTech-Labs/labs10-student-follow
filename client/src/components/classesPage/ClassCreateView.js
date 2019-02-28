@@ -13,13 +13,26 @@ import {
   scheduleRefreshr
   // getRefreshr, getRefreshrs, updateRefreshr, deleteRefreshr, , rescheduleRefreshr, getScheduleRefreshr, deleteScheduleRefreshr, sendTestRefreshr
 } from '../SendgridOps'
-import axios from 'axios';
+//import axios from 'axios';
 
 const styles = theme => ({
-  wrapper: {}
+  wrapper: {
+    display: 'flex',
+    flexFlow: 'column nowrap',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    //NEEDED TO CENTER VIEWS:
+    [theme.breakpoints.up('sm')]: {
+      width: `100% - ${200}px`,
+      marginRight: 200
+      },
+  }
 });
 
 function ClassCreateView(props) {
+  const [file, setFile] = useState({filename:'No File Chosen', content:{}});
+  const [classlist, setClasslist] = useState({});
+
   const [stage, setStage] = useState({
     onListForm: true,
     onRecipientForm: false,
@@ -128,6 +141,10 @@ function ClassCreateView(props) {
       <button onClick={(e) => sendAllToSendgrid(e)}>sendAllToSendgrid</button>
       {stage.onListForm ? (
         <ListForm
+          file={file}
+          setFile={setFile}
+          classlist={classlist}
+          setClasslist={setClasslist}
           listData={listData}
           setListData={setListData}
           stage={stage}
@@ -137,6 +154,7 @@ function ClassCreateView(props) {
 
       {stage.onRecipientForm ? (
         <RecipientForm
+          classlist={classlist}
           recipientData={recipientData}
           setRecipientData={setRecipientData}
           stage={stage}

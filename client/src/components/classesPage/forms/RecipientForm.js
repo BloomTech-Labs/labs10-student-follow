@@ -10,36 +10,39 @@ const styles = theme => ({
 });
 
 function RecipientForm(props) {
+  const { classlist } = props;
+
   const [recipient, setRecipient] = useState({
+    id: '',
     email: '',
-    first_name: '',
-    last_name: ''
+    firstname: '',
+    lastname: ''
   });
 
-  const handleChange = e => {
-    e.preventDefault();
+  const handleChange = ({ target: { name, value } }) => {
     setRecipient({
       ...recipient,
-      [e.target.name]: e.target.value
+      [name]: value
     });
   };
 
   const handleSubmit = e => {
     e.preventDefault();
     const new_recipient = {
+      id: classlist.length + 2,
       email: recipient.email,
-      first_name: recipient.first_name,
-      last_name: recipient.last_name
+      firstname: recipient.firstname,
+      lastname: recipient.lastname
     };
 
     props.setRecipientData({
-      recipients: props.recipientData.recipients.concat(new_recipient)
+      recipients: classlist.concat(new_recipient)
     });
 
     setRecipient({
       email: '',
-      first_name: '',
-      last_name: ''
+      firstname: '',
+      lastname: ''
     });
   };
 
@@ -74,25 +77,25 @@ function RecipientForm(props) {
           variant="outlined"
           value={recipient.email}
           placeholder="email"
-          onChange={(e) => handleChange(e)}
+          onChange={e => handleChange(e)}
           required
         />
         <TextField
-          name="first_name"
+          name="firstname"
           type="text"
           variant="outlined"
-          value={recipient.first_name}
+          value={recipient.firstname}
           placeholder="first name"
-          onChange={(e) => handleChange(e)}
+          onChange={e => handleChange(e)}
           required
         />
         <TextField
-          name="last_name"
+          name="lastname"
           type="text"
           variant="outlined"
-          value={recipient.last_name}
+          value={recipient.lastname}
           placeholder="last name"
-          onChange={(e) => handleChange(e)}
+          onChange={e => handleChange(e)}
           required
         />
         <Button variant="outlined" color="secondary" type="submit">
@@ -101,15 +104,20 @@ function RecipientForm(props) {
       </form>
 
       <h1>Added Recipients</h1>
-      {props.recipientData.recipients.length > 0 ? (
-        props.recipientData.recipients.map((recipient, i) => (
-          <div key={`${recipient.first_name}-${i}`}>
-            <p>
-              recipient-{i + 1}: {recipient.email}, {recipient.first_name},{' '}
-              {recipient.last_name}
-            </p>
-          </div>
-        ))
+      {classlist.length > 0 ? (
+        classlist.map(
+          (recipient, i) => (
+            //console.log(recipient),
+            (
+              <div key={recipient.id}>
+                <p style={{ color: 'white' }}>
+                  recipient-{i + 1}: {recipient.email}, {recipient.firstname},{' '}
+                  {recipient.lastname}
+                </p>
+              </div>
+            )
+          )
+        )
       ) : (
         <p>You need to add new recipients.</p>
       )}
