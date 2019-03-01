@@ -11,6 +11,7 @@ const styles = theme => ({
 
 function RecipientForm(props) {
   const { recipientData } = props;
+  
   const [recipient, setRecipient] = useState({
     email: '',
     first_name: '',
@@ -113,11 +114,11 @@ function RecipientForm(props) {
               )
             )
           )
-        ) : (
-            <p>You need to add new recipients.</p>
-          )
-      }
-    </Grid >
+      ) : (
+        <p>You need to add new recipients.</p>
+      )}
+    </Grid>
+
   );
 }
 

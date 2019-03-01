@@ -34,6 +34,8 @@ import SelectionForm from './classesPage/forms/SelectionForm';
 /* REFRESHRS */
 import RefreshrListView from './refreshrsPage/RefreshrListView';
 import RefreshrCard from './refreshrsPage/RefreshrCard';
+import Refreshr from './refreshrs/Refreshr';
+
 
 /* MISC DATA */
 import ClassOperations from './ClassOperations';
@@ -72,6 +74,7 @@ export {
 
   RefreshrListView,
   RefreshrCard,
+  Refreshr,
 
   ClassOperations,
   MiscData,
