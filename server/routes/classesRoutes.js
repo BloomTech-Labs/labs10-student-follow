@@ -54,14 +54,14 @@ router.post('/:id/drop/:studentId', async (req, res, next) => {
   }
 });
 
-router.get('/:id/refreshrs', async (req, res, next) => {
+
+ router.get('/:id/refreshrs', async (req, res, next) => {
   const { id } = req.params;
   try {
     const refreshrs = await db.getClassRefreshrs(id);
     res.status(responseStatus.success).json(refreshrs);
   } catch (err) {
     console.log(err);
-
     if (TypeError) {
       next(responseStatus.notFound);
     } else {

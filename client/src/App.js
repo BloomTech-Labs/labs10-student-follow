@@ -9,6 +9,7 @@ import {
   Loading,
   LandingPage,
   BillingPage,
+  Refreshr,
   Navbar,
   Navcrumbs,
   RefreshrListView,
@@ -59,6 +60,18 @@ const App = props => {
       .then(res => {
         console.log('q', res.data.questions);
         setQuestions(res.data.questions);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
+  // add questions
+  const addQuestions = question => {
+    axios
+      .post('https://refreshr.herokuapp.com/questions', question)
+      .then(res => {
+        setQuestions([]);
       })
       .catch(err => {
         console.log(err);
@@ -147,13 +160,19 @@ const App = props => {
             <Route exact path="/classes" render={props => <ClassesPage />} />
             <Route
               exact
+              path="/classes/edit/:id"
+              render={props => <ClassEditView {...props} />}
+            />
+            <Route
+              exact
               path="/classes/create"
               render={props => <ClassCreateView />}
             />
             <Route
               exact
-              path="/classes/edit/:id"
-              render={props => <ClassEditView {...props} />}
+
+              path="/questions/create"
+              render={props => <Refreshr addQuestions={addQuestions} />}
             />
             <Route
               path="/misc"

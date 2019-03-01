@@ -1,20 +1,126 @@
 import React from 'react';
+import { withStyles } from '@material-ui/core/styles';
+import { Paper, FormGroup, Fab, Input, Button } from '@material-ui/core';
+import Checkbox from '@material-ui/core/Checkbox';
+import UpIcon from '@material-ui/icons/ArrowUpward';
+import RightIcon from '@material-ui/icons/ArrowForward';
+import Attachment from '@material-ui/icons/Attachment';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Typography from '@material-ui/core/Typography';
 import BigPapa from 'papaparse';
-// import { addList, getList, getLists, updateList, deleteList } from "../../SendgridOps"
+// import { addList, getList, getLists, updateList, deleteList } from "../../SendgridOps"/*-------- STYLES --------*/
+const styles = theme => ({
+  container: {
+    border: `1px solid ${theme.palette.secondary.main}`,
+    ...theme.mixins.gutters(),
+    display: 'flex',
+    flexFlow: 'column nowrap',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingTop: theme.spacing.unit * 4,
+    paddingBottom: theme.spacing.unit * 8,
+    marginTop: theme.spacing.unit * 4,
+    marginBottom: theme.spacing.unit * 4,
+    color: theme.palette.primary.contrastText,
+    background: theme.palette.primary.dark,
+    [theme.breakpoints.down('sm')]: {
+      width: '80%'
+    },
+    [theme.breakpoints.only('md')]: {
+      width: '60%'
+    },
+    width: '50%'
+  },
+  input: {
+    marginBottom: theme.spacing.unit,
+    padding: '.75%',
+    background: theme.palette.secondary.main,
+    color: theme.palette.primary.main,
+    fontSize: '1em',
+    width: 200,
+    borderRadius: 5,
+    paddingLeft: 60,
+    paddingRight: 30,
+    [theme.breakpoints.up('lg')]: {
+      marginRight: theme.spacing.unit * 8
+    }
+  },
+  checkboxDiv: {
+    [theme.breakpoints.down('md')]: {
+      marginLeft: theme.spacing.unit * 2
+    },
+    [theme.breakpoints.up('lg')]: {
+      marginRight: theme.spacing.unit * 6
+    }
+  },
+  checkbox: {
+    marginRight: theme.spacing.unit,
+    color: theme.palette.secondary.main,
+    width: 40,
+    height: 40
+  },
+  form: {
+    width: '90%',
+    display: 'flex',
+    flexFlow: 'row nowrap',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: theme.spacing.unit * 2,
+    [theme.breakpoints.down('md')]: {
+      display: 'flex',
+      flexFlow: 'column nowrap',
+      justifyContent: 'center'
+    }
+  },
+  div: {
+    width: '200px',
+    display: 'flex',
+    justifyContent: 'center',
+    padding: theme.spacing.unit,
+    marginLeft: theme.spacing.unit * 2,
+    [theme.breakpoints.down('md')]: {
+      marginTop: theme.spacing.unit * 2
+    }
+  },
+  btn: {
+    marginRight: theme.spacing.unit * 2,
+    color: theme.palette.primary.main,
+    background: theme.palette.secondary.main,
+    width: 40,
+    height: 40
+  },
+  uploadInput: {
+    display: 'flex',
+    flexFlow: 'row nowrap',
+    width: '200px',
+    justifyContent: 'center',
+    alignItems: 'center',
+    background: theme.palette.secondary.main
+  },
+  inputFont: {
+    fontSize: '.8rem',
+    whiteSpace: 'nowrap',
+    marginLeft: theme.spacing.unit * 2
+  },
+
+  nextText: {
+    marginRight: theme.spacing.unit * 2
+  }
+});
 
 function ListForm(props) {
   console.log('theme', props.theme);
   const { classes, file, setFile, setRecipientData } = props;
 
-  const handleSubmit = e => { };
+  const handleSubmit = e => {};
 
   const importCSV = () => {
     BigPapa.parse(file.content, {
       header: true,
-      complete: function (results, file) {
-        console.log("Parsing complete:", results, file);
+      complete: function(results, file) {
+        console.log('Parsing complete:', results, file);
         // setClasslist(results.data);
-        setRecipientData(results.data)
+        setRecipientData(results.data);
       }
     });
   };
@@ -27,7 +133,7 @@ function ListForm(props) {
   };
 
   const handleFile = ({ target: { files } }) => {
-    console.log(files[0])
+    console.log(files[0]);
     setFile({ content: files[0], filename: files[0].name });
   };
 
@@ -38,184 +144,93 @@ function ListForm(props) {
     });
   };
 
-  const handleNext = (e) => {
-    e.preventDefault()
+  const handleNext = e => {
+    e.preventDefault();
     props.setStage({
       ...props.stage,
       onListForm: !props.stage.onListForm,
       onRecipientForm: !props.stage.onRecipientForm
-    })
-  }
-
+    });
+  };
   return (
-    <div
-      style={{
-        minWidth: '600px',
-        maxWidth: '750px',
-        border: '1px solid black',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-evenly',
-      }}
-    >
-      <button onClick={(e) => handleNext(e)}>NEXT</button>
-      <form onSubmit={handleSubmit}>
-        <input
-          name="name"
-          type="text"
-          value={props.listData.name}
-          placeholder="Enter Class Name"
+    <Paper className={classes.container} elevation={24}>
+      <Typography variant="h6" color="secondary">
+        Upload Classlist
+      </Typography>
+      <FormGroup className={classes.form}>
+        <Button
+          className={classes.uploadInput}
+          variant="contained"
+          component="label"
+        >
+          <input
+            hidden
+            type="file"
+            name="filename"
+            onChange={handleFile}
+            placeholder={null}
+          />
+          <Attachment />
+          <Typography
+            variant="subtitle1"
+            color="primary"
+            className={classes.inputFont}
+          >
+            {file.filename}
+          </Typography>
+        </Button>
+        <div className={classes.div}>
+          <Fab
+            elevation={20}
+            aria-label="Upload"
+            onClick={importCSV}
+            className={classes.btn}
+          >
+            <UpIcon />
+          </Fab>
+          <Typography variant="body2" color="secondary">
+            Upload
+          </Typography>
+        </div>
+      </FormGroup>
+      <FormGroup className={classes.form} onSubmit={handleSubmit}>
+        <Input
+          disableUnderline
           onChange={handleChange}
+          name="classnameInput"
           required
+          placeholder="Classname"
+          className={classes.input}
         />
-      </form>
-      <div
-        className="checkboxDiv"
-        style={{ display: 'flex', alignItems: 'center' }}
-      >
-        <input
-          type="checkbox"
-          name="checkbox"
-          checked={props.listData.ccBool}
-          value={props.listData.ccBool}
-          onChange={handleCheckBox}
-        />{' '}
-        <h5>CC Me On Rocket Emails</h5>
-      </div>
-      <div className="fileInputDiv">
-        <input
-          type="file"
-          name="file"
-          // this ref lets us update input value
-          // w/o adding props or re-rendering
-          ref={(input) => {
-            // filesInput = input;
-          }}
-          style={{ border: '1px solid black', marginRight: '1rem' }}
-          onChange={handleChange}
-          placeholder={null}
+        <FormControlLabel
+          className={classes.checkboxDiv}
+          control={
+            <Checkbox
+              type="checkbox"
+              name="checkbox"
+              className={classes.checkbox}
+              checked={props.listData.ccBool}
+              onChange={handleCheckBox}
+            />
+          }
+          label="CC Me"
+          color="secondary"
         />
-        <button onClick={importCSV}>Upload</button>
+      </FormGroup>
+      <div className={classes.div}>
+        <Typography
+          variant="body2"
+          color="secondary"
+          className={classes.nextText}
+        >
+          Next
+        </Typography>
+        <Fab className={classes.btn}>
+          <RightIcon onClick={e => handleNext(e)} />
+        </Fab>
       </div>
-    </div>
+    </Paper>
   );
 }
 
-// TODO ===== CONVERT TO HOOK
-// TODO ===== REFACTOR TO USE MATERIAL-UI
-// TODO ===== BREAK METHODS AND COMPONENTS INTO OWN FOLDERS?
-// class ListForm extends Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = {
-//       csvFile: undefined,
-//       students: [],
-//       checkboxBool: false,
-//       classListInput: '',
-//       classListName: '',
-//     };
-//   }
-
-//   handleSubmit = (event) => {
-//     event.preventDefault();
-//     this.setState({
-//       classListName: this.state.classListInput,
-//       classListInput: '',
-//     });
-//   };
-
-//   handleChange = (event) => {
-//     if (event.target.name === 'classListTextInput') {
-//       this.setState({ classListInput: event.target.value });
-//     } else {
-//       this.setState({
-//         csvFile: event.target.files[0],
-//       });
-//     }
-//   };
-
-//   importCSV = () => {
-//     const { csvFile } = this.state;
-//     // object keys needed for papaparse
-//     BigPapa.parse(csvFile, {
-//       complete: this.updateStudents,
-//       header: true,
-//     });
-//   };
-
-//   handleCheckBox = () => {
-//     this.setState((prevState) => ({
-//       checkboxBool: !prevState.checkboxBool,
-//     }));
-//   };
-
-//   updateStudents = (students) => {
-//     const list = students.data;
-//     this.setState({ students: list });
-//   };
-
-//   handleNext = (e) => {
-//     e.preventDefault()
-//     this.props.setStage({
-//       ...this.props.stage,
-//       onListForm: !this.props.stage.onListForm,
-//       onRecipientForm: !this.props.stage.onRecipientForm
-//     })
-//   }
-
-//   render() {
-//     return (
-//       <div
-//         style={{
-//           minWidth: '600px',
-//           maxWidth: '750px',
-//           border: '1px solid black',
-//           display: 'flex',
-//           alignItems: 'center',
-//           justifyContent: 'space-evenly',
-//         }}
-//       >
-//         <button onClick={(e) => this.handleNext(e)}>NEXT</button>
-//         <form onSubmit={this.handleSubmit}>
-//           <input
-//             type="text"
-//             placeholder="Enter Class Name"
-//             name="classListTextInput"
-//             required
-//             onChange={this.handleChange}
-//           />
-//         </form>
-//         <div
-//           className="checkboxDiv"
-//           style={{ display: 'flex', alignItems: 'center' }}
-//         >
-//           <input
-//             type="checkbox"
-//             name="checkbox"
-//             checked={this.state.checkboxBool}
-//             value={this.state.checkboxBool}
-//             onChange={this.handleCheckBox}
-//           />{' '}
-//           <h5>CC Me On Rocket Emails</h5>
-//         </div>
-//         <div className="fileInputDiv">
-//           <input
-//             type="file"
-//             name="file"
-//             // this ref lets us update input value
-//             // w/o adding props or re-rendering
-//             ref={(input) => {
-//               this.filesInput = input;
-//             }}
-//             style={{ border: '1px solid black', marginRight: '1rem' }}
-//             onChange={this.handleChange}
-//             placeholder={null}
-//           />
-//           <button onClick={this.importCSV}>Upload</button>
-//         </div>
-//       </div>
-//     );
-//   }
-// }
-
-export default ListForm;
+export default withStyles(styles, { withTheme: true })(ListForm);
