@@ -46,7 +46,9 @@ router.post('/', async (req, res, next) => {
     request.post(
       {
         url: 'https://api.typeform.com/forms',
-        headers: headersExample,
+        headers: {
+          Authorization: 'Bearer A7N7Mxo3cHvRyh7heJ4BErAzHYj4VTTsYT98MD77haXs'
+        },
         body: bodyExample
       },
       function(error, response, body) {
@@ -65,7 +67,7 @@ needle.post('https://api.typeform.com/forms', headersExample, function(
 ) {
   // you can pass params as a string or as an object.
   console.log('ERRORING', err);
-  console.log('RESPONSE', resp);
+  console.log('RESPONSE', resp.body);
 });
 
 module.exports = router;
