@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-
 import {
   Grid,
   Checkbox,
@@ -59,11 +58,10 @@ function ClassEditView(props) {
     console.log('teacherRefs:', teacherRefs);
   }, [teacherRefs]);
 
-
   useEffect(() => {
     console.log('selectedStudents:', selectedStudents);
   }, [selectedStudents]);
-  
+
   async function fetchStudents() {
     console.log(classId);
     const res = await ax.get(`/classes/${classId}/students`);
@@ -126,12 +124,6 @@ function ClassEditView(props) {
       <h1>ClassEditView Component</h1>
       <Grid>
         <h1>Students</h1>
-
-        {students.map(s => (
-          <Grid key={s.id}>
-            <span>{`${s.firstname} ${s.lastname}`}</span>
-            <Checkbox />
-
         {selectedStudents.length ? (
           <Button variant="outlined" onClick={dropStudents}>
             Remove selected from class
@@ -141,7 +133,6 @@ function ClassEditView(props) {
           <Grid key={s.id}>
             <span>{`${s.firstname} ${s.lastname}`}</span>
             <Checkbox value={s.id} onClick={e => selectStudent(e)} />
-
           </Grid>
         ))}
         <h1>Refreshrs</h1>
@@ -167,9 +158,7 @@ function ClassEditView(props) {
           ))}
         </Grid>
       </Grid>
-
       <Button variant="outlined">Save Changes</Button>
-
     </Grid>
   );
 }
