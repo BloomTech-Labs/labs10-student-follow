@@ -3,7 +3,7 @@ import { Route, withRouter, Router } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import history from './history';
 import axios from 'axios';
-import Typeform from './Typeform';
+// import Typeform from './components/typeform/Typeform';
 
 import {
   Loading,
@@ -17,7 +17,8 @@ import {
   ClassesPage,
   CampaignForm,
   ClassCreateView,
-  ClassEditView
+  ClassEditView,
+  Typeform
 } from './components';
 
 const App = props => {
@@ -146,7 +147,7 @@ const App = props => {
                 return <Loading {...props} />;
               }}
             />
-            <Route path="/typeform" component={Typeform} />
+            <Route path="/typeform" render={props => <Typeform />} />
             <Route
               path="/refreshrs"
               render={props => (
@@ -170,7 +171,6 @@ const App = props => {
             />
             <Route
               exact
-
               path="/questions/create"
               render={props => <Refreshr addQuestions={addQuestions} />}
             />

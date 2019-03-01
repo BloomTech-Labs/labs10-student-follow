@@ -43,7 +43,7 @@ class Typeform extends Component {
       });
       console.log('RESPONSE ===', response);
     } catch (error) {
-      console.log('THE ERROR', error);
+      console.log(error);
     }
     console.log('WE IN');
   };
@@ -54,6 +54,7 @@ class Typeform extends Component {
         headers,
         data
       });
+      console.log('RESPONSE ===', response);
     } catch (error) {
       console.log(error);
     }
