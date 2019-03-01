@@ -1,45 +1,44 @@
 {
-	"name": "server",
-	"version": "1.0.0",
-	"main": "index.js",
-	"license": "MIT",
-	"scripts": {
-		"test": "cross-env NODE_ENV=testing && (knex migrate:rollback && knex migrate:latest && knex seed:run) && jest --verbose --watch",
-		"develop": "cross-env NODE_ENV=development nodemon index.js",
-		"reload": "(knex migrate:rollback && knex migrate:latest && knex seed:run) && yarn develop",
-		"start": "node index.js"
-	},
-	"dependencies": {
-		"@sendgrid/mail": "^6.3.1",
-		"cors": "^2.8.5",
-		"cross-env": "^5.2.0",
-		"dotenv": "^6.2.0",
-		"express": "^4.16.4",
-		"express-jwt": "^5.3.1",
-		"express-jwt-authz": "^1.0.0",
-		"faker": "^4.1.0",
-		"helmet": "^3.15.1",
-		"jsonwebtoken": "^8.4.0",
-		"jwks-rsa": "^1.4.0",
-		"knex": "^0.16.3",
-		"moment": "^2.24.0",
-		"morgan": "^1.9.1",
-		"needle": "^2.2.4",
-		"pg": "^7.8.0",
-		"react-id-generator": "^0.1.6",
-		"react-lazy-load-image-component": "^1.3.2",
-		"react-stripe-checkout": "^2.6.3",
-		"stripe": "^6.25.1",
-		"uuid": "^3.3.2"
-	},
-	"devDependencies": {
-		"eslint": "^5.14.0",
-		"jest": "^24.1.0",
-		"nodemon": "^1.18.10",
-		"prettier": "^1.16.4",
-		"supertest": "^3.4.2"
-	},
-	"jest": {
-		"testEnvironment": "node"
-	}
+  "name": "server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "test": "cross-env NODE_ENV=testing && (knex migrate:rollback && knex migrate:latest && knex seed:run) && jest --verbose --watch",
+    "develop": "cross-env NODE_ENV=development nodemon index.js",
+    "reload": "(knex migrate:rollback && knex migrate:latest && knex seed:run) && yarn develop",
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@sendgrid/mail": "^6.3.1",
+    "cors": "^2.8.5",
+    "cross-env": "^5.2.0",
+    "dotenv": "^6.2.0",
+    "express": "^4.16.4",
+    "express-jwt": "^5.3.1",
+    "express-jwt-authz": "^1.0.0",
+    "faker": "^4.1.0",
+    "helmet": "^3.15.1",
+    "jsonwebtoken": "^8.4.0",
+    "jwks-rsa": "^1.4.0",
+    "knex": "^0.16.3",
+    "moment": "^2.24.0",
+    "morgan": "^1.9.1",
+    "pg": "^7.8.0",
+    "react-id-generator": "^0.1.6",
+    "react-lazy-load-image-component": "^1.3.2",
+    "react-stripe-checkout": "^2.6.3",
+    "stripe": "^6.25.1",
+    "uuid": "^3.3.2"
+  },
+  "devDependencies": {
+    "eslint": "^5.14.0",
+    "jest": "^24.1.0",
+    "nodemon": "^1.18.10",
+    "prettier": "^1.16.4",
+    "supertest": "^3.4.2"
+  },
+  "jest": {
+    "testEnvironment": "node"
+  }
 }

@@ -3,7 +3,6 @@ import { Route, withRouter, Router } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import history from './history';
 import axios from 'axios';
-// import Typeform from './components/typeform/Typeform';
 
 import {
   Loading,
