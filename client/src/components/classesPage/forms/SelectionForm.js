@@ -17,7 +17,6 @@ const styles = theme => ({
 });
 
 function SelectionForm(props) {
-  console.log(props.recipientData)
   const handlePrev = (e) => {
     e.preventDefault()
     props.setStage({
