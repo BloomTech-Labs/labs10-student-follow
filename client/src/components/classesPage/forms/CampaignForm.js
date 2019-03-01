@@ -8,6 +8,7 @@ import {
   Button
 } from '@material-ui/core/';
 import { withStyles } from '@material-ui/core/styles';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 // import { addRefreshr, getRefreshr, getRefreshrs, updateRefreshr, deleteRefreshr, scheduleRefreshr, rescheduleRefreshr, getScheduleRefreshr, deleteScheduleRefreshr, sendTestRefreshr, addList } from "../../SendgridOps"
 
@@ -73,7 +74,7 @@ function CampaignForm(props) {
         but the endpoint is not live yet so I'm using this for testing */
       // const res = await axios.get('https://refreshr.herokuapp.com/refreshrs');
       const res = await axios.get(
-        'http://localhost:9000/refreshrs/teachers/35'
+        'https://refreshr.herokuapp.com/refreshrs/teachers/308'
       );
       setRefreshrs(res.data);
     } catch (err) {
@@ -128,7 +129,7 @@ function CampaignForm(props) {
       ...props.campaignData,
       title: 'Your Refreshr Is Here!',
       subject: activeRefreshr.name,
-      html_content: `<h1>Take a refreshr and get more smarter!!</h1><p>Your refreshr is at <a>https://refreshr-app.netlify.com/takerefreshr/${
+      html_content: `<h1>Take a refreshr and get more smart!!</h1><p>Your refreshr is at <a>https://refreshr-app.netlify.com/takerefreshr/${
         activeRefreshr.id
       }</p>`
     });
@@ -172,12 +173,11 @@ function CampaignForm(props) {
           </Card>
         ) : (
           <Card className={classes.card}>
-            <h1>pick a card, any card</h1>
+            <h4>select a refreshr to schedule</h4>
           </Card>
         )}
         <Grid container className={classes.cardList}>
           <Typography variant="h4">Your Refreshrs</Typography>
-          <Typography variant="h6">Your Refreshrs</Typography>
           {refreshrs.map(refreshr => (
             <Card
               onClick={() => handleClick(refreshr.id)}
@@ -189,11 +189,13 @@ function CampaignForm(props) {
               <Typography variant="subtitle2">{refreshr.name}</Typography>
             </Card>
           ))}
-          <Card className={`${classes.card} ${classes.iconCard}`}>
-            <Icon color="action" style={{ fontSize: 60 }}>
-              add_circle
-            </Icon>
-          </Card>
+          <Link to="/questions/create">
+            <Card className={`${classes.card} ${classes.iconCard}`}>
+              <Icon color="action" style={{ fontSize: 60 }}>
+                add_circle
+              </Icon>
+            </Card>
+          </Link>
         </Grid>
       </Grid>
     </>
