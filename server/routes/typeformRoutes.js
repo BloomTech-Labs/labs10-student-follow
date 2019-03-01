@@ -8,12 +8,24 @@ const {
 } = require('../middleware/formattingMiddleware');
 const responseStatus = require('../config/responseStatusConfig');
 
+const request = require('request');
+
+// This route gets all of our forms
 router.get('/', async (req, res, next) => {
   try {
-    const students = await db.getAll();
-    res.status(responseStatus.success).json({ students });
+    const forms = {
+      method: 'GET',
+      url: 'https://api.typeform.com/forms',
+      headers: {
+        Authorization: 'Bearer A7N7Mxo3cHvRyh7heJ4BErAzHYj4VTTsYT98MD77haXs'
+      }
+    };
+    request(forms, function(error, response, body) {
+      if (error) throw new Error(error);
+      res.status(200).json(JSON.parse(body));
+    });
   } catch (err) {
-    next(err);
+    console.log('ERR', err);
   }
 });
 
