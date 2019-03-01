@@ -14,7 +14,8 @@ import axios from 'axios';
 
 const styles = theme => ({
   wrapper: {
-    color: 'white'
+    color: 'white',
+    marginTop: 50
   },
   cardList: {
     display: 'flex'
@@ -24,6 +25,13 @@ const styles = theme => ({
     height: 200,
     border: '1px solid white',
     margin: theme.spacing.unit * 3
+  },
+  studentList: {
+    display: 'flex',
+    flexDirection: 'column',
+    border: '1px solid white',
+    flexWrap: 'wrap',
+    height: '30vh'
   }
 });
 
@@ -31,13 +39,12 @@ function ClassEditView(props) {
   const { classes } = props;
   const classId = props.match.params.id;
   const ax = axios.create({
-    baseURL: 'http://localhost:9000' // development
+    baseURL: 'https://refreshr.herokuapp.com' // development
   });
   const [students, setStudents] = useState([]);
   const [refreshrs, setRefreshrs] = useState([]);
   const [teacherRefs, setTeacherRefs] = useState([]);
   const [selectedStudents, setSelectedStudents] = useState([]);
-  // const [classDetails, setClassDetails] = useState([]);
 
   // get class details on mount
   useEffect(() => {
@@ -59,7 +66,11 @@ function ClassEditView(props) {
   }, [teacherRefs]);
 
   useEffect(() => {
-    console.log('selectedStudents:', selectedStudents);
+    console.log(
+      'selectedStudents:',
+      selectedStudents,
+      typeof selectedStudents[0]
+    );
   }, [selectedStudents]);
 
   async function fetchStudents() {
@@ -96,21 +107,14 @@ function ClassEditView(props) {
   }
 
   function selectStudent(e) {
-    console.log('val', e.target.value);
-
-    const studentId = Number(e.target.value);
-
+    const studentId = parseInt(e.target.value, 10);
+    let updatedStudents = selectedStudents;
     if (e.target.checked) {
-      console.log('add');
-
-      setSelectedStudents([...selectedStudents, studentId]);
+      updatedStudents = selectedStudents.concat(studentId);
     } else {
-      setSelectedStudents(selectedStudents.filter(s => s.id === studentId));
+      updatedStudents = selectedStudents.filter(s => s !== studentId);
     }
-
-    // const student = students.filter(s => s.id === id);
-    // setSelectedStudents([...selectedStudents, student]);
-    // console.log(selectedStudents);
+    setSelectedStudents(updatedStudents);
   }
 
   function dropStudents() {
@@ -121,9 +125,8 @@ function ClassEditView(props) {
 
   return (
     <Grid className={props.classes.wrapper}>
-      <h1>ClassEditView Component</h1>
-      <Grid>
-        <h1>Students</h1>
+      <h1>Students</h1>
+      <Grid className={classes.studentList}>
         {selectedStudents.length ? (
           <Button variant="outlined" onClick={dropStudents}>
             Remove selected from class
@@ -131,10 +134,13 @@ function ClassEditView(props) {
         ) : null}
         {students.map(s => (
           <Grid key={s.id}>
-            <span>{`${s.firstname} ${s.lastname}`}</span>
-            <Checkbox value={s.id} onClick={e => selectStudent(e)} />
+            <span>{`${s.first_name} ${s.last_name}`}</span>
+            <Checkbox value={`${s.id}`} onClick={e => selectStudent(e)} />
           </Grid>
         ))}
+      </Grid>
+
+      <Grid className={classes.refreshrList}>
         <h1>Refreshrs</h1>
         {teacherRefs.length ? (
           <span>Add a refreshr to this class</span>
