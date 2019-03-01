@@ -133,7 +133,7 @@ const App = props => {
             <Navbar theme={props.theme} {...props} />
             <Navcrumbs {...props} />
           </Grid>
-          <Grid item>
+          <Grid item xs={10}>
             <Route
               exact
               path="/"
@@ -170,6 +170,7 @@ const App = props => {
             />
             <Route
               exact
+
               path="/questions/create"
               render={props => <Refreshr addQuestions={addQuestions} />}
             />

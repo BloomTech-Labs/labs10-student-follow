@@ -1,9 +1,10 @@
 const faker = require('faker');
 
 const create = () => ({
-  firstname: faker.name.firstName(),
-  lastname: faker.name.lastName(),
-  email: faker.internet.email()
+  first_name: faker.name.firstName(),
+  last_name: faker.name.lastName(),
+  email: faker.internet.email(),
+  sg_recipient_id: faker.lorem.word()
 });
 
 exports.seed = async function(knex, Promise) {

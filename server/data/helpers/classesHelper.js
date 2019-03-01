@@ -98,6 +98,22 @@ module.exports = {
 
     return ID[0];
   },
+  removeStudent: (classId, studentId) =>
+    db('students_classes')
+      .where({ student_id: studentId, class_id: classId })
+      .delete(),
+
+  getClassStudents: classId =>
+    db('students_classes as sc')
+      .join('students as s', 's.id', 'sc.student_id')
+      .select('s.first_name', 's.last_name', 's.id')
+      .where({ 'sc.class_id': classId }),
+
+  getClassRefreshrs: classId =>
+    db('teachers_classes_refreshrs as tcr')
+      .join('refreshrs as r', 'r.id', 'tcr.refreshr_id')
+      .select('r.name', 'r.id')
+      .where('tcr.class_id', classId),
 
   removeStudent: (classId, studentId) =>
     {

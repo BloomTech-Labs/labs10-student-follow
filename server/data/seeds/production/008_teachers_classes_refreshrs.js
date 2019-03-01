@@ -4,7 +4,8 @@ const create = () => ({
   teacher_id: Math.ceil(Math.random() * 500),
   class_id: Math.ceil(Math.random() * 500),
   refreshr_id: Math.ceil(Math.random() * 100),
-  date: faker.date.future()
+  date: faker.date.future(),
+  sg_campaign_id: faker.lorem.word()
 });
 
 const tcr = [];

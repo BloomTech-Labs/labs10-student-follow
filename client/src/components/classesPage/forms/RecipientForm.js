@@ -11,17 +11,18 @@ const styles = theme => ({
 
 function RecipientForm(props) {
   const { recipientData } = props;
-
+  
   const [recipient, setRecipient] = useState({
     email: '',
     first_name: '',
     last_name: ''
   });
 
-  const handleChange = ({ target: { name, value } }) => {
+  const handleChange = e => {
+    e.preventDefault();
     setRecipient({
       ...recipient,
-      [name]: value
+      [e.target.name]: e.target.value
     });
   };
 
@@ -73,7 +74,7 @@ function RecipientForm(props) {
           variant="outlined"
           value={recipient.email}
           placeholder="email"
-          onChange={e => handleChange(e)}
+          onChange={(e) => handleChange(e)}
           required
         />
         <TextField
@@ -82,7 +83,7 @@ function RecipientForm(props) {
           variant="outlined"
           value={recipient.first_name}
           placeholder="first name"
-          onChange={e => handleChange(e)}
+          onChange={(e) => handleChange(e)}
           required
         />
         <TextField
@@ -91,9 +92,7 @@ function RecipientForm(props) {
           variant="outlined"
           value={recipient.last_name}
           placeholder="last name"
-          onChange={e => handleChange(e)}
-          required
-        />
+          onChange={(e) => handleChange(e)} />
         <Button variant="outlined" color="secondary" type="submit">
           Add Recipient
         </Button>
@@ -119,6 +118,7 @@ function RecipientForm(props) {
         <p>You need to add new recipients.</p>
       )}
     </Grid>
+
   );
 }
 
