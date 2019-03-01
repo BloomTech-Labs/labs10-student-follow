@@ -4,8 +4,8 @@ module.exports = {
   getAll: async () => {
     const allTeachers = await db('teachers').select(
       'id',
-      'firstname',
-      'lastname',
+      'first_name',
+      'last_name',
       'email'
     );
 
@@ -14,7 +14,7 @@ module.exports = {
 
   getTeacher: async id => {
     const teacher = await db('teachers')
-      .select('id', 'firstname', 'lastname', 'email')
+      .select('id', 'first_name', 'last_name', 'email')
       .where({ id })
       .first();
 
@@ -24,8 +24,8 @@ module.exports = {
       let [teacher, classes] = response;
       let result = {
         id: teacher.id,
-        firstname: teacher.firstname,
-        lastname: teacher.lastname,
+        first_name: teacher.first_name,
+        last_name: teacher.last_name,
         email: teacher.email,
         classes: classes
       };

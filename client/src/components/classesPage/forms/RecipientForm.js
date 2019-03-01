@@ -10,10 +10,9 @@ const styles = theme => ({
 });
 
 function RecipientForm(props) {
-  const { classlist } = props;
+  const { recipientData } = props;
 
   const [recipient, setRecipient] = useState({
-    id: '',
     email: '',
     first_name: '',
     last_name: ''
@@ -34,9 +33,7 @@ function RecipientForm(props) {
       last_name: recipient.last_name
     };
 
-    props.setRecipientData({
-      recipients: classlist.concat(new_recipient)
-    });
+    props.setRecipientData(recipientData.concat(new_recipient));
 
     setRecipient({
       email: '',
@@ -103,20 +100,21 @@ function RecipientForm(props) {
       </form>
 
       <h1>Added Recipients</h1>
-      {classlist.length > 0 ? (
-        classlist.map(
-          (recipient, i) => (
-            //console.log(recipient),
-            (
-              <div key={recipient.id}>
-                <p style={{ color: 'white' }}>
-                  recipient-{i + 1}: {recipient.email}, {recipient.first_name},{' '}
-                  {recipient.last_name}
-                </p>
-              </div>
+      {
+        recipientData.length > 0 ? (
+          recipientData.map(
+            (recipient, i) => (
+              // console.log(recipient),
+              (
+                <div key={i}>
+                  <p style={{ color: 'white' }}>
+                    recipient-{i}: {recipient.email}, {recipient.first_name},{' '}
+                    {recipient.last_name}
+                  </p>
+                </div>
+              )
             )
           )
-        )
       ) : (
         <p>You need to add new recipients.</p>
       )}

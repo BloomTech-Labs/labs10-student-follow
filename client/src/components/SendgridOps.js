@@ -20,8 +20,8 @@ const headers = {
 }
 const listId = 7100282 // Students2
 const recipient_id = "YXN0dXJpYXN4aUBnbWFpbC5jb20=" // Timmy
-const recipient_ids = ["YnJpYW5AbWVuZG96YS5jb20=", "am9uYXRoYW5AaXZhbi5jb20=", "anVhbkBzaWVycmEuY29t"] // Juan, Brian, Jonathan
-// const sender_id = 428251 // Refreshr Team
+// const recipient_ids = ["YnJpYW5AbWVuZG96YS5jb20=", "am9uYXRoYW5AaXZhbi5jb20=", "anVhbkBzaWVycmEuY29t"] // Juan, Brian, Jonathan
+const sender_id = 428251 // Refreshr Team
 const campaign_id = 5033203 // March Newsletter
 
 /////////////////////
@@ -110,6 +110,7 @@ export function addRecipient() {
 }
 
 export function addRecipients(recipients) {
+  console.log('recipientsSendOps', recipients)
   const url = `https://api.sendgrid.com/v3/contactdb/recipients`
   // const recipients = [
   //   {
@@ -229,22 +230,17 @@ export function addContact() {
     .catch(err => console.log(err));
 };
 
-export function addContacts(listId, recipient_ids) {
+export function addContacts(recipient_ids) {
   const url = `https://api.sendgrid.com/v3/contactdb/lists/${listId}/recipients`;
-
-  console.log("===")
-  console.log(listId)
-  console.log(recipient_ids)
-  return new Promise(function (resolve, reject) {
-    axios
-      .post(url, recipient_ids, headers)
-      .then(res => {
-        console.log(`===addContacts===`);
-        console.log(res)
-        resolve(res)
-      })
-      .catch(err => console.log(err));
-  })
+  axios
+    .post(url, recipient_ids, headers)
+    .then(res => {
+      console.log(
+        `===addContacts: recipient_ids ${recipient_ids} added to listId ${listId}===`
+      );
+      console.log(res.statusText);
+    })
+    .catch(err => console.log(err));
 };
 
 export function getContacts() {
@@ -275,18 +271,30 @@ export function deleteContact() {
 // 4. CAMPAIGN OPERATIONS
 //////////////////////////
 //////////////////////////
-export function addRefreshr(new_refresher) {
+export function addRefreshr() {
+  const new_refresher = {
+    "title": "March Refreshr",
+    "subject": "New Products for Spring!",
+    "sender_id": 428251,
+    "list_ids": [
+      7050057,
+      7100282
+    ],
+    "segment_ids": null,
+    "categories": [],
+    "suppression_group_id": 9332,
+    "custom_unsubscribe_url": "",
+    "ip_pool": "",
+    "html_content": "<html><head><title></title></head><body><p>Check out our spring line! [unsubscribe]</p></body></html>",
+    "plain_content": "Check out our spring line! [unsubscribe]"
+  }
   const url = "https://api.sendgrid.com/v3/campaigns"
-
-  return new Promise(function (resolve, reject) {
-    axios.post(url, new_refresher, headers)
-      .then(res => {
-        console.log(`===addRefreshr===`)
-        console.log(res)
-        resolve(res)
-      })
-      .catch(err => console.log(err))
-  })
+  axios.post(url, new_refresher, headers)
+    .then(res => {
+      console.log(`===addRefreshr===`)
+      console.log(res)
+    })
+    .catch(err => console.log(err))
 }
 
 export function getRefreshr() {
@@ -336,17 +344,17 @@ export function deleteRefreshr() {
     .catch(err => console.log(err))
 }
 
-export function scheduleRefreshr(scheduleObj, campaign_id) {
+export function scheduleRefreshr() {
+  const scheduleObj = {
+    "send_at": 1551103200 // Feb 25, 2019 8AM
+  }
   const url = `https://api.sendgrid.com/v3/campaigns/${campaign_id}/schedules`
-  return new Promise(function (resolve, reject) {
-    axios.post(url, scheduleObj, headers)
-      .then(res => {
-        console.log(`===scheduleRefreshr===`)
-        console.log(res)
-        resolve(res)
-      })
-      .catch(err => console.log(err))
-  })
+  axios.post(url, scheduleObj, headers)
+    .then(res => {
+      console.log(`===scheduleRefreshr: ===`)
+      console.log(res)
+    })
+    .catch(err => console.log(err))
 }
 
 export function rescheduleRefreshr() {
