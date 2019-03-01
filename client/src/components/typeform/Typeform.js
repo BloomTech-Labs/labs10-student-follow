@@ -45,7 +45,6 @@ class Typeform extends Component {
     } catch (error) {
       console.log(error);
     }
-    console.log('WE IN');
   };
 
   createForm = async event => {
@@ -71,7 +70,7 @@ class Typeform extends Component {
   }
 }
 
-export default Typeform;
+// export default Typeform;
 
 // const Typeform = () => {
 //   return (
@@ -84,4 +83,4 @@ export default Typeform;
 //   );
 // };
 
-// export default Typeform;
+export default Typeform;
