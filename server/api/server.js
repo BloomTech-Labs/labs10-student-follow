@@ -11,7 +11,7 @@ const classesRoutes = require('../routes/classesRoutes');
 const questionsRoutes = require('../routes/questionsRoutes');
 const billingRoutes = require('../routes/billingRoutes');
 const refreshrsRoutes = require('../routes/refreshrsRoutes');
-const typeformRoutes = require('../routes/typeformRoutes');
+// const typeformRoutes = require('../routes/typeformRoutes');
 
 server.use('/classes', classesRoutes);
 server.use('/teachers', teachersRoutes);
@@ -19,7 +19,7 @@ server.use('/students', studentsRoutes);
 server.use('/questions', questionsRoutes);
 server.use('/billing', billingRoutes);
 server.use('/refreshrs', refreshrsRoutes);
-server.use('/form', typeformRoutes);
+// server.use('/form', typeformRoutes);
 server.use(errorHandler);
 
 module.exports = server;

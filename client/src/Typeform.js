@@ -2,6 +2,29 @@ import React, { Component } from 'react';
 const axios = require('axios');
 // import { ReactTypeformEmbed } from 'react-typeform-embed';
 
+const data = {
+  title: 'Test from codebase',
+  fields: [
+    {
+      title: 'the test',
+      type: 'multiple_choice',
+      properties: {
+        description: 'Brilliant questions!',
+        choices: [
+          {
+            ref: 'Coding coding coding',
+            label: 'correct answer'
+          }
+        ]
+      }
+    }
+  ]
+};
+
+const headers = {
+  Authorization: 'Bearer A7N7Mxo3cHvRyh7heJ4BErAzHYj4VTTsYT98MD77haXs'
+};
+
 class Typeform extends Component {
   constructor() {
     super();
@@ -25,11 +48,44 @@ class Typeform extends Component {
     console.log('WE IN');
   };
 
+  createForm = async event => {
+    try {
+      const response = await axios('https://api.typeform.com/forms', {
+        headers: {
+          Authorization: 'Bearer A7N7Mxo3cHvRyh7heJ4BErAzHYj4VTTsYT98MD77haXs'
+        },
+        data: {
+          title: 'Test from codebase',
+          fields: [
+            {
+              title: 'the test',
+              type: 'multiple_choice',
+              properties: {
+                description: 'Brilliant questions!',
+                choices: [
+                  {
+                    ref: 'Coding coding coding',
+                    label: 'correct answer'
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      });
+      console.log('RESPONSE ===', response);
+    } catch (error) {
+      console.log('THE ERROR', error);
+    }
+    console.log('WE IN');
+  };
+
   render() {
     return (
       <div>
         <h1>Get the forms!</h1>
         <button onClick={this.getForms}>Get Typeforms</button>
+        <button onClick={this.createForm}>Create Typeforms</button>
       </div>
     );
   }
