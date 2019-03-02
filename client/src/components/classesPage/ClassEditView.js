@@ -23,7 +23,8 @@ const styles = theme => ({
   },
   refreshrList: {
     display: 'flex',
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
+    border: '1px solid black'
   },
   refreshrCard: {
     width: '25%',
@@ -170,18 +171,11 @@ function ClassEditView(props) {
 
       <Grid>
         <h1>Refreshrs</h1>
-        <Select onChange={e => addRefreshr(e.target.value)}>
-          {teacherRefs.map(r => (
-            <MenuItem key={r.id} value={r.id}>
-              {r.name}
-            </MenuItem>
-          ))}
-        </Select>
         <Grid className={classes.refreshrList}>
           {refreshrs.map(r => (
             <Card className={classes.refreshrCard} key={r.id} raised>
+              <CardContent>{r.name}</CardContent>
               <CardContent>
-                {r.name}
                 <DeleteIcon onClick={() => removeRefreshr(r.id)} />
               </CardContent>
             </Card>
