@@ -36,32 +36,30 @@ import RefreshrListView from './refreshrsPage/RefreshrListView';
 import RefreshrCard from './refreshrsPage/RefreshrCard';
 import Refreshr from './refreshrs/Refreshr';
 
-
 /* MISC DATA */
 import ClassOperations from './ClassOperations';
-import MiscData from './MiscData'
-import Snackbar from './billingPage/Snackbar'
+import MiscData from './MiscData';
+import Snackbar from './billingPage/Snackbar';
+
+/* MISC DATA */
+import Typeform from './typeform/Typeform';
 
 export {
   Auth,
   Login,
-
   Loading,
   Navcrumbs,
   Navbar,
   OtherNavBar,
-
   BillingPage,
   ClassesPage,
   LandingPage,
   RefreshrsPage,
   SettingsPage,
-
   CheckoutForm,
   Pricing,
   Snackbar,
   TakeMoney,
-
   ClassCreateView,
   ClassEditView,
   ClassListView,
@@ -71,11 +69,10 @@ export {
   ListForm,
   RecipientForm,
   SelectionForm,
-
   RefreshrListView,
   RefreshrCard,
   Refreshr,
-
   ClassOperations,
   MiscData,
+  Typeform
 };

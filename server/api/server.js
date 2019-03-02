@@ -1,7 +1,7 @@
 const express = require('express');
 const configureMiddleware = require('../middleware/globalMiddleware');
 const server = express();
-const errorHandler = require('../middleware/errorMiddleware')
+const errorHandler = require('../middleware/errorMiddleware');
 
 configureMiddleware(server);
 
@@ -18,6 +18,6 @@ server.use('/students', studentsRoutes);
 server.use('/questions', questionsRoutes);
 server.use('/billing', billingRoutes);
 server.use('/refreshrs', refreshrsRoutes);
-server.use(errorHandler)
+server.use(errorHandler);
 
 module.exports = server;
