@@ -192,12 +192,6 @@ const App = props => {
             />
             <Route path="/campaign" render={props => <CampaignForm />} />{' '}
             {/* for testing */}
-            <Route
-              path="/dialog"
-              render={props => (
-                <RefreshrListDialog refreshrs={['one', 'two', 'three']} />
-              )}
-            />
           </Grid>
         </Grid>
       </Router>
