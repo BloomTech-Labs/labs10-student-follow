@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Grid, Card, Typography, Icon, CardContent } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import RefreshrCard from './RefreshrCard';
 
@@ -62,7 +63,7 @@ const RefreshrListView = props => {
     // props.getRefreshrs(options);
 
     // 133 will display two refreshrs, 1 will display empty list
-    getTeacherRefreshrs(133);
+    getTeacherRefreshrs(308);
   }, []);
 
   // just for logging, can be deleted
@@ -99,18 +100,20 @@ const RefreshrListView = props => {
             </CardContent>
           </Card>
         ))}
-        <Card className={classes.card} raised>
-          <CardContent>
-            <Typography className={classes.title}>New Refreshr</Typography>
-            <Icon
-              className={classes.icon}
-              color="action"
-              style={{ fontSize: 60 }}
-            >
-              add_circle
-            </Icon>
-          </CardContent>
-        </Card>
+        <Link to="/questions/create" style={{ textDecoration: 'none' }}>
+          <Card className={classes.card} raised>
+            <CardContent>
+              <Typography className={classes.title}>New Refreshr</Typography>
+              <Icon
+                className={classes.icon}
+                color="action"
+                style={{ fontSize: 60 }}
+              >
+                add_circle
+              </Icon>
+            </CardContent>
+          </Card>
+        </Link>
       </Grid>
     );
   }

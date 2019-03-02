@@ -9,14 +9,10 @@ import Button from '@material-ui/core/Button';
 
 const styles = (theme) => ({
   wrapper: {
-    border: '2px solid black',
-    borderRadius: '3px',
-    height: '90vh',
-    marginLeft: '3rem',
+    margin: '2rem auto',
+    borderRadius: '0 0 5px 5px',
     width: '600px',
-    display: 'flex',
-    flexDirection: 'column',
-    padding: '0 1rem'
+    background: 'white'
   },
   refreshrName: {
     maxWidth: '250px',
@@ -26,7 +22,8 @@ const styles = (theme) => ({
   },
   formGroup: {
     maxHeight: '120px', // needed for 4 question look on balsamic
-    marginLeft: '1rem'
+    marginLeft: '1rem',
+    marginBottom: '1rem'
   },
   subheaders: {
     marginTop: '.5rem'
@@ -117,6 +114,7 @@ function Refreshr(props) {
               <>
                 <Checkbox
                   checked={a1}
+                  color="primary"
                   onChange={(e) => setA1(e.target.checked)}
                 />
                 <TextField
@@ -137,6 +135,7 @@ function Refreshr(props) {
               <>
                 <Checkbox
                   checked={a2}
+                  color="primary"
                   onChange={(e) => setA2(e.target.checked)}
                 />
                 <TextField
@@ -157,6 +156,7 @@ function Refreshr(props) {
               <>
                 <Checkbox
                   checked={a3}
+                  color="primary"
                   onChange={(e) => setA3(e.target.checked)}
                 />
                 <TextField
@@ -177,6 +177,7 @@ function Refreshr(props) {
               <>
                 <Checkbox
                   checked={a4}
+                  color="primary"
                   onChange={(e) => setA4(e.target.checked)}
                 />
                 <TextField

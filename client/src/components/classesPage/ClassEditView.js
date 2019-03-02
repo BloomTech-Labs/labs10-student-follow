@@ -60,7 +60,7 @@ function ClassEditView(props) {
   const [refreshrs, setRefreshrs] = useState([]);
   const [teacherRefs, setTeacherRefs] = useState([]);
   const [selectedStudents, setSelectedStudents] = useState([]);
-  const [modal, setModal] = useState(false);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
 
   // get class details on mount
   useEffect(() => {
@@ -88,6 +88,10 @@ function ClassEditView(props) {
       typeof selectedStudents[0]
     );
   }, [selectedStudents]);
+
+  useEffect(() => {
+    console.log('modal:', modalIsOpen);
+  }, [modalIsOpen]);
 
   async function fetchStudents() {
     console.log(classId);
@@ -133,6 +137,10 @@ function ClassEditView(props) {
     setSelectedStudents(updatedStudents);
   }
 
+  function closeModal() {
+    setModalIsOpen(false);
+  }
+
   function dropStudents() {
     // change endpoint to accept array
     // endpoint is /classes/:id/drop/studentId
@@ -160,17 +168,11 @@ function ClassEditView(props) {
 
       <Grid>
         <h1>Refreshrs</h1>
-        {teacherRefs.length ? (
-          <span>Add a refreshr to this class</span>
-        ) : (
-          <Link to="/refreshrs">
-            Create a new refreshr to assign it to the class
-          </Link>
-        ) // this link should go to the create refreshr page, but not sure what the route is
-        }
         <Select onChange={e => addRefreshr(e.target.value)}>
           {teacherRefs.map(r => (
-            <MenuItem value={r.id}>{r.name}</MenuItem>
+            <MenuItem key={r.id} value={r.id}>
+              {r.name}
+            </MenuItem>
           ))}
         </Select>
         <Grid className={classes.refreshrList}>
@@ -182,8 +184,12 @@ function ClassEditView(props) {
               </CardContent>
             </Card>
           ))}
-          {modal && <RefreshrDialog refreshrs={teacherRefs} />}
-          <RefreshrDialog refreshrs={teacherRefs} />
+          <RefreshrDialog
+            refreshrs={teacherRefs}
+            open={modalIsOpen}
+            handleClose={closeModal}
+            addRefreshr={addRefreshr}
+          />
           <Card className={classes.refreshrCard} raised>
             <CardContent>
               <Typography className={classes.title}>Add a Refreshr</Typography>
@@ -191,7 +197,7 @@ function ClassEditView(props) {
                 className={classes.icon}
                 color="action"
                 style={{ fontSize: 60 }}
-                onClick={() => setModal(!modal)}
+                onClick={() => setModalIsOpen(!modalIsOpen)}
               >
                 add_circle
               </Icon>
