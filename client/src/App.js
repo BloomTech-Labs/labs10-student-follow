@@ -4,6 +4,7 @@ import Grid from '@material-ui/core/Grid';
 import history from './history';
 import axios from 'axios';
 import Typeform from './Typeform';
+import RefreshrListDialog from './components/classesPage/components/RefreshrListDialog';
 
 import {
   Loading,
@@ -170,7 +171,6 @@ const App = props => {
             />
             <Route
               exact
-
               path="/questions/create"
               render={props => <Refreshr addQuestions={addQuestions} />}
             />
@@ -191,6 +191,12 @@ const App = props => {
             />
             <Route path="/campaign" render={props => <CampaignForm />} />{' '}
             {/* for testing */}
+            <Route
+              path="/dialog"
+              render={props => (
+                <RefreshrListDialog refreshrs={['one', 'two', 'three']} />
+              )}
+            />
           </Grid>
         </Grid>
       </Router>

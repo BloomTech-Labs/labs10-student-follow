@@ -5,11 +5,15 @@ import {
   Card,
   Select,
   MenuItem,
-  Button
+  Button,
+  Typography,
+  CardContent,
+  Icon
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { Link } from 'react-router-dom';
+import RefreshrDialog from './components/RefreshrListDialog';
 import axios from 'axios';
 
 const styles = theme => ({
@@ -17,14 +21,16 @@ const styles = theme => ({
     color: 'white',
     marginTop: 50
   },
-  cardList: {
-    display: 'flex'
+  refreshrList: {
+    display: 'flex',
+    flexWrap: 'wrap'
   },
-  card: {
-    width: 200,
+  refreshrCard: {
+    width: '25%',
     height: 200,
     border: '1px solid white',
-    margin: theme.spacing.unit * 3
+    margin: theme.spacing.unit * 3,
+    position: 'relative'
   },
   studentList: {
     display: 'flex',
@@ -32,6 +38,15 @@ const styles = theme => ({
     border: '1px solid white',
     flexWrap: 'wrap',
     height: '30vh'
+  },
+  buttonBox: {
+    height: 50
+  },
+  icon: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -40%)'
   }
 });
 
@@ -45,6 +60,7 @@ function ClassEditView(props) {
   const [refreshrs, setRefreshrs] = useState([]);
   const [teacherRefs, setTeacherRefs] = useState([]);
   const [selectedStudents, setSelectedStudents] = useState([]);
+  const [modal, setModal] = useState(false);
 
   // get class details on mount
   useEffect(() => {
@@ -127,11 +143,6 @@ function ClassEditView(props) {
     <Grid className={props.classes.wrapper}>
       <h1>Students</h1>
       <Grid className={classes.studentList}>
-        {selectedStudents.length ? (
-          <Button variant="outlined" onClick={dropStudents}>
-            Remove selected from class
-          </Button>
-        ) : null}
         {students.map(s => (
           <Grid key={s.id}>
             <span>{`${s.first_name} ${s.last_name}`}</span>
@@ -139,8 +150,15 @@ function ClassEditView(props) {
           </Grid>
         ))}
       </Grid>
+      <Grid className={classes.buttonBox}>
+        {selectedStudents.length ? (
+          <Button variant="outlined" onClick={dropStudents}>
+            Remove selected from class
+          </Button>
+        ) : null}
+      </Grid>
 
-      <Grid className={classes.refreshrList}>
+      <Grid>
         <h1>Refreshrs</h1>
         {teacherRefs.length ? (
           <span>Add a refreshr to this class</span>
@@ -155,13 +173,30 @@ function ClassEditView(props) {
             <MenuItem value={r.id}>{r.name}</MenuItem>
           ))}
         </Select>
-        <Grid className={classes.cardList}>
+        <Grid className={classes.refreshrList}>
           {refreshrs.map(r => (
-            <Card className={classes.card} key={r.id} raised>
-              {r.name}
-              <DeleteIcon onClick={() => removeRefreshr(r.id)} />
+            <Card className={classes.refreshrCard} key={r.id} raised>
+              <CardContent>
+                {r.name}
+                <DeleteIcon onClick={() => removeRefreshr(r.id)} />
+              </CardContent>
             </Card>
           ))}
+          {modal && <RefreshrDialog refreshrs={teacherRefs} />}
+          <RefreshrDialog refreshrs={teacherRefs} />
+          <Card className={classes.refreshrCard} raised>
+            <CardContent>
+              <Typography className={classes.title}>Add a Refreshr</Typography>
+              <Icon
+                className={classes.icon}
+                color="action"
+                style={{ fontSize: 60 }}
+                onClick={() => setModal(!modal)}
+              >
+                add_circle
+              </Icon>
+            </CardContent>
+          </Card>
         </Grid>
       </Grid>
       <Button variant="outlined">Save Changes</Button>
