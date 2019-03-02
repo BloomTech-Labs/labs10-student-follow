@@ -98,6 +98,7 @@ module.exports = {
 
     return ID[0];
   },
+
   removeStudent: (classId, studentId) =>
     db('students_classes')
       .where({ student_id: studentId, class_id: classId })
@@ -115,28 +116,19 @@ module.exports = {
       .select('r.name', 'r.id')
       .where('tcr.class_id', classId),
 
-  removeStudent: (classId, studentId) =>
-    {
-      return db('students_classes')
-        .where({ student_id: studentId, class_id: classId })
-        .delete();
-    },
+  getClassStudents: classId => {
+    return db('students_classes as sc')
+      .join('students as s', 's.id', 'sc.student_id')
+      .select('s.first_name', 's.last_name', 's.id')
+      .where({ 'sc.class_id': classId });
+  },
 
-  getClassStudents: classId =>
-  {
-      return db('students_classes as sc')
-        .join('students as s', 's.id', 'sc.student_id')
-        .select('s.first_name', 's.last_name', 's.id')
-        .where({ 'sc.class_id': classId });
-    },
-
- getClassRefreshrs: classId =>
-  {
-     return db('teachers_classes_refreshrs as tcr')
-       .join('refreshrs as r', 'r.id', 'tcr.refreshr_id')
-       .select('r.name', 'r.id')
-       .where('tcr.class_id', classId);
-   },
+  getClassRefreshrs: classId => {
+    return db('teachers_classes_refreshrs as tcr')
+      .join('refreshrs as r', 'r.id', 'tcr.refreshr_id')
+      .select('r.name', 'r.id')
+      .where('tcr.class_id', classId);
+  },
 
   addClass: async classInfo => {
     const newClassID = await db('classes')
@@ -149,13 +141,27 @@ module.exports = {
   },
 
   addStudentsToClass: async (class_id, students) => {
-    console.log('students', students);
-    console.log('cid', class_id);
     try {
       for (let student of students) {
         console.log(`adding ${student} to ${class_id}`);
         await db('students_classes').insert({ student_id: student, class_id });
       }
+    } catch (err) {
+      console.log(err);
+    }
+  },
+
+  removeStudents: async (class_id, students) => {
+    try {
+      let count = 0;
+      for (let student of students) {
+        const result = await db('students_classes')
+          .where({ student_id: student, class_id })
+          .delete();
+        console.log(result);
+        count += result;
+      }
+      return count;
     } catch (err) {
       console.log(err);
     }

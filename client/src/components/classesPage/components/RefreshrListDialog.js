@@ -25,8 +25,6 @@ const styles = {
 };
 
 const RefreshrDialog = props => {
-  console.log('hi');
-
   const { classes } = props;
 
   return (

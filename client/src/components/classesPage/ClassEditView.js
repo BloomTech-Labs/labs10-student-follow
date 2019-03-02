@@ -54,7 +54,8 @@ function ClassEditView(props) {
   const { classes } = props;
   const classId = props.match.params.id;
   const ax = axios.create({
-    baseURL: 'https://refreshr.herokuapp.com' // development
+    baseURL: 'http://localhost:9000' // development
+    // baseURL: 'https://refreshr.herokuapp.com' // production
   });
   const [students, setStudents] = useState([]);
   const [refreshrs, setRefreshrs] = useState([]);
@@ -69,6 +70,7 @@ function ClassEditView(props) {
     fetchTeacherRefreshrs();
   }, []);
 
+  /*
   useEffect(() => {
     console.log('students:', students);
   }, [students]);
@@ -84,25 +86,18 @@ function ClassEditView(props) {
   useEffect(() => {
     console.log(
       'selectedStudents:',
-      selectedStudents,
-      typeof selectedStudents[0]
+      selectedStudents
     );
   }, [selectedStudents]);
-
-  useEffect(() => {
-    console.log('modal:', modalIsOpen);
-  }, [modalIsOpen]);
+  */
 
   async function fetchStudents() {
-    console.log(classId);
     const res = await ax.get(`/classes/${classId}/students`);
-    console.log(res);
     setStudents(res.data);
   }
 
   async function fetchRefreshrs() {
     const res = await ax.get(`/classes/${classId}/refreshrs`);
-    console.log(res);
     setRefreshrs(res.data);
   }
 
@@ -141,10 +136,13 @@ function ClassEditView(props) {
     setModalIsOpen(false);
   }
 
-  function dropStudents() {
-    // change endpoint to accept array
-    // endpoint is /classes/:id/drop/studentId
-    // clear selectedStudents
+  async function dropStudents() {
+    const res = await ax.post(`/classes/${classId}/drop/`, {
+      students: selectedStudents
+    });
+    console.log('dropped:', res);
+    setSelectedStudents([]);
+    fetchStudents(); // better way to do this than calling this here?
   }
 
   return (
@@ -154,7 +152,11 @@ function ClassEditView(props) {
         {students.map(s => (
           <Grid key={s.id}>
             <span>{`${s.first_name} ${s.last_name}`}</span>
-            <Checkbox value={`${s.id}`} onClick={e => selectStudent(e)} />
+            <Checkbox
+              value={`${s.id}`}
+              checked={selectedStudents.includes(parseInt(s.id, 10))}
+              onClick={e => selectStudent(e)}
+            />
           </Grid>
         ))}
       </Grid>
