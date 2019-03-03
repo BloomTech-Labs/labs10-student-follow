@@ -92,11 +92,11 @@ function CampaignForm(props) {
   }
 
   // updates the refreshr's date when date input is changed
-  const setDate = date => {
-    // const [refreshr] = refreshrs.filter(r => r.id === id);
-    activeRefreshr.date = Date.parse(date); // not in utc time, bug list
-    props.setTimeData(Date.parse(date));
-  };
+  // const setDate = date => {
+  //   // const [refreshr] = refreshrs.filter(r => r.id === id);
+  //   activeRefreshr.date = Date.parse(date); // not in utc time, bug list
+  //   props.setTimeData(Date.parse(date));
+  // };
 
   const handlePrev = e => {
     e.preventDefault();

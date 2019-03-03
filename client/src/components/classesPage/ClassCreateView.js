@@ -31,14 +31,6 @@ const styles = theme => ({
 });
 
 function ClassCreateView(props) {
-  let validated = {
-    list_ids: [], // from addList()
-    recipient_ids: [], //from addRecipients()
-    selection_code: null, // HTTP status from addContacts()
-    campaign_id: null, // HTTP status from addRefreshr()
-    schedule_code: null // HTTP status from scheduleRefreshr()
-  };
-
   const [file, setFile] = useState({ filename: 'No File Chosen', content: {} });
 
   const [stage, setStage] = useState({
@@ -58,13 +50,6 @@ function ClassCreateView(props) {
   const [campaignData, setCampaignData] = useState({
     title: '',
     subject: '',
-    // sender_id: 428251, // permanent (Refreshr Team)
-    // list_ids: validated.list_ids,
-    // segment_ids: null,
-    // categories: [],
-    // suppression_group_id: 9332, // permanent (Unsubscribe ID)
-    // custom_unsubscribe_url: '',
-    // ip_pool: '',
     html_content: '', // requires [unsubscribe]
     plain_content: '' // requires [unsubscribe]
   });
@@ -73,21 +58,30 @@ function ClassCreateView(props) {
     send_at: null
   })
 
-  const newRefreshr = {
-    title: campaignData.title,
-    subject: campaignData.subject,
-    sender_id: 428251, // permanent (Refreshr Team)
-    list_ids: validated.list_ids,
-    segment_ids: null,
-    categories: [],
-    suppression_group_id: 9332, // permanent (Unsubscribe ID)
-    custom_unsubscribe_url: '',
-    ip_pool: '',
-    html_content: campaignData.html_content, // requires [unsubscribe]
-    plain_content: campaignData.plain_content // requires [unsubscribe]
-  }
+  let validated = {
+    list_ids: [], // from addList()
+    recipient_ids: [], //from addRecipients()
+    selection_code: null, // HTTP status from addContacts()
+    campaign_id: null, // HTTP status from addRefreshr()
+    schedule_code: null // HTTP status from scheduleRefreshr()
+  };
 
   const sendAllToSendgrid = () => {
+    // New object pulling different pieces of data before promise chain
+    const newRefreshr = {
+      title: campaignData.title,
+      subject: campaignData.subject,
+      sender_id: 428251, // permanent (Refreshr Team)
+      list_ids: validated.list_ids,
+      segment_ids: null,
+      categories: [],
+      suppression_group_id: 9332, // permanent (Unsubscribe ID)
+      custom_unsubscribe_url: '',
+      ip_pool: '',
+      html_content: campaignData.html_content, // requires [unsubscribe]
+      plain_content: campaignData.plain_content // requires [unsubscribe]
+    }
+
     // Add new list name
     addList(listData.classnameInput)
       .then(res => {

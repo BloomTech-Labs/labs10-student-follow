@@ -21,7 +21,7 @@ const headers = {
 const listId = 7100282 // Students2
 const recipient_id = "YXN0dXJpYXN4aUBnbWFpbC5jb20=" // Timmy
 // const recipient_ids = ["YnJpYW5AbWVuZG96YS5jb20=", "am9uYXRoYW5AaXZhbi5jb20=", "anVhbkBzaWVycmEuY29t"] // Juan, Brian, Jonathan
-const sender_id = 428251 // Refreshr Team
+// const sender_id = 428251 // Refreshr Team
 const campaign_id = 5033203 // March Newsletter
 
 /////////////////////

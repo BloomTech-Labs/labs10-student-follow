@@ -109,15 +109,15 @@ const styles = theme => ({
 });
 
 function ListForm(props) {
-  console.log('theme', props.theme);
+  // console.log('theme', props.theme);
   const { classes, file, setFile, setRecipientData } = props;
 
-  const handleSubmit = e => {};
+  const handleSubmit = e => { };
 
   const importCSV = () => {
     BigPapa.parse(file.content, {
       header: true,
-      complete: function(results, file) {
+      complete: function (results, file) {
         console.log('Parsing complete:', results, file);
         // setClasslist(results.data);
         setRecipientData(results.data);
