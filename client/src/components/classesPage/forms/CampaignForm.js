@@ -92,11 +92,14 @@ function CampaignForm(props) {
   }
 
   // updates the refreshr's date when date input is changed
-  // const setDate = date => {
-  //   // const [refreshr] = refreshrs.filter(r => r.id === id);
-  //   activeRefreshr.date = Date.parse(date); // not in utc time, bug list
-  //   props.setTimeData(Date.parse(date));
-  // };
+  // const setDate = e => {
+  //   // activeRefreshr.date = Date.parse(date); // not in utc time, bug list
+  //   const date = e.target.value;
+  //   console.log(date);
+  //   console.log(typeof date);
+  //   console.log(Date.parse(date) / 1000);
+    // props.setTimeData(Date.parse(date));
+  };
 
   const handlePrev = e => {
     e.preventDefault();
@@ -160,9 +163,10 @@ function CampaignForm(props) {
               variant="outlined"
               type="date"
               defaultValue={today}
+              // onChange={e => setDate(e)}
               onChange={e => props.setTimeData({
                 ...props.timeData,
-                send_at: Date.parse(e.target.value)
+                send_at: Date.parse(e.target.value / 1000)
               })}
             />
             <Button
