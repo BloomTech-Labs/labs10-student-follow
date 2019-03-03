@@ -22,7 +22,7 @@ const data = {
 };
 
 const headers = {
-  Authorization: 'Bearer A7N7Mxo3cHvRyh7heJ4BErAzHYj4VTTsYT98MD77haXs'
+  Authorization: `Bearer ${process.env.REACT_APP_TYPEFORM}`
 };
 
 class Typeform extends Component {
@@ -38,7 +38,7 @@ class Typeform extends Component {
     try {
       const response = await axios.get('https://api.typeform.com/forms', {
         headers: {
-          Authorization: 'Bearer A7N7Mxo3cHvRyh7heJ4BErAzHYj4VTTsYT98MD77haXs'
+          Authorization: `Bearer ${process.env.REACT_APP_TYPEFORM}`
         }
       });
       console.log('RESPONSE ===', response);
@@ -69,7 +69,7 @@ class Typeform extends Component {
         'https://api.typeform.com/forms/hWWX4R/responses',
         {
           headers: {
-            Authorization: 'Bearer A7N7Mxo3cHvRyh7heJ4BErAzHYj4VTTsYT98MD77haXs'
+            Authorization: `Bearer ${process.env.REACT_APP_TYPEFORM}`
           }
         }
       );
