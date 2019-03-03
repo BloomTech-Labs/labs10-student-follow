@@ -108,8 +108,6 @@ function Refreshr(props) {
           headers
         }
       );
-      console.log('RESPONSE ===', response);
-      console.log('URL ==', url);
       setUrl(response.data._links.display);
     } catch (error) {
       console.log(error);
@@ -117,9 +115,6 @@ function Refreshr(props) {
     setSubmitted(true);
   };
 
-  console.log('Question object ===', questionObject);
-  console.log('Submitted final ===>', submitted);
-  console.log('URL', url);
   return (
     <Grid className={props.classes.wrapper}>
       <FormGroup
@@ -132,6 +127,7 @@ function Refreshr(props) {
           })
         }
       >
+        <h2>Create Your Refreshr</h2>
         <TextField
           value={refreshrName}
           label="Refreshr Name"
@@ -145,8 +141,8 @@ function Refreshr(props) {
           }}
           onChange={e => addRefreshrName(e.target.value)}
         />
-        <h4 className={props.classes.subheaders}>Review Text</h4>
-        <TextField
+        {/* <h4 className={props.classes.subheaders}>Review Text</h4> */}
+        {/* <TextField
           value={reviewText}
           label="Review Text"
           name="reviewText"
@@ -156,7 +152,7 @@ function Refreshr(props) {
             shrink: true
           }}
           onChange={e => setReviewText(e.target.value)}
-        />
+        /> */}
         <h4 className={props.classes.subheaders}>Question</h4>
         <TextField
           value={questionText}
