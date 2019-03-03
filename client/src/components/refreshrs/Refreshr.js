@@ -73,7 +73,7 @@ function Refreshr(props) {
   const createForm = async event => {
     event.preventDefault();
     const headers = {
-      Authorization: 'Bearer A7N7Mxo3cHvRyh7heJ4BErAzHYj4VTTsYT98MD77haXs'
+      Authorization: `Bearer ${process.env.REACT_APP_TYPEFORM}`
     };
     const data = {
       title: questionObject.refreshrName,
