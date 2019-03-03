@@ -138,14 +138,17 @@ function ClassCreateView(props) {
               res.data.send_at
             }. Status is "${res.data.status}"!`
           );
-          submitClassData(
-            listData,
-            validated.list_ids[0],
-            recipientData,
-            campaignData
-          );
+          setTimeout(() => {
+            submitClassData(
+              listData,
+              validated.list_ids[0],
+              recipientData,
+              campaignData
+            );
+          }, 20000);
         }
       })
+      .then()
 
       .catch(err => console.log(err));
   };

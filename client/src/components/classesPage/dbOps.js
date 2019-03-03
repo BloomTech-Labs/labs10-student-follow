@@ -1,6 +1,5 @@
 import { getContacts } from '../SendgridOps';
 import axios from 'axios';
-import React from 'react';
 
 const ax = axios.create({
   // baseURL: 'https://refreshr.herokuapp.com' // production
@@ -12,35 +11,34 @@ const ax = axios.create({
 //   name: 'some new class'
 // };
 
-const recipientData = {
-  recipients: [
-    {
-      first_name: 'bob',
-      last_name: 'green',
-      email: 'bob@green'
-    },
-    {
-      first_name: 'charlie',
-      last_name: 'hunter',
-      email: 'charlie@hunter'
-    },
-    {
-      first_name: 'bobby',
-      last_name: 'orr',
-      email: 'bobby@bruins'
-    },
-    {
-      first_name: 'ted',
-      last_name: 'williams',
-      email: 'ted@bosox'
-    }
-  ]
-};
-
-const campaignData = {
-  id: 23 // refreshr id
-  // listId: 42 // the sendgrid list id for updating
-};
+/* 
+const recipientData = [
+  {
+    first_name: 'bob',
+    last_name: 'green',
+    email: 'bob@green'
+  },
+  {
+    first_name: 'charlie',
+    last_name: 'hunter',
+    email: 'charlie@hunter'
+  },
+  {
+    first_name: 'bobby',
+    last_name: 'orr',
+    email: 'bobby@bruins'
+  },
+  {
+    first_name: 'ted',
+    last_name: 'williams',
+    email: 'ted@bosox'
+  }
+];
+*/
+// const campaignData = {
+// id: 23 // refreshr id
+// listId: 42 // the sendgrid list id for updating
+// };
 
 /* basic flow of sending data to back end:
 
@@ -52,8 +50,8 @@ const campaignData = {
 
 // submitClassData(listData, validated.list_ids[0], )
 
-const listData = { classnameInput: 'afafadsfsdfqwef', ccBool: false };
-const sg_list_id = 7201393;
+// const listData = { classnameInput: 'afafadsfsdfqwef', ccBool: false };
+// const sg_list_id = 7201393;
 
 const submitClassData = async (
   listData,
@@ -62,10 +60,10 @@ const submitClassData = async (
   campaignData
 ) => {
   try {
-    console.log('listData:', listData);
+    // console.log('listData:', listData);
     console.log('sg_list_id:', sg_list_id);
-    console.log('recipientData:', recipientData);
-    console.log('campaignData:', campaignData);
+    // console.log('recipientData:', recipientData);
+    // console.log('campaignData:', campaignData);
 
     // add class to classes table
     const classRes = await ax.post('/classes', {
@@ -78,24 +76,34 @@ const submitClassData = async (
     // assuming students don't exist in db for now
     const newStudents = []; // array to keep track of new students
 
+    // get recipient id's and map to recipient email
+    const sgIds = {}; // object to match emails to sg id
+    const sgRecipientList = await getContacts(sg_list_id);
+    console.log(sgRecipientList);
+    const recipients = sgRecipientList.data.recipients;
+    console.log(recipients);
+
+    for (let r of recipients) {
+      const email = r.email;
+      const sgId = r.id;
+      sgIds[email] = sgId;
+    }
+    console.log(sgIds);
+
     for (const recipient of recipientData) {
       // add each student to db
-      // should probably change these column names on back or front end so they're consistent
       const studentsRes = await ax.post('/students', {
         first_name: recipient.first_name,
         last_name: recipient.last_name,
         email: recipient.email,
-        sg_recipient_id: null
-        // need to add the recipient id here
+        sg_recipient_id: sgIds[recipient.email]
       });
       // we are not accounting yet for students already in db. will have to throw an error if one is found? or just add that student to the class
       const { newStudentID } = studentsRes.data;
       newStudents.push(newStudentID); // add to array for updating students_classes table
     }
 
-    // get recipient id's and attach to recipients
-    const sgListRecipients = await getContacts(sg_list_id);
-    console.log(sgListRecipients);
+    console.log(newStudents);
 
     // add students and class to students_classes table
     const scRes = await ax.post(`/classes/${newClassID}`, {
@@ -111,6 +119,7 @@ const submitClassData = async (
   }
 };
 
+/*
 const testSubmit = () => {
   return (
     <>
@@ -125,6 +134,7 @@ const testSubmit = () => {
     </>
   );
 };
+*/
 
 // submitClassData(listData, sg_list_id, recipientData, campaignData);
-export default testSubmit;
+export default submitClassData;

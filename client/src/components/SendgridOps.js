@@ -242,14 +242,17 @@ export function addContacts(listId, recipient_ids) {
 }
 
 export function getContacts(listId) {
+  // listId = 7202079;
   const url = `https://api.sendgrid.com/v3/contactdb/lists/${listId}/recipients`;
-  axios
-    .get(url, headers)
-    .then(res => {
-      console.log(`===getContacts: ${res.data.recipient_count}===`);
-      console.log(res.data.recipients);
-    })
-    .catch(err => console.log(err));
+  console.log('listId:', listId);
+  console.log(url);
+
+  return axios.get(url, headers);
+  // .then(res => {
+  //   console.log(`===getContacts: ${res.data.recipient_count}===`);
+  //   console.log(res.data.recipients);
+  // })
+  // .catch(err => console.log(err));
 }
 export function deleteContact() {
   const url = `https://api.sendgrid.com/v3/contactdb/lists/${listId}/recipients/${recipient_id}`;

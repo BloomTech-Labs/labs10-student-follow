@@ -3,7 +3,6 @@ import { Route, withRouter, Router } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import history from './history';
 import axios from 'axios';
-import DBOps from './components/classesPage/dbOps';
 
 import {
   Loading,
@@ -191,7 +190,6 @@ const App = props => {
             />
             <Route path="/campaign" render={props => <CampaignForm />} />{' '}
             {/* for testing */}
-            <Route path="/dbtest" component={DBOps} />
           </Grid>
         </Grid>
       </Router>
