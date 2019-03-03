@@ -318,10 +318,10 @@ export function deleteRefreshr() {
     .catch(err => console.log(err))
 }
 
-export function scheduleRefreshr(scheduleObj, campaign_id) {
+export function scheduleRefreshr(timeData, campaign_id) {
   const url = `https://api.sendgrid.com/v3/campaigns/${campaign_id}/schedules`
   return new Promise(function (resolve, reject) {
-    axios.post(url, scheduleObj, headers)
+    axios.post(url, timeData, headers)
       .then(res => {
         console.log(`===scheduleRefreshr: ===`)
         resolve(res)

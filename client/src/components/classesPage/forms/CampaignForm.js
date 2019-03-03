@@ -127,11 +127,10 @@ function CampaignForm(props) {
   const scheduleRefreshr = () => {
     props.setCampaignData({
       ...props.campaignData,
-      title: 'Your Refreshr Is Here!',
+      title: "Raccoon Jellyfish",
       subject: activeRefreshr.name,
-      html_content: `<h1>Take a refreshr and get more smart!!</h1><p>Your refreshr is at <a>https://refreshr-app.netlify.com/takerefreshr/${
-        activeRefreshr.id
-      }</p>`
+      html_content: "<html><head><title></title></head><body><p>Raccoon Jellyfish! [unsubscribe]</p></body></html>",
+      plain_content: "Raccoon Jellyfish! [unsubscribe]"
     });
     setActiveRefreshr(null);
     // console.log(props.campaignData);
@@ -161,7 +160,10 @@ function CampaignForm(props) {
               variant="outlined"
               type="date"
               defaultValue={today}
-              onChange={e => props.setTimeData(Date.parse(e.target.value))}
+              onChange={e => props.setTimeData({
+                ...props.timeData,
+                send_at: Date.parse(e.target.value)
+              })}
             />
             <Button
               variant="outlined"
@@ -172,10 +174,10 @@ function CampaignForm(props) {
             </Button>
           </Card>
         ) : (
-          <Card className={classes.card}>
-            <h4>select a refreshr to schedule</h4>
-          </Card>
-        )}
+            <Card className={classes.card}>
+              <h4>select a refreshr to schedule</h4>
+            </Card>
+          )}
         <Grid container className={classes.cardList}>
           <Typography variant="h4">Your Refreshrs</Typography>
           {refreshrs.map(refreshr => (
