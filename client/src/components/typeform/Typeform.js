@@ -3,13 +3,13 @@ const axios = require('axios');
 // import { ReactTypeformEmbed } from 'react-typeform-embed';
 
 const data = {
-  title: 'Test from codebase',
+  title: 'Testing from Typeform section of codebase',
   fields: [
     {
-      title: 'the test',
+      title: 'A great test',
       type: 'multiple_choice',
       properties: {
-        description: 'Brilliant questions!',
+        description: 'Fantastic questions!',
         choices: [
           {
             ref: 'Coding coding coding',
@@ -33,26 +33,29 @@ class Typeform extends Component {
     };
   }
 
-  getForms = async event => {
-    event.preventDefault();
-    try {
-      const response = await axios.get('https://api.typeform.com/forms', {
-        headers: {
-          Authorization: 'Bearer A7N7Mxo3cHvRyh7heJ4BErAzHYj4VTTsYT98MD77haXs'
-        }
-      });
-      console.log('RESPONSE ===', response);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // getForms = async event => {
+  //   event.preventDefault();
+  //   try {
+  //     const response = await axios.get('https://api.typeform.com/forms', {
+  //       headers: {
+  //         Authorization: 'Bearer A7N7Mxo3cHvRyh7heJ4BErAzHYj4VTTsYT98MD77haXs'
+  //       }
+  //     });
+  //     console.log('RESPONSE ===', response);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   createForm = async event => {
     try {
-      const response = await axios('https://api.typeform.com/forms', {
-        headers,
-        data
-      });
+      const response = await axios.post(
+        'https://api.typeform.com/forms',
+        data,
+        {
+          headers
+        }
+      );
       console.log('RESPONSE ===', response);
     } catch (error) {
       console.log(error);
@@ -63,7 +66,7 @@ class Typeform extends Component {
     return (
       <div>
         <h1>Get the forms!</h1>
-        <button onClick={this.getForms}>Get Typeforms</button>
+        {/* <button onClick={this.getForms}>Get Typeforms</button> */}
         <button onClick={this.createForm}>Create Typeforms</button>
       </div>
     );
@@ -77,7 +80,6 @@ class Typeform extends Component {
 //     <div>
 //       <h1>My Typeform</h1>
 //       {/* <ReactTypeformEmbed url="https://nick971045.typeform.com/to/eaHFcw/" /> */}
-
 //       <button>Get Typeforms</button>
 //     </div>
 //   );

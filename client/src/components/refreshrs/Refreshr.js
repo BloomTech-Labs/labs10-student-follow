@@ -6,8 +6,11 @@ import FormGroup from '@material-ui/core/FormGroup';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Button from '@material-ui/core/Button';
+import { queueScheduler } from 'rxjs';
 
-const styles = (theme) => ({
+const axios = require('axios');
+
+const styles = theme => ({
   wrapper: {
     margin: '2rem auto',
     borderRadius: '0 0 5px 5px',
@@ -59,6 +62,39 @@ function Refreshr(props) {
     answers: { a1Text, a1, a2Text, a2, a3Text, a3, a4Text, a4 }
   });
 
+  const createForm = async event => {
+    event.preventDefault();
+    const headers = {
+      Authorization: 'Bearer A7N7Mxo3cHvRyh7heJ4BErAzHYj4VTTsYT98MD77haXs'
+    };
+    const data = {
+      title: questionObject.refreshrName,
+      fields: [
+        {
+          title: questionObject.reviewText,
+          type: 'multiple_choice',
+          properties: {
+            choices: [
+              {
+                label: questionObject.answers.a1Text
+              }
+            ]
+          }
+        }
+      ]
+    };
+    try {
+      const response = await axios('https://api.typeform.com/forms', {
+        headers,
+        data
+      });
+      console.log('RESPONSE ===', response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  console.log('Question object ===', questionObject);
   return (
     <Grid className={props.classes.wrapper}>
       <FormGroup
@@ -82,7 +118,7 @@ function Refreshr(props) {
           InputLabelProps={{
             shrink: true
           }}
-          onChange={(e) => addRefreshrName(e.target.value)}
+          onChange={e => addRefreshrName(e.target.value)}
         />
         <h4 className={props.classes.subheaders}>Review Text</h4>
         <TextField
@@ -94,7 +130,7 @@ function Refreshr(props) {
           InputLabelProps={{
             shrink: true
           }}
-          onChange={(e) => setReviewText(e.target.value)}
+          onChange={e => setReviewText(e.target.value)}
         />
         <h4 className={props.classes.subheaders}>Question</h4>
         <TextField
@@ -106,7 +142,7 @@ function Refreshr(props) {
           InputLabelProps={{
             shrink: true
           }}
-          onChange={(e) => setQuestionText(e.target.value)}
+          onChange={e => setQuestionText(e.target.value)}
         />
         <FormGroup className={props.classes.formGroup}>
           <FormControlLabel
@@ -115,7 +151,7 @@ function Refreshr(props) {
                 <Checkbox
                   checked={a1}
                   color="primary"
-                  onChange={(e) => setA1(e.target.checked)}
+                  onChange={e => setA1(e.target.checked)}
                 />
                 <TextField
                   variant="outlined"
@@ -125,7 +161,7 @@ function Refreshr(props) {
                   }}
                   value={a1Text}
                   className={props.classes.answerFields}
-                  onChange={(e) => setA1Text(e.target.value)}
+                  onChange={e => setA1Text(e.target.value)}
                 />
               </>
             }
@@ -136,7 +172,7 @@ function Refreshr(props) {
                 <Checkbox
                   checked={a2}
                   color="primary"
-                  onChange={(e) => setA2(e.target.checked)}
+                  onChange={e => setA2(e.target.checked)}
                 />
                 <TextField
                   variant="outlined"
@@ -146,7 +182,7 @@ function Refreshr(props) {
                   }}
                   value={a2Text}
                   className={props.classes.answerFields}
-                  onChange={(e) => setA2Text(e.target.value)}
+                  onChange={e => setA2Text(e.target.value)}
                 />
               </>
             }
@@ -157,7 +193,7 @@ function Refreshr(props) {
                 <Checkbox
                   checked={a3}
                   color="primary"
-                  onChange={(e) => setA3(e.target.checked)}
+                  onChange={e => setA3(e.target.checked)}
                 />
                 <TextField
                   variant="outlined"
@@ -167,7 +203,7 @@ function Refreshr(props) {
                   }}
                   value={a3Text}
                   className={props.classes.answerFields}
-                  onChange={(e) => setA3Text(e.target.value)}
+                  onChange={e => setA3Text(e.target.value)}
                 />
               </>
             }
@@ -178,7 +214,7 @@ function Refreshr(props) {
                 <Checkbox
                   checked={a4}
                   color="primary"
-                  onChange={(e) => setA4(e.target.checked)}
+                  onChange={e => setA4(e.target.checked)}
                 />
                 <TextField
                   variant="outlined"
@@ -188,7 +224,7 @@ function Refreshr(props) {
                   }}
                   value={a4Text}
                   className={props.classes.answerFields}
-                  onChange={(e) => setA4Text(e.target.value)}
+                  onChange={e => setA4Text(e.target.value)}
                 />
               </>
             }
@@ -197,7 +233,8 @@ function Refreshr(props) {
         <Button
           variant="contained"
           color="primary"
-          onClick={() => props.addQuestions(questionObject)}
+          // onClick={() => props.addQuestions(questionObject)}
+          onClick={e => createForm(e)}
         >
           Submit
         </Button>
