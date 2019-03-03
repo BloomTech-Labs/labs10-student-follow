@@ -91,13 +91,6 @@ function CampaignForm(props) {
     return `${year}-${month}-${day}`;
   }
 
-  // updates the refreshr's date when date input is changed
-  // const setDate = date => {
-  //   // const [refreshr] = refreshrs.filter(r => r.id === id);
-  //   activeRefreshr.date = Date.parse(date); // not in utc time, bug list
-  //   props.setTimeData(Date.parse(date));
-  // };
-
   const handlePrev = e => {
     e.preventDefault();
     props.setStage({
@@ -127,10 +120,11 @@ function CampaignForm(props) {
   const scheduleRefreshr = () => {
     props.setCampaignData({
       ...props.campaignData,
-      title: "Raccoon Jellyfish",
+      title: 'Raccoon Jellyfish',
       subject: activeRefreshr.name,
-      html_content: "<html><head><title></title></head><body><p>Raccoon Jellyfish! [unsubscribe]</p></body></html>",
-      plain_content: "Raccoon Jellyfish! [unsubscribe]"
+      html_content:
+        '<html><head><title></title></head><body><p>Raccoon Jellyfish! [unsubscribe]</p></body></html>',
+      plain_content: 'Raccoon Jellyfish! [unsubscribe]'
     });
     setActiveRefreshr(null);
     // console.log(props.campaignData);
@@ -160,10 +154,13 @@ function CampaignForm(props) {
               variant="outlined"
               type="date"
               defaultValue={today}
-              onChange={e => props.setTimeData({
-                ...props.timeData,
-                send_at: Date.parse(e.target.value)
-              })}
+              // onChange={e => setDate(e)}
+              onChange={e =>
+                props.setTimeData({
+                  ...props.timeData,
+                  send_at: Date.parse(e.target.value) / 1000
+                })
+              }
             />
             <Button
               variant="outlined"
@@ -174,10 +171,10 @@ function CampaignForm(props) {
             </Button>
           </Card>
         ) : (
-            <Card className={classes.card}>
-              <h4>select a refreshr to schedule</h4>
-            </Card>
-          )}
+          <Card className={classes.card}>
+            <h4>select a refreshr to schedule</h4>
+          </Card>
+        )}
         <Grid container className={classes.cardList}>
           <Typography variant="h4">Your Refreshrs</Typography>
           {refreshrs.map(refreshr => (
