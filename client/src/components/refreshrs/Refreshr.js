@@ -7,6 +7,8 @@ import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Button from '@material-ui/core/Button';
 import { queueScheduler } from 'rxjs';
+import styled from 'styled-components';
+import { NavLink as RouterNavLink } from 'react-router-dom';
 
 const axios = require('axios');
 
@@ -51,6 +53,8 @@ function Refreshr(props) {
   const [a2, setA2] = useState(false);
   const [a3, setA3] = useState(false);
   const [a4, setA4] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [url, setUrl] = useState('');
   const [a1Text, setA1Text] = useState('');
   const [a2Text, setA2Text] = useState('');
   const [a3Text, setA3Text] = useState('');
@@ -61,6 +65,10 @@ function Refreshr(props) {
     questionText,
     answers: { a1Text, a1, a2Text, a2, a3Text, a3, a4Text, a4 }
   });
+
+  const StyleDisplay = styled.a`
+    ${{ display: submitted ? 'block' : 'none' }}
+  `;
 
   const createForm = async event => {
     event.preventDefault();
@@ -77,6 +85,15 @@ function Refreshr(props) {
             choices: [
               {
                 label: questionObject.answers.a1Text
+              },
+              {
+                label: questionObject.answers.a2Text
+              },
+              {
+                label: questionObject.answers.a3Text
+              },
+              {
+                label: questionObject.answers.a4Text
               }
             ]
           }
@@ -92,12 +109,17 @@ function Refreshr(props) {
         }
       );
       console.log('RESPONSE ===', response);
+      console.log('URL ==', url);
+      setUrl(response.data._links.display);
     } catch (error) {
       console.log(error);
     }
+    setSubmitted(true);
   };
 
   console.log('Question object ===', questionObject);
+  console.log('Submitted final ===>', submitted);
+  console.log('URL', url);
   return (
     <Grid className={props.classes.wrapper}>
       <FormGroup
@@ -241,6 +263,7 @@ function Refreshr(props) {
         >
           Submit
         </Button>
+        <StyleDisplay>View your Refreshr here: {url}</StyleDisplay>
       </FormGroup>
     </Grid>
   );

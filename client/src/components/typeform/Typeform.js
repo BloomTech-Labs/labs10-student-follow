@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
+import { ReactTypeformEmbed } from 'react-typeform-embed';
 const axios = require('axios');
-// import { ReactTypeformEmbed } from 'react-typeform-embed';
 
 const data = {
   title: 'Testing from Typeform section of codebase',
@@ -33,19 +33,19 @@ class Typeform extends Component {
     };
   }
 
-  // getForms = async event => {
-  //   event.preventDefault();
-  //   try {
-  //     const response = await axios.get('https://api.typeform.com/forms', {
-  //       headers: {
-  //         Authorization: 'Bearer A7N7Mxo3cHvRyh7heJ4BErAzHYj4VTTsYT98MD77haXs'
-  //       }
-  //     });
-  //     console.log('RESPONSE ===', response);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+  getForms = async event => {
+    event.preventDefault();
+    try {
+      const response = await axios.get('https://api.typeform.com/forms', {
+        headers: {
+          Authorization: 'Bearer A7N7Mxo3cHvRyh7heJ4BErAzHYj4VTTsYT98MD77haXs'
+        }
+      });
+      console.log('RESPONSE ===', response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   createForm = async event => {
     try {
@@ -62,12 +62,31 @@ class Typeform extends Component {
     }
   };
 
+  getAnalytics = async event => {
+    event.preventDefault();
+    try {
+      const response = await axios.get(
+        'https://api.typeform.com/forms/jGvWqC/responses',
+        {
+          headers: {
+            Authorization: 'Bearer A7N7Mxo3cHvRyh7heJ4BErAzHYj4VTTsYT98MD77haXs'
+          }
+        }
+      );
+      console.log('RESPONSE ===', response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   render() {
     return (
       <div>
         <h1>Get the forms!</h1>
-        {/* <button onClick={this.getForms}>Get Typeforms</button> */}
+        <ReactTypeformEmbed url="https://nick971045.typeform.com/to/eaHFcw/" />
+        <button onClick={this.getForms}>Get Typeforms</button>
         <button onClick={this.createForm}>Create Typeforms</button>
+        <button onClick={this.getAnalytics}>Get getAnalytics</button>
       </div>
     );
   }
