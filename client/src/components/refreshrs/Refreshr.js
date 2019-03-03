@@ -6,9 +6,7 @@ import FormGroup from '@material-ui/core/FormGroup';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Button from '@material-ui/core/Button';
-import { queueScheduler } from 'rxjs';
 import styled from 'styled-components';
-import { NavLink as RouterNavLink } from 'react-router-dom';
 
 const axios = require('axios');
 
