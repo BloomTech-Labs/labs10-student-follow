@@ -71,7 +71,6 @@ function Refreshr(props) {
   `;
 
   const createForm = async event => {
-    console.log('CREATING FORM');
     event.preventDefault();
     const headers = {
       Authorization: `Bearer ${process.env.REACT_APP_TYPEFORM}`

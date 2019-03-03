@@ -66,7 +66,7 @@ class Typeform extends Component {
     event.preventDefault();
     try {
       const response = await axios.get(
-        'https://api.typeform.com/forms/jGvWqC/responses',
+        'https://api.typeform.com/forms/hWWX4R/responses',
         {
           headers: {
             Authorization: 'Bearer A7N7Mxo3cHvRyh7heJ4BErAzHYj4VTTsYT98MD77haXs'
@@ -83,7 +83,7 @@ class Typeform extends Component {
     return (
       <div>
         <h1>Get the forms!</h1>
-        <ReactTypeformEmbed url="https://nick971045.typeform.com/to/eaHFcw/" />
+        {/* <ReactTypeformEmbed url="https://nick971045.typeform.com/to/eaHFcw/" /> */}
         <button onClick={this.getForms}>Get Typeforms</button>
         <button onClick={this.createForm}>Create Typeforms</button>
         <button onClick={this.getAnalytics}>Get getAnalytics</button>
