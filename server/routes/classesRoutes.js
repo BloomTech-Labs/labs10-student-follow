@@ -54,8 +54,7 @@ router.post('/:id/drop/:studentId', async (req, res, next) => {
   }
 });
 
-
- router.get('/:id/refreshrs', async (req, res, next) => {
+router.get('/:id/refreshrs', async (req, res, next) => {
   const { id } = req.params;
   try {
     const refreshrs = await db.getClassRefreshrs(id);
@@ -81,8 +80,11 @@ router.get('/teachers/:teacherId', async (req, res, next) => {
   }
 });
 
-router.post('/', jwtCheck, emptyCheck, async (req, res, next) => {
+// create a new class
+router.post('/', /*jwtCheck,*/ emptyCheck, async (req, res, next) => {
   const { body } = req;
+  console.log('class:', body);
+
   try {
     const newClassID = await db.addClass(body);
     res.status(responseStatus.postCreated).json({ newClassID });

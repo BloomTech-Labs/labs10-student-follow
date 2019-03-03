@@ -1,4 +1,6 @@
-const axios = require('axios');
+import { getContacts } from '../SendgridOps';
+import axios from 'axios';
+import React from 'react';
 
 const ax = axios.create({
   // baseURL: 'https://refreshr.herokuapp.com' // production
@@ -6,9 +8,9 @@ const ax = axios.create({
 });
 
 // dummy data
-const listData = {
-  name: 'some new class'
-};
+// const listData = {
+//   name: 'some new class'
+// };
 
 const recipientData = {
   recipients: [
@@ -48,11 +50,27 @@ const campaignData = {
   4) add the refreshr, class, and teacher to the teachers_classes_refreshrs table using the refreshr id, teacher(user) id, and class id from step 1
 */
 
-const submitClassData = async (listData, recipientData, campaignData) => {
+// submitClassData(listData, validated.list_ids[0], )
+
+const listData = { classnameInput: 'afafadsfsdfqwef', ccBool: false };
+const sg_list_id = 7201393;
+
+const submitClassData = async (
+  listData,
+  sg_list_id,
+  recipientData,
+  campaignData
+) => {
   try {
+    console.log('listData:', listData);
+    console.log('sg_list_id:', sg_list_id);
+    console.log('recipientData:', recipientData);
+    console.log('campaignData:', campaignData);
+
     // add class to classes table
     const classRes = await ax.post('/classes', {
-      name: listData.name
+      name: listData.classnameInput,
+      sg_list_id
     }); // need to add cc field to classes, leaving it out for now
     const { newClassID } = classRes.data;
 
@@ -60,18 +78,25 @@ const submitClassData = async (listData, recipientData, campaignData) => {
     // assuming students don't exist in db for now
     const newStudents = []; // array to keep track of new students
 
-    for (const recipient of recipientData.recipients) {
+    for (const recipient of recipientData) {
       // add each student to db
       // should probably change these column names on back or front end so they're consistent
       const studentsRes = await ax.post('/students', {
-        firstname: recipient.first_name,
-        lastname: recipient.last_name,
-        email: recipient.email
+        first_name: recipient.first_name,
+        last_name: recipient.last_name,
+        email: recipient.email,
+        sg_recipient_id: null
+        // need to add the recipient id here
       });
       // we are not accounting yet for students already in db. will have to throw an error if one is found? or just add that student to the class
       const { newStudentID } = studentsRes.data;
       newStudents.push(newStudentID); // add to array for updating students_classes table
     }
+
+    // get recipient id's and attach to recipients
+    const sgListRecipients = await getContacts(sg_list_id);
+    console.log(sgListRecipients);
+
     // add students and class to students_classes table
     const scRes = await ax.post(`/classes/${newClassID}`, {
       students: newStudents
@@ -86,4 +111,20 @@ const submitClassData = async (listData, recipientData, campaignData) => {
   }
 };
 
-export default submitClassData;
+const testSubmit = () => {
+  return (
+    <>
+      <h1>test</h1>
+      <button
+        onClick={() =>
+          submitClassData(listData, sg_list_id, recipientData, campaignData)
+        }
+      >
+        test
+      </button>
+    </>
+  );
+};
+
+// submitClassData(listData, sg_list_id, recipientData, campaignData);
+export default testSubmit;
