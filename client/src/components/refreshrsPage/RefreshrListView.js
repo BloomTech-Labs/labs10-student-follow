@@ -3,7 +3,7 @@ import { Grid, Card, Typography, Icon, CardContent } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import RefreshrCard from './RefreshrCard';
+// import RefreshrCard from './RefreshrCard';
 
 /* STYLES */
 const styles = theme => ({

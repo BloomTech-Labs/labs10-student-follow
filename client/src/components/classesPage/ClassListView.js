@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Grid, Card, Typography, Icon, CardContent } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import { NewClassCard, ExistingClassCard } from '../index.js';
+// import { NewClassCard, ExistingClassCard } from '../index.js';
 import axios from 'axios';
 
 const styles = theme => ({

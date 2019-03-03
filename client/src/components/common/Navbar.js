@@ -60,7 +60,7 @@ const styles = theme => ({
   },
   list: {
     [theme.breakpoints.up('sm')]: {
-     borderLeft: '1px solid #FFFFFF',
+      borderLeft: '1px solid #FFFFFF',
     },
     background: theme.palette.primary.dark,
     color: theme.palette.primary.contrastText,
@@ -86,7 +86,7 @@ const styles = theme => ({
 
 
 const Navbar = props => {
-  console.log(props.theme)
+  // console.log(props.theme)
   const { classes, location } = props;
 
   /*-------- NAV BUTTONS --------*/
@@ -146,7 +146,7 @@ const Navbar = props => {
   if (location.pathname !== '/') {
     return (
       <div className={classes.root}>
-        <AppBar position="fixed"  elevation={20} className={classes.appBar}>
+        <AppBar position="fixed" elevation={20} className={classes.appBar}>
           <Toolbar className={classes.toolbar}>
             <Button variant="outlined" className={classes.btn} onClick={(e) => { e.preventDefault(); handleLogIn() }}>{localStorage.getItem('isLoggedIn') ? 'Logout' : 'Login'}</Button>
             <HomeLink className={classes.logo} to='/dashboard' />

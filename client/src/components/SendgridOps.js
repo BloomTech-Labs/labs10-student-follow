@@ -21,7 +21,7 @@ const headers = {
 const listId = 7100282 // Students2
 const recipient_id = "YXN0dXJpYXN4aUBnbWFpbC5jb20=" // Timmy
 // const recipient_ids = ["YnJpYW5AbWVuZG96YS5jb20=", "am9uYXRoYW5AaXZhbi5jb20=", "anVhbkBzaWVycmEuY29t"] // Juan, Brian, Jonathan
-const sender_id = 428251 // Refreshr Team
+// const sender_id = 428251 // Refreshr Team
 const campaign_id = 5033203 // March Newsletter
 
 /////////////////////
@@ -318,10 +318,10 @@ export function deleteRefreshr() {
     .catch(err => console.log(err))
 }
 
-export function scheduleRefreshr(scheduleObj, campaign_id) {
+export function scheduleRefreshr(timeData, campaign_id) {
   const url = `https://api.sendgrid.com/v3/campaigns/${campaign_id}/schedules`
   return new Promise(function (resolve, reject) {
-    axios.post(url, scheduleObj, headers)
+    axios.post(url, timeData, headers)
       .then(res => {
         console.log(`===scheduleRefreshr: ===`)
         resolve(res)
