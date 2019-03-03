@@ -86,7 +86,7 @@ function ClassCreateView(props) {
     addList(listData.classnameInput)
       .then(res => {
         validated.list_ids.push(res.data.id)
-        console.log(`line 83`)
+        console.log(`89`)
         console.log(recipientData)
         return addRecipients(recipientData)
       })
@@ -97,9 +97,8 @@ function ClassCreateView(props) {
           ...validated.recipient_ids,
           ...res.data.persisted_recipients
         ]
-        console.log(`line 94`)
-        console.log(validated.list_ids[0])
-        console.log(validated.recipient_ids)
+        console.log(`100`)
+        console.log(validated)
         return addContacts(validated.list_ids[0], validated.recipient_ids)
       })
 
@@ -107,7 +106,7 @@ function ClassCreateView(props) {
       .then(res => {
         validated.selection_code = res.status
         if (validated.selection_code === 201) {
-          console.log(`line 104`)
+          console.log(`109`)
           console.log(newRefreshr)
           return addRefreshr(newRefreshr)
         }
@@ -117,9 +116,7 @@ function ClassCreateView(props) {
       .then(res => {
         if (res.status === 201) {
           validated.campaign_id = res.data.id
-          console.log(`line 114`)
-          console.log(timeData)
-          console.log(validated.campaign_id)
+          console.log(`119`)
           return scheduleRefreshr(timeData, validated.campaign_id)
         }
       })
@@ -127,6 +124,7 @@ function ClassCreateView(props) {
       // Sucess if all steps complete
       .then(res => {
         if (res.status === 201) {
+          console.log(`129`)
           validated.schedule_code = res.status
           console.log(`Success! Your campaign ${res.data.id} is scheduled for ${res.data.send_at}. Status is "${res.data.status}"!`)
         }
