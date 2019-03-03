@@ -84,10 +84,13 @@ function Refreshr(props) {
       ]
     };
     try {
-      const response = await axios('https://api.typeform.com/forms', {
-        headers,
-        data
-      });
+      const response = await axios.post(
+        'https://api.typeform.com/forms',
+        data,
+        {
+          headers
+        }
+      );
       console.log('RESPONSE ===', response);
     } catch (error) {
       console.log(error);
