@@ -68,6 +68,7 @@ const App = props => {
 
   // add questions
   const addQuestions = question => {
+    console.log('ADDING QUESTIONS');
     axios
       .post('https://refreshr.herokuapp.com/questions', question)
       .then(res => {
