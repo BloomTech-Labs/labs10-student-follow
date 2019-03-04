@@ -21,7 +21,7 @@ function SelectionForm(props) {
     e.preventDefault()
     props.setStage({
       ...props.stage,
-      onRecipientForm: !props.stage.onRecipientForm,
+      onListForm: !props.stage.onListForm,
       onSelectionForm: !props.stage.onSelectionForm
     })
   }

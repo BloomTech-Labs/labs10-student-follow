@@ -3,7 +3,6 @@ import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
 import {
   ListForm,
-  RecipientForm,
   SelectionForm,
   CampaignForm
 } from '../index.js';
@@ -40,7 +39,7 @@ function ClassCreateView(props) {
 
   const [stage, setStage] = useState({
     onListForm: true,
-    onRecipientForm: false,
+    // onRecipientForm: false,
     onSelectionForm: false,
     onCampaignForm: false
   });
@@ -155,7 +154,6 @@ function ClassCreateView(props) {
 
   return (
     <Grid className={props.classes.wrapper}>
-      <h1>ClassCreateView Component</h1>
       <button onClick={e => sendAllToSendgrid(e)}>sendAllToSendgrid</button>
       {stage.onListForm ? (
         <ListForm
@@ -170,14 +168,14 @@ function ClassCreateView(props) {
         />
       ) : null}
 
-      {stage.onRecipientForm ? (
+      {/* {stage.onRecipientForm ? (
         <RecipientForm
           recipientData={recipientData}
           setRecipientData={setRecipientData}
           stage={stage}
           setStage={setStage}
         />
-      ) : null}
+      ) : null} */}
 
       {stage.onSelectionForm ? (
         <SelectionForm
