@@ -112,41 +112,41 @@ function Refreshr(props) {
             ]
           }
         }
+      ],
+      logic: [
+        {
+          type: 'field',
+          ref: 'question_1',
+          actions: [
+            {
+              action: 'add',
+              details: {
+                target: {
+                  type: 'variable',
+                  value: 'score'
+                },
+                value: {
+                  type: 'constant',
+                  value: 1
+                }
+              },
+              condition: {
+                op: 'is',
+                vars: [
+                  {
+                    type: 'field',
+                    value: 'question_1'
+                  },
+                  {
+                    type: 'choice',
+                    value: 'correct'
+                  }
+                ]
+              }
+            }
+          ]
+        }
       ]
-      // logic: [
-      //   {
-      //     type: 'field',
-      //     ref: 'question_1',
-      //     actions: [
-      //       {
-      //         action: 'add',
-      //         details: {
-      //           target: {
-      //             type: 'variable',
-      //             value: 'score'
-      //           },
-      //           value: {
-      //             type: 'constant',
-      //             value: 1
-      //           }
-      //         },
-      //         condition: {
-      //           op: 'is',
-      //           vars: [
-      //             {
-      //               type: 'field',
-      //               value: 'question_1'
-      //             },
-      //             {
-      //               type: 'choice',
-      //               value: 'correct'
-      //             }
-      //           ]
-      //         }
-      //       }
-      //     ]
-      //   }
-      // ]
     };
     try {
       const response = await axios.post(
