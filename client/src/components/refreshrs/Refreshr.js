@@ -75,6 +75,9 @@ function Refreshr(props) {
     };
     const data = {
       title: questionObject.refreshrName,
+      variables: {
+        score: 0
+      },
       fields: [
         {
           title: 'Please enter your email address.',
@@ -84,26 +87,66 @@ function Refreshr(props) {
           }
         },
         {
+          ref: 'question_1',
           title: questionObject.reviewText,
           type: 'multiple_choice',
           properties: {
+            randomize: true,
             choices: [
               {
+                ref: 'correct',
                 label: questionObject.answers.a1Text
               },
               {
+                ref: 'incorrect_1',
                 label: questionObject.answers.a2Text
               },
               {
+                ref: 'incorrect_2',
                 label: questionObject.answers.a3Text
               },
               {
+                ref: 'incorrect_3',
                 label: questionObject.answers.a4Text
               }
             ]
           }
         }
       ]
+      // logic: [
+      //   {
+      //     type: 'field',
+      //     ref: 'question_1',
+      //     actions: [
+      //       {
+      //         action: 'add',
+      //         details: {
+      //           target: {
+      //             type: 'variable',
+      //             value: 'score'
+      //           },
+      //           value: {
+      //             type: 'constant',
+      //             value: 1
+      //           }
+      //         },
+      //         condition: {
+      //           op: 'is',
+      //           vars: [
+      //             {
+      //               type: 'field',
+      //               value: 'question_1'
+      //             },
+      //             {
+      //               type: 'choice',
+      //               value: 'correct'
+      //             }
+      //           ]
+      //         }
+      //       }
+      //     ]
+      //   }
+      // ]
     };
     try {
       const response = await axios.post(
