@@ -2,14 +2,14 @@ exports.up = function(knex, Promise) {
   return knex.schema.createTable('students_classes', (tbl) => {
     tbl.increments();
     tbl
-      .integer('student_id')
+      .string('student_id')
       .unsigned()
-      .references('id')
+      .references('sg_recipient_id')
       .inTable('students');
     tbl
-      .integer('class_id')
+      .string('class_id')
       .unsigned()
-      .references('id')
+      .references('sg_list_id')
       .inTable('classes');
   });
 };
