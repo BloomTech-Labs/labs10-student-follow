@@ -116,6 +116,12 @@ module.exports = {
       .select('r.name', 'r.id')
       .where('tcr.class_id', classId),
 
+  removeStudent: (classId, studentId) => {
+    return db('students_classes')
+      .where({ student_id: studentId, class_id: classId })
+      .delete();
+  },
+
   getClassStudents: classId => {
     return db('students_classes as sc')
       .join('students as s', 's.id', 'sc.student_id')
@@ -133,10 +139,13 @@ module.exports = {
   addClass: async classInfo => {
     const newClassID = await db('classes')
       .insert(classInfo)
-      .returning('id')
-      .then(id => {
-        return id;
-      });
+      .returning('id');
+    // .returning('id')
+    // .then(id => {
+    //   return id;
+    // });
+    console.log(`class created: ${newClassID}`);
+    console.log(newClassID);
     return newClassID[0];
   },
 

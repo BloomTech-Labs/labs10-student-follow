@@ -57,12 +57,17 @@ module.exports = {
   },
 
   addStudent: async student => {
-    const newStudent = await db('students')
-      .insert(student)
-      .returning('id')
-      .then(id => {
-        return id;
-      });
-    return newStudent[0];
+    try {
+      const newStudent = await db('students')
+        .insert(student)
+        .returning('id');
+      // .then(id => {
+      //   return id;
+      // });
+      console.log('ns:', newStudent);
+      return newStudent[0];
+    } catch (err) {
+      console.log(err);
+    }
   }
 };

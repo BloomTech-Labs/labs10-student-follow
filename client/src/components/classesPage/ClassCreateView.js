@@ -1,7 +1,12 @@
-import React, { useState } from "react";
-import Grid from "@material-ui/core/Grid";
-import { withStyles } from "@material-ui/core/styles";
-import { ListForm, RecipientForm, SelectionForm, CampaignForm } from '../index.js'
+import React, { useState } from 'react';
+import Grid from '@material-ui/core/Grid';
+import { withStyles } from '@material-ui/core/styles';
+import {
+  ListForm,
+  RecipientForm,
+  SelectionForm,
+  CampaignForm
+} from '../index.js';
 import {
   addList,
   // getList, getLists, updateList, deleteList,
@@ -12,8 +17,8 @@ import {
   addRefreshr,
   scheduleRefreshr
   // addRefreshr, getRefreshr, getRefreshrs, updateRefreshr, deleteRefreshr, scheduleRefreshr, rescheduleRefreshr, getScheduleRefreshr, deleteScheduleRefreshr, sendTestRefreshr
-
-} from '../SendgridOps'
+} from '../SendgridOps';
+import submitClassData from './dbOps';
 // import axios from 'axios';
 
 const styles = theme => ({
@@ -26,7 +31,7 @@ const styles = theme => ({
     [theme.breakpoints.up('sm')]: {
       width: `100% - ${200}px`,
       marginRight: 200
-    },
+    }
   }
 });
 
@@ -56,7 +61,7 @@ function ClassCreateView(props) {
 
   const [timeData, setTimeData] = useState({
     send_at: null
-  })
+  });
 
   let validated = {
     list_ids: [], // from addList()
@@ -80,15 +85,15 @@ function ClassCreateView(props) {
       ip_pool: '',
       html_content: campaignData.html_content, // requires [unsubscribe]
       plain_content: campaignData.plain_content // requires [unsubscribe]
-    }
+    };
 
     // Add new list name
     addList(listData.classnameInput)
       .then(res => {
-        validated.list_ids.push(res.data.id)
-        console.log(`89`)
-        console.log(recipientData)
-        return addRecipients(recipientData)
+        validated.list_ids.push(res.data.id);
+        console.log(`line 83`);
+        console.log(recipientData);
+        return addRecipients(recipientData);
       })
 
       // Add new recipients
@@ -96,47 +101,62 @@ function ClassCreateView(props) {
         validated.recipient_ids = [
           ...validated.recipient_ids,
           ...res.data.persisted_recipients
-        ]
-        console.log(`100`)
-        console.log(validated)
-        return addContacts(validated.list_ids[0], validated.recipient_ids)
+        ];
+        console.log(`line 94`);
+        console.log(validated.list_ids[0]);
+        console.log('validated recipients:', validated.recipient_ids);
+        return addContacts(validated.list_ids[0], validated.recipient_ids);
       })
 
       // Add all new recipients to list
       .then(res => {
-        validated.selection_code = res.status
+        validated.selection_code = res.status;
         if (validated.selection_code === 201) {
-          console.log(`109`)
-          console.log(newRefreshr)
-          return addRefreshr(newRefreshr)
+          console.log(`line 104`);
+          console.log(newRefreshr);
+          return addRefreshr(newRefreshr);
         }
       })
 
       // Send Refreshr object with unix time to be scheduled
       .then(res => {
         if (res.status === 201) {
-          validated.campaign_id = res.data.id
-          console.log(`119`)
-          return scheduleRefreshr(timeData, validated.campaign_id)
+          validated.campaign_id = res.data.id;
+          console.log(`line 114`);
+          console.log(timeData);
+          console.log(validated.campaign_id);
+          return scheduleRefreshr(timeData, validated.campaign_id);
         }
       })
 
       // Sucess if all steps complete
       .then(res => {
         if (res.status === 201) {
-          console.log(`129`)
-          validated.schedule_code = res.status
-          console.log(`Success! Your campaign ${res.data.id} is scheduled for ${res.data.send_at}. Status is "${res.data.status}"!`)
+          validated.schedule_code = res.status;
+          console.log(
+            `Success! Your campaign ${res.data.id} is scheduled for ${
+              res.data.send_at
+            }. Status is "${res.data.status}"!`
+          );
+          setTimeout(() => {
+            submitClassData(
+              listData,
+              validated.list_ids[0],
+              recipientData,
+              campaignData
+            );
+          }, 20000);
         }
       })
+      .then()
 
-      .catch(err => console.log(err))
-  }
+      .catch(err => console.log(err));
+  };
 
   return (
     <Grid className={props.classes.wrapper}>
       <h1>ClassCreateView Component</h1>
-      <button onClick={(e) => sendAllToSendgrid(e)}>sendAllToSendgrid</button>
+      <button onClick={e => sendAllToSendgrid(e)}>sendAllToSendgrid</button>
       {stage.onListForm ? (
         <ListForm
           file={file}
