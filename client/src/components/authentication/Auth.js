@@ -5,11 +5,10 @@ const clientID = 'jNDq5B6iAnIRcrpM07Omh05uyppZ89px';
 const domain = 'team-refreshr.auth0.com';
 const options = {
   auth: {
-
     //PRODUCTION
     //audience: 'https://refreshr.herokuapp.com',
     //redirect: true,
-    // redirectUri: 'https://refreshr-app.netlify.com/loading',
+    // reddirectUri: 'https://refreshr-app.netlify.com/loading',
     //DEVELOPMENT
     audience: 'http://localhost:9000',
     redirect: true,
@@ -37,6 +36,7 @@ const options = {
     }
   ]
 };
+
 const lock = new Auth0Lock(clientID, domain, options);
 
 lock.on('authenticated', authResult => {
@@ -50,7 +50,7 @@ lock.on('authenticated', authResult => {
 
     localStorage.setItem('accessToken', authResult.accessToken);
     localStorage.setItem('profile', JSON.stringify(profile));
-    localStorage.setItem('name', `${profile.name}`)
+    localStorage.setItem('name', `${profile.name}`);
     localStorage.setItem('user_id', profile['http://localhost:9000/uid']);
 
     const body = {
@@ -66,14 +66,14 @@ lock.on('authenticated', authResult => {
     axios({
       method: 'post',
       url: 'http://localhost:9000/teachers',
-      headers: {Authorization: `Bearer ${authResult.accessToken}` },
+      headers: { Authorization: `Bearer ${authResult.accessToken}` },
       data: body
-      })
+    })
       .then(res => {
-        console.log(res)
+        console.log(res);
       })
       .catch(err => console.log(err));
-  })
+  });
 });
 
 lock.on('authorization_error', error => {

@@ -4,15 +4,14 @@ const create = (id) => ({
   first_name: faker.name.firstName(),
   last_name: faker.name.lastName(),
   email: faker.internet.email(),
-  sg_recipient_id: faker.random.alphaNumeric(),
-  user_id: id,
-  role: 'student'
+  sg_recipient_id: id,
+
 });
 
 exports.seed = async function(knex, Promise) {
   const students = [];
 
-  for (let i = 0; i < 500; i++) {
+  for (let i = 1; i < 501; i++) {
     students.push(create(i));
   }
 

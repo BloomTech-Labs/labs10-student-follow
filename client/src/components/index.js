@@ -1,6 +1,3 @@
-/* AUTH */
-import Auth from './authentication/Auth';
-
 /* COMMON */
 import Navcrumbs from './common/Navcrumbs';
 import Navbar from './common/Navbar';
@@ -42,7 +39,6 @@ import Snackbar from './billingPage/Snackbar';
 import Typeform from './typeform/Typeform';
 
 export {
-  Auth,
   Navcrumbs,
   Navbar,
   BillingPage,

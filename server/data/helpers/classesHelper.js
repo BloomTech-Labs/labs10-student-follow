@@ -8,24 +8,24 @@ module.exports = {
 
   getClass: async id => {
     const selectedClass = await db('classes')
-      .where({ id })
+      .where('sg_list_id', id)
       .first();
 
     const teacher = await db('teachers')
       .select(
-        'teachers.id as t_id',
+        'teachers.user_id as t_id',
         'teachers.first_name as t_first',
         'teachers.last_name as t_last',
         'teachers.email as t_email'
       )
       .join('teachers_classes_refreshrs as tcr', 'teachers.user_id', 'tcr.teacher_id')
-      .join('classes', 'classes.id', 'tcr.class_id') 
-      .where('classes.id', id);
+      .join('classes', 'classes.sg_list_id', 'tcr.class_id') 
+      .where('classes.sg_list_id', id);
 
     const students = await db('students')
-      .join('students_classes', 'students.id', 'students_classes.student_id')
-      .join('classes', 'classes.id', 'students_classes.class_id') 
-      .where('classes.id', id);
+      .join('students_classes', 'students.sg_recipient_id', 'students_classes.student_id')
+      .join('classes', 'classes.sg_list_id', 'students_classes.class_id') 
+      .where('classes.sg_list_id', id);
 
     const refreshrs = await db('refreshrs')
       .select(
@@ -46,8 +46,8 @@ module.exports = {
       )
       .join('questions', 'questions.id', 'questions_refreshrs.question_id')
       .join('teachers_classes_refreshrs as tcr', 'refreshrs.id', 'tcr.refreshr_id')
-      .join('classes', 'classes.id', 'tcr.refreshr_id')
-      .where('classes.id', id);
+      .join('classes', 'classes.sg_list_id', 'tcr.class_id')
+      .where('classes.sg_list_id', id);
 
     return Promise.all([selectedClass, teacher, students, refreshrs]).then(
       response => {

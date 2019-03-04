@@ -1,15 +1,16 @@
 const faker = require('faker');
 
-const create = () => ({
+const create = (id) => ({
   review_text: faker.lorem.sentence(20),
-  name: faker.random.words(2)
+  name: faker.random.words(2),
+  typeform_url: `${id}`
 });
 
 exports.seed = async function(knex, Promise) {
   const refreshrs = [];
 
-  for (let i = 0; i < 100; i++) {
-    refreshrs.push(create());
+  for (let i = 1; i < 101; i++) {
+    refreshrs.push(create(i));
   }
 
   await knex.raw('TRUNCATE TABLE refreshrs RESTART IDENTITY CASCADE');

@@ -19,13 +19,15 @@ import {
 } from './components';
 
 const App = props => {
+  console.log('ENV:', process.env)
   const classes = { props };
-  const token = localStorage.getItem('accessToken')
-  const user_id = localStorage.getItem('user_id')
+  const token = localStorage.getItem('accessToken');
+  const user_id = localStorage.getItem('user_id');
 
   /* STATE */
+  const [url, setUrl] = useState('');
   const [refreshrs, setRefreshrs] = useState([]);
-   const [questions, setQuestions] = useState([]);
+  const [questions, setQuestions] = useState([]);
   const [allClasses, setClasses] = useState([]);
   // const [students, setStudents] = useState([]);
   // const [teachers, setTeachers] = useState([]);
@@ -76,13 +78,13 @@ const App = props => {
     axios({
       method: 'get',
       url: `https://refreshr.herokuapp.com/${user_id}`,
-      headers: {Authorization: `Bearer ${token}` },
-      })
-    .then(res => {
-      console.log(res)
-      setClasses(res.data.teacher.classes)
+      headers: { Authorization: `Bearer ${token}` }
     })
-    .catch(err => console.log(err))
+      .then(res => {
+        console.log(res);
+        setClasses(res.data.teacher.classes);
+      })
+      .catch(err => console.log(err));
   };
 
   // //all students
@@ -113,62 +115,75 @@ const App = props => {
 
   /* ROUTES */
   return (
-    console.log(props.auth),
-    <>
-      <Router history={history}>
-        <Grid
-          className={classes.container}
-          container
-          direction="column"
-          spacing={0}
-          justify="space-between"
-          alignItems="stretch"
-        >
-          <Grid item>
-            <Navbar theme={props.theme} {...props} />
-            <Navcrumbs {...props} />
+    console.log('APP:', props.lock),
+    console.log('APP:', props.Url),
+    (
+      <>
+        <Router history={history}>
+          <Grid
+            className={classes.container}
+            container
+            direction="column"
+            spacing={0}
+            justify="space-between"
+            alignItems="stretch"
+          >
+            <Grid item>
+              <Navbar theme={props.theme} {...props} />
+              <Navcrumbs {...props} />
+            </Grid>
+            <Grid item xs={10}>
+              <Route
+                exact
+                path="/"
+                render={props => <LandingPage {...props} />}
+              />
+              <Route
+                path="/dashboard"
+                render={props => (
+                  <Dashboard getClasses={getClasses} allClasses={allClasses} />
+                )}
+              />
+              <Route path="/typeform" render={props => <Typeform />} />
+              <Route
+                path="/refreshrs"
+                render={props => (
+                  <RefreshrListView
+                    getRefreshrs={getRefreshrs}
+                    refreshrs={refreshrs}
+                  />
+                )}
+              />
+              <Route path="/billing" render={props => <BillingPage />} />
+              <Route exact path="/classes" render={props => <ClassesPage />} />
+              <Route
+                exact
+                path="/classes/edit/:id"
+                render={props => <ClassEditView {...props} />}
+              />
+              <Route
+                exact
+                path="/classes/create"
+                render={props => <ClassCreateView />}
+              />
+              <Route
+                exact
+                path="/questions/create"
+                render={props => (
+                  <Refreshr
+                    addQuestions={addQuestions}
+                    url={url}
+                    setUrl={setUrl}
+                  />
+                )}
+              />
+              <Route path="/campaign" render={props => <CampaignForm />} />{' '}
+              {/* for testing */}
+            </Grid>
           </Grid>
-          <Grid item xs={10}>
-
-            <Route
-              exact
-              path="/"
-              render={props => <LandingPage {...props} />}
-            />
-            <Route path="/dashboard" render={props => <Dashboard getClasses={getClasses} allClasses={allClasses} />} />
-            <Route path="/typeform" render={props => <Typeform />} />
-            <Route
-              path="/refreshrs"
-              render={props => (
-                <RefreshrListView
-                  getRefreshrs={getRefreshrs}
-                  refreshrs={refreshrs}
-                />
-              )}
-            />
-            <Route path="/billing" render={props => <BillingPage />} />
-            <Route exact path="/classes" render={props => <ClassesPage />} />
-            <Route
-              exact
-              path="/classes/edit/:id"
-              render={props => <ClassEditView {...props} />}
-            />
-            <Route
-              exact
-              path="/classes/create"
-              render={props => <ClassCreateView />}
-            />
-            <Route
-              exact
-              path="/questions/create"
-              render={props => <Refreshr addQuestions={addQuestions} />}
-            />
-            <Route path="/campaign" render={props => <CampaignForm />} />{' '}
-            {/* for testing */}
-          </Grid>
-        </Grid>
-      </Router>
-    </>
+        </Router>
+      </>
+    )
   );
 };
 

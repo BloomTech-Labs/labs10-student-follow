@@ -11,7 +11,7 @@ const create = (id) => ({
 exports.seed = async function(knex, Promise) {
   const teachers = [];
 
-  for (let i = 0; i < 500; i++) {
+  for (let i = 1; i < 501; i++) {
     teachers.push(create(i));
   }
 

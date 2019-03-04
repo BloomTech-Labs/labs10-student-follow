@@ -1,16 +1,16 @@
 const faker = require('faker');
 
-const create = () => ({
+const create = (id) => ({
   teacher_id: Math.ceil(Math.random() * 500),
   class_id: Math.ceil(Math.random() * 500),
   refreshr_id: Math.ceil(Math.random() * 100),
   date: faker.date.future(),
-  sg_campaign_id: faker.lorem.word()
+  sg_campaign_id: id
 });
 
 const tcr = [];
-for (let i = 0; i < 100; i++) {
-  tcr.push(create());
+for (let i = 1; i < 101; i++) {
+  tcr.push(create(i));
 }
 exports.seed = async function(knex, Promise) {
   await knex.raw(
