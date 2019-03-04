@@ -135,7 +135,7 @@ function ClassCreateView(props) {
           validated.schedule_code = res.status;
           console.log(
             `Success! Your campaign ${res.data.id} is scheduled for ${
-              res.data.send_at
+            res.data.send_at
             }. Status is "${res.data.status}"!`
           );
           setTimeout(() => {

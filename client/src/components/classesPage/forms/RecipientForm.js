@@ -20,6 +20,12 @@ const styles = theme => ({
     marginBottom: theme.spacing.unit * 4,
     color: theme.palette.primary.contrastText,
     background: theme.palette.primary.dark,
+    [theme.breakpoints.down('sm')]: {
+      width: '80%'
+    },
+    [theme.breakpoints.only('md')]: {
+      width: '60%'
+    },
   },
   input: {
     width: '200px',
@@ -34,23 +40,33 @@ const styles = theme => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+    margin: '2rem 0'
   },
   navDiv: {
     display: 'flex',
     justifyContent: 'space-between',
     padding: theme.spacing.unit,
     marginLeft: theme.spacing.unit * 2,
+    [theme.breakpoints.down('sm')]: {
+      flexDirection: 'column'
+    },
+    [theme.breakpoints.only('md')]: {
+      width: '60%'
+    }
   },
   buttonDiv: {
     display: 'flex',
     justifyContent: 'center',
+    [theme.breakpoints.down('sm')]: {
+      margin: '0.5rem 0'
+    },
   },
   btn: {
     marginRight: theme.spacing.unit * 2,
     color: theme.palette.primary.main,
     background: theme.palette.secondary.main,
     width: 40,
-    height: 40
+    height: 40,
   },
   nextText: {
     marginRight: theme.spacing.unit * 2
@@ -118,7 +134,6 @@ function RecipientForm(props) {
         Recipients Form
       </Typography>
 
-      <h1>Recipients to add</h1>
       {
         recipientData.length > 0 ? (
           recipientData.map(
@@ -176,7 +191,6 @@ function RecipientForm(props) {
 
         <div className={classes.buttonDiv}>
           <Fab
-            elevation={20}
             className={classes.btn}
             type="submit"
           >
