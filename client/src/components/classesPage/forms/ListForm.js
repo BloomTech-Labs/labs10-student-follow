@@ -8,7 +8,7 @@ import Attachment from '@material-ui/icons/Attachment';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Typography from '@material-ui/core/Typography';
 import BigPapa from 'papaparse';
-// import { addList, getList, getLists, updateList, deleteList } from "../../SendgridOps"/*-------- STYLES --------*/
+
 const styles = theme => ({
   container: {
     border: `1px solid ${theme.palette.secondary.main}`,
@@ -154,7 +154,7 @@ function ListForm(props) {
   };
   return (
     <Paper className={classes.container} elevation={24}>
-      <Typography variant="h6" color="secondary" style={{textAlign: 'center'}}>
+      <Typography variant="h6" color="secondary" style={{ textAlign: 'center' }}>
         Upload Classlist
       </Typography>
       <FormGroup className={classes.form}>

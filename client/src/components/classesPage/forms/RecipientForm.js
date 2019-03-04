@@ -1,17 +1,68 @@
 import React, { useState } from 'react';
-import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
-// import { addRecipient, addRecipients, getRecipient, getRecipients, updateRecipient, deleteRecipient, deleteRecipients } from "../../SendgridOps"
+import { Paper, Fab, Input } from '@material-ui/core';
+import Typography from '@material-ui/core/Typography';
+import UpIcon from '@material-ui/icons/ArrowUpward';
+import ArrowForward from '@material-ui/icons/ArrowForward';
+import ArrowBack from '@material-ui/icons/ArrowBack';
 
 const styles = theme => ({
-  wrapper: {}
+  container: {
+    width: '50%',
+    border: `1px solid ${theme.palette.secondary.main}`,
+    ...theme.mixins.gutters(),
+    flexFlow: 'column nowrap',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingTop: theme.spacing.unit * 4,
+    paddingBottom: theme.spacing.unit * 8,
+    marginTop: theme.spacing.unit * 4,
+    marginBottom: theme.spacing.unit * 4,
+    color: theme.palette.primary.contrastText,
+    background: theme.palette.primary.dark,
+  },
+  input: {
+    width: '200px',
+    marginBottom: theme.spacing.unit,
+    padding: '1%',
+    background: theme.palette.secondary.main,
+    color: theme.palette.primary.main,
+    fontSize: '1rem',
+    borderRadius: '5px',
+  },
+  form: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  navDiv: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    padding: theme.spacing.unit,
+    marginLeft: theme.spacing.unit * 2,
+  },
+  buttonDiv: {
+    display: 'flex',
+    justifyContent: 'center',
+  },
+  btn: {
+    marginRight: theme.spacing.unit * 2,
+    color: theme.palette.primary.main,
+    background: theme.palette.secondary.main,
+    width: 40,
+    height: 40
+  },
+  nextText: {
+    marginRight: theme.spacing.unit * 2
+  },
+  hrStyle: {
+    margin: '1rem auto',
+  }
 });
 
 function RecipientForm(props) {
-  const { recipientData } = props;
-  
+  const { classes, recipientData } = props;
+
   const [recipient, setRecipient] = useState({
     email: '',
     first_name: '',
@@ -62,43 +113,12 @@ function RecipientForm(props) {
   };
 
   return (
-    <Grid className={props.classes.wrapper}>
-      <p>RecipientForm Component</p>
-      <button onClick={e => handlePrev(e)}>PREV</button>
-      <button onClick={e => handleNext(e)}>NEXT</button>
+    <Paper className={classes.container}>
+      <Typography variant="h6" color="secondary" style={{ textAlign: 'center' }}>
+        Recipients Form
+      </Typography>
 
-      <form className={props.classes.form} onSubmit={e => handleSubmit(e)}>
-        <TextField
-          name="email"
-          type="email"
-          variant="outlined"
-          value={recipient.email}
-          placeholder="email"
-          onChange={(e) => handleChange(e)}
-          required
-        />
-        <TextField
-          name="first_name"
-          type="text"
-          variant="outlined"
-          value={recipient.first_name}
-          placeholder="first name"
-          onChange={(e) => handleChange(e)}
-          required
-        />
-        <TextField
-          name="last_name"
-          type="text"
-          variant="outlined"
-          value={recipient.last_name}
-          placeholder="last name"
-          onChange={(e) => handleChange(e)} />
-        <Button variant="outlined" color="secondary" type="submit">
-          Add Recipient
-        </Button>
-      </form>
-
-      <h1>Added Recipients</h1>
+      <h1>Recipients to add</h1>
       {
         recipientData.length > 0 ? (
           recipientData.map(
@@ -107,17 +127,100 @@ function RecipientForm(props) {
               (
                 <div key={i}>
                   <p style={{ color: 'white' }}>
-                    recipient-{i}: {recipient.email}, {recipient.first_name},{' '}
-                    {recipient.last_name}
+                    {i + 1}. {recipient.first_name} {' '} {recipient.last_name}<br />
+                    email: {recipient.email}
                   </p>
                 </div>
               )
             )
           )
-      ) : (
-        <p>You need to add new recipients.</p>
-      )}
-    </Grid>
+        ) : (
+            <p>You need to add new recipients.</p>
+          )
+      }
+
+      <hr className={classes.hrStyle} />
+
+      <form className={classes.form} onSubmit={e => handleSubmit(e)}>
+        <Input
+          className={classes.input}
+          name="email"
+          type="email"
+          variant="outlined"
+          value={recipient.email}
+          placeholder="email"
+          onChange={(e) => handleChange(e)}
+          disableUnderline
+          required
+        />
+        <Input
+          className={classes.input}
+          name="first_name"
+          type="text"
+          variant="outlined"
+          value={recipient.first_name}
+          placeholder="first name"
+          onChange={(e) => handleChange(e)}
+          required
+        />
+        <Input
+          className={classes.input}
+          name="last_name"
+          type="text"
+          variant="outlined"
+          value={recipient.last_name}
+          placeholder="last name"
+          onChange={(e) => handleChange(e)}
+          required
+        />
+
+        <div className={classes.buttonDiv}>
+          <Fab
+            elevation={20}
+            className={classes.btn}
+            type="submit"
+          >
+            <UpIcon />
+          </Fab>
+          <Typography
+            variant="body2"
+            color="secondary"
+            className={classes.nextText}
+          >
+            Add Recipient
+          </Typography>
+        </div>
+      </form>
+
+      <hr className={classes.hrStyle} />
+
+      <div className={classes.navDiv}>
+        <div className={classes.buttonDiv}>
+          <Fab className={classes.btn}>
+            <ArrowBack onClick={e => handlePrev(e)} />
+          </Fab>
+          <Typography
+            variant="body2"
+            color="secondary"
+            className={classes.nextText}
+          >
+            PREV
+        </Typography>
+        </div>
+        <div className={classes.buttonDiv}>
+          <Typography
+            variant="body2"
+            color="secondary"
+            className={classes.nextText}
+          >
+            NEXT
+          </Typography>
+          <Fab className={classes.btn}>
+            <ArrowForward onClick={e => handleNext(e)} />
+          </Fab>
+        </div>
+      </div>
+    </Paper>
 
   );
 }
