@@ -154,7 +154,7 @@ function ListForm(props) {
   };
   return (
     <Paper className={classes.container} elevation={24}>
-      <Typography variant="h6" color="secondary">
+      <Typography variant="h6" color="secondary" style={{textAlign: 'center'}}>
         Upload Classlist
       </Typography>
       <FormGroup className={classes.form}>

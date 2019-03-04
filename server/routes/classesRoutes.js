@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../data/helpers/classesHelper');
-const jwtCheck = require('../middleware/authenticate');
 const { emptyCheck } = require('../middleware/formattingMiddleware');
 const responseStatus = require('../config/responseStatusConfig');
 
@@ -21,6 +20,7 @@ router.get('/:id', async (req, res, next) => {
     res.status(responseStatus.success).json({ specifiedClass });
   } catch (err) {
     if (TypeError) {
+      console.log(err);
       next(responseStatus.notFound);
     } else {
       next(err);
@@ -28,23 +28,8 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
-router.get('/:id/students', async (req, res, next) => {
-  const { id } = req.params;
-  try {
-    const students = await db.getClassStudents(id);
-    res.status(responseStatus.success).json(students);
-  } catch (err) {
-    if (TypeError) {
-      next(responseStatus.notFound);
-    } else {
-      next(err);
-    }
-  }
-});
-
-// drop students from a class
-// takes an array of students
-router.post('/:id/drop/', async (req, res, next) => {
+// drop a student from a class
+router.delete('/:id/drop/:studentId', async (req, res, next) => {
   try {
     const { id } = req.params;
     const { students } = req.body;
@@ -56,33 +41,7 @@ router.post('/:id/drop/', async (req, res, next) => {
   }
 });
 
-router.get('/:id/refreshrs', async (req, res, next) => {
-  const { id } = req.params;
-  try {
-    const refreshrs = await db.getClassRefreshrs(id);
-    res.status(responseStatus.success).json(refreshrs);
-  } catch (err) {
-    console.log(err);
-    if (TypeError) {
-      next(responseStatus.notFound);
-    } else {
-      next(err);
-    }
-  }
-});
-
-router.get('/teachers/:teacherId', async (req, res, next) => {
-  try {
-    const { teacherId } = req.params;
-    const classList = await db.getTeacherClasses(teacherId);
-    res.status(responseStatus.success).json(classList);
-  } catch (err) {
-    console.log(err);
-    next(err);
-  }
-});
-
-router.post('/', jwtCheck, emptyCheck, async (req, res, next) => {
+router.post('/', emptyCheck, async (req, res, next) => {
   const { body } = req;
   try {
     const newClassID = await db.addClass(body);
@@ -92,18 +51,21 @@ router.post('/', jwtCheck, emptyCheck, async (req, res, next) => {
   }
 });
 
-// add students to class, takes an array of student ids and adds them to class
+// adds a single student to the class
 router.post('/:id', async (req, res, next) => {
-  const { students } = req.body;
-  const classId = req.params.id;
+  const { student_id } = req.body;
+  const class_id = req.params.id;
   try {
-    await db.addStudentsToClass(classId, students);
+    await db.addStudent(class_id, student_id);
+    res
+      .status(responseStatus.success)
+      .json('Student successfully added to class.');
   } catch (err) {
     console.log(err);
   }
 });
 
-router.put('/:id', jwtCheck, emptyCheck, async (req, res, next) => {
+router.put('/:id', emptyCheck, async (req, res, next) => {
   const { id } = req.params;
   const { body } = req;
   try {
@@ -114,7 +76,7 @@ router.put('/:id', jwtCheck, emptyCheck, async (req, res, next) => {
   }
 });
 
-router.delete('/:id', jwtCheck, async (req, res, next) => {
+router.delete('/:id', async (req, res, next) => {
   const { id } = req.params;
   try {
     const deletedRecords = await db.deleteClass(id);

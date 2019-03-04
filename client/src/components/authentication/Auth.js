@@ -1,96 +1,88 @@
-import history from '../../history';
-import auth0 from 'auth0-js';
+import Auth0Lock from 'auth0-lock';
+import axios from 'axios';
 
-// ...
-export default class Auth {
-  accessToken;
-  idToken;
-  expiresAt;
-  auth0 = new auth0.WebAuth({
-    domain: 'team-refreshr.auth0.com',
-    clientID: 'jNDq5B6iAnIRcrpM07Omh05uyppZ89px',
-    audience: 'https://team-refreshr.auth0.com/api/v2/',
+const clientID = 'jNDq5B6iAnIRcrpM07Omh05uyppZ89px';
+const domain = 'team-refreshr.auth0.com';
+const options = {
+  auth: {
+
     //PRODUCTION
+    //audience: 'https://refreshr.herokuapp.com',
+    //redirect: true,
     // redirectUri: 'https://refreshr-app.netlify.com/loading',
     //DEVELOPMENT
-    redirectUri: 'http://localhost:3000/loading',
+    audience: 'http://localhost:9000',
+    redirect: true,
+    redirectUrl: 'http://localhost:3000/dashboard',
+    usernameStyle: 'email',
+    responseType: 'token id_token'
+  },
+  socialButtonStyle: 'small',
+  theme: {
+    primaryColor: '#0b2742',
+    backgroundColor: '#000',
+    logo: 'http://i67.tinypic.com/vfgxf8.png'
+  },
+  loginAfterSignup: true,
+  additionalSignUpFields: [
+    {
+      name: 'first_name',
+      placeholder: 'First Name',
+      icon: 'http://i63.tinypic.com/2z886rs.png'
+    },
+    {
+      name: 'last_name',
+      placeholder: 'Last Name',
+      icon: 'http://i63.tinypic.com/2z886rs.png'
+    }
+  ]
+};
+const lock = new Auth0Lock(clientID, domain, options);
 
-    responseType: 'token id_token',
-    scope: 'openid'
+lock.on('authenticated', authResult => {
+  // Use the token in authResult to getUserInfo() and save it to localStorage
+  lock.getUserInfo(authResult.accessToken, function(error, profile) {
+    if (error) {
+      alert(error);
+      return;
+    }
+    //console.log(authResult);
+
+    localStorage.setItem('accessToken', authResult.accessToken);
+    localStorage.setItem('profile', JSON.stringify(profile));
+    localStorage.setItem('name', `${profile.name}`)
+    localStorage.setItem('user_id', profile['http://localhost:9000/uid']);
+
+    const body = {
+      first_name: profile.given_name,
+      last_name: profile.family_name,
+      email: profile.email,
+      user_id: profile['http://localhost:9000/uid'],
+      role: profile['http://localhost:9000/roles'][0]
+    };
+    //console.log(body)
+    //This captures users and adds them to the teacher table upon login, if they already exist
+    //200 OK will be sent and the unique constraint will be shown in the console.
+    axios({
+      method: 'post',
+      url: 'http://localhost:9000/teachers',
+      headers: {Authorization: `Bearer ${authResult.accessToken}` },
+      data: body
+      })
+      .then(res => {
+        console.log(res)
+      })
+      .catch(err => console.log(err));
+  })
+});
+
+lock.on('authorization_error', error => {
+  lock.show({
+    flashMessage: {
+      type: 'error',
+      text: error.errorDescription
+    }
   });
+});
 
-  login = () => {
-    this.auth0.authorize();
-  };
-
-  handleAuthentication = () => {
-    this.auth0.parseHash((err, authResult) => {
-      if (authResult && authResult.accessToken && authResult.idToken) {
-        this.setSession(authResult);
-        localStorage.setItem('token', authResult);
-
-        // history.replace('/home')
-      } else if (err) {
-        history.replace('/');
-        console.log(err);
-        alert(`Error: ${err.error}. Check the console for further details.`);
-      }
-    });
-  };
-
-  getAccessToken = () => {
-    return this.accessToken;
-  };
-
-  getIdToken = () => {
-    return this.idToken;
-  };
-
-  setSession = authResult => {
-    // Set isLoggedIn flag in localStorage
-    localStorage.setItem('isLoggedIn', 'true');
-
-    // Set the time that the access token will expire at
-    let expiresAt = authResult.expiresIn * 1000 + new Date().getTime();
-    this.accessToken = authResult.accessToken;
-    this.idToken = authResult.idToken;
-    this.expiresAt = expiresAt;
-
-    // navigate to the home route
-    history.replace('/dashboard');
-  };
-
-  renewSession = () => {
-    this.auth0.checkSession({}, (err, authResult) => {
-      if (authResult && authResult.accessToken && authResult.idToken) {
-        this.setSession(authResult);
-      } else if (err) {
-        this.logout();
-        console.log(err);
-        alert(
-          `Could not get a new token (${err.error}: ${err.error_description}).`
-        );
-      }
-    });
-  };
-
-  logout = () => {
-    // Remove tokens and expiry time
-    this.accessToken = null;
-    this.idToken = null;
-    this.expiresAt = 0;
-
-    // Remove isLoggedIn flag from localStorage
-    localStorage.removeItem('isLoggedIn');
-
-    // navigate to the home route
-    history.replace('/');
-  };
-
-  isAuthenticated = () => {
-    // Check whether the current time is past the
-    // access token's expiry time
-    let expiresAt = this.expiresAt;
-    return new Date().getTime() < expiresAt;
-  };
-}
+export default lock;

@@ -6,16 +6,6 @@ module.exports = {
 
     return allRefreshrs;
   },
-  getClassRefreshrs: async class_id => db('refreshrs').where({ class_id }),
-  getTeacherRefreshrs: teacher_id => {
-    return db('refreshrs')
-      .join(
-        'teachers_classes_refreshrs',
-        'refreshrs.id',
-        'teachers_classes_refreshrs.refreshr_id'
-      )
-      .where({ 'teachers_classes_refreshrs.teacher_id': teacher_id });
-  },
 
   getRefreshr: async id => {
     const selectedRefreshr = await db('refreshrs')
@@ -35,11 +25,11 @@ module.exports = {
       let [selectedRefreshr, questions] = response;
       let result = {
         id: selectedRefreshr.id,
-        date: selectedRefreshr.date,
-        refreshrs: questions.map(q => {
+        name: selectedRefreshr.name,
+        review_text: selectedRefreshr.review_text,
+        questions: questions.map(q => {
           return {
             question_id: q.question_id,
-            review_text: q.review_text,
             question: {
               question_text: q.question,
               wrong_answer_1: q.wrong_answer_1,

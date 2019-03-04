@@ -18,24 +18,26 @@ module.exports = {
         'teachers.last_name as t_last',
         'teachers.email as t_email'
       )
-      .join('classes', 'teachers.id', 'classes.teacher_id')
+      .join('teachers_classes_refreshrs as tcr', 'teachers.user_id', 'tcr.teacher_id')
+      .join('classes', 'classes.id', 'tcr.class_id') 
       .where('classes.id', id);
 
     const students = await db('students')
       .join('students_classes', 'students.id', 'students_classes.student_id')
-      .where('class_id', id);
+      .join('classes', 'classes.id', 'students_classes.class_id') 
+      .where('classes.id', id);
 
     const refreshrs = await db('refreshrs')
       .select(
         'refreshrs.id',
-        'refreshrs.date',
+        'refreshrs.name as r_name',
+        'refreshrs.review_text',
         'questions.id as question_id',
-        'questions.review_text',
         'questions.question',
         'questions.wrong_answer_1',
         'questions.wrong_answer_2',
         'questions.wrong_answer_3',
-        'questions.correct_answer'
+        'questions.correct_answer',
       )
       .join(
         'questions_refreshrs',
@@ -43,7 +45,8 @@ module.exports = {
         'questions_refreshrs.refreshr_id'
       )
       .join('questions', 'questions.id', 'questions_refreshrs.question_id')
-      .join('classes', 'refreshrs.class_id', 'classes.id')
+      .join('teachers_classes_refreshrs as tcr', 'refreshrs.id', 'tcr.refreshr_id')
+      .join('classes', 'classes.id', 'tcr.refreshr_id')
       .where('classes.id', id);
 
     return Promise.all([selectedClass, teacher, students, refreshrs]).then(
@@ -69,7 +72,7 @@ module.exports = {
           refreshrs: refreshrs.map(r => {
             return {
               refreshr_id: r.id,
-              date: r.date,
+              name: r.r_name,
               review_text: r.review_text,
               refreshr: {
                 question_id: r.question_id,
@@ -77,7 +80,7 @@ module.exports = {
                 wrong_answer_1: r.wrong_answer_1,
                 wrong_answer_2: r.wrong_answer_2,
                 wrong_answer_3: r.wrong_answer_3,
-                correct_answer: r.correct_answer
+                correct_answer: r.correct_answer,
               }
             };
           })
@@ -85,49 +88,6 @@ module.exports = {
         return result;
       }
     );
-  },
-
-  getTeacherClasses: async teacher_id =>
-    db('teachers_classes_refreshrs as tcr')
-      .join('classes as c', 'c.id', 'tcr.class_id')
-      .where({ teacher_id }),
-
-  addStudent: async (classID, studentID) => {
-    const body = { classID, studentID };
-    const ID = await db('students_classes').insert(body);
-
-    return ID[0];
-  },
-
-  removeStudent: (classId, studentId) =>
-    db('students_classes')
-      .where({ student_id: studentId, class_id: classId })
-      .delete(),
-
-  getClassStudents: classId =>
-    db('students_classes as sc')
-      .join('students as s', 's.id', 'sc.student_id')
-      .select('s.first_name', 's.last_name', 's.id')
-      .where({ 'sc.class_id': classId }),
-
-  getClassRefreshrs: classId =>
-    db('teachers_classes_refreshrs as tcr')
-      .join('refreshrs as r', 'r.id', 'tcr.refreshr_id')
-      .select('r.name', 'r.id')
-      .where('tcr.class_id', classId),
-
-  getClassStudents: classId => {
-    return db('students_classes as sc')
-      .join('students as s', 's.id', 'sc.student_id')
-      .select('s.first_name', 's.last_name', 's.id')
-      .where({ 'sc.class_id': classId });
-  },
-
-  getClassRefreshrs: classId => {
-    return db('teachers_classes_refreshrs as tcr')
-      .join('refreshrs as r', 'r.id', 'tcr.refreshr_id')
-      .select('r.name', 'r.id')
-      .where('tcr.class_id', classId);
   },
 
   addClass: async classInfo => {
@@ -139,34 +99,7 @@ module.exports = {
       });
     return newClassID[0];
   },
-
-  addStudentsToClass: async (class_id, students) => {
-    try {
-      for (let student of students) {
-        console.log(`adding ${student} to ${class_id}`);
-        await db('students_classes').insert({ student_id: student, class_id });
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  },
-
-  removeStudents: async (class_id, students) => {
-    try {
-      let count = 0;
-      for (let student of students) {
-        const result = await db('students_classes')
-          .where({ student_id: student, class_id })
-          .delete();
-        console.log(result);
-        count += result;
-      }
-      return count;
-    } catch (err) {
-      console.log(err);
-    }
-  },
-
+  
   updateClass: async (id, updatedClass) => {
     const updateCount = await db('classes')
       .where({ id })
@@ -179,5 +112,18 @@ module.exports = {
       .where({ id })
       .del();
     return deleteCount;
-  }
+  },
+  
+  addStudent: async (class_id, student_id) => {
+    const ID = await db('students_classes').insert({class_id, student_id});
+    return ID[0];
+  },
+
+
+  removeStudent: (class_id, student_id) =>
+    {
+      return db('students_classes')
+        .where({class_id, student_id })
+        .delete();
+    },
 };

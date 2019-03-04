@@ -3,16 +3,14 @@ import { Route, withRouter, Router } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import history from './history';
 import axios from 'axios';
-
 import {
-  Loading,
   LandingPage,
   BillingPage,
   Refreshr,
   Navbar,
   Navcrumbs,
   RefreshrListView,
-  MiscData,
+  Dashboard,
   ClassesPage,
   CampaignForm,
   ClassCreateView,
@@ -22,20 +20,15 @@ import {
 
 const App = props => {
   const classes = { props };
-
-  /* AUTHENTICATION */
-  const handleAuthentication = (nextState, replace) => {
-    if (/access_token|id_token|error/.test(nextState.location.hash)) {
-      props.auth.handleAuthentication();
-    }
-  };
+  const token = localStorage.getItem('accessToken')
+  const user_id = localStorage.getItem('user_id')
 
   /* STATE */
   const [refreshrs, setRefreshrs] = useState([]);
-  const [questions, setQuestions] = useState([]);
+   const [questions, setQuestions] = useState([]);
   const [allClasses, setClasses] = useState([]);
-  const [students, setStudents] = useState([]);
-  const [teachers, setTeachers] = useState([]);
+  // const [students, setStudents] = useState([]);
+  // const [teachers, setTeachers] = useState([]);
 
   /* METHODS */
 
@@ -54,17 +47,17 @@ const App = props => {
   };
 
   //all Questions
-  const getQuestions = options => {
-    axios
-      .get('https://refreshr.herokuapp.com/questions', options)
-      .then(res => {
-        console.log('q', res.data.questions);
-        setQuestions(res.data.questions);
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  };
+  // const getQuestions = options => {
+  //   axios
+  //     .get('https://refreshr.herokuapp.com/questions', options)
+  //     .then(res => {
+  //       console.log('q', res.data.questions);
+  //       setQuestions(res.data.questions);
+  //     })
+  //     .catch(err => {
+  //       console.log(err);
+  //     });
+  // };
 
   // add questions
   const addQuestions = question => {
@@ -80,45 +73,47 @@ const App = props => {
 
   //all classes
   const getClasses = options => {
-    axios
-      .get('https://refreshr.herokuapp.com/classes', options)
-      .then(res => {
-        console.log('c', res.data.classes);
-        setClasses(res.data.classes);
+    axios({
+      method: 'get',
+      url: `https://refreshr.herokuapp.com/${user_id}`,
+      headers: {Authorization: `Bearer ${token}` },
       })
-      .catch(err => {
-        console.log(err);
-      });
+    .then(res => {
+      console.log(res)
+      setClasses(res.data.teacher.classes)
+    })
+    .catch(err => console.log(err))
   };
 
-  //all students
-  const getStudents = options => {
-    axios
-      .get('https://refreshr.herokuapp.com/students', options)
-      .then(res => {
-        console.log('s', res.data.students);
-        setStudents(res.data.students);
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  };
+  // //all students
+  // const getStudents = options => {
+  //   axios
+  //     .get('https://refreshr.herokuapp.com/students', options)
+  //     .then(res => {
+  //       console.log('s', res.data.students);
+  //       setStudents(res.data.students);
+  //     })
+  //     .catch(err => {
+  //       console.log(err);
+  //     });
+  // };
 
-  //all teachers
-  const getTeachers = options => {
-    axios
-      .get('https://refreshr.herokuapp.com/teachers', options)
-      .then(res => {
-        console.log('t', res.data.teachers);
-        setTeachers(res.data.teachers);
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  };
+  // //all teachers
+  // const getTeachers = options => {
+  //   axios
+  //     .get('https://refreshr.herokuapp.com/teachers', options)
+  //     .then(res => {
+  //       console.log('t', res.data.teachers);
+  //       setTeachers(res.data.teachers);
+  //     })
+  //     .catch(err => {
+  //       console.log(err);
+  //     });
+  // };
 
   /* ROUTES */
   return (
+    console.log(props.auth),
     <>
       <Router history={history}>
         <Grid
@@ -134,18 +129,13 @@ const App = props => {
             <Navcrumbs {...props} />
           </Grid>
           <Grid item xs={10}>
+
             <Route
               exact
               path="/"
               render={props => <LandingPage {...props} />}
             />
-            <Route
-              path="/loading"
-              render={props => {
-                handleAuthentication(props);
-                return <Loading {...props} />;
-              }}
-            />
+            <Route path="/dashboard" render={props => <Dashboard getClasses={getClasses} allClasses={allClasses} />} />
             <Route path="/typeform" render={props => <Typeform />} />
             <Route
               path="/refreshrs"
@@ -172,21 +162,6 @@ const App = props => {
               exact
               path="/questions/create"
               render={props => <Refreshr addQuestions={addQuestions} />}
-            />
-            <Route
-              path="/misc"
-              render={props => (
-                <MiscData
-                  allClasses={allClasses}
-                  teachers={teachers}
-                  students={students}
-                  questions={questions}
-                  getClasses={getClasses}
-                  getTeachers={getTeachers}
-                  getQuestions={getQuestions}
-                  getStudents={getStudents}
-                />
-              )}
             />
             <Route path="/campaign" render={props => <CampaignForm />} />{' '}
             {/* for testing */}
