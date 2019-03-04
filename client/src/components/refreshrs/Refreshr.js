@@ -77,6 +77,13 @@ function Refreshr(props) {
       title: questionObject.refreshrName,
       fields: [
         {
+          title: 'Please enter your email address.',
+          type: 'email',
+          validations: {
+            required: true
+          }
+        },
+        {
           title: questionObject.reviewText,
           type: 'multiple_choice',
           properties: {

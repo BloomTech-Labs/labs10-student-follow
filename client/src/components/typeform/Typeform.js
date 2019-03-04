@@ -6,6 +6,13 @@ const data = {
   title: 'Testing from Typeform section of codebase',
   fields: [
     {
+      title: 'Please enter your email address.',
+      type: 'email',
+      validations: {
+        required: 'true'
+      }
+    },
+    {
       title: 'A great test',
       type: 'multiple_choice',
       properties: {
