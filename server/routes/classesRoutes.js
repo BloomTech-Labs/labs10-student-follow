@@ -42,7 +42,10 @@ router.delete('/:id/drop/:studentId', async (req, res, next) => {
 });
 
 router.post('/', emptyCheck, async (req, res, next) => {
+
   const { body } = req;
+  console.log('class:', body);
+
   try {
     const newClassID = await db.addClass(body);
     res.status(responseStatus.postCreated).json({ newClassID });

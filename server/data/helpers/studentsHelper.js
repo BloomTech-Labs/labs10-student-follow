@@ -55,5 +55,6 @@ module.exports = {
     const newStudentID = await db('students')
       .insert(student)
     return newStudentID[0];
+
   }
 };

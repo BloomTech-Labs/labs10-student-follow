@@ -93,10 +93,13 @@ module.exports = {
   addClass: async classInfo => {
     const newClassID = await db('classes')
       .insert(classInfo)
-      .returning('id')
-      .then(id => {
-        return id;
-      });
+      .returning('id');
+    // .returning('id')
+    // .then(id => {
+    //   return id;
+    // });
+    console.log(`class created: ${newClassID}`);
+    console.log(newClassID);
     return newClassID[0];
   },
   
