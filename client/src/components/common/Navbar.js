@@ -10,7 +10,7 @@ import IconButton from '@material-ui/core/IconButton';
 import { withStyles } from '@material-ui/core/styles';
 import { Link as RouterLink, withRouter } from 'react-router-dom';
 import { breadcrumbNameMap } from '../common/Navcrumbs';
-import Logo from '../logo.png'
+import Logo from './logo.png'
 import Button from '@material-ui/core/Button';
 
 /*-------- STYLES --------*/
@@ -60,7 +60,7 @@ const styles = theme => ({
   },
   list: {
     [theme.breakpoints.up('sm')]: {
-     borderLeft: '1px solid #FFFFFF',
+      borderLeft: '1px solid #FFFFFF',
     },
     background: theme.palette.primary.dark,
     color: theme.palette.primary.contrastText,
@@ -86,7 +86,6 @@ const styles = theme => ({
 
 
 const Navbar = props => {
-  console.log(props.theme)
   const { classes, location } = props;
 
   /*-------- NAV BUTTONS --------*/
@@ -116,7 +115,6 @@ const Navbar = props => {
 
   /*-------- NAV DRAWER --------*/
   const [open, setOpen] = useState(false)
-
   const toggleDrawer = () => {
     setOpen(!open)
   }
@@ -128,16 +126,23 @@ const Navbar = props => {
       <ListItemLink to="/billing" className={classes.text} />
     </List>
   )
+  console.log(location)
 
   /*-------- LOGIN/LOGOUT BUTTON --------*/
 
   const handleLogIn = () => {
-    if (localStorage.getItem('isLoggedIn')) {
-      console.log('logging out')
-      props.auth.logout()
+
+    if (location.pathname !== '/') {
+      // console.log('logging out')
+      localStorage.clear()
+      props.lock.logout({
+        returnTo: 'http://localhost:3000',
+        clientID: 'jNDq5B6iAnIRcrpM07Omh05uyppZ89px'
+      })
+      
     } else {
-      console.log('logging in')
-      props.auth.login()
+      // console.log('logging in')
+      props.lock.show()
     }
   }
 
@@ -146,9 +151,9 @@ const Navbar = props => {
   if (location.pathname !== '/') {
     return (
       <div className={classes.root}>
-        <AppBar position="fixed"  elevation={20} className={classes.appBar}>
+        <AppBar position="fixed" elevation={20} className={classes.appBar}>
           <Toolbar className={classes.toolbar}>
-            <Button variant="outlined" className={classes.btn} onClick={(e) => { e.preventDefault(); handleLogIn() }}>{localStorage.getItem('isLoggedIn') ? 'Logout' : 'Login'}</Button>
+            <Button variant="outlined" className={classes.btn} onClick={(e) => { e.preventDefault(); handleLogIn() }}>{location.pathname !== '/' ? 'Logout' : 'Login'}</Button>
             <HomeLink className={classes.logo} to='/dashboard' />
             <IconButton color="inherit" aria-label="Open Nav" onClick={toggleDrawer} className={classes.menuButton}>
               <MenuIcon />
@@ -189,7 +194,7 @@ const Navbar = props => {
       <div className={classes.root}>
         <AppBar position="fixed" className={classes.appBar}>
           <Toolbar className={classes.toolbar}>
-            <Button variant="outlined" className={classes.btn} onClick={(e) => { e.preventDefault(); handleLogIn() }}>{localStorage.getItem('isLoggedIn') ? 'Logout' : 'Login'}</Button>
+            <Button variant="outlined" className={classes.btn} onClick={(e) => { e.preventDefault(); handleLogIn() }}>{location.pathname !== '/' ? 'Logout' : 'Login'}</Button>
           </Toolbar>
         </AppBar>
       </div>

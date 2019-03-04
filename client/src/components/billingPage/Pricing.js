@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import classNames from 'classnames';
+import React from 'react';
+// import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import AppBar from '@material-ui/core/AppBar';
-import Button from '@material-ui/core/Button';
+// import AppBar from '@material-ui/core/AppBar';
+// import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
@@ -10,7 +10,7 @@ import CardHeader from '@material-ui/core/CardHeader';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Grid from '@material-ui/core/Grid';
 import StarIcon from '@material-ui/icons/StarBorder';
-import Toolbar from '@material-ui/core/Toolbar';
+// import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import TakeMoney from './TakeMoney';
@@ -105,55 +105,55 @@ const tiers = [
     buttonVariant: 'custom'
   }
 ];
-const footers = [
-  {
-    title: 'Company',
-    description: ['Team', 'History', 'Contact us', 'Locations']
-  },
-  {
-    title: 'Features',
-    description: [
-      'Cool stuff',
-      'Random feature',
-      'Team feature',
-      'Developer stuff',
-      'Another one'
-    ]
-  },
-  {
-    title: 'Resources',
-    description: [
-      'Resource',
-      'Resource name',
-      'Another resource',
-      'Final resource'
-    ]
-  },
-  {
-    title: 'Legal',
-    description: ['Privacy policy', 'Terms of use']
-  }
-];
+// const footers = [
+//   {
+//     title: 'Company',
+//     description: ['Team', 'History', 'Contact us', 'Locations']
+//   },
+//   {
+//     title: 'Features',
+//     description: [
+//       'Cool stuff',
+//       'Random feature',
+//       'Team feature',
+//       'Developer stuff',
+//       'Another one'
+//     ]
+//   },
+//   {
+//     title: 'Resources',
+//     description: [
+//       'Resource',
+//       'Resource name',
+//       'Another resource',
+//       'Final resource'
+//     ]
+//   },
+//   {
+//     title: 'Legal',
+//     description: ['Privacy policy', 'Terms of use']
+//   }
+// ];
 
 // function Pricing(props) {
 //   const { classes } = props;
 
 const Pricing = props => {
-  const [subType, setSubType] = useState(999);
-  const [snackbar, setSnackbar] = useState(false);
+  // const [subType, setSubType] = useState(999);
+  // const [snackbar, setSnackbar] = useState(false);
   const { classes } = props;
 
-  const openSnackbar = () => {
-    setSnackbar(true);
-    setTimeout(() => {
-      setSnackbar(false);
-    }, 1000);
-  };
+  // const openSnackbar = () => {
+  //   setSnackbar(true);
+  //   setTimeout(() => {
+  //     setSnackbar(false);
+  //   }, 1000);
+  // };
 
-  const handleChange = e => {
-    console.log('VALUE', e.target.value);
-    setSubType(parseInt(e.target.value));
-  };
+  // const handleChange = e => {
+  //   console.log('VALUE', e.target.value);
+  //   setSubType(parseInt(e.target.value));
+  // };
 
   return (
     <React.Fragment>

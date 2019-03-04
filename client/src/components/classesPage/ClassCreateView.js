@@ -1,7 +1,12 @@
-import React, { useState } from "react";
-import Grid from "@material-ui/core/Grid";
-import { withStyles } from "@material-ui/core/styles";
-import { ListForm, RecipientForm, SelectionForm, CampaignForm } from '../index.js'
+import React, { useState } from 'react';
+import Grid from '@material-ui/core/Grid';
+import { withStyles } from '@material-ui/core/styles';
+import {
+  ListForm,
+  RecipientForm,
+  SelectionForm,
+  CampaignForm
+} from '../index.js';
 import {
   addList,
   // getList, getLists, updateList, deleteList,
@@ -12,8 +17,8 @@ import {
   addRefreshr,
   scheduleRefreshr
   // addRefreshr, getRefreshr, getRefreshrs, updateRefreshr, deleteRefreshr, scheduleRefreshr, rescheduleRefreshr, getScheduleRefreshr, deleteScheduleRefreshr, sendTestRefreshr
-
-} from '../SendgridOps'
+} from '../SendgridOps';
+import submitClassData from './dbOps';
 // import axios from 'axios';
 
 const styles = theme => ({
@@ -26,7 +31,7 @@ const styles = theme => ({
     [theme.breakpoints.up('sm')]: {
       width: `100% - ${200}px`,
       marginRight: 200
-    },
+    }
   }
 });
 
@@ -50,49 +55,45 @@ function ClassCreateView(props) {
   const [campaignData, setCampaignData] = useState({
     title: '',
     subject: '',
-    sender_id: '',
-    list_id: '',
-    segment_ids: null,
-    categories: [],
-    suppression_group_id: 9332,
-    custom_unsubscribe_url: '',
-    ip_pool: '',
-    html_content: '',
-    plain_content: ''
+    html_content: '', // requires [unsubscribe]
+    plain_content: '' // requires [unsubscribe]
   });
 
-  const sendAllToSendgrid = () => {
-    let validated = {
-      list_ids: [], // from addList()
-      recipient_ids: [], //from addRecipients()
-      selection_code: null, // HTTP status from addContacts()
-      campaign_id: null, // HTTP status from addRefreshr()
-      schedule_code: null // HTTP status from scheduleRefreshr()
-    };
+  const [timeData, setTimeData] = useState({
+    send_at: null
+  });
 
-    const new_refreshr = {
-      title: "March Refreshr", // required
-      subject: "React Refreshr", // required
-      sender_id: 428251, // constant (Refreshr Team)
-      list_ids: validated.list_ids, // required
+  let validated = {
+    list_ids: [], // from addList()
+    recipient_ids: [], //from addRecipients()
+    selection_code: null, // HTTP status from addContacts()
+    campaign_id: null, // HTTP status from addRefreshr()
+    schedule_code: null // HTTP status from scheduleRefreshr()
+  };
+
+  const sendAllToSendgrid = () => {
+    // New object pulling different pieces of data before promise chain
+    const newRefreshr = {
+      title: campaignData.title,
+      subject: campaignData.subject,
+      sender_id: 428251, // permanent (Refreshr Team)
+      list_ids: validated.list_ids,
       segment_ids: null,
       categories: [],
-      suppression_group_id: 9332, // constant (Unsubscribe ID)
-      custom_unsubscribe_url: "",
-      ip_pool: "",
-      html_content: "<html><head><title></title></head><body><p>React is a JavaScript library! [unsubscribe]</p></body></html>", // required
-      plain_content: "React is an awesome library! [unsubscribe]" // required
-    }
-
-    const scheduleObj = {
-      "send_at": 1551448800 // March 1st 8AM CST
-    }
+      suppression_group_id: 9332, // permanent (Unsubscribe ID)
+      custom_unsubscribe_url: '',
+      ip_pool: '',
+      html_content: campaignData.html_content, // requires [unsubscribe]
+      plain_content: campaignData.plain_content // requires [unsubscribe]
+    };
 
     // Add new list name
     addList(listData.classnameInput)
       .then(res => {
-        validated.list_ids.push(res.data.id)
-        return addRecipients(recipientData)
+        validated.list_ids.push(res.data.id);
+        console.log(`line 83`);
+        console.log(recipientData);
+        return addRecipients(recipientData);
       })
 
       // Add new recipients
@@ -100,41 +101,62 @@ function ClassCreateView(props) {
         validated.recipient_ids = [
           ...validated.recipient_ids,
           ...res.data.persisted_recipients
-        ]
-        return addContacts(validated.list_ids[0], validated.recipient_ids)
+        ];
+        console.log(`line 94`);
+        console.log(validated.list_ids[0]);
+        console.log('validated recipients:', validated.recipient_ids);
+        return addContacts(validated.list_ids[0], validated.recipient_ids);
       })
 
       // Add all new recipients to list
       .then(res => {
-        validated.selection_code = res.status
+        validated.selection_code = res.status;
         if (validated.selection_code === 201) {
-          return addRefreshr(new_refreshr)
+          console.log(`line 104`);
+          console.log(newRefreshr);
+          return addRefreshr(newRefreshr);
         }
       })
 
       // Send Refreshr object with unix time to be scheduled
       .then(res => {
         if (res.status === 201) {
-          validated.campaign_id = res.data.id
-          return scheduleRefreshr(scheduleObj, validated.campaign_id)
+          validated.campaign_id = res.data.id;
+          console.log(`line 114`);
+          console.log(timeData);
+          console.log(validated.campaign_id);
+          return scheduleRefreshr(timeData, validated.campaign_id);
         }
       })
 
       // Sucess if all steps complete
       .then(res => {
         if (res.status === 201) {
-          validated.schedule_code = res.status
-          console.log(`Success! Your campaign ${res.data.id} is scheduled for ${res.data.send_at}. Status is "${res.data.status}"!`)
+          validated.schedule_code = res.status;
+          console.log(
+            `Success! Your campaign ${res.data.id} is scheduled for ${
+              res.data.send_at
+            }. Status is "${res.data.status}"!`
+          );
+          setTimeout(() => {
+            submitClassData(
+              listData,
+              validated.list_ids[0],
+              recipientData,
+              campaignData
+            );
+          }, 20000);
         }
       })
+      .then()
 
-      .catch(err => console.log(err))
-  }
+      .catch(err => console.log(err));
+  };
 
   return (
     <Grid className={props.classes.wrapper}>
       <h1>ClassCreateView Component</h1>
-      <button onClick={(e) => sendAllToSendgrid(e)}>sendAllToSendgrid</button>
+      <button onClick={e => sendAllToSendgrid(e)}>sendAllToSendgrid</button>
       {stage.onListForm ? (
         <ListForm
           file={file}
@@ -173,6 +195,7 @@ function ClassCreateView(props) {
           stage={stage}
           setStage={setStage}
           sendAllToSendgrid={sendAllToSendgrid}
+          setTimeData={setTimeData}
         />
       ) : null}
     </Grid>

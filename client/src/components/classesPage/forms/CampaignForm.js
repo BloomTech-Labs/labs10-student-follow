@@ -91,13 +91,6 @@ function CampaignForm(props) {
     return `${year}-${month}-${day}`;
   }
 
-  // updates the refreshr's date when date input is changed
-  const setDate = date => {
-    // const [refreshr] = refreshrs.filter(r => r.id === id);
-    activeRefreshr.date = Date.parse(date); // not in utc time, bug list
-    props.setTimeData(Date.parse(date));
-  };
-
   const handlePrev = e => {
     e.preventDefault();
     props.setStage({
@@ -127,11 +120,11 @@ function CampaignForm(props) {
   const scheduleRefreshr = () => {
     props.setCampaignData({
       ...props.campaignData,
-      title: 'Your Refreshr Is Here!',
+      title: 'Raccoon Jellyfish',
       subject: activeRefreshr.name,
-      html_content: `<h1>Take a refreshr and get more smart!!</h1><p>Your refreshr is at <a>https://refreshr-app.netlify.com/takerefreshr/${
-        activeRefreshr.id
-      }</p>`
+      html_content:
+        '<html><head><title></title></head><body><p>Raccoon Jellyfish! [unsubscribe]</p></body></html>',
+      plain_content: 'Raccoon Jellyfish! [unsubscribe]'
     });
     setActiveRefreshr(null);
     // console.log(props.campaignData);
@@ -147,6 +140,17 @@ function CampaignForm(props) {
     props.sendAllToSendgrid();
   };
 
+  const alterTime = (e) => {
+    e.preventDefault()
+    const inputTime = Date.parse(e.target.value) / 1000
+    const alteredTime = inputTime + 18000 // Adds 5 hours on, makes it same day @ 12am from user input
+
+    props.setTimeData({
+      ...props.timeData,
+      send_at: alteredTime
+    })
+  }
+
   return (
     <>
       <Grid container className={classes.wrapper}>
@@ -161,7 +165,8 @@ function CampaignForm(props) {
               variant="outlined"
               type="date"
               defaultValue={today}
-              onChange={e => props.setTimeData(Date.parse(e.target.value))}
+              // onChange={e => setDate(e)}
+              onChange={e => alterTime(e)}
             />
             <Button
               variant="outlined"
@@ -172,10 +177,10 @@ function CampaignForm(props) {
             </Button>
           </Card>
         ) : (
-          <Card className={classes.card}>
-            <h4>select a refreshr to schedule</h4>
-          </Card>
-        )}
+            <Card className={classes.card}>
+              <h4>select a refreshr to schedule</h4>
+            </Card>
+          )}
         <Grid container className={classes.cardList}>
           <Typography variant="h4">Your Refreshrs</Typography>
           {refreshrs.map(refreshr => (

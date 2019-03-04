@@ -109,15 +109,15 @@ const styles = theme => ({
 });
 
 function ListForm(props) {
-  console.log('theme', props.theme);
+  // console.log('theme', props.theme);
   const { classes, file, setFile, setRecipientData } = props;
 
-  const handleSubmit = e => {};
+  const handleSubmit = e => { };
 
   const importCSV = () => {
     BigPapa.parse(file.content, {
       header: true,
-      complete: function(results, file) {
+      complete: function (results, file) {
         console.log('Parsing complete:', results, file);
         // setClasslist(results.data);
         setRecipientData(results.data);
@@ -154,7 +154,7 @@ function ListForm(props) {
   };
   return (
     <Paper className={classes.container} elevation={24}>
-      <Typography variant="h6" color="secondary">
+      <Typography variant="h6" color="secondary" style={{textAlign: 'center'}}>
         Upload Classlist
       </Typography>
       <FormGroup className={classes.form}>

@@ -13,15 +13,11 @@ module.exports = {
 
     const classes = await db('classes')
       .select(
-        'teachers.first_name as first',
-        'teachers.last_name as last',
         'classes.id as classID',
-        'classes.name'
-      )
-      .join('teachers', 'classes.teacher_id', 'teachers.id')
+        'classes.name')
       .join('students_classes', 'classes.id', 'students_classes.class_id')
       .join('students', 'students.id', 'students_classes.student_id')
-      .where('students_classes.student_id', id);
+      .where('students.id', id)
 
     return Promise.all([student, classes]).then(response => {
       let [student, classes] = response;
@@ -33,8 +29,7 @@ module.exports = {
         classes: classes.map(c => {
           return {
             classID: c.classID,
-            classname: c.name,
-            teacher: `${c.first} ${c.last}`
+            classname: c.name
           };
         })
       };
@@ -57,12 +52,9 @@ module.exports = {
   },
 
   addStudent: async student => {
-    const newStudent = await db('students')
+    const newStudentID = await db('students')
       .insert(student)
-      .returning('id')
-      .then(id => {
-        return id;
-      });
-    return newStudent[0];
+    return newStudentID[0];
+
   }
 };
