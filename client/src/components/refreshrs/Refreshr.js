@@ -6,8 +6,11 @@ import FormGroup from '@material-ui/core/FormGroup';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Button from '@material-ui/core/Button';
+import styled from 'styled-components';
 
-const styles = (theme) => ({
+const axios = require('axios');
+
+const styles = theme => ({
   wrapper: {
     margin: '2rem auto',
     borderRadius: '0 0 5px 5px',
@@ -48,6 +51,8 @@ function Refreshr(props) {
   const [a2, setA2] = useState(false);
   const [a3, setA3] = useState(false);
   const [a4, setA4] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [url, setUrl] = useState('');
   const [a1Text, setA1Text] = useState('');
   const [a2Text, setA2Text] = useState('');
   const [a3Text, setA3Text] = useState('');
@@ -58,6 +63,55 @@ function Refreshr(props) {
     questionText,
     answers: { a1Text, a1, a2Text, a2, a3Text, a3, a4Text, a4 }
   });
+
+  const StyleDisplay = styled.a`
+    ${{ display: submitted ? 'block' : 'none' }}
+  `;
+
+  const createForm = async event => {
+    event.preventDefault();
+    const headers = {
+      Authorization: `Bearer ${process.env.REACT_APP_TYPEFORM}`
+    };
+    const data = {
+      title: questionObject.refreshrName,
+      fields: [
+        {
+          title: questionObject.reviewText,
+          type: 'multiple_choice',
+          properties: {
+            choices: [
+              {
+                label: questionObject.answers.a1Text
+              },
+              {
+                label: questionObject.answers.a2Text
+              },
+              {
+                label: questionObject.answers.a3Text
+              },
+              {
+                label: questionObject.answers.a4Text
+              }
+            ]
+          }
+        }
+      ]
+    };
+    try {
+      const response = await axios.post(
+        'https://api.typeform.com/forms',
+        data,
+        {
+          headers
+        }
+      );
+      setUrl(response.data._links.display);
+    } catch (error) {
+      console.log(error);
+    }
+    setSubmitted(true);
+  };
 
   return (
     <Grid className={props.classes.wrapper}>
@@ -71,6 +125,7 @@ function Refreshr(props) {
           })
         }
       >
+        <h2>Create Your Refreshr</h2>
         <TextField
           value={refreshrName}
           label="Refreshr Name"
@@ -82,10 +137,10 @@ function Refreshr(props) {
           InputLabelProps={{
             shrink: true
           }}
-          onChange={(e) => addRefreshrName(e.target.value)}
+          onChange={e => addRefreshrName(e.target.value)}
         />
-        <h4 className={props.classes.subheaders}>Review Text</h4>
-        <TextField
+        {/* <h4 className={props.classes.subheaders}>Review Text</h4> */}
+        {/* <TextField
           value={reviewText}
           label="Review Text"
           name="reviewText"
@@ -94,8 +149,8 @@ function Refreshr(props) {
           InputLabelProps={{
             shrink: true
           }}
-          onChange={(e) => setReviewText(e.target.value)}
-        />
+          onChange={e => setReviewText(e.target.value)}
+        /> */}
         <h4 className={props.classes.subheaders}>Question</h4>
         <TextField
           value={questionText}
@@ -106,7 +161,7 @@ function Refreshr(props) {
           InputLabelProps={{
             shrink: true
           }}
-          onChange={(e) => setQuestionText(e.target.value)}
+          onChange={e => setQuestionText(e.target.value)}
         />
         <FormGroup className={props.classes.formGroup}>
           <FormControlLabel
@@ -115,7 +170,7 @@ function Refreshr(props) {
                 <Checkbox
                   checked={a1}
                   color="primary"
-                  onChange={(e) => setA1(e.target.checked)}
+                  onChange={e => setA1(e.target.checked)}
                 />
                 <TextField
                   variant="outlined"
@@ -125,7 +180,7 @@ function Refreshr(props) {
                   }}
                   value={a1Text}
                   className={props.classes.answerFields}
-                  onChange={(e) => setA1Text(e.target.value)}
+                  onChange={e => setA1Text(e.target.value)}
                 />
               </>
             }
@@ -136,7 +191,7 @@ function Refreshr(props) {
                 <Checkbox
                   checked={a2}
                   color="primary"
-                  onChange={(e) => setA2(e.target.checked)}
+                  onChange={e => setA2(e.target.checked)}
                 />
                 <TextField
                   variant="outlined"
@@ -146,7 +201,7 @@ function Refreshr(props) {
                   }}
                   value={a2Text}
                   className={props.classes.answerFields}
-                  onChange={(e) => setA2Text(e.target.value)}
+                  onChange={e => setA2Text(e.target.value)}
                 />
               </>
             }
@@ -157,7 +212,7 @@ function Refreshr(props) {
                 <Checkbox
                   checked={a3}
                   color="primary"
-                  onChange={(e) => setA3(e.target.checked)}
+                  onChange={e => setA3(e.target.checked)}
                 />
                 <TextField
                   variant="outlined"
@@ -167,7 +222,7 @@ function Refreshr(props) {
                   }}
                   value={a3Text}
                   className={props.classes.answerFields}
-                  onChange={(e) => setA3Text(e.target.value)}
+                  onChange={e => setA3Text(e.target.value)}
                 />
               </>
             }
@@ -178,7 +233,7 @@ function Refreshr(props) {
                 <Checkbox
                   checked={a4}
                   color="primary"
-                  onChange={(e) => setA4(e.target.checked)}
+                  onChange={e => setA4(e.target.checked)}
                 />
                 <TextField
                   variant="outlined"
@@ -188,7 +243,7 @@ function Refreshr(props) {
                   }}
                   value={a4Text}
                   className={props.classes.answerFields}
-                  onChange={(e) => setA4Text(e.target.value)}
+                  onChange={e => setA4Text(e.target.value)}
                 />
               </>
             }
@@ -197,10 +252,14 @@ function Refreshr(props) {
         <Button
           variant="contained"
           color="primary"
-          onClick={() => props.addQuestions(questionObject)}
+          onClick={e => {
+            props.addQuestions(questionObject);
+            createForm(e);
+          }}
         >
           Submit
         </Button>
+        <StyleDisplay>View your Refreshr here: {url}</StyleDisplay>
       </FormGroup>
     </Grid>
   );

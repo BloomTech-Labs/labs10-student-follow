@@ -140,6 +140,17 @@ function CampaignForm(props) {
     props.sendAllToSendgrid();
   };
 
+  const alterTime = (e) => {
+    e.preventDefault()
+    const inputTime = Date.parse(e.target.value) / 1000
+    const alteredTime = inputTime + 18000 // Adds 5 hours on, makes it same day @ 12am from user input
+
+    props.setTimeData({
+      ...props.timeData,
+      send_at: alteredTime
+    })
+  }
+
   return (
     <>
       <Grid container className={classes.wrapper}>
@@ -155,12 +166,7 @@ function CampaignForm(props) {
               type="date"
               defaultValue={today}
               // onChange={e => setDate(e)}
-              onChange={e =>
-                props.setTimeData({
-                  ...props.timeData,
-                  send_at: Date.parse(e.target.value) / 1000
-                })
-              }
+              onChange={e => alterTime(e)}
             />
             <Button
               variant="outlined"
@@ -171,10 +177,10 @@ function CampaignForm(props) {
             </Button>
           </Card>
         ) : (
-          <Card className={classes.card}>
-            <h4>select a refreshr to schedule</h4>
-          </Card>
-        )}
+            <Card className={classes.card}>
+              <h4>select a refreshr to schedule</h4>
+            </Card>
+          )}
         <Grid container className={classes.cardList}>
           <Typography variant="h4">Your Refreshrs</Typography>
           {refreshrs.map(refreshr => (

@@ -98,6 +98,7 @@ module.exports = {
 
     return ID[0];
   },
+
   removeStudent: (classId, studentId) =>
     db('students_classes')
       .where({ student_id: studentId, class_id: classId })
@@ -149,13 +150,27 @@ module.exports = {
   },
 
   addStudentsToClass: async (class_id, students) => {
-    console.log('students', students);
-    console.log('cid', class_id);
     try {
       for (let student of students) {
         console.log(`adding ${student} to ${class_id}`);
         await db('students_classes').insert({ student_id: student, class_id });
       }
+    } catch (err) {
+      console.log(err);
+    }
+  },
+
+  removeStudents: async (class_id, students) => {
+    try {
+      let count = 0;
+      for (let student of students) {
+        const result = await db('students_classes')
+          .where({ student_id: student, class_id })
+          .delete();
+        console.log(result);
+        count += result;
+      }
+      return count;
     } catch (err) {
       console.log(err);
     }

@@ -42,11 +42,13 @@ router.get('/:id/students', async (req, res, next) => {
   }
 });
 
-// drop a student from a class
-router.post('/:id/drop/:studentId', async (req, res, next) => {
+// drop students from a class
+// takes an array of students
+router.post('/:id/drop/', async (req, res, next) => {
   try {
-    const { id, studentId } = req.params;
-    const result = await db.removeStudent(id, studentId);
+    const { id } = req.params;
+    const { students } = req.body;
+    const result = await db.removeStudents(id, students);
     res.status(responseStatus.success).json({ droppedStudents: result });
   } catch (err) {
     console.log(err);

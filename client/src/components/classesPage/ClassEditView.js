@@ -5,25 +5,49 @@ import {
   Card,
   Select,
   MenuItem,
-  Button
+  Button,
+  Typography,
+  CardContent,
+  Icon
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { Link } from 'react-router-dom';
+import RefreshrDialog from './components/RefreshrListDialog';
 import axios from 'axios';
 
 const styles = theme => ({
   wrapper: {
-    color: 'white'
+    color: 'white',
+    marginTop: 50
   },
-  cardList: {
-    display: 'flex'
+  refreshrList: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    border: '1px solid black'
   },
-  card: {
-    width: 200,
+  refreshrCard: {
+    width: '25%',
     height: 200,
     border: '1px solid white',
-    margin: theme.spacing.unit * 3
+    margin: theme.spacing.unit * 3,
+    position: 'relative'
+  },
+  studentList: {
+    display: 'flex',
+    flexDirection: 'column',
+    border: '1px solid white',
+    flexWrap: 'wrap',
+    height: '30vh'
+  },
+  buttonBox: {
+    height: 50
+  },
+  icon: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -40%)'
   }
 });
 
@@ -32,12 +56,13 @@ function ClassEditView(props) {
   const classId = props.match.params.id;
   const ax = axios.create({
     baseURL: 'http://localhost:9000' // development
+    // baseURL: 'https://refreshr.herokuapp.com' // production
   });
   const [students, setStudents] = useState([]);
   const [refreshrs, setRefreshrs] = useState([]);
   const [teacherRefs, setTeacherRefs] = useState([]);
   const [selectedStudents, setSelectedStudents] = useState([]);
-  // const [classDetails, setClassDetails] = useState([]);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
 
   // get class details on mount
   useEffect(() => {
@@ -46,6 +71,7 @@ function ClassEditView(props) {
     fetchTeacherRefreshrs();
   }, []);
 
+  /*
   useEffect(() => {
     console.log('students:', students);
   }, [students]);
@@ -59,19 +85,20 @@ function ClassEditView(props) {
   }, [teacherRefs]);
 
   useEffect(() => {
-    console.log('selectedStudents:', selectedStudents);
+    console.log(
+      'selectedStudents:',
+      selectedStudents
+    );
   }, [selectedStudents]);
+  */
 
   async function fetchStudents() {
-    console.log(classId);
     const res = await ax.get(`/classes/${classId}/students`);
-    console.log(res);
     setStudents(res.data);
   }
 
   async function fetchRefreshrs() {
     const res = await ax.get(`/classes/${classId}/refreshrs`);
-    console.log(res);
     setRefreshrs(res.data);
   }
 
@@ -96,66 +123,82 @@ function ClassEditView(props) {
   }
 
   function selectStudent(e) {
-    console.log('val', e.target.value);
-
-    const studentId = Number(e.target.value);
-
+    const studentId = parseInt(e.target.value, 10);
+    let updatedStudents = selectedStudents;
     if (e.target.checked) {
-      console.log('add');
-
-      setSelectedStudents([...selectedStudents, studentId]);
+      updatedStudents = selectedStudents.concat(studentId);
     } else {
-      setSelectedStudents(selectedStudents.filter(s => s.id === studentId));
+      updatedStudents = selectedStudents.filter(s => s !== studentId);
     }
-
-    // const student = students.filter(s => s.id === id);
-    // setSelectedStudents([...selectedStudents, student]);
-    // console.log(selectedStudents);
+    setSelectedStudents(updatedStudents);
   }
 
-  function dropStudents() {
-    // change endpoint to accept array
-    // endpoint is /classes/:id/drop/studentId
-    // clear selectedStudents
+  function closeModal() {
+    setModalIsOpen(false);
+  }
+
+  async function dropStudents() {
+    const res = await ax.post(`/classes/${classId}/drop/`, {
+      students: selectedStudents
+    });
+    console.log('dropped:', res);
+    setSelectedStudents([]);
+    fetchStudents(); // better way to do this than calling this here?
   }
 
   return (
     <Grid className={props.classes.wrapper}>
-      <h1>ClassEditView Component</h1>
-      <Grid>
-        <h1>Students</h1>
+      <h1>Students</h1>
+      <Grid className={classes.studentList}>
+        {students.map(s => (
+          <Grid key={s.id}>
+            <span>{`${s.first_name} ${s.last_name}`}</span>
+            <Checkbox
+              value={`${s.id}`}
+              checked={selectedStudents.includes(parseInt(s.id, 10))}
+              onClick={e => selectStudent(e)}
+            />
+          </Grid>
+        ))}
+      </Grid>
+      <Grid className={classes.buttonBox}>
         {selectedStudents.length ? (
           <Button variant="outlined" onClick={dropStudents}>
             Remove selected from class
           </Button>
         ) : null}
-        {students.map(s => (
-          <Grid key={s.id}>
-            <span>{`${s.firstname} ${s.lastname}`}</span>
-            <Checkbox value={s.id} onClick={e => selectStudent(e)} />
-          </Grid>
-        ))}
+      </Grid>
+
+      <Grid>
         <h1>Refreshrs</h1>
-        {teacherRefs.length ? (
-          <span>Add a refreshr to this class</span>
-        ) : (
-          <Link to="/refreshrs">
-            Create a new refreshr to assign it to the class
-          </Link>
-        ) // this link should go to the create refreshr page, but not sure what the route is
-        }
-        <Select onChange={e => addRefreshr(e.target.value)}>
-          {teacherRefs.map(r => (
-            <MenuItem value={r.id}>{r.name}</MenuItem>
-          ))}
-        </Select>
-        <Grid className={classes.cardList}>
+        <Grid className={classes.refreshrList}>
           {refreshrs.map(r => (
-            <Card className={classes.card} key={r.id} raised>
-              {r.name}
-              <DeleteIcon onClick={() => removeRefreshr(r.id)} />
+            <Card className={classes.refreshrCard} key={r.id} raised>
+              <CardContent>{r.name}</CardContent>
+              <CardContent>
+                <DeleteIcon onClick={() => removeRefreshr(r.id)} />
+              </CardContent>
             </Card>
           ))}
+          <RefreshrDialog
+            refreshrs={teacherRefs}
+            open={modalIsOpen}
+            handleClose={closeModal}
+            addRefreshr={addRefreshr}
+          />
+          <Card className={classes.refreshrCard} raised>
+            <CardContent>
+              <Typography className={classes.title}>Add a Refreshr</Typography>
+              <Icon
+                className={classes.icon}
+                color="action"
+                style={{ fontSize: 60 }}
+                onClick={() => setModalIsOpen(!modalIsOpen)}
+              >
+                add_circle
+              </Icon>
+            </CardContent>
+          </Card>
         </Grid>
       </Grid>
       <Button variant="outlined">Save Changes</Button>
