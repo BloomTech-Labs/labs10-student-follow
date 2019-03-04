@@ -115,8 +115,6 @@ const Navbar = props => {
 
   /*-------- NAV DRAWER --------*/
   const [open, setOpen] = useState(false)
-  const [buttonText, setButtonText] = useState('Login')
-
   const toggleDrawer = () => {
     setOpen(!open)
   }
