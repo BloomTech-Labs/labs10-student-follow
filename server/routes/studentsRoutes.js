@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../data/helpers/studentsHelper');
-const jwtCheck = require('../middleware/authenticate');
+const management = require('../authentication');
 const {
   emptyCheck,
   whitespaceCheck
@@ -34,7 +34,6 @@ router.get('/:id', async (req, res, next) => {
 
 router.post(
   '/',
-  // jwtCheck,
   emptyCheck,
   whitespaceCheck,
   async (req, res, next) => {
@@ -50,7 +49,7 @@ router.post(
 
 router.put(
   '/:id',
-  jwtCheck,
+
   emptyCheck,
   whitespaceCheck,
   async (req, res, next) => {
@@ -65,7 +64,7 @@ router.put(
   }
 );
 
-router.delete('/:id', jwtCheck, async (req, res, next) => {
+router.delete('/:id', async (req, res, next) => {
   const { id } = req.params;
   try {
     const deletedRecords = await db.deleteStudent(id);

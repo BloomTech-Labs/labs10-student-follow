@@ -1,12 +1,9 @@
 /* AUTH */
 import Auth from './authentication/Auth';
-import Login from './authentication/Login';
 
 /* COMMON */
-import Loading from './common/Loading';
 import Navcrumbs from './common/Navcrumbs';
 import Navbar from './common/Navbar';
-import OtherNavBar from './common/OtherNavBar';
 
 /* PAGES */
 import BillingPage from './pages/BillingPage';
@@ -38,7 +35,7 @@ import Refreshr from './refreshrs/Refreshr';
 
 /* MISC DATA */
 import ClassOperations from './ClassOperations';
-import MiscData from './MiscData';
+import Dashboard from './Dashboard';
 import Snackbar from './billingPage/Snackbar';
 
 /* MISC DATA */
@@ -46,11 +43,8 @@ import Typeform from './typeform/Typeform';
 
 export {
   Auth,
-  Login,
-  Loading,
   Navcrumbs,
   Navbar,
-  OtherNavBar,
   BillingPage,
   ClassesPage,
   LandingPage,
@@ -73,6 +67,6 @@ export {
   RefreshrCard,
   Refreshr,
   ClassOperations,
-  MiscData,
+  Dashboard,
   Typeform
 };

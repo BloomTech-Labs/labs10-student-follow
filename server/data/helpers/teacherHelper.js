@@ -14,25 +14,40 @@ module.exports = {
 
   getTeacher: async id => {
     const teacher = await db('teachers')
-      .select('id', 'first_name', 'last_name', 'email')
-      .where({ id })
+      .select('user_id', 'first_name', 'last_name', 'email')
+      .where('user_id', id)
       .first();
 
-    const classes = await db('classes').where('teacher_id', id);
+    const classes = await db('classes')
+      .select('classes.name as c_name', 'refreshrs.name as r_name', 'tcr.date', 'tcr.class_id')
+      .join('teachers_classes_refreshrs as tcr', 'classes.id', 'tcr.class_id')
+      .join('refreshrs', 'refreshrs.id', 'tcr.refreshr_id')
+      .join('teachers', 'teachers.user_id', 'tcr.teacher_id')
+      .where('teachers.user_id', id);
 
     return Promise.all([teacher, classes]).then(response => {
       let [teacher, classes] = response;
       let result = {
-        id: teacher.id,
+        id: teacher.user_id,
         first_name: teacher.first_name,
         last_name: teacher.last_name,
         email: teacher.email,
-        classes: classes
+        classes: classes.map(c => {
+          return {
+            class_id: c.class_id,
+            created_date: c.date,
+            classname: c.c_name,
+            refreshr_name: c.r_name
+          };
+        }),
       };
       return result;
     });
   },
-
+  addTeacher: async (teacher) => {
+    const newTeacherID= await db('teachers').insert(teacher)
+    return newTeacherID[0]
+  },
   updateTeacher: async (id, teacher) => {
     const updateCount = await db('teachers')
       .where({ id })
@@ -40,11 +55,6 @@ module.exports = {
     return updateCount;
   },
 
-  /* delete teacher will currently throw a foreign key error 
-  if the teacher has any classes. do we want the class to
-  be deleted as well? we could add 'on delete cascade' to
-  teachers if so, but i dunno if that's what we want
-  */
   deleteTeacher: async id => {
     const deleteCount = await db('teachers')
       .where({ id })
