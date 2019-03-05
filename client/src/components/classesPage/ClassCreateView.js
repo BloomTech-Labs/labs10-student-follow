@@ -3,8 +3,6 @@ import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
 import {
   ListForm,
-  RecipientForm,
-  SelectionForm,
   CampaignForm
 } from '../index.js';
 import {
@@ -19,7 +17,6 @@ import {
   // addRefreshr, getRefreshr, getRefreshrs, updateRefreshr, deleteRefreshr, scheduleRefreshr, rescheduleRefreshr, getScheduleRefreshr, deleteScheduleRefreshr, sendTestRefreshr
 } from '../SendgridOps';
 import submitClassData from './dbOps';
-// import axios from 'axios';
 
 const styles = theme => ({
   wrapper: {
@@ -40,8 +37,6 @@ function ClassCreateView(props) {
 
   const [stage, setStage] = useState({
     onListForm: true,
-    onRecipientForm: false,
-    onSelectionForm: false,
     onCampaignForm: false
   });
 
@@ -135,7 +130,7 @@ function ClassCreateView(props) {
           validated.schedule_code = res.status;
           console.log(
             `Success! Your campaign ${res.data.id} is scheduled for ${
-              res.data.send_at
+            res.data.send_at
             }. Status is "${res.data.status}"!`
           );
           setTimeout(() => {
@@ -155,8 +150,6 @@ function ClassCreateView(props) {
 
   return (
     <Grid className={props.classes.wrapper}>
-      <h1>ClassCreateView Component</h1>
-      <button onClick={e => sendAllToSendgrid(e)}>sendAllToSendgrid</button>
       {stage.onListForm ? (
         <ListForm
           file={file}
@@ -167,24 +160,6 @@ function ClassCreateView(props) {
           stage={stage}
           setStage={setStage}
           setRecipientData={setRecipientData}
-        />
-      ) : null}
-
-      {stage.onRecipientForm ? (
-        <RecipientForm
-          recipientData={recipientData}
-          setRecipientData={setRecipientData}
-          stage={stage}
-          setStage={setStage}
-        />
-      ) : null}
-
-      {stage.onSelectionForm ? (
-        <SelectionForm
-          listData={listData}
-          recipientData={recipientData}
-          stage={stage}
-          setStage={setStage}
         />
       ) : null}
 
