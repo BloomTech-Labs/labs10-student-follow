@@ -5,6 +5,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import CloudUpload from '@material-ui/icons/CloudUpload';
 import GroupAdd from '@material-ui/icons/GroupAdd';
 import ArrowForward from '@material-ui/icons/ArrowForward';
+import RemoveCircleOutline from '@material-ui/icons/RemoveCircleOutline';
 import Attachment from '@material-ui/icons/Attachment';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Typography from '@material-ui/core/Typography';
@@ -150,6 +151,15 @@ const styles = theme => ({
   hrStyle: {
     margin: '1rem auto',
     width: '100%'
+  },
+  recipientStaging: {
+    display: 'flex',
+    alignItems: 'center'
+  },
+  unstageRecipientBtn: {
+    "&:hover": {
+      cursor: 'pointer'
+    }
   }
 });
 
@@ -226,6 +236,12 @@ function ListForm(props) {
       onCampaignForm: !props.stage.onCampaignForm
     });
   };
+
+  const unstageRecipient = (e, targetEmail) => {
+    e.preventDefault()
+    const filteredArr = props.recipientData.filter(r => r.email !== targetEmail)
+    setRecipientData(filteredArr)
+  }
 
   return (
     <Paper className={classes.container} elevation={24}>
@@ -358,10 +374,15 @@ function ListForm(props) {
           recipientData.map(
             (recipient, i) => (
               (
-                <div key={i}>
+                <div key={i} className={classes.recipientStaging}>
                   <p style={{ color: 'white' }}>
-                    {i + 1}. {recipient.first_name} {recipient.last_name} ({recipient.email})
+                    {i + 1}. {recipient.first_name} {recipient.last_name} ({recipient.email}) &nbsp;
                   </p>
+                  <RemoveCircleOutline
+                    className={classes.unstageRecipientBtn}
+                    tooltip="Remove selected recipient"
+                    onClick={(e) => unstageRecipient(e, recipient.email)}
+                  />
                 </div>
               )
             )
