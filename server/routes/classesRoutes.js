@@ -42,7 +42,6 @@ router.delete('/:id/drop/:studentId', async (req, res, next) => {
 });
 
 router.post('/', emptyCheck, async (req, res, next) => {
-
   const { body } = req;
   console.log('class:', body);
 
@@ -66,6 +65,24 @@ router.post('/:id', async (req, res, next) => {
       .json('Student successfully added to class.');
   } catch (err) {
     console.log(err);
+    next(err);
+  }
+});
+
+// assigns a refreshr to the class
+router.post('/:id/refreshrs', async (req, res, next) => {
+  const { id } = req.params;
+  const { refreshr, teacher } = req.body;
+  try {
+    await db.addRefreshr(id, refreshr_id);
+    res
+      .status(responseStatus.success)
+      .json({
+        message: `refreshr ${refreshr_id} assigned to class ${id} with teacher ${teacher_id}`
+      });
+  } catch (err) {
+    console.log(err);
+    next(err);
   }
 });
 

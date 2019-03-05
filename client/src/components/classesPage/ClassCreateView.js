@@ -145,7 +145,7 @@ function ClassCreateView(props) {
               recipientData,
               campaignData
             );
-          }, 20000);
+          }, 30000);
         }
       })
       .then()

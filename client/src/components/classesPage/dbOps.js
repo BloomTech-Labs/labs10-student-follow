@@ -114,14 +114,22 @@ const submitClassData = async (
     console.log(newStudents);
 
     // add students and class to students_classes table
+    for (let student of newStudents) {
     const scRes = await ax.post(`/classes/${newClassID}`, {
-      students: newStudents
+      student_id: student
     });
     console.log('response:', scRes);
+  }
+
+
 
     // add refreshrs to tcr TODO
     // refreshrs will already be created and so will have an id
     // add teacher(user) id, class id, and refreshr id
+    for (let refreshr of campaignData) {
+      const refRes = ax.post(`/classes/${newClassID}/refreshrs`);
+      console.log(refRes);
+    }
   } catch (err) {
     console.log(`error: ${err}`);
   }

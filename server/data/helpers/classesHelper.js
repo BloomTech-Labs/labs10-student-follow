@@ -18,13 +18,21 @@ module.exports = {
         'teachers.last_name as t_last',
         'teachers.email as t_email'
       )
-      .join('teachers_classes_refreshrs as tcr', 'teachers.user_id', 'tcr.teacher_id')
-      .join('classes', 'classes.sg_list_id', 'tcr.class_id') 
+      .join(
+        'teachers_classes_refreshrs as tcr',
+        'teachers.user_id',
+        'tcr.teacher_id'
+      )
+      .join('classes', 'classes.sg_list_id', 'tcr.class_id')
       .where('classes.sg_list_id', id);
 
     const students = await db('students')
-      .join('students_classes', 'students.sg_recipient_id', 'students_classes.student_id')
-      .join('classes', 'classes.sg_list_id', 'students_classes.class_id') 
+      .join(
+        'students_classes',
+        'students.sg_recipient_id',
+        'students_classes.student_id'
+      )
+      .join('classes', 'classes.sg_list_id', 'students_classes.class_id')
       .where('classes.sg_list_id', id);
 
     const refreshrs = await db('refreshrs')
@@ -37,7 +45,7 @@ module.exports = {
         'questions.wrong_answer_1',
         'questions.wrong_answer_2',
         'questions.wrong_answer_3',
-        'questions.correct_answer',
+        'questions.correct_answer'
       )
       .join(
         'questions_refreshrs',
@@ -45,7 +53,11 @@ module.exports = {
         'questions_refreshrs.refreshr_id'
       )
       .join('questions', 'questions.id', 'questions_refreshrs.question_id')
-      .join('teachers_classes_refreshrs as tcr', 'refreshrs.id', 'tcr.refreshr_id')
+      .join(
+        'teachers_classes_refreshrs as tcr',
+        'refreshrs.id',
+        'tcr.refreshr_id'
+      )
       .join('classes', 'classes.sg_list_id', 'tcr.class_id')
       .where('classes.sg_list_id', id);
 
@@ -80,7 +92,7 @@ module.exports = {
                 wrong_answer_1: r.wrong_answer_1,
                 wrong_answer_2: r.wrong_answer_2,
                 wrong_answer_3: r.wrong_answer_3,
-                correct_answer: r.correct_answer,
+                correct_answer: r.correct_answer
               }
             };
           })
@@ -99,10 +111,25 @@ module.exports = {
     //   return id;
     // });
     console.log(`class created: ${newClassID}`);
-    console.log('CLASSID',newClassID[0]);
+    console.log('CLASSID', newClassID[0]);
     return newClassID[0];
   },
-  
+
+  addRefreshr: async (class_id, refreshr) => {
+    // check for any null fieds
+    // const existing = await db('teachers_classes_refreshrs')
+    // .where(class_id);
+    // console.log(existing);
+    // for (entry of existing) {
+    db('teachers_classes_refreshrs').insert({
+      class_id,
+      teacher_id,
+      refreshr_id: refreshr.refreshr_id,
+      date: refreshr.date,
+      sg_campaign_id: refreshr.sg_campaign_id
+    });
+  },
+
   updateClass: async (id, updatedClass) => {
     const updateCount = await db('classes')
       .where('sg_list_id', id)
@@ -112,21 +139,19 @@ module.exports = {
 
   deleteClass: async id => {
     const deleteCount = await db('classes')
-    .where('sg_list_id', id)
-    .del();
+      .where('sg_list_id', id)
+      .del();
     return deleteCount;
   },
-  
+
   addStudent: async (class_id, student_id) => {
-    const ID = await db('students_classes').insert({class_id, student_id});
+    const ID = await db('students_classes').insert({ class_id, student_id });
     return ID[0];
   },
 
-
-  removeStudent: (class_id, student_id) =>
-    {
-      return db('students_classes')
-        .where({class_id, student_id })
-        .delete();
-    },
+  removeStudent: (class_id, student_id) => {
+    return db('students_classes')
+      .where({ class_id, student_id })
+      .delete();
+  }
 };
