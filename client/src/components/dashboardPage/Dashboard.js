@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
-import { CardContent, Typography, Card, Icon, CardMedia, CardActionArea } from '@material-ui/core';
+import { CardContent, Typography, Card, Icon, Button, CardActions } from '@material-ui/core';
 
 const styles = theme => ({
   wrapper: {
@@ -48,18 +48,19 @@ const styles = theme => ({
     color: '#FFFFFF',
     paddingLeft: '10px'
   },
-  classData: {
-
-    paddingLeft: '10px'
-  },
   classCard: {
     display: 'flex',
     flexDirection: 'column',
     margin: '1rem',
     background: 'white',
-    // border: '3px solid red',
     width: '200px',
-  }
+  },
+  buttonDiv: {
+    justifyContent: 'space-around',
+  },
+  classData: {
+    paddingLeft: '10px',
+  },
 });
 
 const Dashboard = props => {
@@ -108,7 +109,12 @@ const Dashboard = props => {
             <Typography component="p"   className={classes.lists}>Students: {c.numOfStudents}</Typography>
             <Typography component="p"   className={classes.lists}>Participation: {c.participationRate}%</Typography>
             <Typography component="p"  className={classes.lists}>Refreshrs Sent: {c.refreshrsEmailed}</Typography>
+            {/* <CardActions className={classes.buttonDiv}>
+      </CardActions> */}
             </CardContent>
+        <Button color="primary"  className={classes.lists}>
+          Edit
+        </Button>
           {/* </CardActionArea> */}
           </Card>
         ))}
