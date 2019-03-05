@@ -14,7 +14,6 @@ import {
   CampaignForm,
   ClassCreateView,
   ClassEditView,
-  Typeform,
   ClassListView
 } from './components';
 
@@ -144,7 +143,6 @@ const App = props => {
                   <Dashboard getClasses={getClasses} allClasses={allClasses} />
                 )}
               />
-              <Route path="/typeform" render={props => <Typeform />} />
               <Route
                 exact
                 path="/refreshrs"
@@ -156,7 +154,11 @@ const App = props => {
                 )}
               />
               <Route path="/billing" render={props => <BillingPage />} />
-              <Route exact path="/classes" render={props => <ClassListView />} />
+              <Route
+                exact
+                path="/classes"
+                render={props => <ClassListView />}
+              />
               <Route
                 exact
                 path="/classes/edit/:id"
