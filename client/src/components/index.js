@@ -27,8 +27,6 @@ import Refreshr from './refreshrsPage/Refreshr';
 /* MISC DATA */
 import ClassOperations from './classesPage/ClassOperations';
 import Dashboard from './dashboardPage/Dashboard';
-/* MISC DATA */
-import Typeform from './typeform/Typeform';
 
 export {
   Navcrumbs,
@@ -48,6 +46,5 @@ export {
   RefreshrCard,
   Refreshr,
   ClassOperations,
-  Dashboard,
-  Typeform
+  Dashboard
 };

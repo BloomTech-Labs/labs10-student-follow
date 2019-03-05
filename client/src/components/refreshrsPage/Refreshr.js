@@ -41,15 +41,9 @@ const styles = theme => ({
 
 function Refreshr(props) {
   const { setUrl, url } = props;
-  console.log('REF:', url);
   const [refreshrName, addRefreshrName] = useState('');
-  const [reviewText] = useState(
-    //setReviewText
-    'This is a short section of text that describes or reminds about one part of the topic. It is not intended to be a complete review of the material, just a reminder of the most important parts. This section is limited to 512 characters.'
-  );
-  const [questionText, setQuestionText] = useState(
-    'This is a multiple choice question related to the topic. Again the goal is not to be exhaustive, just to call the material to mind. A good question will not simply call for the recollection of information, but will require the application of knowledge.'
-  );
+  const [questionTextOne, setQuestionTextOne] = useState('');
+  const [questionTextTwo, setQuestionTextTwo] = useState('');
   const [a1, setA1] = useState(false);
   const [a2, setA2] = useState(false);
   const [a3, setA3] = useState(false);
@@ -62,8 +56,8 @@ function Refreshr(props) {
   const [a4Text, setA4Text] = useState('');
   const [questionObject, setQuestionObject] = useState({
     refreshrName,
-    reviewText,
-    questionText,
+    questionTextOne,
+    questionTextTwo,
     answers: { a1Text, a1, a2Text, a2, a3Text, a3, a4Text, a4 }
   });
 
@@ -78,26 +72,47 @@ function Refreshr(props) {
     };
     const data = {
       title: questionObject.refreshrName,
+      variables: {
+        score: 0
+      },
       fields: [
         {
-          title: questionObject.reviewText,
+          title: 'Please enter your email address.',
+          type: 'email',
+          validations: {
+            required: true
+          }
+        },
+        {
+          ref: 'question_1',
+          title: questionObject.questionTextOne,
           type: 'multiple_choice',
           properties: {
+            randomize: true,
             choices: [
               {
+                ref: 'correct',
                 label: questionObject.answers.a1Text
               },
               {
+                ref: 'incorrect_1',
                 label: questionObject.answers.a2Text
               },
               {
+                ref: 'incorrect_2',
                 label: questionObject.answers.a3Text
               },
               {
+                ref: 'incorrect_3',
                 label: questionObject.answers.a4Text
               }
             ]
           }
+        },
+        {
+          ref: 'question_2',
+          title: questionObject.questionTextTwo,
+          type: 'short_text'
         }
       ]
     };
@@ -122,8 +137,8 @@ function Refreshr(props) {
         onChange={() =>
           setQuestionObject({
             refreshrName,
-            reviewText,
-            questionText,
+            questionTextOne,
+            questionTextTwo,
             answers: { a1Text, a1, a2Text, a2, a3Text, a3, a4Text, a4 }
           })
         }
@@ -142,29 +157,17 @@ function Refreshr(props) {
           }}
           onChange={e => addRefreshrName(e.target.value)}
         />
-        {/* <h4 className={props.classes.subheaders}>Review Text</h4> */}
-        {/* <TextField
-          value={reviewText}
-          label="Review Text"
-          name="reviewText"
-          multiline
-          variant="outlined"
-          InputLabelProps={{
-            shrink: true
-          }}
-          onChange={e => setReviewText(e.target.value)}
-        /> */}
-        <h4 className={props.classes.subheaders}>Question</h4>
+        <h4 className={props.classes.subheaders}>Questions</h4>
         <TextField
-          value={questionText}
-          label="Question"
+          placeholder="Enter your multiple choice question here.."
+          label="Question 1"
           name="question"
           multiline
           variant="outlined"
           InputLabelProps={{
             shrink: true
           }}
-          onChange={e => setQuestionText(e.target.value)}
+          onChange={e => setQuestionTextOne(e.target.value)}
         />
         <FormGroup className={props.classes.formGroup}>
           <FormControlLabel
@@ -252,6 +255,17 @@ function Refreshr(props) {
             }
           />
         </FormGroup>
+        <TextField
+          placeholder="Enter your text-response question here.."
+          label="Question 2"
+          name="question"
+          multiline
+          variant="outlined"
+          InputLabelProps={{
+            shrink: true
+          }}
+          onChange={e => setQuestionTextTwo(e.target.value)}
+        />
         <Button
           variant="contained"
           color="primary"
