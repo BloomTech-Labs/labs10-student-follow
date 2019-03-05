@@ -43,7 +43,8 @@ function Refreshr(props) {
   const { setUrl, url } = props;
   console.log('REF:', url);
   const [refreshrName, addRefreshrName] = useState('');
-  const [reviewText, setReviewText] = useState(
+  const [reviewText] = useState(
+    //setReviewText
     'This is a short section of text that describes or reminds about one part of the topic. It is not intended to be a complete review of the material, just a reminder of the most important parts. This section is limited to 512 characters.'
   );
   const [questionText, setQuestionText] = useState(

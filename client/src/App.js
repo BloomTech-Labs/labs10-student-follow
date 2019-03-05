@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Route, withRouter, Router } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
-import history from './history';
 import axios from 'axios';
 import {
   LandingPage,
@@ -15,11 +14,12 @@ import {
   CampaignForm,
   ClassCreateView,
   ClassEditView,
-  Typeform
+  Typeform,
+  ClassListView
 } from './components';
 
 const App = props => {
-  console.log('ENV:', process.env)
+  console.log('ENV:', process.env);
   const classes = { props };
   const token = localStorage.getItem('accessToken');
   const user_id = localStorage.getItem('user_id');
@@ -119,7 +119,7 @@ const App = props => {
     console.log('APP:', props.Url),
     (
       <>
-        <Router history={history}>
+        <Router history={props.history}>
           <Grid
             className={classes.container}
             container
@@ -146,6 +146,7 @@ const App = props => {
               />
               <Route path="/typeform" render={props => <Typeform />} />
               <Route
+                exact
                 path="/refreshrs"
                 render={props => (
                   <RefreshrListView
@@ -155,7 +156,7 @@ const App = props => {
                 )}
               />
               <Route path="/billing" render={props => <BillingPage />} />
-              <Route exact path="/classes" render={props => <ClassesPage />} />
+              <Route exact path="/classes" render={props => <ClassListView />} />
               <Route
                 exact
                 path="/classes/edit/:id"
@@ -168,7 +169,7 @@ const App = props => {
               />
               <Route
                 exact
-                path="/questions/create"
+                path="/refreshrs/create"
                 render={props => (
                   <Refreshr
                     addQuestions={addQuestions}
