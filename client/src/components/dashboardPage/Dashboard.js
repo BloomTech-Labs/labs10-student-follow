@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
+import { CardContent, Typography, Card, Icon, CardMedia, CardActionArea } from '@material-ui/core';
 
 const styles = theme => ({
   wrapper: {
@@ -40,16 +41,24 @@ const styles = theme => ({
     }
   },
   lists: {
-    fontSize: '30px'
+    fontSize: '1rem',
+  },
+  classTitle: {
+    background: '#9D69A3',
+    color: '#FFFFFF',
+    paddingLeft: '10px'
+  },
+  classData: {
+
+    paddingLeft: '10px'
   },
   classCard: {
     display: 'flex',
     flexDirection: 'column',
     margin: '1rem',
     background: 'white',
-    padding: '.5rem',
-    border: '3px solid red',
-    width: '200px'
+    // border: '3px solid red',
+    width: '200px',
   }
 });
 
@@ -62,7 +71,7 @@ const Dashboard = props => {
     props.getClasses();
     // props.getQuestions(options);
   }, []);
-  const { teachers, students, allClasses, questions, classes } = props;
+  const { allClasses, classes } = props;
   //   console.log('Teachers Check:', teachers)
   //   console.log('Students Check:', students)
   //   console.log('Classes Check:', classes)
@@ -85,51 +94,31 @@ const Dashboard = props => {
   ];
   return (
     <Grid className={classes.wrapper}>
-      <h1 style={{ color: 'white' }}>User: {name}</h1>
-
-      {/* <div className={classes.containers}>
-        <h5>Students</h5>
-        {students.map(student => (
-          <p className={classes.lists}>{student.email}</p>
-        ))}{' '}
-      </div>
-
-      <div className={classes.containers}>
-        <h5>Teachers</h5>
-        {teachers.map(teacher => (
-          <p className={classes.lists}>{teacher.email}</p>
-        ))}
-      </div> */}
-
+      <Typography component="h2" color='secondary' inline="true">User: {name}</Typography>
       {console.log('PROPS', allClasses)}
-      <div className={classes.classContainer}>
+      <Grid className={classes.classContainer}>
         {testClasses.map(c => (
-          <div key={c.class_id} className={classes.classCard}>
-            <h4>{c.classname}</h4>
-            <p style={{ margin: 0 }}>Students: {c.numOfStudents}</p>
-            <p style={{ margin: 0 }}>Participation: {c.participationRate}%</p>
-            <p>Refreshrs Sent: {c.refreshrsEmailed}</p>
-          </div>
-        ))}
-      </div>
+          <Card key={c.class_id} className={classes.classCard}>
+          {/* <CardActionArea> */}
 
-      {/* START this is the working card when you got here */}
-      {/* <div className={classes.containers}>
-        <h5>Classes</h5>
-        {testClasses.map(c => (
-          <p key={c.class_id} className={classes.lists}>
-            {c.classname}
-          </p>
-        ))}
-      </div> */}
-      {/* END this is the working card when you got here */}
+            {/* <CardMedia component="img" image={require("./logo.png")} title="refreshr logo" alt="refreshr logo" height="auto" width="20"/> */}
+            <Typography component='h4' className={classes.classTitle}>{c.classname}</Typography>
+            <CardContent className={classes.classData}>
 
-      {/* <div className={classes.containers}>
-        <h5>Questions</h5>
-        {questions.map(question => (
-          <p className={classes.lists}>{question.question}</p>
+            <Typography component="p"   className={classes.lists}>Students: {c.numOfStudents}</Typography>
+            <Typography component="p"   className={classes.lists}>Participation: {c.participationRate}%</Typography>
+            <Typography component="p"  className={classes.lists}>Refreshrs Sent: {c.refreshrsEmailed}</Typography>
+            </CardContent>
+          {/* </CardActionArea> */}
+          </Card>
         ))}
-      </div> */}
+        <div className={classes.classCard}>
+          <h4>New Class</h4>
+          <Icon className={classes.icon} fontSize="large">
+            add_circle
+          </Icon>
+        </div>
+      </Grid>
     </Grid>
   );
 };
