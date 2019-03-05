@@ -40,7 +40,7 @@ const styles = theme => ({
     color: theme.palette.primary.main,
     fontSize: '1em',
     width: 200,
-    borderRadius: 5,
+    borderRadius: 5
   },
   input3: {
     margin: '3% 1%',
@@ -48,7 +48,7 @@ const styles = theme => ({
     background: theme.palette.secondary.main,
     color: theme.palette.primary.main,
     fontSize: '1em',
-    borderRadius: 5,
+    borderRadius: 5
   },
   checkboxDiv: {
     marginLeft: theme.spacing.unit * 2
@@ -66,13 +66,13 @@ const styles = theme => ({
     flexFlow: 'column nowrap',
     justifyContent: 'space-evenly',
     alignItems: 'center',
-    padding: theme.spacing.unit * 2,
+    padding: theme.spacing.unit * 2
   },
   form2: {
     width: '100%',
     display: 'flex',
     margin: '2rem 0',
-    justifyContent: 'space-evenly',
+    justifyContent: 'space-evenly'
   },
   form3: {
     display: 'flex',
@@ -81,7 +81,7 @@ const styles = theme => ({
     margin: '2rem 0',
     [theme.breakpoints.down('sm')]: {
       flexDirection: 'column',
-      alignItems: 'center',
+      alignItems: 'center'
     }
   },
   csvDiv: {
@@ -111,7 +111,7 @@ const styles = theme => ({
     [theme.breakpoints.down('md')]: {
       marginTop: theme.spacing.unit * 2,
       width: 40,
-      height: 40,
+      height: 40
     }
   },
   uploadInput: {
@@ -156,7 +156,7 @@ const styles = theme => ({
 function ListForm(props) {
   const { classes, file, setFile, recipientData, setRecipientData } = props;
 
-  const handleSubmit = e => { };
+  const handleSubmit = e => {};
 
   const handleRecipientSubmit = e => {
     e.preventDefault();
@@ -178,7 +178,7 @@ function ListForm(props) {
   const importCSV = () => {
     BigPapa.parse(file.content, {
       header: true,
-      complete: function (results, file) {
+      complete: function(results, file) {
         console.log('Parsing complete:', results, file);
         setRecipientData(results.data);
       }
@@ -229,7 +229,11 @@ function ListForm(props) {
 
   return (
     <Paper className={classes.container} elevation={24}>
-      <Typography variant="h6" color="secondary" style={{ textAlign: 'center' }}>
+      <Typography
+        variant="h6"
+        color="secondary"
+        style={{ textAlign: 'center' }}
+      >
         Add Class
       </Typography>
 
@@ -316,7 +320,7 @@ function ListForm(props) {
           variant="outlined"
           value={recipient.email}
           placeholder="Email"
-          onChange={(e) => handleRecipientChange(e)}
+          onChange={e => handleRecipientChange(e)}
           disableUnderline
           required
         />
@@ -327,7 +331,7 @@ function ListForm(props) {
           variant="outlined"
           value={recipient.first_name}
           placeholder="First name"
-          onChange={(e) => handleRecipientChange(e)}
+          onChange={e => handleRecipientChange(e)}
           required
         />
         <Input
@@ -337,7 +341,7 @@ function ListForm(props) {
           variant="outlined"
           value={recipient.last_name}
           placeholder="Last name"
-          onChange={(e) => handleRecipientChange(e)}
+          onChange={e => handleRecipientChange(e)}
           required
         />
 
@@ -353,23 +357,18 @@ function ListForm(props) {
 
       <hr className={classes.hrStyle} />
 
-      {
-        recipientData.length > 0 ? (
-          recipientData.map(
-            (recipient, i) => (
-              (
-                <div key={i}>
-                  <p style={{ color: 'white' }}>
-                    {i + 1}. {recipient.first_name} {recipient.last_name} ({recipient.email})
-                  </p>
-                </div>
-              )
-            )
-          )
-        ) : (
-            <p>You need to add new recipients.</p>
-          )
-      }
+      {recipientData.length > 0 ? (
+        recipientData.map((recipient, i) => (
+          <div key={i}>
+            <p style={{ color: 'white' }}>
+              {i + 1}. {recipient.first_name} {recipient.last_name} (
+              {recipient.email})
+            </p>
+          </div>
+        ))
+      ) : (
+        <p>You need to add new recipients.</p>
+      )}
 
       <hr className={classes.hrStyle} />
 
@@ -381,15 +380,11 @@ function ListForm(props) {
         >
           NEXT
         </Typography>
-        <Fab
-          elevation={20}
-          aria-label="Upload"
-          className={classes.btn}
-        >
+        <Fab elevation={20} aria-label="Upload" className={classes.btn}>
           <ArrowForward onClick={e => handleNext(e)} />
         </Fab>
       </div>
-    </Paper >
+    </Paper>
   );
 }
 

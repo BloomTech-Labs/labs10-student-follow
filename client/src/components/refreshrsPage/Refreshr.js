@@ -1,41 +1,191 @@
 import React, { useState } from 'react';
-import { withStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
-import FormGroup from '@material-ui/core/FormGroup';
-import Checkbox from '@material-ui/core/Checkbox';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Button from '@material-ui/core/Button';
+import {
+  Grid,
+  Typography,
+  FormControlLabel,
+  Checkbox,
+  FormGroup,
+  TextField,
+  withStyles,
+  Button,
+  Card,
+  Paper,
+  Fab,
+  Input
+} from '@material-ui/core';
 import styled from 'styled-components';
 
 const axios = require('axios');
 
+// const styles = theme => ({
+//   wrapper: {
+//     margin: '2rem auto',
+//     borderRadius: '0 0 5px 5px',
+//     width: '600px',
+//     background: 'white'
+//   },
+//   refreshrName: {
+//     maxWidth: '250px',
+//     width: '100%',
+//     height: '100%',
+//     maxHeight: '35px'
+//   },
+//   formGroup: {
+//     maxHeight: '120px', // needed for 4 question look on balsamic
+//     marginLeft: '1rem',
+//     marginBottom: '1rem'
+//   },
+//   subheaders: {
+//     marginTop: '.5rem'
+//   },
+//   answerFields: {
+//     height: '100%',
+//     width: '100%',
+//     maxWidth: '160px',
+//     maxHeight: '28px'
+//   }
+// });
+
 const styles = theme => ({
-  wrapper: {
-    margin: '2rem auto',
-    borderRadius: '0 0 5px 5px',
-    width: '600px',
-    background: 'white'
+  container: {
+    border: `1px solid ${theme.palette.secondary.main}`,
+    ...theme.mixins.gutters(),
+    display: 'flex',
+    flexFlow: 'column nowrap',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingTop: theme.spacing.unit * 4,
+    paddingBottom: theme.spacing.unit * 8,
+    marginTop: theme.spacing.unit * 6,
+    marginBottom: theme.spacing.unit * 4,
+    color: theme.palette.primary.contrastText,
+    background: theme.palette.primary.dark,
+    [theme.breakpoints.down('sm')]: {
+      width: '80%'
+    },
+    [theme.breakpoints.only('md')]: {
+      width: '60%'
+    },
+    width: '50%'
   },
-  refreshrName: {
-    maxWidth: '250px',
+  input1: {
+    marginBottom: theme.spacing.unit,
+    padding: '.75%',
+    paddingLeft: 14,
+    background: theme.palette.secondary.main,
+    color: theme.palette.primary.main,
+    fontSize: '1em',
+    width: 200,
+    borderRadius: 5
+  },
+  input3: {
+    margin: '3% 1%',
+    padding: '0.75% 3%',
+    background: theme.palette.secondary.main,
+    color: theme.palette.primary.main,
+    fontSize: '1em',
+    borderRadius: 5
+  },
+  checkboxDiv: {
+    marginLeft: theme.spacing.unit * 2
+  },
+  checkbox: {
+    marginRight: theme.spacing.unit,
+    color: theme.palette.secondary.main,
+    width: 40,
+    height: 40
+  },
+  form1: {
+    width: '90%',
+    display: 'flex',
+    flexDirection: 'column',
+    flexFlow: 'column nowrap',
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+    padding: theme.spacing.unit * 2
+  },
+  form2: {
     width: '100%',
-    height: '100%',
-    maxHeight: '35px'
+    display: 'flex',
+    margin: '2rem 0',
+    justifyContent: 'space-evenly'
   },
-  formGroup: {
-    maxHeight: '120px', // needed for 4 question look on balsamic
-    marginLeft: '1rem',
-    marginBottom: '1rem'
+  form3: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: '2rem 0',
+    [theme.breakpoints.down('sm')]: {
+      flexDirection: 'column',
+      alignItems: 'center'
+    }
   },
-  subheaders: {
-    marginTop: '.5rem'
+  csvDiv: {
+    width: '200px',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: theme.spacing.unit,
+    marginLeft: theme.spacing.unit * 2,
+    [theme.breakpoints.down('md')]: {
+      marginTop: theme.spacing.unit * 2
+    }
   },
-  answerFields: {
-    height: '100%',
-    width: '100%',
-    maxWidth: '160px',
-    maxHeight: '28px'
+  btn: {
+    marginRight: theme.spacing.unit * 2,
+    color: theme.palette.primary.main,
+    background: theme.palette.secondary.main,
+    width: 40,
+    height: 40
+  },
+  btn3: {
+    width: 65,
+    height: 40,
+    color: theme.palette.primary.main,
+    background: theme.palette.secondary.main,
+    marginLeft: theme.spacing.unit,
+    [theme.breakpoints.down('md')]: {
+      marginTop: theme.spacing.unit * 2,
+      width: 40,
+      height: 40
+    }
+  },
+  uploadInput: {
+    display: 'flex',
+    flexFlow: 'row nowrap',
+    margin: '0 1rem',
+    width: '50%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    background: theme.palette.secondary.main
+  },
+  inputFont: {
+    fontSize: '.8rem',
+    marginLeft: theme.spacing.unit * 2
+  },
+  nextText: {
+    marginRight: theme.spacing.unit * 2
+  },
+  navDiv: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    padding: theme.spacing.unit,
+    marginLeft: theme.spacing.unit * 2,
+    [theme.breakpoints.down('sm')]: {
+      flexDirection: 'column'
+    },
+    [theme.breakpoints.only('md')]: {
+      width: '60%'
+    }
+  },
+  buttonDiv: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  hrStyle: {
+    margin: '1rem auto',
+    width: '100%'
   }
 });
 
@@ -132,153 +282,178 @@ function Refreshr(props) {
   };
 
   return (
-    <Grid className={props.classes.wrapper}>
-      <FormGroup
-        onChange={() =>
-          setQuestionObject({
-            refreshrName,
-            questionTextOne,
-            questionTextTwo,
-            answers: { a1Text, a1, a2Text, a2, a3Text, a3, a4Text, a4 }
-          })
-        }
-      >
-        <h2>Create Your Refreshr</h2>
-        <TextField
-          value={refreshrName}
-          label="Refreshr Name"
-          name="refreshrName"
-          className={props.classes.refreshrName}
-          placeholder="Refreshr Name"
-          margin="normal"
-          variant="outlined"
-          InputLabelProps={{
-            shrink: true
-          }}
-          onChange={e => addRefreshrName(e.target.value)}
-        />
-        <h4 className={props.classes.subheaders}>Questions</h4>
-        <TextField
-          placeholder="Enter your multiple choice question here.."
-          label="Question 1"
-          name="question"
-          multiline
-          variant="outlined"
-          InputLabelProps={{
-            shrink: true
-          }}
-          onChange={e => setQuestionTextOne(e.target.value)}
-        />
-        <FormGroup className={props.classes.formGroup}>
-          <FormControlLabel
-            control={
-              <>
-                <Checkbox
-                  checked={a1}
-                  color="primary"
-                  onChange={e => setA1(e.target.checked)}
-                />
-                <TextField
-                  variant="outlined"
-                  label="Answer 1"
-                  InputLabelProps={{
-                    shrink: true
-                  }}
-                  value={a1Text}
-                  className={props.classes.answerFields}
-                  onChange={e => setA1Text(e.target.value)}
-                />
-              </>
-            }
-          />
-          <FormControlLabel
-            control={
-              <>
-                <Checkbox
-                  checked={a2}
-                  color="primary"
-                  onChange={e => setA2(e.target.checked)}
-                />
-                <TextField
-                  variant="outlined"
-                  label="Answer 2"
-                  InputLabelProps={{
-                    shrink: true
-                  }}
-                  value={a2Text}
-                  className={props.classes.answerFields}
-                  onChange={e => setA2Text(e.target.value)}
-                />
-              </>
-            }
-          />
-          <FormControlLabel
-            control={
-              <>
-                <Checkbox
-                  checked={a3}
-                  color="primary"
-                  onChange={e => setA3(e.target.checked)}
-                />
-                <TextField
-                  variant="outlined"
-                  label="Answer 3"
-                  InputLabelProps={{
-                    shrink: true
-                  }}
-                  value={a3Text}
-                  className={props.classes.answerFields}
-                  onChange={e => setA3Text(e.target.value)}
-                />
-              </>
-            }
-          />
-          <FormControlLabel
-            control={
-              <>
-                <Checkbox
-                  checked={a4}
-                  color="primary"
-                  onChange={e => setA4(e.target.checked)}
-                />
-                <TextField
-                  variant="outlined"
-                  label="Answer 4"
-                  InputLabelProps={{
-                    shrink: true
-                  }}
-                  value={a4Text}
-                  className={props.classes.answerFields}
-                  onChange={e => setA4Text(e.target.value)}
-                />
-              </>
-            }
-          />
-        </FormGroup>
-        <TextField
-          placeholder="Enter your text-response question here.."
-          label="Question 2"
-          name="question"
-          multiline
-          variant="outlined"
-          InputLabelProps={{
-            shrink: true
-          }}
-          onChange={e => setQuestionTextTwo(e.target.value)}
-        />
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={e => {
-            props.addQuestions(questionObject);
-            createForm(e);
-          }}
+    <Paper className={props.classes.container} elevation={24}>
+      <Grid className={props.classes.wrapper}>
+        <FormGroup
+          onChange={() =>
+            setQuestionObject({
+              refreshrName,
+              questionTextOne,
+              questionTextTwo,
+              answers: { a1Text, a1, a2Text, a2, a3Text, a3, a4Text, a4 }
+            })
+          }
         >
-          Submit
-        </Button>
-        <StyleDisplay>View your Refreshr here: {url}</StyleDisplay>
-      </FormGroup>
-    </Grid>
+          <Typography
+            variant="h6"
+            color="secondary"
+            style={{ textAlign: 'center' }}
+          >
+            Create Your Refreshr
+          </Typography>
+
+          <hr className={props.classes.hrStyle} />
+
+          <FormGroup
+            className={props.classes.form1}
+            onSubmit={props.handleSubmit}
+          >
+            <Input
+              disableUnderline
+              onChange={props.handleClassChange}
+              name="classnameInput"
+              required
+              placeholder="Enter Refreshr Name.."
+              className={props.classes.input1}
+            />
+          </FormGroup>
+
+          <TextField
+            value={refreshrName}
+            label="Refreshr Name"
+            name="refreshrName"
+            className={props.classes.refreshrName}
+            placeholder="Refreshr Name"
+            margin="normal"
+            variant="outlined"
+            InputLabelProps={{
+              shrink: true
+            }}
+            onChange={e => addRefreshrName(e.target.value)}
+          />
+          <h4 className={props.classes.subheaders}>Questions</h4>
+          <TextField
+            placeholder="Enter your multiple choice question here.."
+            label="Question 1"
+            name="question"
+            multiline
+            variant="outlined"
+            InputLabelProps={{
+              shrink: true
+            }}
+            onChange={e => setQuestionTextOne(e.target.value)}
+          />
+          <FormGroup className={props.classes.formGroup}>
+            <FormControlLabel
+              control={
+                <>
+                  <Checkbox
+                    checked={a1}
+                    color="primary"
+                    onChange={e => setA1(e.target.checked)}
+                  />
+                  <TextField
+                    variant="outlined"
+                    label="Answer 1"
+                    InputLabelProps={{
+                      shrink: true
+                    }}
+                    value={a1Text}
+                    className={props.classes.answerFields}
+                    onChange={e => setA1Text(e.target.value)}
+                  />
+                </>
+              }
+            />
+            <FormControlLabel
+              control={
+                <>
+                  <Checkbox
+                    checked={a2}
+                    color="primary"
+                    onChange={e => setA2(e.target.checked)}
+                  />
+                  <TextField
+                    variant="outlined"
+                    label="Answer 2"
+                    InputLabelProps={{
+                      shrink: true
+                    }}
+                    value={a2Text}
+                    className={props.classes.answerFields}
+                    onChange={e => setA2Text(e.target.value)}
+                  />
+                </>
+              }
+            />
+            <FormControlLabel
+              control={
+                <>
+                  <Checkbox
+                    checked={a3}
+                    color="primary"
+                    onChange={e => setA3(e.target.checked)}
+                  />
+                  <TextField
+                    variant="outlined"
+                    label="Answer 3"
+                    InputLabelProps={{
+                      shrink: true
+                    }}
+                    value={a3Text}
+                    className={props.classes.answerFields}
+                    onChange={e => setA3Text(e.target.value)}
+                  />
+                </>
+              }
+            />
+            <FormControlLabel
+              control={
+                <>
+                  <Checkbox
+                    checked={a4}
+                    color="primary"
+                    onChange={e => setA4(e.target.checked)}
+                  />
+                  <TextField
+                    variant="outlined"
+                    label="Answer 4"
+                    InputLabelProps={{
+                      shrink: true
+                    }}
+                    value={a4Text}
+                    className={props.classes.answerFields}
+                    onChange={e => setA4Text(e.target.value)}
+                  />
+                </>
+              }
+            />
+          </FormGroup>
+          <TextField
+            placeholder="Enter your text-response question here.."
+            label="Question 2"
+            name="question"
+            multiline
+            variant="outlined"
+            InputLabelProps={{
+              shrink: true
+            }}
+            onChange={e => setQuestionTextTwo(e.target.value)}
+          />
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={e => {
+              props.addQuestions(questionObject);
+              createForm(e);
+            }}
+          >
+            Submit
+          </Button>
+          <StyleDisplay>View your Refreshr here: {url}</StyleDisplay>
+        </FormGroup>
+      </Grid>
+    </Paper>
   );
 }
 
