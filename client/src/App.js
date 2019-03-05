@@ -145,6 +145,7 @@ const App = props => {
               />
               <Route path="/typeform" render={props => <Typeform />} />
               <Route
+                exact
                 path="/refreshrs"
                 render={props => (
                   <RefreshrListView
@@ -167,7 +168,7 @@ const App = props => {
               />
               <Route
                 exact
-                path="/questions/create"
+                path="/refreshrs/create"
                 render={props => (
                   <Refreshr
                     addQuestions={addQuestions}

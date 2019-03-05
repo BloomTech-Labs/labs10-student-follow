@@ -80,43 +80,32 @@ const RefreshrListView = props => {
   const { classes } = props;
 
   // <RefreshrCard refreshrs={refreshrs} />
-  if (!refreshrs.length) {
-    return (
-      <Grid className={classes.emptyList}>
-        <Typography variant="h2">Add a New Refreshr</Typography>
-        <Icon color="action" style={{ fontSize: 60 }}>
-          add_circle
-        </Icon>
-      </Grid>
-    );
-  } else {
-    return (
-      <Grid className={classes.wrapper}>
-        {refreshrs.map(r => (
-          <Card key={r.id} className={classes.card} raised>
-            <CardContent>
-              <Typography className={classes.title}>{r.name}</Typography>
-              <Typography variant="body1">{r.review_text}</Typography>
-            </CardContent>
-          </Card>
-        ))}
-        <Link to="/questions/create" style={{ textDecoration: 'none' }}>
-          <Card className={classes.card} raised>
-            <CardContent>
-              <Typography className={classes.title}>New Refreshr</Typography>
-              <Icon
-                className={classes.icon}
-                color="action"
-                style={{ fontSize: 60 }}
-              >
-                add_circle
-              </Icon>
-            </CardContent>
-          </Card>
-        </Link>
-      </Grid>
-    );
-  }
+  return (
+    <Grid className={classes.wrapper}>
+      {refreshrs.map(r => (
+        <Card key={r.id} className={classes.card} raised>
+          <CardContent>
+            <Typography className={classes.title}>{r.name}</Typography>
+            <Typography variant="body1">{r.review_text}</Typography>
+          </CardContent>
+        </Card>
+      ))}
+      <Link to="/questions/create" style={{ textDecoration: 'none' }}>
+        <Card className={classes.card} raised>
+          <CardContent>
+            <Typography className={classes.title}>New Refreshr</Typography>
+            <Icon
+              className={classes.icon}
+              color="action"
+              style={{ fontSize: 60 }}
+            >
+              add_circle
+            </Icon>
+          </CardContent>
+        </Card>
+      </Link>
+    </Grid>
+  );
 };
 
 export default withStyles(styles)(RefreshrListView);

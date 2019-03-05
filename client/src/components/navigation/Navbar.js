@@ -122,8 +122,8 @@ const Navbar = props => {
 
   const drawer = (
     <List component="nav" className={classes.list}>
-      <ListItemLink to="/refreshrs" className={classes.text} />
-      <ListItemLink to="/classes" className={classes.text} />
+      <ListItemLink to="/refreshrs/create" className={classes.text} />
+      <ListItemLink to="/classes/create" className={classes.text} />
       <ListItemLink to="/billing" className={classes.text} />
     </List>
   );
