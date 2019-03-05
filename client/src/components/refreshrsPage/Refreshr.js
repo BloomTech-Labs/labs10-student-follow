@@ -78,10 +78,20 @@ const styles = theme => ({
     width: 200,
     borderRadius: 5
   },
-  input3: {
-    margin: '3% 1%',
-    padding: '0.75% 3%',
+  input2: {
+    marginBottom: theme.spacing.unit,
+    padding: '.75%',
+    paddingLeft: 14,
     background: theme.palette.secondary.main,
+    color: theme.palette.primary.main,
+    fontSize: '1em',
+    width: 200,
+    borderRadius: 5
+  },
+  multipleChoice: {
+    margin: '3% 1%',
+    padding: '2% 3%',
+    // background: theme.palette.secondary.main,
     color: theme.palette.primary.main,
     fontSize: '1em',
     borderRadius: 5
@@ -281,6 +291,8 @@ function Refreshr(props) {
     setSubmitted(true);
   };
 
+  console.log('REFRESHR NAME', refreshrName);
+
   return (
     <Paper className={props.classes.container} elevation={24}>
       <Grid className={props.classes.wrapper}>
@@ -304,13 +316,21 @@ function Refreshr(props) {
 
           <hr className={props.classes.hrStyle} />
 
+          <Typography
+            variant="p"
+            color="secondary"
+            style={{ textAlign: 'center' }}
+          >
+            Refreshr Name
+          </Typography>
+
           <FormGroup
             className={props.classes.form1}
             onSubmit={props.handleSubmit}
           >
             <Input
               disableUnderline
-              onChange={props.handleClassChange}
+              onChange={e => addRefreshrName(e.target.value)}
               name="classnameInput"
               required
               placeholder="Enter Refreshr Name.."
@@ -318,7 +338,9 @@ function Refreshr(props) {
             />
           </FormGroup>
 
-          <TextField
+          <hr className={props.classes.hrStyle} />
+
+          {/* <TextField
             value={refreshrName}
             label="Refreshr Name"
             name="refreshrName"
@@ -330,8 +352,68 @@ function Refreshr(props) {
               shrink: true
             }}
             onChange={e => addRefreshrName(e.target.value)}
-          />
-          <h4 className={props.classes.subheaders}>Questions</h4>
+          /> */}
+          <h4 className={props.classes.subheaders}>Create Questions</h4>
+
+          <Typography
+            variant="p"
+            color="secondary"
+            style={{ textAlign: 'center' }}
+          >
+            Question 1
+          </Typography>
+
+          <FormGroup
+            className={props.classes.form1}
+            onSubmit={props.handleSubmit}
+          >
+            <Input
+              disableUnderline
+              onChange={e => addRefreshrName(e.target.value)}
+              name="classnameInput"
+              required
+              placeholder="Enter question.."
+              className={props.classes.input1}
+            />
+          </FormGroup>
+
+          <form className={props.classes.multipleChoice}>
+            <Input
+              disableUnderline
+              onChange={e => addRefreshrName(e.target.value)}
+              name="classnameInput"
+              required
+              placeholder="Answer one.."
+              className={props.classes.input1}
+            />
+            <Input
+              disableUnderline
+              onChange={e => addRefreshrName(e.target.value)}
+              name="classnameInput"
+              required
+              placeholder="Answer two.."
+              className={props.classes.input1}
+            />
+            <Input
+              disableUnderline
+              onChange={e => addRefreshrName(e.target.value)}
+              name="classnameInput"
+              required
+              placeholder="Answer three.."
+              className={props.classes.input1}
+            />
+            <Input
+              disableUnderline
+              onChange={e => addRefreshrName(e.target.value)}
+              name="classnameInput"
+              required
+              placeholder="Answer four.."
+              className={props.classes.input1}
+            />
+          </form>
+
+          <hr className={props.classes.hrStyle} />
+
           <TextField
             placeholder="Enter your multiple choice question here.."
             label="Question 1"
