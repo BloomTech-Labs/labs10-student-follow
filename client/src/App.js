@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Route, withRouter, Router } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
-import history from './history';
 import axios from 'axios';
 import {
   LandingPage,
@@ -19,7 +18,7 @@ import {
 } from './components';
 
 const App = props => {
-  console.log('ENV:', process.env)
+  console.log('ENV:', process.env);
   const classes = { props };
   const token = localStorage.getItem('accessToken');
   const user_id = localStorage.getItem('user_id');
@@ -119,7 +118,7 @@ const App = props => {
     console.log('APP:', props.Url),
     (
       <>
-        <Router history={history}>
+        <Router history={props.history}>
           <Grid
             className={classes.container}
             container

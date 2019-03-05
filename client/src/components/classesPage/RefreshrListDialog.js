@@ -2,13 +2,11 @@ import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 import {
-  Button,
   List,
   ListItem,
   ListItemText,
   DialogTitle,
-  Dialog,
-  Typography
+  Dialog
 } from '@material-ui/core/';
 import AddIcon from '@material-ui/icons/Add';
 

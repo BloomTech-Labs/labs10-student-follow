@@ -17,7 +17,7 @@ import {
   addRefreshr,
   scheduleRefreshr
   // addRefreshr, getRefreshr, getRefreshrs, updateRefreshr, deleteRefreshr, scheduleRefreshr, rescheduleRefreshr, getScheduleRefreshr, deleteScheduleRefreshr, sendTestRefreshr
-} from '../SendgridOps';
+} from './SendgridOps';
 import submitClassData from './dbOps';
 // import axios from 'axios';
 
