@@ -3,13 +3,9 @@ import { withRouter } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
-import {
-  CardContent,
-  Typography,
-  Card,
-  Icon,
-  Button,
-} from '@material-ui/core';
+import { CardContent, Typography, Card, Icon, Button } from '@material-ui/core';
+
+// TODO Update edit links on cards to correct classes & refreshrs
 
 const styles = theme => ({
   wrapper: {
@@ -52,6 +48,7 @@ const styles = theme => ({
   },
   links: {
     color: 'inherit',
+    textDecoration: 'none'
   },
   classTitle: {
     background: '#9D69A3',
@@ -125,7 +122,9 @@ const Dashboard = props => {
               </Typography>
             </CardContent>
             <Button color="primary" className={classes.lists}>
-              Edit
+              <Link to="/" className={classes.links}>
+                Edit
+              </Link>
             </Button>
           </Card>
         ))}
@@ -133,11 +132,11 @@ const Dashboard = props => {
           <Typography component="h4" className={classes.classTitle}>
             New Class
           </Typography>
-            
+
           <Icon className={classes.icon} color="primary">
-          <Link to="/refreshrs/create" className={classes.links}>
-            add_circle
-          </Link>
+            <Link to="/refreshrs/create" className={classes.links}>
+              add_circle
+            </Link>
           </Icon>
         </Card>
       </Grid>
