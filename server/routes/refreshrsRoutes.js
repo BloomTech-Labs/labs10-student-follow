@@ -59,4 +59,19 @@ router.delete('/:id', async (req, res, next) => {
   }
 });
 
+router.get('/teachers/:teacherId', async (req, res, next) => {
+  try {
+    const { teacherId } = req.params;
+    const refreshrList = await db.getTeacherRefreshrs(teacherId);
+    res.status(responseStatus.success).json(refreshrList);
+  } catch (err) {
+    console.log(err);
+    if (TypeError) {
+      next(responseStatus.notFound);
+    } else {
+      next(err);
+    }
+  }
+});
+
 module.exports = router;

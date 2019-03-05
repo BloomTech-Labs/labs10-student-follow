@@ -18,8 +18,6 @@ import ClassEditView from './classesPage/ClassEditView';
 import ClassListView from './classesPage/ClassListView';
 import CampaignForm from './classesPage/forms/CampaignForm';
 import ListForm from './classesPage/forms/ListForm';
-import RecipientForm from './classesPage/forms/RecipientForm';
-import SelectionForm from './classesPage/forms/SelectionForm';
 
 /* REFRESHRS */
 import RefreshrListView from './refreshrsPage/RefreshrListView';
@@ -46,8 +44,6 @@ export {
   ClassListView,
   CampaignForm,
   ListForm,
-  RecipientForm,
-  SelectionForm,
   RefreshrListView,
   RefreshrCard,
   Refreshr,

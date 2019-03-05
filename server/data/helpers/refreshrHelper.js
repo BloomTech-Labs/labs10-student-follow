@@ -83,5 +83,17 @@ module.exports = {
       .where({ id })
       .del();
     return deleteCount;
-  }
+  },
+
+  getTeacherRefreshrs: teacher_id => {
+    return db('refreshrs')
+      .join(
+        'teachers_classes_refreshrs',
+        'refreshrs.id',
+        'teachers_classes_refreshrs.refreshr_id'
+      )
+      .where({ 'teachers_classes_refreshrs.teacher_id': teacher_id });
+  },
 };
+
+

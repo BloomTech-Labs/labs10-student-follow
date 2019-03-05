@@ -1,45 +1,17 @@
 import { getContacts } from './SendgridOps';
 import axios from 'axios';
 
+const token = localStorage.getItem('accessToken');
 const ax = axios.create({
   // baseURL: 'https://refreshr.herokuapp.com' // production
-  baseURL: 'http://localhost:9000' // development
+  baseURL: 'http://localhost:9000',
+  headers: {
+    authorization: `Bearer ${token}` // development
+  }
 });
 
-// dummy data
-// const listData = {
-//   name: 'some new class'
-// };
-
-/* 
-const recipientData = [
-  {
-    first_name: 'bob',
-    last_name: 'green',
-    email: 'bob@green'
-  },
-  {
-    first_name: 'charlie',
-    last_name: 'hunter',
-    email: 'charlie@hunter'
-  },
-  {
-    first_name: 'bobby',
-    last_name: 'orr',
-    email: 'bobby@bruins'
-  },
-  {
-    first_name: 'ted',
-    last_name: 'williams',
-    email: 'ted@bosox'
-  }
-];
-*/
-// const campaignData = {
-// id: 23 // refreshr id
-// listId: 42 // the sendgrid list id for updating
-// };
-
+const user_id = localStorage.getItem('user_id');
+console.log('uid:', user_id);
 /* basic flow of sending data to back end:
 
   1) add the new class to the classes table. save the returned id
@@ -48,11 +20,6 @@ const recipientData = [
   4) add the refreshr, class, and teacher to the teachers_classes_refreshrs table using the refreshr id, teacher(user) id, and class id from step 1
 */
 
-// submitClassData(listData, validated.list_ids[0], )
-
-// const listData = { classnameInput: 'afafadsfsdfqwef', ccBool: false };
-// const sg_list_id = 7201393;
-
 const submitClassData = async (
   listData,
   sg_list_id,
@@ -60,15 +27,11 @@ const submitClassData = async (
   campaignData
 ) => {
   try {
-    // console.log('listData:', listData);
-    console.log('sg_list_id:', sg_list_id);
-    // console.log('recipientData:', recipientData);
-    // console.log('campaignData:', campaignData);
 
     // add class to classes table
     const classRes = await ax.post('/classes', {
       name: listData.classnameInput,
-      sg_list_id
+      sg_list_id: `${sg_list_id}`
     }); // need to add cc field to classes, leaving it out for now
     const { newClassID } = classRes.data;
 
@@ -79,16 +42,11 @@ const submitClassData = async (
     // get recipient id's and map to recipient email
     const sgIds = {}; // object to match emails to sg id
     const sgRecipientList = await getContacts(sg_list_id);
-    console.log(sgRecipientList);
     const recipients = sgRecipientList.data.recipients;
-    console.log(recipients);
 
     for (let r of recipients) {
-      const email = r.email;
-      const sgId = r.id;
-      sgIds[email] = sgId;
+      sgIds[r.email] = r.id;
     }
-    console.log(sgIds);
 
     for (const recipient of recipientData) {
       // add each student to db
@@ -103,38 +61,29 @@ const submitClassData = async (
       newStudents.push(newStudentID); // add to array for updating students_classes table
     }
 
-    console.log(newStudents);
-
     // add students and class to students_classes table
-    const scRes = await ax.post(`/classes/${newClassID}`, {
-      students: newStudents
-    });
-    console.log('response:', scRes);
+    for (let student of newStudents) {
+      const scRes = await ax.post(`/classes/${newClassID}`, {
+        student_id: student
+      });
+    }
 
-    // add refreshrs to tcr TODO
-    // refreshrs will already be created and so will have an id
-    // add teacher(user) id, class id, and refreshr id
+    // add refreshr to tcr
+    const newRefreshr = {
+      refreshr_id: campaignData.refreshr_id,
+      date: campaignData.date,
+      sg_campaign_id: campaignData.campaign_id
+    };
+    const refRes = await ax.post(
+      `/classes/${newClassID}/refreshrs`,{
+        teacher_id: user_id,
+      refreshr: newRefreshr,
+      }
+    );
+    console.log(refRes);
   } catch (err) {
     console.log(`error: ${err}`);
   }
 };
 
-/*
-const testSubmit = () => {
-  return (
-    <>
-      <h1>test</h1>
-      <button
-        onClick={() =>
-          submitClassData(listData, sg_list_id, recipientData, campaignData)
-        }
-      >
-        test
-      </button>
-    </>
-  );
-};
-*/
-
-// submitClassData(listData, sg_list_id, recipientData, campaignData);
 export default submitClassData;
