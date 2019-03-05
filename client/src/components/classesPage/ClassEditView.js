@@ -245,6 +245,28 @@ function ClassEditView(props) {
     fetchClass();
   }
 
+  async function changeClassName(e) {
+    e.preventDefault();
+    console.log(e.target.className.value);
+    const res = await ax.put(`/classes/${classId}`, {
+      name: classData.name,
+      sg_list_id: classData.id
+    });
+    console.log(res);
+  }
+
+  function handleClassChange(e) {
+    console.log(e.target.value);
+    setClassData({
+      ...classData,
+      name: e.target.value
+    });
+  }
+
+  useEffect(() => {
+    console.log(classData);
+  }, [classData]);
+
   async function dropStudents() {
     const res = await ax.post(`/classes/${classId}/drop/`, {
       students: selectedStudents
@@ -254,15 +276,20 @@ function ClassEditView(props) {
     // fetchStudents(); // better way to do this than calling this here?
   }
 
-  const makeInput = (name, label) => {
+  const makeInput = (
+    name,
+    label,
+    value = newStudent[name],
+    onChange = handleChange
+  ) => {
     return (
       <TextField
         className={classes.inputs}
         variant="outlined"
         label={label}
-        onChange={handleChange}
-        value={newStudent[name]}
+        onChange={onChange}
         name={name}
+        value={value}
       />
     );
   };
@@ -271,6 +298,12 @@ function ClassEditView(props) {
     <Grid className={props.classes.wrapper}>
       <Typography variant="h6" className={classes.title}>
         Settings
+        <form onSubmit={e => changeClassName(e)}>
+          {makeInput('className', 'Class Name', classData.name, e =>
+            handleClassChange(e)
+          )}
+          <Button type="submit">Change Class Name</Button>
+        </form>
       </Typography>
       <Grid classname={classes.settings}>
         <form onSubmit={e => addStudent(e)}>
