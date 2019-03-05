@@ -68,14 +68,30 @@ const styles = theme => ({
     },
     width: '50%'
   },
-  input1: {
+  textField: {
+    background: theme.palette.secondary.main,
+    borderRadius: 5,
+    // margin: '5% 10%'
+    width: '80%'
+  },
+  inputName: {
     marginBottom: theme.spacing.unit,
     padding: '.75%',
     paddingLeft: 14,
     background: theme.palette.secondary.main,
     color: theme.palette.primary.main,
     fontSize: '1em',
-    width: 200,
+    width: '75%',
+    borderRadius: 5
+  },
+  inputQuestion: {
+    marginBottom: theme.spacing.unit,
+    padding: '.75%',
+    paddingLeft: 14,
+    background: theme.palette.secondary.main,
+    color: theme.palette.primary.main,
+    fontSize: '1em',
+    width: '75%',
     borderRadius: 5
   },
   input2: {
@@ -85,16 +101,17 @@ const styles = theme => ({
     background: theme.palette.secondary.main,
     color: theme.palette.primary.main,
     fontSize: '1em',
-    width: 200,
+    width: '100%',
     borderRadius: 5
   },
   multipleChoice: {
     margin: '3% 1%',
-    padding: '2% 3%',
+    padding: '2% 10%',
     // background: theme.palette.secondary.main,
     color: theme.palette.primary.main,
     fontSize: '1em',
-    borderRadius: 5
+    borderRadius: 5,
+    width: '100%'
   },
   checkboxDiv: {
     marginLeft: theme.spacing.unit * 2
@@ -106,7 +123,7 @@ const styles = theme => ({
     height: 40
   },
   form1: {
-    width: '90%',
+    // width: '90%',
     display: 'flex',
     flexDirection: 'column',
     flexFlow: 'column nowrap',
@@ -334,7 +351,7 @@ function Refreshr(props) {
               name="classnameInput"
               required
               placeholder="Enter Refreshr Name.."
-              className={props.classes.input1}
+              className={props.classes.inputName}
             />
           </FormGroup>
 
@@ -360,61 +377,116 @@ function Refreshr(props) {
             color="secondary"
             style={{ textAlign: 'center' }}
           >
-            Question 1
+            Question 1: Multiple Choice
+          </Typography>
+          <FormGroup
+            className={props.classes.form1}
+            onSubmit={props.handleSubmit}
+          >
+            <TextField
+              id="filled-multiline-static"
+              multiline
+              rows="2"
+              placeholder="Enter question.."
+              className={props.classes.textField}
+              margin="normal"
+              variant="filled"
+            />
+          </FormGroup>
+          {/* <FormGroup
+            className={props.classes.form1}
+            onSubmit={props.handleSubmit}
+          >
+            <Input
+              disableUnderline
+              // onChange={e => addRefreshrName(e.target.value)}
+              onChange={e => setQuestionTextOne(e.target.value)}
+              name="classnameInput"
+              required
+              placeholder="Enter question.."
+              className={props.classes.inputQuestion}
+            />
+          </FormGroup> */}
+
+          <FormGroup>
+            <form className={props.classes.multipleChoice}>
+              <Input
+                disableUnderline
+                // onChange={e => addRefreshrName(e.target.value)}
+                onChange={e => setA1Text(e.target.value)}
+                name="classnameInput"
+                required
+                placeholder="Answer one.."
+                className={props.classes.input2}
+              />
+              <Input
+                disableUnderline
+                // onChange={e => addRefreshrName(e.target.value)}
+                // onChange={e => setA4Text(e.target.value)}
+                name="classnameInput"
+                onChange={e => setA2Text(e.target.value)}
+                required
+                placeholder="Answer two.."
+                className={props.classes.input2}
+              />
+              <Input
+                disableUnderline
+                // onChange={e => addRefreshrName(e.target.value)}
+                onChange={e => setA3Text(e.target.value)}
+                name="classnameInput"
+                required
+                placeholder="Answer three.."
+                className={props.classes.input2}
+              />
+              <Input
+                disableUnderline
+                // onChange={e => addRefreshrName(e.target.value)}
+                onChange={e => setA4Text(e.target.value)}
+                name="classnameInput"
+                required
+                placeholder="Answer four.."
+                className={props.classes.input2}
+              />
+            </form>
+          </FormGroup>
+
+          <hr className={props.classes.hrStyle} />
+
+          <Typography
+            variant="p"
+            color="secondary"
+            style={{ textAlign: 'center' }}
+          >
+            Question 2: Text Response
           </Typography>
 
           <FormGroup
             className={props.classes.form1}
             onSubmit={props.handleSubmit}
           >
-            <Input
+            {/* <Input
               disableUnderline
-              onChange={e => addRefreshrName(e.target.value)}
+              // onChange={e => addRefreshrName(e.target.value)}
+              onChange={e => setQuestionTextTwo(e.target.value)}
               name="classnameInput"
               required
               placeholder="Enter question.."
-              className={props.classes.input1}
+              className={props.classes.inputQuestion}
+            /> */}
+            <TextField
+              id="filled-multiline-static"
+              multiline
+              rows="2"
+              placeholder="Enter question.."
+              className={props.classes.textField}
+              margin="normal"
+              variant="filled"
             />
           </FormGroup>
 
-          <form className={props.classes.multipleChoice}>
-            <Input
-              disableUnderline
-              onChange={e => addRefreshrName(e.target.value)}
-              name="classnameInput"
-              required
-              placeholder="Answer one.."
-              className={props.classes.input1}
-            />
-            <Input
-              disableUnderline
-              onChange={e => addRefreshrName(e.target.value)}
-              name="classnameInput"
-              required
-              placeholder="Answer two.."
-              className={props.classes.input1}
-            />
-            <Input
-              disableUnderline
-              onChange={e => addRefreshrName(e.target.value)}
-              name="classnameInput"
-              required
-              placeholder="Answer three.."
-              className={props.classes.input1}
-            />
-            <Input
-              disableUnderline
-              onChange={e => addRefreshrName(e.target.value)}
-              name="classnameInput"
-              required
-              placeholder="Answer four.."
-              className={props.classes.input1}
-            />
-          </form>
-
           <hr className={props.classes.hrStyle} />
 
-          <TextField
+          {/* <TextField
             placeholder="Enter your multiple choice question here.."
             label="Question 1"
             name="question"
@@ -521,7 +593,7 @@ function Refreshr(props) {
               shrink: true
             }}
             onChange={e => setQuestionTextTwo(e.target.value)}
-          />
+          /> */}
           <Button
             variant="contained"
             color="primary"
