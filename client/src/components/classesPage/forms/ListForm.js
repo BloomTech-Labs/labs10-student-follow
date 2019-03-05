@@ -20,7 +20,7 @@ const styles = theme => ({
     alignItems: 'center',
     paddingTop: theme.spacing.unit * 4,
     paddingBottom: theme.spacing.unit * 8,
-    marginTop: theme.spacing.unit * 4,
+    marginTop: theme.spacing.unit * 6,
     marginBottom: theme.spacing.unit * 4,
     color: theme.palette.primary.contrastText,
     background: theme.palette.primary.dark,
@@ -103,7 +103,6 @@ const styles = theme => ({
     height: 40
   },
   btn3: {
-    width: '100%',
     width: 65,
     height: 40,
     color: theme.palette.primary.main,
@@ -224,7 +223,7 @@ function ListForm(props) {
     props.setStage({
       ...props.stage,
       onListForm: !props.stage.onListForm,
-      onSelectionForm: !props.stage.onSelectionForm
+      onCampaignForm: !props.stage.onCampaignForm
     });
   };
 
@@ -304,6 +303,7 @@ function ListForm(props) {
       </div>
 
       <hr className={classes.hrStyle} />
+
       <Typography variant="p" color="secondary" style={{ textAlign: 'center' }}>
         Recipient Name
       </Typography>

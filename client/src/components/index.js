@@ -25,7 +25,6 @@ import ExistingClassCard from './classesPage/components/ExistingClassCard';
 import NewClassCard from './classesPage/components/NewClassCard';
 import CampaignForm from './classesPage/forms/CampaignForm';
 import ListForm from './classesPage/forms/ListForm';
-import SelectionForm from './classesPage/forms/SelectionForm';
 
 /* REFRESHRS */
 import RefreshrListView from './refreshrsPage/RefreshrListView';
@@ -60,7 +59,6 @@ export {
   NewClassCard,
   CampaignForm,
   ListForm,
-  SelectionForm,
   RefreshrListView,
   RefreshrCard,
   Refreshr,
