@@ -42,19 +42,16 @@ const styles = theme => ({
     width: 200,
     borderRadius: 5,
   },
-  input2: {
-    margin: '0 1%',
-    padding: '.75%',
-    paddingLeft: 35,
+  input3: {
+    margin: '3% 1%',
+    padding: '0.75% 3%',
     background: theme.palette.secondary.main,
     color: theme.palette.primary.main,
-    fontSize: '0.75rem',
+    fontSize: '1em',
     borderRadius: 5,
   },
   checkboxDiv: {
-    // [theme.breakpoints.down('md')]: {
     marginLeft: theme.spacing.unit * 2
-    // }
   },
   checkbox: {
     marginRight: theme.spacing.unit,
@@ -65,14 +62,27 @@ const styles = theme => ({
   form1: {
     width: '90%',
     display: 'flex',
+    flexDirection: 'column',
     flexFlow: 'column nowrap',
-    justifyContent: 'space-around',
+    justifyContent: 'space-evenly',
     alignItems: 'center',
     padding: theme.spacing.unit * 2,
   },
   form2: {
+    width: '100%',
     display: 'flex',
     margin: '2rem 0',
+    justifyContent: 'space-evenly',
+  },
+  form3: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: '2rem 0',
+    [theme.breakpoints.down('sm')]: {
+      flexDirection: 'column',
+      alignItems: 'center',
+    }
   },
   csvDiv: {
     width: '200px',
@@ -92,17 +102,30 @@ const styles = theme => ({
     width: 40,
     height: 40
   },
+  btn3: {
+    width: '100%',
+    width: 65,
+    height: 40,
+    color: theme.palette.primary.main,
+    background: theme.palette.secondary.main,
+    marginLeft: theme.spacing.unit,
+    [theme.breakpoints.down('md')]: {
+      marginTop: theme.spacing.unit * 2,
+      width: 40,
+      height: 40,
+    }
+  },
   uploadInput: {
     display: 'flex',
     flexFlow: 'row nowrap',
-    width: '200px',
+    margin: '0 1rem',
+    width: '50%',
     justifyContent: 'center',
     alignItems: 'center',
     background: theme.palette.secondary.main
   },
   inputFont: {
     fontSize: '.8rem',
-    whiteSpace: 'nowrap',
     marginLeft: theme.spacing.unit * 2
   },
   nextText: {
@@ -124,9 +147,6 @@ const styles = theme => ({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center'
-    // [theme.breakpoints.down('sm')]: {
-    //   margin: '0.5rem 0'
-    // },
   },
   hrStyle: {
     margin: '1rem auto',
@@ -135,7 +155,6 @@ const styles = theme => ({
 });
 
 function ListForm(props) {
-  // console.log('theme', props.theme);
   const { classes, file, setFile, recipientData, setRecipientData } = props;
 
   const handleSubmit = e => { };
@@ -162,7 +181,6 @@ function ListForm(props) {
       header: true,
       complete: function (results, file) {
         console.log('Parsing complete:', results, file);
-        // setClasslist(results.data);
         setRecipientData(results.data);
       }
     });
@@ -253,7 +271,7 @@ function ListForm(props) {
         CSV File
       </Typography>
 
-      <FormGroup className={classes.form1}>
+      <div className={classes.form2}>
         <Button
           className={classes.uploadInput}
           variant="contained"
@@ -275,26 +293,24 @@ function ListForm(props) {
             {file.filename}
           </Typography>
         </Button>
-        <div className={classes.csvDiv}>
-          <Fab
-            elevation={20}
-            aria-label="Upload"
-            onClick={importCSV}
-            className={classes.btn}
-          >
-            <CloudUpload />
-          </Fab>
-        </div>
-      </FormGroup>
+        <Fab
+          elevation={20}
+          aria-label="Upload"
+          onClick={importCSV}
+          className={classes.btn}
+        >
+          <CloudUpload />
+        </Fab>
+      </div>
 
       <hr className={classes.hrStyle} />
       <Typography variant="p" color="secondary" style={{ textAlign: 'center' }}>
         Recipient Name
       </Typography>
 
-      <form className={classes.form2} onSubmit={e => handleRecipientSubmit(e)}>
+      <form className={classes.form3} onSubmit={e => handleRecipientSubmit(e)}>
         <Input
-          className={classes.input2}
+          className={classes.input3}
           name="email"
           type="email"
           variant="outlined"
@@ -305,7 +321,7 @@ function ListForm(props) {
           required
         />
         <Input
-          className={classes.input2}
+          className={classes.input3}
           name="first_name"
           type="text"
           variant="outlined"
@@ -315,7 +331,7 @@ function ListForm(props) {
           required
         />
         <Input
-          className={classes.input2}
+          className={classes.input3}
           name="last_name"
           type="text"
           variant="outlined"
@@ -326,8 +342,9 @@ function ListForm(props) {
         />
 
         <Fab
-          aria-label="Add REcipient"
-          className={classes.btn}
+          elevation={24}
+          aria-label="Add Recipient"
+          className={classes.btn3}
           type="submit"
         >
           <GroupAdd />
@@ -340,12 +357,10 @@ function ListForm(props) {
         recipientData.length > 0 ? (
           recipientData.map(
             (recipient, i) => (
-              // console.log(recipient),
               (
                 <div key={i}>
                   <p style={{ color: 'white' }}>
-                    {i + 1}. {recipient.first_name} {' '} {recipient.last_name}<br />
-                    email: {recipient.email}
+                    {i + 1}. {recipient.first_name} {recipient.last_name} ({recipient.email})
                   </p>
                 </div>
               )
@@ -366,7 +381,11 @@ function ListForm(props) {
         >
           NEXT
         </Typography>
-        <Fab className={classes.btn}>
+        <Fab
+          elevation={20}
+          aria-label="Upload"
+          className={classes.btn}
+        >
           <ArrowForward onClick={e => handleNext(e)} />
         </Fab>
       </div>
