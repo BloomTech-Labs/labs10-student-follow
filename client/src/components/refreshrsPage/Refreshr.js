@@ -41,23 +41,9 @@ const styles = theme => ({
 
 function Refreshr(props) {
   const { setUrl, url } = props;
-  console.log('REF:', url);
   const [refreshrName, addRefreshrName] = useState('');
-<<<<<<< HEAD:client/src/components/refreshrs/Refreshr.js
-  // const [reviewText, setReviewText] = useState(
-  //   'This is a short section of text that describes or reminds about one part of the topic. It is not intended to be a complete review of the material, just a reminder of the most important parts. This section is limited to 512 characters.'
-  // );
   const [questionTextOne, setQuestionTextOne] = useState('');
   const [questionTextTwo, setQuestionTextTwo] = useState('');
-=======
-  const [reviewText] = useState(
-    //setReviewText
-    'This is a short section of text that describes or reminds about one part of the topic. It is not intended to be a complete review of the material, just a reminder of the most important parts. This section is limited to 512 characters.'
-  );
-  const [questionText, setQuestionText] = useState(
-    'This is a multiple choice question related to the topic. Again the goal is not to be exhaustive, just to call the material to mind. A good question will not simply call for the recollection of information, but will require the application of knowledge.'
-  );
->>>>>>> 0925c6a7d7f295f8273e17d92d367d6ed6bc7744:client/src/components/refreshrsPage/Refreshr.js
   const [a1, setA1] = useState(false);
   const [a2, setA2] = useState(false);
   const [a3, setA3] = useState(false);
@@ -70,7 +56,6 @@ function Refreshr(props) {
   const [a4Text, setA4Text] = useState('');
   const [questionObject, setQuestionObject] = useState({
     refreshrName,
-    // reviewText,
     questionTextOne,
     questionTextTwo,
     answers: { a1Text, a1, a2Text, a2, a3Text, a3, a4Text, a4 }
@@ -80,7 +65,6 @@ function Refreshr(props) {
     ${{ display: submitted ? 'block' : 'none' }}
   `;
 
-  console.log('Question object', questionObject);
   const createForm = async event => {
     event.preventDefault();
     const headers = {
@@ -153,7 +137,6 @@ function Refreshr(props) {
         onChange={() =>
           setQuestionObject({
             refreshrName,
-            // reviewText,
             questionTextOne,
             questionTextTwo,
             answers: { a1Text, a1, a2Text, a2, a3Text, a3, a4Text, a4 }
@@ -174,21 +157,8 @@ function Refreshr(props) {
           }}
           onChange={e => addRefreshrName(e.target.value)}
         />
-        {/* <h4 className={props.classes.subheaders}>Review Text</h4> */}
-        {/* <TextField
-          value={reviewText}
-          label="Review Text"
-          name="reviewText"
-          multiline
-          variant="outlined"
-          InputLabelProps={{
-            shrink: true
-          }}
-          onChange={e => setReviewText(e.target.value)}
-        /> */}
         <h4 className={props.classes.subheaders}>Questions</h4>
         <TextField
-          // value={questionText}
           placeholder="Enter your multiple choice question here.."
           label="Question 1"
           name="question"
@@ -286,7 +256,6 @@ function Refreshr(props) {
           />
         </FormGroup>
         <TextField
-          // value={questionText}
           placeholder="Enter your text-response question here.."
           label="Question 2"
           name="question"
