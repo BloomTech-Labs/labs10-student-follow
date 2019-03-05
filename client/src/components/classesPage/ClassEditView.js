@@ -3,8 +3,6 @@ import {
   Grid,
   Checkbox,
   Card,
-  Select,
-  MenuItem,
   Button,
   Typography,
   CardContent,
@@ -12,8 +10,7 @@ import {
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { Link } from 'react-router-dom';
-import RefreshrDialog from './components/RefreshrListDialog';
+import RefreshrDialog from './RefreshrListDialog';
 import axios from 'axios';
 
 const styles = theme => ({

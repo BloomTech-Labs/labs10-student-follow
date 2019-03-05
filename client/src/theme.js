@@ -1,9 +1,11 @@
 import { createMuiTheme } from '@material-ui/core/styles';
 
 //REFRESHR Colors
-//#195088 Navy blue (Background)
-//#4C99E5 Ocean blue(Font)
-//#FFFFFF white(card color)(nav)
+
+//Background: #0b2742
+//Background Contrast Text: #FFFFFF
+//Cards: #FFFFFF
+//Card Contrast Text:#0b2742
 
 //breakpoint values {xs: 0, sm: 600, md: 960, lg: 1280, xl: 1920}
 
@@ -13,6 +15,7 @@ export default createMuiTheme({
     useNextVariants: true,
     body1: { color: "inherit" },
     body2: { color: "inherit" }
+
   },
   palette: {
     primary: {
@@ -22,12 +25,12 @@ export default createMuiTheme({
     secondary: {
       main: '#FFFFFF',
       contrastText: '#0b2742'
-
     },
     background: {
       default: '#0b2742',
       paper: '#0b2742'
     },
     tonalOffset: 0.2
-  },
-})
+  }
+});
+

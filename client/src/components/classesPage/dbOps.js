@@ -1,4 +1,4 @@
-import { getContacts } from '../SendgridOps';
+import { getContacts } from './SendgridOps';
 import axios from 'axios';
 
 const token = localStorage.getItem('accessToken');
