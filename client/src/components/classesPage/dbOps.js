@@ -1,9 +1,13 @@
 import { getContacts } from '../SendgridOps';
 import axios from 'axios';
 
+const token = localStorage.getItem('accessToken');
 const ax = axios.create({
   // baseURL: 'https://refreshr.herokuapp.com' // production
-  baseURL: 'http://localhost:9000' // development
+  baseURL: 'http://localhost:9000',
+  headers: {
+    authorization: `Bearer ${token}`
+  } // development
 });
 
 // dummy data
@@ -60,17 +64,19 @@ const submitClassData = async (
   campaignData
 ) => {
   try {
-    // console.log('listData:', listData);
+    console.log('listData:', listData);
     console.log('sg_list_id:', sg_list_id);
-    // console.log('recipientData:', recipientData);
-    // console.log('campaignData:', campaignData);
+    console.log('recipientData:', recipientData);
+    console.log('campaignData:', campaignData);
 
     // add class to classes table
     const classRes = await ax.post('/classes', {
       name: listData.classnameInput,
-      sg_list_id
+      sg_list_id: `${sg_list_id}`
     }); // need to add cc field to classes, leaving it out for now
+    console.log(classRes);
     const { newClassID } = classRes.data;
+    console.log('class id:', newClassID)
 
     // add students to students
     // assuming students don't exist in db for now
@@ -84,20 +90,22 @@ const submitClassData = async (
     console.log(recipients);
 
     for (let r of recipients) {
-      const email = r.email;
-      const sgId = r.id;
-      sgIds[email] = sgId;
+      // const email = r.email;
+      // const sgId = r.id;
+      sgIds[r.email] = r.id;
     }
     console.log(sgIds);
 
     for (const recipient of recipientData) {
+      
       // add each student to db
       const studentsRes = await ax.post('/students', {
         first_name: recipient.first_name,
         last_name: recipient.last_name,
         email: recipient.email,
-        sg_recipient_id: sgIds[recipient.email]
+        sg_recipient_id: sgIds[recipient.email],
       });
+      console.log('students res:', studentsRes)
       // we are not accounting yet for students already in db. will have to throw an error if one is found? or just add that student to the class
       const { newStudentID } = studentsRes.data;
       newStudents.push(newStudentID); // add to array for updating students_classes table

@@ -53,7 +53,8 @@ module.exports = {
 
   addStudent: async student => {
     const newStudentID = await db('students')
-      .insert(student)
+      .insert(student);
+      console.log('in helper:', newStudentID);
     return newStudentID[0];
 
   }

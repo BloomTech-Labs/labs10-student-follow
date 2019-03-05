@@ -66,6 +66,15 @@ function CampaignForm(props) {
     getRefreshrs();
   }, []);
 
+  const token = localStorage.getItem('accessToken');
+
+  const ax = axios.create({
+    baseURL: 'http://localhost:9000',
+    headers: {
+      authorization: `Bearer ${token}`
+    }
+  });
+
   /* putting the axios request here for now just to design the page. it may make more sense to make
   it in the parent component and then pass down props to the children components */
   const getRefreshrs = async () => {
@@ -73,9 +82,11 @@ function CampaignForm(props) {
       /* this should fetch the class's refreshrs from /refreshrs/classes/:classId,
         but the endpoint is not live yet so I'm using this for testing */
       // const res = await axios.get('https://refreshr.herokuapp.com/refreshrs');
-      const res = await axios.get(
-        'https://refreshr.herokuapp.com/refreshrs/teachers/308'
+      const res = await ax.get('/refreshrs/teachers/53'
+        // 'https://refreshr.herokuapp.com/refreshrs/teachers/308'
+
       );
+      // console.log(res.data);
       setRefreshrs(res.data);
     } catch (err) {
       console.log(err);

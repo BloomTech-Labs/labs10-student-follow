@@ -48,6 +48,7 @@ router.post('/', emptyCheck, async (req, res, next) => {
 
   try {
     const newClassID = await db.addClass(body);
+    console.log('post route:', newClassID);
     res.status(responseStatus.postCreated).json({ newClassID });
   } catch (err) {
     next(err);

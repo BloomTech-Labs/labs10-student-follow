@@ -93,27 +93,27 @@ module.exports = {
   addClass: async classInfo => {
     const newClassID = await db('classes')
       .insert(classInfo)
-      .returning('id');
+      .returning('sg_list_id');
     // .returning('id')
     // .then(id => {
     //   return id;
     // });
     console.log(`class created: ${newClassID}`);
-    console.log(newClassID);
+    console.log('CLASSID',newClassID[0]);
     return newClassID[0];
   },
   
   updateClass: async (id, updatedClass) => {
     const updateCount = await db('classes')
-      .where({ id })
+      .where('sg_list_id', id)
       .update(updatedClass);
     return updateCount;
   },
 
   deleteClass: async id => {
     const deleteCount = await db('classes')
-      .where({ id })
-      .del();
+    .where('sg_list_id', id)
+    .del();
     return deleteCount;
   },
   
