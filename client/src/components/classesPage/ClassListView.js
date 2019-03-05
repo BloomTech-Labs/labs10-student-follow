@@ -43,35 +43,39 @@ const styles = theme => ({
 });
 
 function ClassListView(props) {
+  const user_id = localStorage.getItem('user_id');
+  const token = localStorage.getItem('accessToken');
   const { classes } = props;
   const [classList, setClassList] = useState([]);
 
   const ax = axios.create({
     // baseURL: 'https://refreshr.herokuapp.com' // production
-    baseURL: 'http://localhost:9000' // development
+    baseURL: 'http://localhost:9000', // development
+    headers: {
+      authorization: `Bearer ${token}`
+    }
   });
 
   // fetch classes on mount
   useEffect(() => {
-    // this should be the teacher(user) id, using a teacher with two classes for now
-    // change to 1 or something to see the empty list
-    getTeacherClasses(35);
+    getTeacherClasses(user_id);
   }, []);
 
   useEffect(() => {
-    console.log(classList);
+    console.log('classlist:', classList);
   }, [classList]);
 
   async function getTeacherClasses(id) {
     try {
-      const res = await ax.get(`/classes/teachers/${id}`);
-      setClassList(res.data);
+      const res = await ax.get(`/teachers/${id}`);
+      console.log(res.data);
+      setClassList(res.data.teacher.classes);
     } catch (err) {
       console.log(err);
     }
   }
 
-  if (!classList.length) {
+  if (!classList || !classList.length) {
     return (
       <Grid className={classes.emptyList}>
         <Typography variant="h2">Add a New Class</Typography>
@@ -86,11 +90,13 @@ function ClassListView(props) {
     return (
       <Grid className={props.classes.wrapper}>
         {classList.map(c => (
-          <Card key={c.id} className={classes.card} raised>
+          <Link to={`/classes/edit/${c.class_id}`} key={c.class_id}>
+          <Card className={classes.card} raised>
             <CardContent>
-              <Typography className={classes.title}>{c.name}</Typography>
+              <Typography className={classes.title}>{c.classname}</Typography>
             </CardContent>
           </Card>
+          </Link>
         ))}
         <Link to="/classes/create" style={{ textDecoration: 'none' }}>
           <Card className={classes.card} raised>

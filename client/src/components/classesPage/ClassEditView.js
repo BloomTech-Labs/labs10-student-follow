@@ -54,8 +54,12 @@ const styles = theme => ({
 function ClassEditView(props) {
   const { classes } = props;
   const classId = props.match.params.id;
+  const token = localStorage.getItem('accessToken');
   const ax = axios.create({
-    baseURL: 'http://localhost:9000' // development
+    baseURL: 'http://localhost:9000', // development
+    headers: {
+      authorization: `Bearer ${token}`
+    }
     // baseURL: 'https://refreshr.herokuapp.com' // production
   });
   const [students, setStudents] = useState([]);
@@ -66,9 +70,10 @@ function ClassEditView(props) {
 
   // get class details on mount
   useEffect(() => {
-    fetchStudents();
-    fetchRefreshrs();
-    fetchTeacherRefreshrs();
+    // fetchStudents();
+    // fetchRefreshrs();
+    // fetchTeacherRefreshrs();
+    fetchClass();
   }, []);
 
   /*
@@ -91,6 +96,13 @@ function ClassEditView(props) {
     );
   }, [selectedStudents]);
   */
+
+  async function fetchClass() {
+    const res = await ax.get(`/classes/${classId}`);
+    console.log(res);
+    setStudents(res.data.specifiedClass.students);
+    setRefreshrs(res.data.specifiedClass.refreshrs);
+  }
 
   async function fetchStudents() {
     const res = await ax.get(`/classes/${classId}/students`);
@@ -123,7 +135,7 @@ function ClassEditView(props) {
   }
 
   function selectStudent(e) {
-    const studentId = parseInt(e.target.value, 10);
+    const studentId = e.target.value;
     let updatedStudents = selectedStudents;
     if (e.target.checked) {
       updatedStudents = selectedStudents.concat(studentId);
@@ -151,11 +163,11 @@ function ClassEditView(props) {
       <h1>Students</h1>
       <Grid className={classes.studentList}>
         {students.map(s => (
-          <Grid key={s.id}>
-            <span>{`${s.first_name} ${s.last_name}`}</span>
+          <Grid key={s.student_id}>
+            <span>{`${s.name}`}</span>
             <Checkbox
-              value={`${s.id}`}
-              checked={selectedStudents.includes(parseInt(s.id, 10))}
+              value={`${s.student_id}`}
+              checked={selectedStudents.includes(s.student_id)}
               onClick={e => selectStudent(e)}
             />
           </Grid>
@@ -173,7 +185,7 @@ function ClassEditView(props) {
         <h1>Refreshrs</h1>
         <Grid className={classes.refreshrList}>
           {refreshrs.map(r => (
-            <Card className={classes.refreshrCard} key={r.id} raised>
+            <Card className={classes.refreshrCard} key={r.refreshr_id} raised>
               <CardContent>{r.name}</CardContent>
               <CardContent>
                 <DeleteIcon onClick={() => removeRefreshr(r.id)} />

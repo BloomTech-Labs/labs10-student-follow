@@ -15,7 +15,8 @@ import {
   CampaignForm,
   ClassCreateView,
   ClassEditView,
-  Typeform
+  Typeform,
+  ClassListView
 } from './components';
 
 const App = props => {
@@ -155,7 +156,7 @@ const App = props => {
                 )}
               />
               <Route path="/billing" render={props => <BillingPage />} />
-              <Route exact path="/classes" render={props => <ClassesPage />} />
+              <Route exact path="/classes" render={props => <ClassListView />} />
               <Route
                 exact
                 path="/classes/edit/:id"
