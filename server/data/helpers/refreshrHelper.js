@@ -21,12 +21,30 @@ module.exports = {
       .join('refreshrs', 'refreshrs.id', 'questions_refreshrs.refreshr_id')
       .where('refreshrs.id', id);
 
-    return Promise.all([selectedRefreshr, questions]).then(response => {
-      let [selectedRefreshr, questions] = response;
+    const teacher = await db('teachers')
+    .select('teachers.user_id as t_id',
+    'teachers.first_name as t_first',
+    'teachers.last_name as t_last',
+    'teachers.email as t_email')
+    .join('teacher_classes_refreshrs as tcr', 'teachers.user_id', 'tcr.teacher_id')
+    .join('refreshrs', 'refreshrs.id', 'tcr.refreshr_id')
+    .where('refreshrs.id', id)
+
+
+    return Promise.all([selectedRefreshr, questions, teacher]).then(response => {
+      let [selectedRefreshr, questions, teacher] = response;
       let result = {
         id: selectedRefreshr.id,
         name: selectedRefreshr.name,
         review_text: selectedRefreshr.review_text,
+        typeform_url: selectedRefreshr.typeform_url,
+        teachers: teacher.map(t => {
+          return {
+            teacher_id: t.t_id,
+            name: `${t.t_first} ${t.t_last}`,
+            email: t.t_email
+          };
+        }),
         questions: questions.map(q => {
           return {
             question_id: q.question_id,
@@ -65,5 +83,17 @@ module.exports = {
       .where({ id })
       .del();
     return deleteCount;
-  }
+  },
+
+  getTeacherRefreshrs: teacher_id => {
+    return db('refreshrs')
+      .join(
+        'teachers_classes_refreshrs',
+        'refreshrs.id',
+        'teachers_classes_refreshrs.refreshr_id'
+      )
+      .where({ 'teachers_classes_refreshrs.teacher_id': teacher_id });
+  },
 };
+
+

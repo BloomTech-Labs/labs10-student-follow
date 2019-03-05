@@ -13,10 +13,9 @@ import { Link as RouterLink, withRouter } from 'react-router-dom';
 
 export const breadcrumbNameMap = {
   '/dashboard': 'Dashboard',
-  '/refreshrs': 'Refreshrs',
-  '/classes': 'Classes',
-  '/billing': 'Billing',
-  '/settings': 'Settings'
+  '/refreshrs/create': 'Create Refreshrs',
+  '/classes/create': 'Create Classes',
+  '/billing': 'Billing'
 };
 
 const styles = theme => ({
@@ -57,15 +56,15 @@ const Navcrumbs = props => {
                         {breadcrumbNameMap[to]}
                       </Typography>
                     ) : (
-                        <Link
-                          component={RouterLink}
-                          color="inherit"
-                          to={to}
-                          key={to}
-                        >
-                          {breadcrumbNameMap[to]}
-                        </Link>
-                      );
+                      <Link
+                        component={RouterLink}
+                        color="inherit"
+                        to={to}
+                        key={to}
+                      >
+                        {breadcrumbNameMap[to]}
+                      </Link>
+                    );
                   })}
                 </Breadcrumbs>
               );

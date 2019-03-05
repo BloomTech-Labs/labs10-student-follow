@@ -8,16 +8,16 @@ module.exports = {
 
   getStudent: async id => {
     const student = await db('students')
-      .where({ id })
+      .where('sg_recipient_id', id)
       .first();
 
     const classes = await db('classes')
       .select(
-        'classes.id as classID',
+        'classes.sg_list_id as class_id',
         'classes.name')
-      .join('students_classes', 'classes.id', 'students_classes.class_id')
-      .join('students', 'students.id', 'students_classes.student_id')
-      .where('students.id', id)
+      .join('students_classes', 'classes.sg_list_id', 'students_classes.class_id')
+      .join('students', 'students.sg_recipient_id', 'students_classes.student_id')
+      .where('students.sg_recipient_id', id)
 
     return Promise.all([student, classes]).then(response => {
       let [student, classes] = response;
@@ -28,7 +28,7 @@ module.exports = {
         email: student.email,
         classes: classes.map(c => {
           return {
-            classID: c.classID,
+            class_id: c.class_id,
             classname: c.name
           };
         })
@@ -54,6 +54,8 @@ module.exports = {
   addStudent: async student => {
     const newStudentID = await db('students')
       .insert(student)
+      .returning('sg_recipient_id');
+      console.log('in helper:', newStudentID);
     return newStudentID[0];
 
   }

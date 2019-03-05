@@ -3,6 +3,7 @@ exports.up = function(knex, Promise) {
     tbl.increments();
     tbl.string('name');
     tbl.text('review_text');
+    tbl.string('typeform_url', 500)
   });
 };
 

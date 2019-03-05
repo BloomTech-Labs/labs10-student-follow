@@ -1,19 +1,12 @@
 exports.seed = async function(knex, Promise) {
   const students_classes = [];
-  const s_ids = [];
-  const c_ids = [];
-
-  for (let i = 1; i < 501; i++) {
-    s_ids.push(i);
-    c_ids.push(i);
-  }
 
   for (let i = 0; i < 500; i++) {
     const [class_id] = [
-      ...c_ids.splice(Math.floor(Math.random() * c_ids.length), 1)
+     Math.ceil(Math.random() * 500).toString()
     ];
     const [student_id] = [
-      ...s_ids.splice(Math.floor(Math.random() * s_ids.length), 1)
+      Math.ceil(Math.random() * 500).toString()
     ];
     students_classes.push({
       class_id: class_id,

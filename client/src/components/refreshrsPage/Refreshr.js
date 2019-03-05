@@ -40,18 +40,30 @@ const styles = theme => ({
 });
 
 function Refreshr(props) {
+  const { setUrl, url } = props;
+  console.log('REF:', url);
   const [refreshrName, addRefreshrName] = useState('');
+<<<<<<< HEAD:client/src/components/refreshrs/Refreshr.js
   // const [reviewText, setReviewText] = useState(
   //   'This is a short section of text that describes or reminds about one part of the topic. It is not intended to be a complete review of the material, just a reminder of the most important parts. This section is limited to 512 characters.'
   // );
   const [questionTextOne, setQuestionTextOne] = useState('');
   const [questionTextTwo, setQuestionTextTwo] = useState('');
+=======
+  const [reviewText] = useState(
+    //setReviewText
+    'This is a short section of text that describes or reminds about one part of the topic. It is not intended to be a complete review of the material, just a reminder of the most important parts. This section is limited to 512 characters.'
+  );
+  const [questionText, setQuestionText] = useState(
+    'This is a multiple choice question related to the topic. Again the goal is not to be exhaustive, just to call the material to mind. A good question will not simply call for the recollection of information, but will require the application of knowledge.'
+  );
+>>>>>>> 0925c6a7d7f295f8273e17d92d367d6ed6bc7744:client/src/components/refreshrsPage/Refreshr.js
   const [a1, setA1] = useState(false);
   const [a2, setA2] = useState(false);
   const [a3, setA3] = useState(false);
   const [a4, setA4] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [url, setUrl] = useState('');
+
   const [a1Text, setA1Text] = useState('');
   const [a2Text, setA2Text] = useState('');
   const [a3Text, setA3Text] = useState('');

@@ -5,23 +5,40 @@ import {
   Card,
   Typography,
   Icon,
-  Button
+  Button,
+  Fab
 } from '@material-ui/core/';
 import { withStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-// import { addRefreshr, getRefreshr, getRefreshrs, updateRefreshr, deleteRefreshr, scheduleRefreshr, rescheduleRefreshr, getScheduleRefreshr, deleteScheduleRefreshr, sendTestRefreshr, addList } from "../../SendgridOps"
+import ArrowBack from '@material-ui/icons/ArrowBack';
+import Send from '@material-ui/icons/Send';
 
 const styles = theme => ({
-  wrapper: {
+  container: {
+    border: `1px solid ${theme.palette.secondary.main}`,
+    ...theme.mixins.gutters(),
     display: 'flex',
-    flexWrap: 'wrap',
+    flexFlow: 'column nowrap',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    justifyContent: 'center',
-    margin: '1rem'
+    paddingTop: theme.spacing.unit * 4,
+    paddingBottom: theme.spacing.unit * 8,
+    marginTop: theme.spacing.unit * 6,
+    marginBottom: theme.spacing.unit * 4,
+    color: theme.palette.primary.contrastText,
+    background: theme.palette.primary.dark,
+    [theme.breakpoints.down('sm')]: {
+      width: '80%'
+    },
+    [theme.breakpoints.only('md')]: {
+      width: '60%'
+    },
+    width: '50%'
   },
   cardList: {
-    border: '1px solid blue'
+    display: 'flex',
+    justifyContent: 'center',
   },
   card: {
     margin: 20,
@@ -50,7 +67,41 @@ const styles = theme => ({
     justifyContent: 'center',
     alignItems: 'center',
     border: 'none'
-  }
+  },
+  navDiv: {
+    display: 'flex',
+    justifyContent: 'space-around',
+    width: '100%',
+    [theme.breakpoints.down('md')]: {
+      flexDirection: 'column',
+    }
+  },
+  buttonDiv: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    [theme.breakpoints.down('md')]: {
+      marginTop: theme.spacing.unit * 2,
+    }
+  },
+  hrStyle: {
+    margin: '1rem auto',
+    width: '100%'
+  },
+  leftBtn: {
+    marginRight: theme.spacing.unit * 2,
+    color: theme.palette.primary.main,
+    background: theme.palette.secondary.main,
+    width: 40,
+    height: 40,
+  },
+  rightBtn: {
+    marginLeft: theme.spacing.unit * 2,
+    color: theme.palette.primary.main,
+    background: theme.palette.secondary.main,
+    width: 40,
+    height: 40,
+  },
 });
 
 function CampaignForm(props) {
@@ -66,6 +117,15 @@ function CampaignForm(props) {
     getRefreshrs();
   }, []);
 
+  const token = localStorage.getItem('accessToken');
+
+  const ax = axios.create({
+    baseURL: 'http://localhost:9000',
+    headers: {
+      authorization: `Bearer ${token}`
+    }
+  });
+
   /* putting the axios request here for now just to design the page. it may make more sense to make
   it in the parent component and then pass down props to the children components */
   const getRefreshrs = async () => {
@@ -73,9 +133,11 @@ function CampaignForm(props) {
       /* this should fetch the class's refreshrs from /refreshrs/classes/:classId,
         but the endpoint is not live yet so I'm using this for testing */
       // const res = await axios.get('https://refreshr.herokuapp.com/refreshrs');
-      const res = await axios.get(
-        'https://refreshr.herokuapp.com/refreshrs/teachers/308'
+      const res = await ax.get('/refreshrs/teachers/53'
+        // 'https://refreshr.herokuapp.com/refreshrs/teachers/308'
+
       );
+      // console.log(res.data);
       setRefreshrs(res.data);
     } catch (err) {
       console.log(err);
@@ -95,39 +157,22 @@ function CampaignForm(props) {
     e.preventDefault();
     props.setStage({
       ...props.stage,
-      onSelectionForm: !props.stage.onSelectionForm,
+      onListForm: !props.stage.onListForm,
       onCampaignForm: !props.stage.onCampaignForm
     });
-  };
-
-  const handleNext = e => {
-    e.preventDefault();
-    props.setStage({
-      ...props.stage,
-      onCampaignForm: !props.stage.onCampaignForm,
-      onListForm: !props.stage.onListForm
-      /* kelfro: I'm pretty sure we should go with the sendgrid update here but I left the part Justin wrote as a comment in case you wanted to keep this.      
-   jl_classform_axios
-    });
-    props.submitClassData(); // submit all form data to back end
-    alert("You're all done!");
-  };
-*/
-    });
-    alert('Saving to DB and sending to the SendGrid Server!');
   };
 
   const scheduleRefreshr = () => {
     props.setCampaignData({
       ...props.campaignData,
-      title: 'Raccoon Jellyfish',
+      title: 'Your Refreshr Is Here!',
       subject: activeRefreshr.name,
       html_content:
-        '<html><head><title></title></head><body><p>Raccoon Jellyfish! [unsubscribe]</p></body></html>',
-      plain_content: 'Raccoon Jellyfish! [unsubscribe]'
+        `<html><head><title></title></head><body><p>${activeRefreshr.review_text} [unsubscribe]</p></body></html>`,
+      plain_content: `${activeRefreshr.review_text} [unsubscribe]`,
+      refreshr_id: activeRefreshr.refreshr_id,
     });
     setActiveRefreshr(null);
-    // console.log(props.campaignData);
   };
 
   const handleClick = id => {
@@ -137,11 +182,18 @@ function CampaignForm(props) {
 
   const handleSubmit = e => {
     e.preventDefault();
+    alert('Saving to DB and sending to the SendGrid Server!');
     props.sendAllToSendgrid();
   };
 
   const alterTime = (e) => {
     e.preventDefault()
+    // tacking time onto campaign data for submitClassData()
+    props.setCampaignData({
+      ...props.campaignData,
+      date: e.target.value
+    });
+
     const inputTime = Date.parse(e.target.value) / 1000
     const alteredTime = inputTime + 18000 // Adds 5 hours on, makes it same day @ 12am from user input
 
@@ -149,61 +201,104 @@ function CampaignForm(props) {
       ...props.timeData,
       send_at: alteredTime
     })
+    
   }
 
   return (
-    <>
-      <Grid container className={classes.wrapper}>
-        <button onClick={e => handlePrev(e)}>PREV</button>
-        <button onClick={e => handleNext(e)}>NEXT</button>
-        <button onClick={e => handleSubmit(e)}>SUBMIT</button>
-        <Typography variant="h6">Refreshrs(campaign)</Typography>
-        {activeRefreshr ? (
-          <Card className={classes.activeCard}>
-            <h1>{activeRefreshr.name}</h1>
-            <TextField
-              variant="outlined"
-              type="date"
-              defaultValue={today}
-              // onChange={e => setDate(e)}
-              onChange={e => alterTime(e)}
-            />
-            <Button
-              variant="outlined"
-              color="inherit"
-              onClick={scheduleRefreshr}
-            >
-              Schedule this refreshr!
-            </Button>
+    <Grid container className={classes.container}>
+      <Typography variant="h6" color="secondary" style={{ textAlign: 'center' }}>
+        Schedule Class
+      </Typography>
+
+      <hr className={classes.hrStyle} />
+
+      {activeRefreshr ? (
+        <Card className={classes.activeCard}>
+          <h1>{activeRefreshr.name}</h1>
+          <TextField
+            variant="outlined"
+            type="date"
+            defaultValue={today}
+            onChange={e => alterTime(e)}
+          />
+          <Button
+            variant="outlined"
+            color="inherit"
+            onClick={scheduleRefreshr}
+          >
+            Schedule this refreshr!
+          </Button>
+        </Card>
+      ) : (
+          <Card className={classes.card}>
+            <h4>select a refreshr to schedule</h4>
           </Card>
-        ) : (
-            <Card className={classes.card}>
-              <h4>select a refreshr to schedule</h4>
-            </Card>
-          )}
-        <Grid container className={classes.cardList}>
-          <Typography variant="h4">Your Refreshrs</Typography>
-          {refreshrs.map(refreshr => (
-            <Card
-              onClick={() => handleClick(refreshr.id)}
-              className={classes.card}
-              key={refreshr.id}
-              id={refreshr.id}
-              raised
-            >
-              <Typography variant="subtitle2">{refreshr.name}</Typography>
-            </Card>
-          ))}
-          <Link to="/questions/create">
-            <Card className={`${classes.card} ${classes.iconCard}`}>
-              <Icon color="action" style={{ fontSize: 60 }}>
-                add_circle
-              </Icon>
-            </Card>
-          </Link>
-        </Grid>
+        )}
+
+      <hr className={classes.hrStyle} />
+
+      <Typography variant="p" color="secondary" style={{ textAlign: 'center' }}>
+        Your Refreshrs
+      </Typography>
+
+      <Grid className={classes.cardList}>
+        {refreshrs.map(refreshr => (
+          <Card
+            onClick={() => handleClick(refreshr.id)}
+            className={classes.card}
+            key={refreshr.id}
+            id={refreshr.id}
+            raised
+          >
+            <Typography variant="subtitle2">{refreshr.name}</Typography>
+          </Card>
+        ))}
+        <Link to="/questions/create">
+          <Card className={`${classes.card} ${classes.iconCard}`}>
+            <Icon color="action" style={{ fontSize: 60 }}>
+              add_circle
+            </Icon>
+          </Card>
+        </Link>
       </Grid>
-    </>
+
+      <hr className={classes.hrStyle} />
+
+      <div className={classes.navDiv}>
+        <div className={classes.buttonDiv}>
+          <Fab
+            elevation={20}
+            aria-label="Back"
+            className={classes.leftBtn}
+          >
+            <ArrowBack onClick={e => handlePrev(e)} />
+          </Fab>
+          <Typography
+            variant="body2"
+            color="secondary"
+            className={classes.nextText}
+          >
+            PREV
+          </Typography>
+        </div>
+        <div className={classes.buttonDiv}>
+          <Typography
+            variant="body2"
+            color="secondary"
+            className={classes.nextText}
+          >
+            SEND
+          </Typography>
+          <Fab
+            elevation={20}
+            aria-label="Submit"
+            className={classes.rightBtn}
+          >
+            <Send onClick={e => handleSubmit(e)} />
+          </Fab>
+        </div>
+      </div>
+    </Grid>
   );
 }
 
