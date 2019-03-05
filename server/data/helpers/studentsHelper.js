@@ -28,7 +28,7 @@ module.exports = {
         email: student.email,
         classes: classes.map(c => {
           return {
-            classID: c.classID,
+            class_id: c.class_id,
             classname: c.name
           };
         })
@@ -54,6 +54,8 @@ module.exports = {
   addStudent: async student => {
     const newStudentID = await db('students')
       .insert(student)
+      .returning('sg_recipient_id');
+      console.log('in helper:', newStudentID);
     return newStudentID[0];
 
   }

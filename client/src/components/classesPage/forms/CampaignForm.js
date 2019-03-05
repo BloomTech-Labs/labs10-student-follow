@@ -117,6 +117,15 @@ function CampaignForm(props) {
     getRefreshrs();
   }, []);
 
+  const token = localStorage.getItem('accessToken');
+
+  const ax = axios.create({
+    baseURL: 'http://localhost:9000',
+    headers: {
+      authorization: `Bearer ${token}`
+    }
+  });
+
   /* putting the axios request here for now just to design the page. it may make more sense to make
   it in the parent component and then pass down props to the children components */
   const getRefreshrs = async () => {
@@ -124,9 +133,11 @@ function CampaignForm(props) {
       /* this should fetch the class's refreshrs from /refreshrs/classes/:classId,
         but the endpoint is not live yet so I'm using this for testing */
       // const res = await axios.get('https://refreshr.herokuapp.com/refreshrs');
-      const res = await axios.get(
-        'https://refreshr.herokuapp.com/refreshrs/teachers/308'
+      const res = await ax.get('/refreshrs/teachers/53'
+        // 'https://refreshr.herokuapp.com/refreshrs/teachers/308'
+
       );
+      // console.log(res.data);
       setRefreshrs(res.data);
     } catch (err) {
       console.log(err);
@@ -154,11 +165,12 @@ function CampaignForm(props) {
   const scheduleRefreshr = () => {
     props.setCampaignData({
       ...props.campaignData,
-      title: 'Raccoon Jellyfish',
+      title: 'Your Refreshr Is Here!',
       subject: activeRefreshr.name,
       html_content:
-        '<html><head><title></title></head><body><p>Raccoon Jellyfish! [unsubscribe]</p></body></html>',
-      plain_content: 'Raccoon Jellyfish! [unsubscribe]'
+        `<html><head><title></title></head><body><p>${activeRefreshr.review_text} [unsubscribe]</p></body></html>`,
+      plain_content: `${activeRefreshr.review_text} [unsubscribe]`,
+      refreshr_id: activeRefreshr.refreshr_id,
     });
     setActiveRefreshr(null);
   };
@@ -176,6 +188,12 @@ function CampaignForm(props) {
 
   const alterTime = (e) => {
     e.preventDefault()
+    // tacking time onto campaign data for submitClassData()
+    props.setCampaignData({
+      ...props.campaignData,
+      date: e.target.value
+    });
+
     const inputTime = Date.parse(e.target.value) / 1000
     const alteredTime = inputTime + 18000 // Adds 5 hours on, makes it same day @ 12am from user input
 
@@ -183,6 +201,7 @@ function CampaignForm(props) {
       ...props.timeData,
       send_at: alteredTime
     })
+    
   }
 
   return (
