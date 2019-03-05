@@ -10,40 +10,8 @@ const ax = axios.create({
   } // development
 });
 
-// dummy data
-// const listData = {
-//   name: 'some new class'
-// };
-
-/* 
-const recipientData = [
-  {
-    first_name: 'bob',
-    last_name: 'green',
-    email: 'bob@green'
-  },
-  {
-    first_name: 'charlie',
-    last_name: 'hunter',
-    email: 'charlie@hunter'
-  },
-  {
-    first_name: 'bobby',
-    last_name: 'orr',
-    email: 'bobby@bruins'
-  },
-  {
-    first_name: 'ted',
-    last_name: 'williams',
-    email: 'ted@bosox'
-  }
-];
-*/
-// const campaignData = {
-// id: 23 // refreshr id
-// listId: 42 // the sendgrid list id for updating
-// };
-
+const user_id = localStorage.getItem('user_id');
+console.log('uid:', user_id);
 /* basic flow of sending data to back end:
 
   1) add the new class to the classes table. save the returned id
@@ -76,7 +44,7 @@ const submitClassData = async (
     }); // need to add cc field to classes, leaving it out for now
     console.log(classRes);
     const { newClassID } = classRes.data;
-    console.log('class id:', newClassID)
+    console.log('class id:', newClassID);
 
     // add students to students
     // assuming students don't exist in db for now
@@ -97,15 +65,14 @@ const submitClassData = async (
     console.log(sgIds);
 
     for (const recipient of recipientData) {
-      
       // add each student to db
       const studentsRes = await ax.post('/students', {
         first_name: recipient.first_name,
         last_name: recipient.last_name,
         email: recipient.email,
-        sg_recipient_id: sgIds[recipient.email],
+        sg_recipient_id: sgIds[recipient.email]
       });
-      console.log('students res:', studentsRes)
+      console.log('students res:', studentsRes);
       // we are not accounting yet for students already in db. will have to throw an error if one is found? or just add that student to the class
       const { newStudentID } = studentsRes.data;
       newStudents.push(newStudentID); // add to array for updating students_classes table
@@ -115,21 +82,28 @@ const submitClassData = async (
 
     // add students and class to students_classes table
     for (let student of newStudents) {
-    const scRes = await ax.post(`/classes/${newClassID}`, {
-      student_id: student
-    });
-    console.log('response:', scRes);
-  }
-
-
-
-    // add refreshrs to tcr TODO
-    // refreshrs will already be created and so will have an id
-    // add teacher(user) id, class id, and refreshr id
-    for (let refreshr of campaignData) {
-      const refRes = ax.post(`/classes/${newClassID}/refreshrs`);
-      console.log(refRes);
+      const scRes = await ax.post(`/classes/${newClassID}`, {
+        student_id: student
+      });
+      console.log('response:', scRes);
     }
+
+    // add refreshr to tcr
+    // we should also send teacher_id here
+    const newRefreshr = {
+      refreshr_id: campaignData.refreshr_id,
+      date: campaignData.date,
+      sg_campaign_id: campaignData.campaign_id
+    };
+    const refRes = await ax.post(
+      `/classes/${newClassID}/refreshrs`,{
+        teacher_id: user_id,
+      refreshr: newRefreshr,
+
+      }
+
+    );
+    console.log(refRes);
   } catch (err) {
     console.log(`error: ${err}`);
   }

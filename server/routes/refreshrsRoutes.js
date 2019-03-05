@@ -63,7 +63,6 @@ router.get('/teachers/:teacherId', async (req, res, next) => {
   try {
     const { teacherId } = req.params;
     const refreshrList = await db.getTeacherRefreshrs(teacherId);
-    console.log(refreshrList);
     res.status(responseStatus.success).json(refreshrList);
   } catch (err) {
     console.log(err);

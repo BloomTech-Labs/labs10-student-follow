@@ -115,19 +115,15 @@ module.exports = {
     return newClassID[0];
   },
 
-  addRefreshr: async (class_id, refreshr) => {
-    // check for any null fieds
-    // const existing = await db('teachers_classes_refreshrs')
-    // .where(class_id);
-    // console.log(existing);
-    // for (entry of existing) {
-    db('teachers_classes_refreshrs').insert({
+  addRefreshr: async (class_id, refreshr, teacher_id) => {
+    // TODO: check for any classes with null refreshrs and insert there?
+    const result = await db('teachers_classes_refreshrs').insert({
       class_id,
-      teacher_id,
       refreshr_id: refreshr.refreshr_id,
       date: refreshr.date,
-      sg_campaign_id: refreshr.sg_campaign_id
-    });
+      sg_campaign_id: refreshr.sg_campaign_id,
+      teacher_id
+    }).returning['class_id', 'refreshr', 'teacher_id']
   },
 
   updateClass: async (id, updatedClass) => {

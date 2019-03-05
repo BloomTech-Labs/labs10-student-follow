@@ -139,6 +139,7 @@ function ClassCreateView(props) {
             }. Status is "${res.data.status}"!`
           );
           setTimeout(() => {
+            campaignData.campaign_id = validated.campaign_id; // tacking on for submitCD
             submitClassData(
               listData,
               validated.list_ids[0],
@@ -148,8 +149,6 @@ function ClassCreateView(props) {
           }, 30000);
         }
       })
-      .then()
-
       .catch(err => console.log(err));
   };
 

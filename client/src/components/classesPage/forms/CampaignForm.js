@@ -135,7 +135,8 @@ function CampaignForm(props) {
       subject: activeRefreshr.name,
       html_content:
         '<html><head><title></title></head><body><p>Raccoon Jellyfish! [unsubscribe]</p></body></html>',
-      plain_content: 'Raccoon Jellyfish! [unsubscribe]'
+      plain_content: 'Raccoon Jellyfish! [unsubscribe]',
+      refreshr_id: activeRefreshr.refreshr_id,
     });
     setActiveRefreshr(null);
     // console.log(props.campaignData);
@@ -153,6 +154,12 @@ function CampaignForm(props) {
 
   const alterTime = (e) => {
     e.preventDefault()
+    // tacking time onto campaign data for submitClassData()
+    props.setCampaignData({
+      ...props.campaignData,
+      date: e.target.value
+    });
+
     const inputTime = Date.parse(e.target.value) / 1000
     const alteredTime = inputTime + 18000 // Adds 5 hours on, makes it same day @ 12am from user input
 
@@ -160,6 +167,7 @@ function CampaignForm(props) {
       ...props.timeData,
       send_at: alteredTime
     })
+    
   }
 
   return (
