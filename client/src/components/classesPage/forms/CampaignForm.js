@@ -131,11 +131,11 @@ function CampaignForm(props) {
   const scheduleRefreshr = () => {
     props.setCampaignData({
       ...props.campaignData,
-      title: 'Raccoon Jellyfish',
+      title: 'Your Refreshr Is Here!',
       subject: activeRefreshr.name,
       html_content:
-        '<html><head><title></title></head><body><p>Raccoon Jellyfish! [unsubscribe]</p></body></html>',
-      plain_content: 'Raccoon Jellyfish! [unsubscribe]',
+        `<html><head><title></title></head><body><p>${activeRefreshr.review_text} [unsubscribe]</p></body></html>`,
+      plain_content: `${activeRefreshr.review_text} [unsubscribe]`,
       refreshr_id: activeRefreshr.refreshr_id,
     });
     setActiveRefreshr(null);

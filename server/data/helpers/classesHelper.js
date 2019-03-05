@@ -106,24 +106,21 @@ module.exports = {
     const newClassID = await db('classes')
       .insert(classInfo)
       .returning('sg_list_id');
-    // .returning('id')
-    // .then(id => {
-    //   return id;
-    // });
-    console.log(`class created: ${newClassID}`);
-    console.log('CLASSID', newClassID[0]);
     return newClassID[0];
   },
 
   addRefreshr: async (class_id, refreshr, teacher_id) => {
     // TODO: check for any classes with null refreshrs and insert there?
-    const result = await db('teachers_classes_refreshrs').insert({
+    const result = await db('teachers_classes_refreshrs')
+    .returning(['class_id', 'refreshr_id', 'teacher_id'])
+    .insert({
       class_id,
       refreshr_id: refreshr.refreshr_id,
       date: refreshr.date,
       sg_campaign_id: refreshr.sg_campaign_id,
       teacher_id
-    }).returning['class_id', 'refreshr', 'teacher_id']
+    })
+    return result;
   },
 
   updateClass: async (id, updatedClass) => {

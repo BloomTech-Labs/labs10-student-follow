@@ -73,14 +73,12 @@ router.post('/:id', async (req, res, next) => {
 router.post('/:id/refreshrs', async (req, res, next) => {
   const { id } = req.params;
   const  { refreshr, teacher_id } = req.body;
-  console.log('refreshr:', refreshr);
   try {
-    const returnMsg = await db.addRefreshr(id, refreshr, teacher_id);
-    console.log(returnMsg);
+    const [ returnMsg ] = await db.addRefreshr(id, refreshr, teacher_id);
     res
       .status(responseStatus.success)
       .json({
-        message: `refreshr ${refreshr.refreshr_id} assigned to class ${id}`
+        message: `refreshr ${returnMsg.refreshr_id} assigned to class ${returnMsg.teacher_id} with teacher ${returnMsg.teacher_id}`
       });
   } catch (err) {
     console.log(err);
