@@ -57,6 +57,7 @@ router.post('/', emptyCheck, async (req, res, next) => {
 // adds a single student to the class
 router.post('/:id', async (req, res, next) => {
   const { student_id } = req.body;
+  console.log('student id:', student_id);
   const class_id = req.params.id;
   try {
     await db.addStudent(class_id, student_id);
@@ -72,14 +73,14 @@ router.post('/:id', async (req, res, next) => {
 // assigns a refreshr to the class
 router.post('/:id/refreshrs', async (req, res, next) => {
   const { id } = req.params;
-  const  { refreshr, teacher_id } = req.body;
+  const { refreshr, teacher_id } = req.body;
   try {
-    const [ returnMsg ] = await db.addRefreshr(id, refreshr, teacher_id);
-    res
-      .status(responseStatus.success)
-      .json({
-        message: `refreshr ${returnMsg.refreshr_id} assigned to class ${returnMsg.teacher_id} with teacher ${returnMsg.teacher_id}`
-      });
+    const [returnMsg] = await db.addRefreshr(id, refreshr, teacher_id);
+    res.status(responseStatus.success).json({
+      message: `refreshr ${returnMsg.refreshr_id} assigned to class ${
+        returnMsg.teacher_id
+      } with teacher ${returnMsg.teacher_id}`
+    });
   } catch (err) {
     console.log(err);
     next(err);

@@ -13,6 +13,7 @@ import {
 import { withStyles } from '@material-ui/core/styles';
 import DeleteIcon from '@material-ui/icons/Delete';
 import RefreshrDialog from './RefreshrListDialog';
+import { addRecipient, addContact } from './SendgridOps';
 import axios from 'axios';
 
 const styles = theme => ({
@@ -90,8 +91,13 @@ function ClassEditView(props) {
   const [students, setStudents] = useState([]);
   const [refreshrs, setRefreshrs] = useState([]);
   const [teacherRefs, setTeacherRefs] = useState([]);
+  const [classData, setClassData] = useState({
+    name: '',
+    id: ''
+  });
   const [selectedStudents, setSelectedStudents] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [addedStudents, setAddedStudents] = useState([]);
 
   // get class details on mount
   useEffect(() => {
@@ -128,7 +134,15 @@ function ClassEditView(props) {
     console.log(res);
     setStudents(res.data.specifiedClass.students);
     setRefreshrs(res.data.specifiedClass.refreshrs);
+    setClassData({
+      id: res.data.specifiedClass.id,
+      name: res.data.specifiedClass.name
+    });
   }
+
+  useEffect(() => {
+    console.log('classData:', classData);
+  }, [classData]);
 
   // async function fetchStudents() {
   //   const res = await ax.get(`/classes/${classId}/students`);
@@ -181,18 +195,55 @@ function ClassEditView(props) {
     email: ''
   });
 
-  useEffect(() => {
-    console.log(newStudent);
-  }, [newStudent]);
+  // useEffect(() => {
+  //   console.log(newStudent);
+  // }, [newStudent]);
 
   const handleChange = e => {
-    console.log(e);
-
     setNewStudent({
       ...newStudent,
       [e.target.name]: e.target.value
     });
   };
+
+  async function addStudent(e) {
+    e.preventDefault();
+    console.log(newStudent);
+    // add student to typeform recipients, get id back
+    const sgStudent = [newStudent];
+    let res = await addRecipient(sgStudent);
+    console.log(res);
+    console.log('recipient:', res.data.persisted_recipients);
+
+    // attach id to newStudent
+    newStudent.sg_recipient_id = res.data.persisted_recipients[0];
+
+    // add student to students
+    res = await ax.post('/students', newStudent);
+
+    // add student/class to students_classes
+    const classId = classData.id;
+    console.log('classID:', classId);
+    res = await ax.post(`/classes/${classId}`, {
+      student_id: newStudent.sg_recipient_id
+    });
+    console.log(res);
+
+    // add student to class sendgrid contact list
+    res = await addContact(classData.id, newStudent.sg_recipient_id);
+    console.log(res);
+
+    // setAddedStudents([...addedStudents, newStudent]);
+    // clear new student input
+    setNewStudent({
+      first_name: '',
+      last_name: '',
+      email: ''
+    });
+
+    // get updated data from the server...better way to do this?
+    fetchClass();
+  }
 
   async function dropStudents() {
     const res = await ax.post(`/classes/${classId}/drop/`, {
@@ -210,6 +261,7 @@ function ClassEditView(props) {
         variant="outlined"
         label={label}
         onChange={handleChange}
+        value={newStudent[name]}
         name={name}
       />
     );
@@ -221,9 +273,12 @@ function ClassEditView(props) {
         Settings
       </Typography>
       <Grid classname={classes.settings}>
-        {makeInput('first_name', 'First Name')}
-        {makeInput('last_name', 'Last Name')}
-        {makeInput('email', 'Email')}
+        <form onSubmit={e => addStudent(e)}>
+          {makeInput('first_name', 'First Name')}
+          {makeInput('last_name', 'Last Name')}
+          {makeInput('email', 'Email')}
+          <Button type="submit">Add Student</Button>
+        </form>
       </Grid>
       <Typography variant="h6" className={classes.title}>
         Students
@@ -234,6 +289,19 @@ function ClassEditView(props) {
             <span>{`${s.name}`}</span>
             <Checkbox
               color="secondary"
+              value={`${s.student_id}`}
+              checked={selectedStudents.includes(s.student_id)}
+              onClick={e => selectStudent(e)}
+            />
+          </Grid>
+        ))}
+        {addedStudents.map((s, i) => (
+          <Grid key={i}>
+            <span style={{ fontWeight: 'bold' }}>{`${s.first_name} ${
+              s.last_name
+            }`}</span>
+            <Checkbox
+              color="primary"
               value={`${s.student_id}`}
               checked={selectedStudents.includes(s.student_id)}
               onClick={e => selectStudent(e)}

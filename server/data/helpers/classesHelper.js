@@ -65,7 +65,7 @@ module.exports = {
       response => {
         let [selectedClass, teacher, students, refreshrs] = response;
         let result = {
-          id: selectedClass.id,
+          id: selectedClass.sg_list_id,
           name: selectedClass.name,
           teacher: teacher.map(t => {
             return {
@@ -112,14 +112,14 @@ module.exports = {
   addRefreshr: async (class_id, refreshr, teacher_id) => {
     // TODO: check for any classes with null refreshrs and insert there?
     const result = await db('teachers_classes_refreshrs')
-    .returning(['class_id', 'refreshr_id', 'teacher_id'])
-    .insert({
-      class_id,
-      refreshr_id: refreshr.refreshr_id,
-      date: refreshr.date,
-      sg_campaign_id: refreshr.sg_campaign_id,
-      teacher_id
-    })
+      .returning(['class_id', 'refreshr_id', 'teacher_id'])
+      .insert({
+        class_id,
+        refreshr_id: refreshr.refreshr_id,
+        date: refreshr.date,
+        sg_campaign_id: refreshr.sg_campaign_id,
+        teacher_id
+      });
     return result;
   },
 
