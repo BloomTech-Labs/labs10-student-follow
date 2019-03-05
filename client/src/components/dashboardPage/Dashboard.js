@@ -1,8 +1,15 @@
 import React, { useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
-import { CardContent, Typography, Card, Icon, Button, CardActions } from '@material-ui/core';
+import {
+  CardContent,
+  Typography,
+  Card,
+  Icon,
+  Button,
+} from '@material-ui/core';
 
 const styles = theme => ({
   wrapper: {
@@ -41,7 +48,10 @@ const styles = theme => ({
     }
   },
   lists: {
-    fontSize: '1rem',
+    fontSize: '1rem'
+  },
+  links: {
+    color: 'inherit',
   },
   classTitle: {
     background: '#9D69A3',
@@ -53,30 +63,27 @@ const styles = theme => ({
     flexDirection: 'column',
     margin: '1rem',
     background: 'white',
-    width: '200px',
+    width: '200px'
   },
   buttonDiv: {
-    justifyContent: 'space-around',
+    justifyContent: 'space-around'
   },
   classData: {
-    paddingLeft: '10px',
+    paddingLeft: '10px'
   },
+  icon: {
+    fontSize: '70px',
+    margin: '2rem auto'
+  }
 });
 
 const Dashboard = props => {
   const name = localStorage.getItem('name');
 
   useEffect(() => {
-    // props.getTeachers(options);
-    // props.getStudents(options);
     props.getClasses();
-    // props.getQuestions(options);
   }, []);
   const { allClasses, classes } = props;
-  //   console.log('Teachers Check:', teachers)
-  //   console.log('Students Check:', students)
-  //   console.log('Classes Check:', classes)
-  //   console.log('Questions Check:', questions)
   const testClasses = [
     {
       classname: 'FSW438',
@@ -95,35 +102,44 @@ const Dashboard = props => {
   ];
   return (
     <Grid className={classes.wrapper}>
-      <Typography component="h2" color='secondary' inline="true">User: {name}</Typography>
+      <Typography component="h2" color="secondary" inline="true">
+        User: {name}
+      </Typography>
       {console.log('PROPS', allClasses)}
       <Grid className={classes.classContainer}>
         {testClasses.map(c => (
           <Card key={c.class_id} className={classes.classCard}>
-          {/* <CardActionArea> */}
-
             {/* <CardMedia component="img" image={require("./logo.png")} title="refreshr logo" alt="refreshr logo" height="auto" width="20"/> */}
-            <Typography component='h4' className={classes.classTitle}>{c.classname}</Typography>
+            <Typography component="h4" className={classes.classTitle}>
+              {c.classname}
+            </Typography>
             <CardContent className={classes.classData}>
-
-            <Typography component="p"   className={classes.lists}>Students: {c.numOfStudents}</Typography>
-            <Typography component="p"   className={classes.lists}>Participation: {c.participationRate}%</Typography>
-            <Typography component="p"  className={classes.lists}>Refreshrs Sent: {c.refreshrsEmailed}</Typography>
-            {/* <CardActions className={classes.buttonDiv}>
-      </CardActions> */}
+              <Typography component="p" className={classes.lists}>
+                Students: {c.numOfStudents}
+              </Typography>
+              <Typography component="p" className={classes.lists}>
+                Participation: {c.participationRate}%
+              </Typography>
+              <Typography component="p" className={classes.lists}>
+                Refreshrs Sent: {c.refreshrsEmailed}
+              </Typography>
             </CardContent>
-        <Button color="primary"  className={classes.lists}>
-          Edit
-        </Button>
-          {/* </CardActionArea> */}
+            <Button color="primary" className={classes.lists}>
+              Edit
+            </Button>
           </Card>
         ))}
-        <div className={classes.classCard}>
-          <h4>New Class</h4>
-          <Icon className={classes.icon} fontSize="large">
+        <Card className={classes.classCard}>
+          <Typography component="h4" className={classes.classTitle}>
+            New Class
+          </Typography>
+            
+          <Icon className={classes.icon} color="primary">
+          <Link to="/refreshrs/create" className={classes.links}>
             add_circle
+          </Link>
           </Icon>
-        </div>
+        </Card>
       </Grid>
     </Grid>
   );
