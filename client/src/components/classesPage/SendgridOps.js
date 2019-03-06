@@ -258,17 +258,19 @@ export function getContacts(listId) {
   // })
   // .catch(err => console.log(err));
 }
-export function deleteContact() {
-  const url = `https://api.sendgrid.com/v3/contactdb/lists/${listId}/recipients/${recipient_id}`;
-  axios
-    .delete(url, headers)
-    .then(res => {
-      console.log(
-        `===deleteContact: recipient_id: ${recipient_id} deleted from listId ${listId}===`
-      );
-      console.log(res.statusText);
-    })
-    .catch(err => console.log(err));
+export function deleteContact(listId, recipientId) {
+  const url = `https://api.sendgrid.com/v3/contactdb/lists/${listId}/recipients/${recipientId}`;
+  return (
+    axios
+      .delete(url, headers)
+      // .then(res => {
+      //   console.log(
+      //     `===deleteContact: recipient_id: ${recipient_id} deleted from listId ${listId}===`
+      //   );
+      //   console.log(res.statusText);
+      // })
+      .catch(err => console.log(err))
+  );
 }
 
 //////////////////////////

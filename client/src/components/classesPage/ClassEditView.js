@@ -13,7 +13,7 @@ import {
 import { withStyles } from '@material-ui/core/styles';
 import DeleteIcon from '@material-ui/icons/Delete';
 import RefreshrDialog from './RefreshrListDialog';
-import { addRecipient, addContact } from './SendgridOps';
+import { addRecipient, addContact, deleteContact } from './SendgridOps';
 import axios from 'axios';
 
 const styles = theme => ({
@@ -50,6 +50,8 @@ const styles = theme => ({
     flexFlow: 'column wrap',
     border: `1px solid ${theme.palette.secondary.main}`,
     flexWrap: 'wrap',
+    width: '80%',
+    maxHeight: theme.spacing.unit * 50,
     padding: theme.spacing.unit * 6
   },
   buttonBox: {
@@ -121,13 +123,10 @@ function ClassEditView(props) {
     console.log('teacherRefs:', teacherRefs);
   }, [teacherRefs]);
 
+*/
   useEffect(() => {
-    console.log(
-      'selectedStudents:',
-      selectedStudents
-    );
+    console.log('selectedStudents:', selectedStudents);
   }, [selectedStudents]);
-  */
 
   async function fetchClass() {
     const res = await ax.get(`/classes/${classId}`);
@@ -149,10 +148,10 @@ function ClassEditView(props) {
   //   setStudents(res.data);
   // }
 
-  async function fetchRefreshrs() {
-    const res = await ax.get(`/classes/${classId}/refreshrs`);
-    setRefreshrs(res.data);
-  }
+  // async function fetchRefreshrs() {
+  //   const res = await ax.get(`/classes/${classId}/refreshrs`);
+  //   setRefreshrs(res.data);
+  // }
 
   async function fetchTeacherRefreshrs(id) {
     // this should be user id, not 35
@@ -194,10 +193,6 @@ function ClassEditView(props) {
     last_name: '',
     email: ''
   });
-
-  // useEffect(() => {
-  //   console.log(newStudent);
-  // }, [newStudent]);
 
   const handleChange = e => {
     setNewStudent({
@@ -268,12 +263,17 @@ function ClassEditView(props) {
   }, [classData]);
 
   async function dropStudents() {
-    const res = await ax.post(`/classes/${classId}/drop/`, {
-      students: selectedStudents
-    });
-    console.log('dropped:', res);
+    for (let student of selectedStudents) {
+      const res = await ax.delete(`/classes/${classId}/drop/${student}`);
+      console.log('dropped:', res);
+
+      // drop student from sg list
+      deleteContact(classId, student);
+    }
+    fetchClass(); // better way to do this than calling this here?
+
+    // reset selected students
     setSelectedStudents([]);
-    // fetchStudents(); // better way to do this than calling this here?
   }
 
   const makeInput = (

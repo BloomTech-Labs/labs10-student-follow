@@ -31,9 +31,10 @@ router.get('/:id', async (req, res, next) => {
 // drop a student from a class
 router.delete('/:id/drop/:studentId', async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const { students } = req.body;
-    const result = await db.removeStudents(id, students);
+    const { id, studentId } = req.params;
+    console.log(id, studentId);
+
+    const result = await db.removeStudent(id, studentId);
     res.status(responseStatus.success).json({ droppedStudents: result });
   } catch (err) {
     console.log(err);
