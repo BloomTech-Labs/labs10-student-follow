@@ -1,11 +1,8 @@
 import React, { useEffect } from 'react';
-import { withRouter } from 'react-router-dom';
-import { Link } from 'react-router-dom';
-import Grid from '@material-ui/core/Grid';
-import { withStyles } from '@material-ui/core/styles';
-import { CardContent, Typography, Card, Icon, Button } from '@material-ui/core';
+import { withRouter, Link } from 'react-router-dom';
+import { CardContent, Typography, Card, Icon, Button, Grid, withStyles } from '@material-ui/core';
 
-// TODO Update edit links on cards to correct classes & refreshrs
+// TODO update refreshrs EDIT button on card w/ correct link
 
 const styles = theme => ({
   wrapper: {
@@ -13,10 +10,11 @@ const styles = theme => ({
     flexFlow: 'column nowrap',
     justifyContent: 'space-around',
     alignItems: 'center',
-    marginTop: 100,
+    marginTop: '60px',
     //NEEDED TO CENTER VIEWS:
-    [theme.breakpoints.up('sm')]: {
-      width: `100% - ${200}px`
+    [theme.breakpoints.up('md')]: {
+      width: `100% - ${200}px`,
+      alignItems: 'flex-start'
       // marginRight: 200 // temp removed because of the comments above,
     }
   },
@@ -35,8 +33,9 @@ const styles = theme => ({
     display: 'flex',
     flexFlow: 'row wrap',
     justifyContent: 'space-evenly',
-    width: '600px',
-    border: '3px solid teal',
+    ...theme.mixins.gutters(),
+    alignItems: 'center',
+    paddingBottom: theme.spacing.unit * 2,
     [theme.breakpoints.down('sm')]: {
       flexDirection: 'column',
       alignItems: 'center',
@@ -55,12 +54,31 @@ const styles = theme => ({
     color: '#FFFFFF',
     paddingLeft: '10px'
   },
+  refreshrTitle: {
+    background: '#488286',
+    color: '#FFFFFF',
+    paddingLeft: '10px'
+  },
+  cardSectionLabels: {
+    marginLeft: '2rem',
+    [theme.breakpoints.down('sm')]: {
+      margin: '0'
+    }
+  },
   classCard: {
     display: 'flex',
     flexDirection: 'column',
     margin: '1rem',
     background: 'white',
     width: '200px'
+  },
+  refreshrNewCard: {
+    display: 'flex',
+    flexDirection: 'column',
+    margin: '1rem',
+    background: 'white',
+    width: '200px',
+    height: '130px'
   },
   buttonDiv: {
     justifyContent: 'space-around'
@@ -71,12 +89,15 @@ const styles = theme => ({
   icon: {
     fontSize: '70px',
     margin: '2rem auto'
+  },
+  refreshrIcon: {
+    fontSize: '70px',
+    margin: '1rem auto'
   }
 });
 
 const Dashboard = props => {
-  const name = localStorage.getItem('name');
-
+  // const name = localStorage.getItem('name'); // commented out until decide what to do w/ name
   useEffect(() => {
     props.getClasses();
   }, []);
@@ -95,20 +116,71 @@ const Dashboard = props => {
       participationRate: 78,
       refreshrsEmailed: 36,
       class_id: 2
+    },
+    {
+      classname: 'Android 74',
+      numOfStudents: 84,
+      participationRate: 78,
+      refreshrsEmailed: 36,
+      class_id: 3
+    },
+    {
+      classname: 'Android 74',
+      numOfStudents: 84,
+      participationRate: 78,
+      refreshrsEmailed: 36,
+      class_id: 4
+    }
+  ];
+  const testRefreshrs = [
+    {
+      refreshrName: 'CSS Basics',
+      classesAssigned: 84,
+      refreshr_id: 1
+    },
+    {
+      refreshrName: 'Relational Databases',
+      classesAssigned: 21,
+      refreshr_id: 2
+    },
+    {
+      refreshrName: 'Relational Databases',
+      classesAssigned: 21,
+      refreshr_id: 3
+    },
+    {
+      refreshrName: 'Relational Databases',
+      classesAssigned: 21,
+      refreshr_id: 4
+    },
+    {
+      refreshrName: 'Relational Databases',
+      classesAssigned: 21,
+      refreshr_id: 5
     }
   ];
   return (
     <Grid className={classes.wrapper}>
-      <Typography component="h2" color="secondary" inline="true">
-        User: {name}
-      </Typography>
       {console.log('PROPS', allClasses)}
+      {/* cant figure out what to do w/ the username right now */}
+      {/* <Typography component="h2" color="secondary">
+        Welcome {name}, 
+      </Typography> */}
+      {/* end username */}
+      <Typography
+        component="h2"
+        color="secondary"
+        className={classes.cardSectionLabels}
+      >
+        Classes:
+      </Typography>
       <Grid className={classes.classContainer}>
         {testClasses.map(c => (
           <Card key={c.class_id} className={classes.classCard}>
-            {/* <CardMedia component="img" image={require("./logo.png")} title="refreshr logo" alt="refreshr logo" height="auto" width="20"/> */}
             <Typography component="h4" className={classes.classTitle}>
-              {c.classname}
+              {c.classname.length > 10
+                ? c.classname.substring(0, 10) + '...'
+                : c.classname}
             </Typography>
             <CardContent className={classes.classData}>
               <Typography component="p" className={classes.lists}>
@@ -122,7 +194,10 @@ const Dashboard = props => {
               </Typography>
             </CardContent>
             <Button color="primary" className={classes.lists}>
-              <Link to="/" className={classes.links}>
+              <Link
+                to={`/classes/edit/${c.class_id}`}
+                className={classes.links}
+              >
                 Edit
               </Link>
             </Button>
@@ -132,8 +207,45 @@ const Dashboard = props => {
           <Typography component="h4" className={classes.classTitle}>
             New Class
           </Typography>
-
           <Icon className={classes.icon} color="primary">
+            <Link to="/classes/create" className={classes.links}>
+              add_circle
+            </Link>
+          </Icon>
+        </Card>
+      </Grid>
+      <Typography
+        component="h2"
+        color="secondary"
+        className={classes.cardSectionLabels}
+      >
+        Refreshrs:
+      </Typography>
+      <Grid className={classes.classContainer}>
+        {testRefreshrs.map(r => (
+          <Card key={r.refreshr_id} className={classes.classCard}>
+            <Typography component="h4" className={classes.refreshrTitle}>
+              {r.refreshrName.length > 10
+                ? r.refreshrName.substring(0, 10) + '...'
+                : r.refreshrName}
+            </Typography>
+            <CardContent className={classes.classData}>
+              <Typography component="p" className={classes.lists}>
+                Classes Assigned: {r.classesAssigned}
+              </Typography>
+            </CardContent>
+            <Button color="primary" className={classes.lists}>
+              <Link to="/" className={classes.links}>
+                Edit
+              </Link>
+            </Button>
+          </Card>
+        ))}
+        <Card className={classes.refreshrNewCard}>
+          <Typography component="h4" className={classes.refreshrTitle}>
+            New Refreshr
+          </Typography>
+          <Icon className={classes.refreshrIcon} color="primary">
             <Link to="/refreshrs/create" className={classes.links}>
               add_circle
             </Link>
