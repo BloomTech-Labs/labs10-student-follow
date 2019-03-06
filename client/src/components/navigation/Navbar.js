@@ -11,7 +11,7 @@ import IconButton from '@material-ui/core/IconButton';
 import { withStyles } from '@material-ui/core/styles';
 import { Link as RouterLink, withRouter } from 'react-router-dom';
 import { breadcrumbNameMap } from '../navigation/Navcrumbs';
-import Logo from './logo.png';
+import Logo from '../../logo.png';
 import Button from '@material-ui/core/Button';
 
 /*-------- STYLES --------*/

@@ -17,9 +17,10 @@ import Typography from '@material-ui/core/Typography';
 const style = (theme) => ({
   container: {
     width: '100%', 
+    height: '100vh',
+    marginTop: -64,
   },
   subcontainer: {
-    position: 'absolute',
     width: '100%',
     margin: 0,
     padding: 0
@@ -40,7 +41,8 @@ const style = (theme) => ({
   },
   textP: {
     fontSize: '1.6rem',
-    width: '35%',
+    width: '30%',
+    textAlign: 'left',
     paddingLeft: 40,
     paddingTop: 10,
     fontFamily: 'Arial, Helvetica, sans-serif',
@@ -53,8 +55,8 @@ const style = (theme) => ({
     },
   },
   backgroundImg: {
-    zIndex: -1,
     width: '100vw',
+    marginTop: 64,
     height: '100vh',
   }
 
@@ -80,22 +82,5 @@ const LandingPage = props => {
 
 export default withRouter(withStyles(style)(LandingPage));
 
-//Call to Action?
-          {/* <Button
-            variant="contained"
-            size="large"
-            color="primary"
-            className={classes.margin}
-          >
-            Create Refreshr
-          </Button>
-        </div>
-      </div>
-      <LazyLoadImage className="background-img" alt="image" src={Image} />
-      <LazyLoadImage className="mobile-img" alt="image" src={MobileImage} />
-    </div>
-  );
-};
 
-export default withStyles(styles)(LandingPage); */}
 
