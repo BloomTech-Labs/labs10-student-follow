@@ -60,11 +60,14 @@ const styles = theme => ({
     marginBottom: theme.spacing.unit * 4,
     color: theme.palette.primary.contrastText,
     background: theme.palette.primary.dark,
+    marginLeft: '25%',
     [theme.breakpoints.down('sm')]: {
-      width: '80%'
+      width: '80%',
+      marginLeft: '7.5%'
     },
     [theme.breakpoints.only('md')]: {
-      width: '60%'
+      width: '60%',
+      marginLeft: '20%'
     },
     width: '50%'
   },
@@ -87,7 +90,7 @@ const styles = theme => ({
   },
   inputQuestion: {
     marginBottom: theme.spacing.unit,
-    padding: '.75%',
+    padding: '5%',
     paddingLeft: 14,
     background: theme.palette.secondary.main,
     color: theme.palette.primary.main,
@@ -95,7 +98,7 @@ const styles = theme => ({
     width: '75%',
     borderRadius: 5
   },
-  input2: {
+  inputMultipleChoice: {
     marginBottom: theme.spacing.unit,
     padding: '.75%',
     paddingLeft: 14,
@@ -378,7 +381,7 @@ function Refreshr(props) {
             color="secondary"
             style={{ textAlign: 'center' }}
           >
-            Question 1: Multiple Choice
+            Question 1: Multiple Choice Response
           </Typography>
           <FormGroup
             className={props.classes.form1}
@@ -401,7 +404,7 @@ function Refreshr(props) {
               multiline
               rows="4"
               placeholder="Enter question.."
-              className={props.classes.input2}
+              className={props.classes.inputQuestion}
             />
           </FormGroup>
           {/* <FormGroup
@@ -428,7 +431,7 @@ function Refreshr(props) {
                 name="classnameInput"
                 required
                 placeholder="Answer one.."
-                className={props.classes.input2}
+                className={props.classes.inputMultipleChoice}
               />
               <Input
                 disableUnderline
@@ -438,7 +441,7 @@ function Refreshr(props) {
                 onChange={e => setA2Text(e.target.value)}
                 required
                 placeholder="Answer two.."
-                className={props.classes.input2}
+                className={props.classes.inputMultipleChoice}
               />
               <Input
                 disableUnderline
@@ -447,7 +450,7 @@ function Refreshr(props) {
                 name="classnameInput"
                 required
                 placeholder="Answer three.."
-                className={props.classes.input2}
+                className={props.classes.inputMultipleChoice}
               />
               <Input
                 disableUnderline
@@ -456,7 +459,7 @@ function Refreshr(props) {
                 name="classnameInput"
                 required
                 placeholder="Answer four.."
-                className={props.classes.input2}
+                className={props.classes.inputMultipleChoice}
               />
             </form>
           </FormGroup>
@@ -501,7 +504,7 @@ function Refreshr(props) {
               multiline
               rows="4"
               placeholder="Enter question.."
-              className={props.classes.input2}
+              className={props.classes.inputQuestion}
             />
           </FormGroup>
 
