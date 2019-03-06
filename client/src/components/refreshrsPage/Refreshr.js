@@ -39,10 +39,6 @@ const styles = theme => ({
       width: '100%',
       marginLeft: '10%'
     },
-    // [theme.breakpoints.up('sm')]: {
-    //   border: '2px solid red',
-    //   width: '100%'
-    // },
     width: '50%'
   },
   textField: {
