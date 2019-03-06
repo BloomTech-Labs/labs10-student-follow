@@ -13,6 +13,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import ArrowBack from '@material-ui/icons/ArrowBack';
 import Send from '@material-ui/icons/Send';
+import moment from 'moment'
 
 const styles = theme => ({
   container: {
@@ -133,9 +134,9 @@ function CampaignForm(props) {
       /* this should fetch the class's refreshrs from /refreshrs/classes/:classId,
         but the endpoint is not live yet so I'm using this for testing */
       // const res = await axios.get('https://refreshr.herokuapp.com/refreshrs');
-      const res = await ax.get('/refreshrs/teachers/53'
-        // 'https://refreshr.herokuapp.com/refreshrs/teachers/308'
-
+      const res = await ax.get(
+        // '/refreshrs/teachers/53'
+        'https://refreshr.herokuapp.com/refreshrs/teachers/394'
       );
       // console.log(res.data);
       setRefreshrs(res.data);
@@ -182,26 +183,68 @@ function CampaignForm(props) {
 
   const handleSubmit = e => {
     e.preventDefault();
-    alert('Saving to DB and sending to the SendGrid Server!');
     props.sendAllToSendgrid();
   };
 
   const alterTime = (e) => {
     e.preventDefault()
+    const a = moment(`${e.target.value}T00:00:00`)
+    const b = moment(`${e.target.value}T00:00:00`).unix()
+    const twoD = moment(`${e.target.value}T00:00:00`).add(2, 'day').toString()
+    const twoDU = moment(`${e.target.value}T00:00:00`).add(2, 'day').unix()
+    const twoW = moment(`${e.target.value}T00:00:00`).add(2, 'weeks').toString()
+    const twoWU = moment(`${e.target.value}T00:00:00`).add(2, 'weeks').unix()
+    const twoM = moment(`${e.target.value}T00:00:00`).add(2, 'month').toString()
+    const twoMU = moment(`${e.target.value}T00:00:00`).add(2, 'month').unix()
+
+    console.log(a)
+    console.log(b)
+    console.log(`2 days`)
+    console.log(twoD, twoDU)
+    console.log(`2 weeks`)
+    console.log(twoW, twoWU)
+    console.log(`2 months`)
+    console.log(twoM, twoMU)
+
+    const timeTriData = [
+      {
+        send_at: twoDU,
+      },
+      {
+        send_at: twoWU,
+      },
+      {
+        send_at: twoMU,
+      },
+    ]
+
+    props.setTimeTriData([
+      ...timeTriData
+    ])
+
+    // let day2 = moment(`${e.target.value} 8:00`)
+    // console.log(day2.add(14, 'days'))
+
     // tacking time onto campaign data for submitClassData()
-    props.setCampaignData({
-      ...props.campaignData,
-      date: e.target.value
-    });
+    // props.setCampaignData({
+    //   ...props.campaignData,
+    //   date: e.target.value
+    // });
 
-    const inputTime = Date.parse(e.target.value) / 1000
-    const alteredTime = inputTime + 18000 // Adds 5 hours on, makes it same day @ 12am from user input
+    // const inputTime = Date.parse(e.target.value) / 1000
+    // const alteredTime = inputTime + 18000 // Adds 5 hours on, makes it same day @ 12am from user input
+    // console.log(alteredTime)
+    // const alteredTime2d = inputTime + 18000 // Adds 5 hours on, makes it same day @ 12am from user input
+    // const alteredTime2wk = inputTime + 18000 // Adds 5 hours on, makes it same day @ 12am from user input
+    // const alteredTime2mo = inputTime + 18000 // Adds 5 hours on, makes it same day @ 12am from user input
 
-    props.setTimeData({
-      ...props.timeData,
-      send_at: alteredTime
-    })
-    
+    // console.log(alteredTime2d)
+    // console.log(alteredTime2wk)
+    // console.log(alteredTime2mo)
+    // props.setTimeData({
+    //   ...props.timeData,
+    //   send_at: alteredTime
+    // })
   }
 
   return (
