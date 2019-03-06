@@ -34,7 +34,7 @@ const styles = theme => ({
     }
   },
   menuButton: {
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.down('sm')]: {
       display: 'none'
     }
   },
