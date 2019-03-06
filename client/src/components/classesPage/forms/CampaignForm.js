@@ -13,6 +13,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import ArrowBack from '@material-ui/icons/ArrowBack';
 import Send from '@material-ui/icons/Send';
+import moment from 'moment'
 
 const styles = theme => ({
   container: {
@@ -50,14 +51,13 @@ const styles = theme => ({
     flexDirection: 'column'
   },
   activeCard: {
-    margin: 20,
-    width: 300,
+    margin: 10,
+    width: '90%',
     height: 300,
     padding: theme.spacing.unit * 3,
     justifyContent: 'space-between',
     display: 'flex',
     flexDirection: 'column',
-    border: '2px solid red'
   },
   dateField: {
     marginTop: 20
@@ -100,13 +100,28 @@ const styles = theme => ({
     color: theme.palette.primary.main,
     background: theme.palette.secondary.main,
     width: 40,
-    height: 40
+    height: 40,
+  },
+  scheduleDiv: {
+    margin: '1rem 0',
+  },
+  scheduleText: {
+    marginLeft: '1rem',
   }
 });
 
 function CampaignForm(props) {
   const [refreshrs, setRefreshrs] = useState([]);
   const [activeRefreshr, setActiveRefreshr] = useState(null);
+
+  // For displaying on the page for the ease of user
+  // current time, 2 days, 2 weeks, 2 months
+  let [schedule, setSchedule] = useState({
+    schedule0: null,
+    schedule1: null,
+    schedule2: null,
+    schedule3: null,
+  })
 
   const { classes } = props;
   let today = new Date(); // to set default for date inputs
@@ -135,8 +150,7 @@ function CampaignForm(props) {
         but the endpoint is not live yet so I'm using this for testing */
       // const res = await axios.get('https://refreshr.herokuapp.com/refreshrs');
       const res = await ax.get(
-        `/refreshrs/teachers/${userID}`
-        // 'https://refreshr.herokuapp.com/refreshrs/teachers/308'
+        'https://refreshr.herokuapp.com/refreshrs/teachers/190'
       );
       console.log(res.data);
       setRefreshrs(res.data);
@@ -184,26 +198,38 @@ function CampaignForm(props) {
 
   const handleSubmit = e => {
     e.preventDefault();
-    alert('Saving to DB and sending to the SendGrid Server!');
     props.sendAllToSendgrid();
   };
 
-  const alterTime = e => {
-    e.preventDefault();
-    // tacking time onto campaign data for submitClassData()
-    props.setCampaignData({
-      ...props.campaignData,
-      date: e.target.value
-    });
+  const alterTime = (e) => {
+    e.preventDefault()
+    const schedule0 = moment(`${e.target.value}T00:00:00`).format('ddd, MMMM Do, YYYY ha')
+    const schedule1 = moment(`${e.target.value}T00:00:00`).add(2, 'day').format('ddd, MMMM Do, YYYY ha')
+    const schedule2 = moment(`${e.target.value}T00:00:00`).add(2, 'weeks').format('ddd, MMMM Do, YYYY ha')
+    const schedule3 = moment(`${e.target.value}T00:00:00`).add(2, 'month').format('ddd, MMMM Do, YYYY ha')
 
-    const inputTime = Date.parse(e.target.value) / 1000;
-    const alteredTime = inputTime + 18000; // Adds 5 hours on, makes it same day @ 12am from user input
+    const twoDaysUnix = moment(`${e.target.value}T00:00:00`).add(2, 'day').unix()
+    const twoWeeksUnix = moment(`${e.target.value}T00:00:00`).add(2, 'weeks').unix()
+    const twoMonthsUnix = moment(`${e.target.value}T00:00:00`).add(2, 'month').unix()
 
-    props.setTimeData({
-      ...props.timeData,
-      send_at: alteredTime
-    });
-  };
+    const timeTriData = [
+      { send_at: twoDaysUnix },
+      { send_at: twoWeeksUnix },
+      { send_at: twoMonthsUnix },
+    ]
+
+    setSchedule({
+      ...schedule,
+      schedule0,
+      schedule1,
+      schedule2,
+      schedule3,
+    })
+
+    props.setTimeTriData([
+      ...timeTriData
+    ])
+  }
 
   return (
     <Grid container className={classes.container}>
@@ -226,8 +252,41 @@ function CampaignForm(props) {
             defaultValue={today}
             onChange={e => alterTime(e)}
           />
-          <Button variant="outlined" color="inherit" onClick={scheduleRefreshr}>
-            Schedule this refreshr!
+          <div className={classes.scheduleDiv}>
+            <Typography
+              variant={"p"}
+              color="secondary"
+            >
+              Input: {schedule.schedule0 || ""}
+            </Typography>
+            <Typography
+              className={classes.scheduleText}
+              variant={"p"}
+              color="secondary"
+            >
+              +2 days: {schedule.schedule1 || ""}
+            </Typography>
+            <Typography
+              className={classes.scheduleText}
+              variant={"p"}
+              color="secondary"
+            >
+              +2 weeks: {schedule.schedule2 || ""}
+            </Typography>
+            <Typography
+              className={classes.scheduleText}
+              variant={"p"}
+              color="secondary"
+            >
+              +2 months: {schedule.schedule3 || ""}
+            </Typography>
+          </div>
+          <Button
+            variant="outlined"
+            color="secondary"
+            onClick={scheduleRefreshr}
+          >
+            Load Schedule
           </Button>
         </Card>
       ) : (
