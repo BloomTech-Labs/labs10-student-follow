@@ -27,6 +27,7 @@ const submitClassData = async (
   campaignData
 ) => {
   try {
+    console.log(campaignData);
 
     // add class to classes table
     const classRes = await ax.post('/classes', {
@@ -74,12 +75,10 @@ const submitClassData = async (
       date: campaignData.date,
       sg_campaign_id: campaignData.campaign_id
     };
-    const refRes = await ax.post(
-      `/classes/${newClassID}/refreshrs`,{
-        teacher_id: user_id,
-      refreshr: newRefreshr,
-      }
-    );
+    const refRes = await ax.post(`/classes/${newClassID}/refreshrs`, {
+      teacher_id: user_id,
+      refreshr: newRefreshr
+    });
     console.log(refRes);
   } catch (err) {
     console.log(`error: ${err}`);

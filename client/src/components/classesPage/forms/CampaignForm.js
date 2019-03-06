@@ -131,7 +131,6 @@ function CampaignForm(props) {
   it in the parent component and then pass down props to the children components */
   const getRefreshrs = async () => {
     try {
-      console.log(userID);
       /* this should fetch the class's refreshrs from /refreshrs/classes/:classId,
         but the endpoint is not live yet so I'm using this for testing */
       // const res = await axios.get('https://refreshr.herokuapp.com/refreshrs');
@@ -173,7 +172,7 @@ function CampaignForm(props) {
         activeRefreshr.review_text
       } [unsubscribe]</p></body></html>`,
       plain_content: `${activeRefreshr.review_text} [unsubscribe]`,
-      refreshr_id: activeRefreshr.refreshr_id
+      refreshr_id: activeRefreshr.id
     });
     setActiveRefreshr(null);
   };
