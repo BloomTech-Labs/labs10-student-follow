@@ -98,11 +98,15 @@ const styles = theme => ({
   }
 });
 
-function Refreshr(props) {
+function RefreshrEdit(props) {
   const { setUrl, url } = props;
   const [refreshrName, addRefreshrName] = useState('');
   const [questionTextOne, setQuestionTextOne] = useState('');
   const [questionTextTwo, setQuestionTextTwo] = useState('');
+  const [a1, setA1] = useState(false);
+  const [a2, setA2] = useState(false);
+  const [a3, setA3] = useState(false);
+  const [a4, setA4] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
   const [a1Text, setA1Text] = useState('');
@@ -113,7 +117,7 @@ function Refreshr(props) {
     refreshrName,
     questionTextOne,
     questionTextTwo,
-    answers: { a1Text, a2Text, a3Text, a4Text }
+    answers: { a1Text, a1, a2Text, a2, a3Text, a3, a4Text, a4 }
   });
 
   const StyleDisplay = styled.a`
@@ -195,7 +199,7 @@ function Refreshr(props) {
               refreshrName,
               questionTextOne,
               questionTextTwo,
-              answers: { a1Text, a2Text, a3Text, a4Text }
+              answers: { a1Text, a1, a2Text, a2, a3Text, a3, a4Text, a4 }
             })
           }
         >
@@ -340,4 +344,4 @@ function Refreshr(props) {
   );
 }
 
-export default withStyles(styles)(Refreshr);
+export default withStyles(styles)(RefreshrEdit);

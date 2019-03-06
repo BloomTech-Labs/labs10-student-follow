@@ -5,6 +5,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import CloudUpload from '@material-ui/icons/CloudUpload';
 import GroupAdd from '@material-ui/icons/GroupAdd';
 import ArrowForward from '@material-ui/icons/ArrowForward';
+import RemoveCircleOutline from '@material-ui/icons/RemoveCircleOutline';
 import Attachment from '@material-ui/icons/Attachment';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Typography from '@material-ui/core/Typography';
@@ -24,13 +25,13 @@ const styles = theme => ({
     marginBottom: theme.spacing.unit * 4,
     color: theme.palette.primary.contrastText,
     background: theme.palette.primary.dark,
-    [theme.breakpoints.down('sm')]: {
-      width: '80%'
+    [theme.breakpoints.only('sm')]: {
+      width: '60vw'
     },
-    [theme.breakpoints.only('md')]: {
-      width: '60%'
+    [theme.breakpoints.only('xs')]: {
+      width: '90vw'
     },
-    width: '50%'
+    width: '100%'
   },
   input1: {
     marginBottom: theme.spacing.unit,
@@ -103,8 +104,8 @@ const styles = theme => ({
     height: 40
   },
   btn3: {
-    width: 65,
-    height: 40,
+    width: 60,
+    height: 60,
     color: theme.palette.primary.main,
     background: theme.palette.secondary.main,
     marginLeft: theme.spacing.unit,
@@ -117,7 +118,7 @@ const styles = theme => ({
   uploadInput: {
     display: 'flex',
     flexFlow: 'row nowrap',
-    margin: '0 1rem',
+    margin: '5% 0',
     width: '50%',
     justifyContent: 'center',
     alignItems: 'center',
@@ -150,6 +151,15 @@ const styles = theme => ({
   hrStyle: {
     margin: '1rem auto',
     width: '100%'
+  },
+  recipientStaging: {
+    display: 'flex',
+    alignItems: 'center'
+  },
+  unstageRecipientBtn: {
+    '&:hover': {
+      cursor: 'pointer'
+    }
   }
 });
 
@@ -225,6 +235,14 @@ function ListForm(props) {
       onListForm: !props.stage.onListForm,
       onCampaignForm: !props.stage.onCampaignForm
     });
+  };
+
+  const unstageRecipient = (e, targetEmail) => {
+    e.preventDefault();
+    const filteredArr = props.recipientData.filter(
+      r => r.email !== targetEmail
+    );
+    setRecipientData(filteredArr);
   };
 
   return (
@@ -359,11 +377,16 @@ function ListForm(props) {
 
       {recipientData.length > 0 ? (
         recipientData.map((recipient, i) => (
-          <div key={i}>
+          <div key={i} className={classes.recipientStaging}>
             <p style={{ color: 'white' }}>
               {i + 1}. {recipient.first_name} {recipient.last_name} (
-              {recipient.email})
+              {recipient.email}) &nbsp;
             </p>
+            <RemoveCircleOutline
+              className={classes.unstageRecipientBtn}
+              tooltip="Remove selected recipient"
+              onClick={e => unstageRecipient(e, recipient.email)}
+            />
           </div>
         ))
       ) : (

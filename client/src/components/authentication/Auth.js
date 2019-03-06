@@ -4,6 +4,9 @@ import axios from 'axios';
 const clientID = 'jNDq5B6iAnIRcrpM07Omh05uyppZ89px';
 const domain = 'team-refreshr.auth0.com';
 const options = {
+  languageDictionary: {
+    title: ""
+  },
   auth: {
     //PRODUCTION
     //audience: 'https://refreshr.herokuapp.com',
@@ -14,8 +17,9 @@ const options = {
     redirect: true,
     redirectUrl: 'http://localhost:3000/dashboard',
     usernameStyle: 'email',
-    responseType: 'token id_token'
+    responseType: 'token id_token', 
   },
+ 
   socialButtonStyle: 'small',
   theme: {
     primaryColor: '#0b2742',
@@ -51,6 +55,7 @@ lock.on('authenticated', authResult => {
     localStorage.setItem('accessToken', authResult.accessToken);
     localStorage.setItem('profile', JSON.stringify(profile));
     localStorage.setItem('name', `${profile.name}`);
+    localStorage.setItem('email', profile.email)
     localStorage.setItem('user_id', profile['http://localhost:9000/uid']);
 
     const body = {
