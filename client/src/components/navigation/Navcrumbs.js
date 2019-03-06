@@ -12,7 +12,8 @@ import Route from 'react-router/Route';
 import { Link as RouterLink, withRouter } from 'react-router-dom';
 
 export const breadcrumbNameMap = {
-  '/dashboard': 'Dashboard',
+  '/refreshrs': 'Refreshrs',
+  '/classes': 'Classes',
   '/refreshrs/create': 'Create Refreshrs',
   '/classes/create': 'Create Classes',
   '/billing': 'Billing'
@@ -20,8 +21,22 @@ export const breadcrumbNameMap = {
 
 const styles = theme => ({
   root: {
+    top: 70,
+    position: 'absolute',
+    left: '1%',
+    color: theme.palette.primary.contrastText,
     display: 'flex',
-    flexFlow: 'row nowrap'
+    flexFlow: 'row nowrap',
+    alignItems: 'flex-start',
+  },
+  links: {
+    fontSize: '1rem',
+    color: theme.palette.primary.contrastText,
+    display: 'block',
+    '&:hover': {
+      textDecoration: 'none',
+      color: theme.palette.secondary.dark
+    }
   }
 });
 
@@ -42,29 +57,22 @@ const Navcrumbs = props => {
               return (
                 <Breadcrumbs
                   arial-label="Breadcrumb"
-                  separator={<NavigateNextIcon fontSize="small" />}
+                  separator={<NavigateNextIcon fontSize="small" color='secondary' />}
                 >
-                  <Link component={RouterLink} color="inherit" to="/home">
-                    Home
+                  <Link component={RouterLink} className={classes.links} to="/dashboard" style={{display: `${location.pathname === '/' ? 'none' : 'flex' }`}}>
+                  Dashboard
                   </Link>
                   {pathnames.map((value, index) => {
-                    const last = index === pathnames.length - 1;
                     const to = `/${pathnames.slice(0, index + 1).join('/')}`;
-
-                    return last ? (
-                      <Typography color="textPrimary" key={to}>
-                        {breadcrumbNameMap[to]}
-                      </Typography>
-                    ) : (
+                    return(
                       <Link
+                        className={classes.links}
                         component={RouterLink}
-                        color="inherit"
-                        to={to}
-                        key={to}
+                        to={to} 
                       >
                         {breadcrumbNameMap[to]}
                       </Link>
-                    );
+                    )
                   })}
                 </Breadcrumbs>
               );

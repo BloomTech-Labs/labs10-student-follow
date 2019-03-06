@@ -25,13 +25,13 @@ const styles = theme => ({
     marginBottom: theme.spacing.unit * 4,
     color: theme.palette.primary.contrastText,
     background: theme.palette.primary.dark,
-    [theme.breakpoints.down('sm')]: {
-      width: '80%'
+    [theme.breakpoints.only('sm')]: {
+      width: '60vw'
     },
-    [theme.breakpoints.only('md')]: {
-      width: '60%'
+    [theme.breakpoints.only('xs')]: {
+      width: '90vw'
     },
-    width: '50%'
+    width: '100%'
   },
   input1: {
     marginBottom: theme.spacing.unit,
@@ -73,7 +73,9 @@ const styles = theme => ({
     width: '100%',
     display: 'flex',
     margin: '2rem 0',
-    justifyContent: 'space-evenly',
+    flexFlow: 'column nowrap',
+    alignItems: 'center',
+    justifyContent: 'space-around',
   },
   form3: {
     display: 'flex',
@@ -104,8 +106,8 @@ const styles = theme => ({
     height: 40
   },
   btn3: {
-    width: 65,
-    height: 40,
+    width: 60,
+    height: 60,
     color: theme.palette.primary.main,
     background: theme.palette.secondary.main,
     marginLeft: theme.spacing.unit,
@@ -118,7 +120,7 @@ const styles = theme => ({
   uploadInput: {
     display: 'flex',
     flexFlow: 'row nowrap',
-    margin: '0 1rem',
+    margin: '5% 0',
     width: '50%',
     justifyContent: 'center',
     alignItems: 'center',
