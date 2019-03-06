@@ -38,6 +38,7 @@ module.exports = {
     const refreshrs = await db('refreshrs')
       .select(
         'refreshrs.id',
+        'tcr.date',
         'refreshrs.name as r_name',
         'refreshrs.review_text',
         'questions.id as question_id',
@@ -85,6 +86,7 @@ module.exports = {
             return {
               refreshr_id: r.id,
               name: r.r_name,
+              date: r.date,
               review_text: r.review_text,
               refreshr: {
                 question_id: r.question_id,
