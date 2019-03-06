@@ -1,11 +1,11 @@
 const faker = require('faker');
 
-const create = (id) => ({
+const create = id => ({
   first_name: faker.name.firstName(),
   last_name: faker.name.lastName(),
   email: faker.internet.email(),
   role: 'teacher',
-  user_id:  id,
+  user_id: `${id}`
 });
 
 exports.seed = async function(knex, Promise) {
