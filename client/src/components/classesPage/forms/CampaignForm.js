@@ -109,6 +109,15 @@ function CampaignForm(props) {
   const [refreshrs, setRefreshrs] = useState([]);
   const [activeRefreshr, setActiveRefreshr] = useState(null);
 
+  // For displaying on the page for the ease of user
+  // current time, 2 days, 2 weeks, 2 months
+  let [schedule, setSchedule] = useState({
+    schedule0: null,
+    schedule1: null,
+    schedule2: null,
+    schedule3: null,
+  })
+
   const { classes } = props;
   let today = new Date(); // to set default for date inputs
   today = dateMapper(today);
@@ -135,8 +144,7 @@ function CampaignForm(props) {
         but the endpoint is not live yet so I'm using this for testing */
       // const res = await axios.get('https://refreshr.herokuapp.com/refreshrs');
       const res = await ax.get(
-        // '/refreshrs/teachers/53'
-        'https://refreshr.herokuapp.com/refreshrs/teachers/394'
+        'https://refreshr.herokuapp.com/refreshrs/teachers/190'
       );
       // console.log(res.data);
       setRefreshrs(res.data);
@@ -188,63 +196,32 @@ function CampaignForm(props) {
 
   const alterTime = (e) => {
     e.preventDefault()
-    const a = moment(`${e.target.value}T00:00:00`)
-    const b = moment(`${e.target.value}T00:00:00`).unix()
-    const twoD = moment(`${e.target.value}T00:00:00`).add(2, 'day').toString()
-    const twoDU = moment(`${e.target.value}T00:00:00`).add(2, 'day').unix()
-    const twoW = moment(`${e.target.value}T00:00:00`).add(2, 'weeks').toString()
-    const twoWU = moment(`${e.target.value}T00:00:00`).add(2, 'weeks').unix()
-    const twoM = moment(`${e.target.value}T00:00:00`).add(2, 'month').toString()
-    const twoMU = moment(`${e.target.value}T00:00:00`).add(2, 'month').unix()
+    const schedule0 = moment(`${e.target.value}T00:00:00`).format('ddd, MMMM Do, YYYY ha')
+    const schedule1 = moment(`${e.target.value}T00:00:00`).add(2, 'day').format('ddd, MMMM Do, YYYY ha')
+    const schedule2 = moment(`${e.target.value}T00:00:00`).add(2, 'weeks').format('ddd, MMMM Do, YYYY ha')
+    const schedule3 = moment(`${e.target.value}T00:00:00`).add(2, 'month').format('ddd, MMMM Do, YYYY ha')
 
-    console.log(a)
-    console.log(b)
-    console.log(`2 days`)
-    console.log(twoD, twoDU)
-    console.log(`2 weeks`)
-    console.log(twoW, twoWU)
-    console.log(`2 months`)
-    console.log(twoM, twoMU)
+    const twoDaysUnix = moment(`${e.target.value}T00:00:00`).add(2, 'day').unix()
+    const twoWeeksUnix = moment(`${e.target.value}T00:00:00`).add(2, 'weeks').unix()
+    const twoMonthsUnix = moment(`${e.target.value}T00:00:00`).add(2, 'month').unix()
 
     const timeTriData = [
-      {
-        send_at: twoDU,
-      },
-      {
-        send_at: twoWU,
-      },
-      {
-        send_at: twoMU,
-      },
+      { send_at: twoDaysUnix },
+      { send_at: twoWeeksUnix },
+      { send_at: twoMonthsUnix },
     ]
+
+    setSchedule({
+      ...schedule,
+      schedule0,
+      schedule1,
+      schedule2,
+      schedule3,
+    })
 
     props.setTimeTriData([
       ...timeTriData
     ])
-
-    // let day2 = moment(`${e.target.value} 8:00`)
-    // console.log(day2.add(14, 'days'))
-
-    // tacking time onto campaign data for submitClassData()
-    // props.setCampaignData({
-    //   ...props.campaignData,
-    //   date: e.target.value
-    // });
-
-    // const inputTime = Date.parse(e.target.value) / 1000
-    // const alteredTime = inputTime + 18000 // Adds 5 hours on, makes it same day @ 12am from user input
-    // console.log(alteredTime)
-    // const alteredTime2d = inputTime + 18000 // Adds 5 hours on, makes it same day @ 12am from user input
-    // const alteredTime2wk = inputTime + 18000 // Adds 5 hours on, makes it same day @ 12am from user input
-    // const alteredTime2mo = inputTime + 18000 // Adds 5 hours on, makes it same day @ 12am from user input
-
-    // console.log(alteredTime2d)
-    // console.log(alteredTime2wk)
-    // console.log(alteredTime2mo)
-    // props.setTimeData({
-    //   ...props.timeData,
-    //   send_at: alteredTime
-    // })
   }
 
   return (
@@ -264,6 +241,10 @@ function CampaignForm(props) {
             defaultValue={today}
             onChange={e => alterTime(e)}
           />
+          <Typography variant={"p"} color="secondary">Input: {schedule.schedule0 || ""}</Typography>
+          <Typography variant={"p"} color="secondary">+2 days: {schedule.schedule1 || ""}</Typography>
+          <Typography variant={"p"} color="secondary">+2 weeks: {schedule.schedule2 || ""}</Typography>
+          <Typography variant={"p"} color="secondary">+2 months: {schedule.schedule3 || ""}</Typography>
           <Button
             variant="outlined"
             color="inherit"
