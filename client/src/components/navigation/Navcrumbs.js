@@ -5,7 +5,6 @@ import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import { withStyles } from '@material-ui/core/styles';
 import Link from '@material-ui/core/Link';
 import NoSsr from '@material-ui/core/NoSsr';
-import Typography from '@material-ui/core/Typography';
 import Breadcrumbs from '@material-ui/lab/Breadcrumbs';
 import MemoryRouter from 'react-router/MemoryRouter';
 import Route from 'react-router/Route';
