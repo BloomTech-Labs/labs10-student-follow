@@ -69,7 +69,8 @@ const styles = theme => ({
     width: '50%'
   },
   textField: {
-    background: theme.palette.secondary.main,
+    // background: theme.palette.secondary.main,
+    background: '#FFFFFF',
     borderRadius: 5,
     // margin: '5% 10%'
     width: '80%'
@@ -383,7 +384,7 @@ function Refreshr(props) {
             className={props.classes.form1}
             onSubmit={props.handleSubmit}
           >
-            <TextField
+            {/* <TextField
               id="filled-multiline-static"
               multiline
               rows="2"
@@ -391,6 +392,16 @@ function Refreshr(props) {
               className={props.classes.textField}
               margin="normal"
               variant="filled"
+            /> */}
+            <Input
+              disableUnderline
+              onChange={e => setQuestionTextOne(e.target.value)}
+              name="classnameInput"
+              required
+              multiline
+              rows="4"
+              placeholder="Enter question.."
+              className={props.classes.input2}
             />
           </FormGroup>
           {/* <FormGroup
@@ -473,7 +484,7 @@ function Refreshr(props) {
               placeholder="Enter question.."
               className={props.classes.inputQuestion}
             /> */}
-            <TextField
+            {/* <TextField
               id="filled-multiline-static"
               multiline
               rows="2"
@@ -481,6 +492,16 @@ function Refreshr(props) {
               className={props.classes.textField}
               margin="normal"
               variant="filled"
+            /> */}
+            <Input
+              disableUnderline
+              name="classnameInput"
+              onChange={e => setQuestionTextTwo(e.target.value)}
+              required
+              multiline
+              rows="4"
+              placeholder="Enter question.."
+              className={props.classes.input2}
             />
           </FormGroup>
 
