@@ -11,12 +11,6 @@ const styles = theme => ({
     justifyContent: 'space-around',
     alignItems: 'center',
     marginTop: '60px',
-    //NEEDED TO CENTER VIEWS:
-    [theme.breakpoints.up('md')]: {
-      width: `100% - ${200}px`,
-      alignItems: 'flex-start'
-      // marginRight: 200 // temp removed because of the comments above,
-    }
   },
   containers: {
     display: 'flex',

@@ -1,9 +1,10 @@
 const faker = require('faker');
 
-const create = (id) => ({
+const create = id => ({
   review_text: faker.lorem.sentence(20),
   name: faker.random.words(2),
-  typeform_url: `${id}`
+  typeform_url: `${id}`,
+  teacher_id: `${id * Math.ceil(Math.random())}`
 });
 
 exports.seed = async function(knex, Promise) {

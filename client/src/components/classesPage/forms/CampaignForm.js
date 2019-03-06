@@ -39,7 +39,7 @@ const styles = theme => ({
   },
   cardList: {
     display: 'flex',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   card: {
     margin: 20,
@@ -73,7 +73,7 @@ const styles = theme => ({
     justifyContent: 'space-around',
     width: '100%',
     [theme.breakpoints.down('md')]: {
-      flexDirection: 'column',
+      flexDirection: 'column'
     }
   },
   buttonDiv: {
@@ -81,7 +81,7 @@ const styles = theme => ({
     justifyContent: 'center',
     alignItems: 'center',
     [theme.breakpoints.down('md')]: {
-      marginTop: theme.spacing.unit * 2,
+      marginTop: theme.spacing.unit * 2
     }
   },
   hrStyle: {
@@ -93,7 +93,7 @@ const styles = theme => ({
     color: theme.palette.primary.main,
     background: theme.palette.secondary.main,
     width: 40,
-    height: 40,
+    height: 40
   },
   rightBtn: {
     marginLeft: theme.spacing.unit * 2,
@@ -132,6 +132,7 @@ function CampaignForm(props) {
     getRefreshrs();
   }, []);
 
+  const userID = localStorage.getItem('user_id');
   const token = localStorage.getItem('accessToken');
 
   const ax = axios.create({
@@ -151,7 +152,7 @@ function CampaignForm(props) {
       const res = await ax.get(
         'https://refreshr.herokuapp.com/refreshrs/teachers/190'
       );
-      // console.log(res.data);
+      console.log(res.data);
       setRefreshrs(res.data);
     } catch (err) {
       console.log(err);
@@ -181,10 +182,11 @@ function CampaignForm(props) {
       ...props.campaignData,
       title: 'Your Refreshr Is Here!',
       subject: activeRefreshr.name,
-      html_content:
-        `<html><head><title></title></head><body><p>${activeRefreshr.review_text} [unsubscribe]</p></body></html>`,
+      html_content: `<html><head><title></title></head><body><p>${
+        activeRefreshr.review_text
+      } [unsubscribe]</p></body></html>`,
       plain_content: `${activeRefreshr.review_text} [unsubscribe]`,
-      refreshr_id: activeRefreshr.refreshr_id,
+      refreshr_id: activeRefreshr.id
     });
     setActiveRefreshr(null);
   };
@@ -231,7 +233,11 @@ function CampaignForm(props) {
 
   return (
     <Grid container className={classes.container}>
-      <Typography variant="h6" color="secondary" style={{ textAlign: 'center' }}>
+      <Typography
+        variant="h6"
+        color="secondary"
+        style={{ textAlign: 'center' }}
+      >
         Schedule Class
       </Typography>
 
@@ -284,10 +290,10 @@ function CampaignForm(props) {
           </Button>
         </Card>
       ) : (
-          <Card className={classes.card}>
-            <h4>select a refreshr to schedule</h4>
-          </Card>
-        )}
+        <Card className={classes.card}>
+          <h4>select a refreshr to schedule</h4>
+        </Card>
+      )}
 
       <hr className={classes.hrStyle} />
 
@@ -320,11 +326,7 @@ function CampaignForm(props) {
 
       <div className={classes.navDiv}>
         <div className={classes.buttonDiv}>
-          <Fab
-            elevation={20}
-            aria-label="Back"
-            className={classes.leftBtn}
-          >
+          <Fab elevation={20} aria-label="Back" className={classes.leftBtn}>
             <ArrowBack onClick={e => handlePrev(e)} />
           </Fab>
           <Typography
@@ -343,11 +345,7 @@ function CampaignForm(props) {
           >
             SEND
           </Typography>
-          <Fab
-            elevation={20}
-            aria-label="Submit"
-            className={classes.rightBtn}
-          >
+          <Fab elevation={20} aria-label="Submit" className={classes.rightBtn}>
             <Send onClick={e => handleSubmit(e)} />
           </Fab>
         </div>

@@ -15,7 +15,6 @@ export default createMuiTheme({
     useNextVariants: true,
     body1: { color: "inherit" },
     body2: { color: "inherit" }
-
   },
   palette: {
     primary: {
@@ -31,6 +30,6 @@ export default createMuiTheme({
       paper: '#0b2742'
     },
     tonalOffset: 0.2
-  }
+  },
 });
 

@@ -91,11 +91,11 @@ function ClassListView(props) {
       <Grid className={props.classes.wrapper}>
         {classList.map(c => (
           <Link to={`/classes/edit/${c.class_id}`} key={c.class_id}>
-          <Card className={classes.card} raised>
-            <CardContent>
-              <Typography className={classes.title}>{c.classname}</Typography>
-            </CardContent>
-          </Card>
+            <Card className={classes.card} raised>
+              <CardContent>
+                <Typography className={classes.title}>{c.classname}</Typography>
+              </CardContent>
+            </Card>
           </Link>
         ))}
         <Link to="/classes/create" style={{ textDecoration: 'none' }}>

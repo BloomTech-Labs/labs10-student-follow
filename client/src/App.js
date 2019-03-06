@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Route, withRouter, Router } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
+import { withStyles } from '@material-ui/core/styles';
 import axios from 'axios';
 import {
   LandingPage,
@@ -17,9 +18,32 @@ import {
   ClassListView
 } from './components';
 
+const styles = theme => ({
+  container: {
+    margin: 0,
+    padding: 0,
+    display: 'flex',
+    flexFlow: 'column nowrap',
+    alignItems: 'center',
+    justifyContent: 'space-between'
+  },
+  routes: {
+    display: 'flex',
+    flexFlow: 'column nowrap',
+    alignItems: 'center',
+    marginTop: 64,
+    justifyContent: 'space-between',
+    width: '100%',
+     [theme.breakpoints.up('sm')]: {
+      width: `calc(100% - ${200}px)`,
+      marginRight: 200
+     }
+  }
+});
+
 const App = props => {
   console.log('ENV:', process.env);
-  const classes = { props };
+  const { classes } = props;
   const token = localStorage.getItem('accessToken');
   const user_id = localStorage.getItem('user_id');
 
@@ -114,29 +138,28 @@ const App = props => {
 
   /* ROUTES */
   return (
-    console.log('APP:', props.lock),
+    console.log('APP:', props.theme),
     console.log('APP:', props.Url),
     (
       <>
-        <Router history={props.history}>
           <Grid
-            className={classes.container}
             container
             direction="column"
             spacing={0}
             justify="space-between"
-            alignItems="stretch"
+            alignItems="center"
+            className={classes.container}
           >
             <Grid item>
               <Navbar theme={props.theme} {...props} />
               <Navcrumbs {...props} />
             </Grid>
-            <Grid item xs={10}>
-              <Route
-                exact
-                path="/"
+            <Route
+                exact path="/"
                 render={props => <LandingPage {...props} />}
-              />
+            />
+            <Grid item className={classes.routes}>
+             
               <Route
                 path="/dashboard"
                 render={props => (
@@ -184,10 +207,9 @@ const App = props => {
               {/* for testing */}
             </Grid>
           </Grid>
-        </Router>
       </>
     )
   );
 };
 
-export default withRouter(App);
+export default withRouter(withStyles(styles, { withTheme: true })(App));

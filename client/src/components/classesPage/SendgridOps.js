@@ -98,22 +98,24 @@ export function deleteList() {
 // 2. RECIPIENT OPERATIONS
 //////////////////////////
 //////////////////////////
-export function addRecipient() {
-  const recipient = [
-    {
-      email: 'jonathan@ivan.com',
-      first_name: 'Jonathan',
-      last_name: 'Ivan'
-    }
-  ];
+export function addRecipient(recipient) {
+  // const recipient = [
+  //   {
+  //     email: 'jonathan@ivan.com',
+  //     first_name: 'Jonathan',
+  //     last_name: 'Ivan'
+  //   }
+  // ];
   const url = `https://api.sendgrid.com/v3/contactdb/recipients`;
-  axios
-    .post(url, recipient, headers)
-    .then(res => {
-      console.log(`===addRecipient===`);
-      console.log(res);
-    })
-    .catch(err => console.log(err));
+  return (
+    axios
+      .post(url, recipient, headers)
+      // .then(res => {
+      //   console.log(`===addRecipient===`);
+      //   console.log(res);
+      // })
+      .catch(err => console.log(err))
+  );
 }
 
 export function addRecipients(recipients) {
@@ -214,17 +216,19 @@ export function deleteRecipients() {
 // 3. SELECTION OPERATIONS
 //////////////////////////
 //////////////////////////
-export function addContact() {
-  const url = `https://api.sendgrid.com/v3/contactdb/lists/${listId}/recipients/${recipient_id}`;
-  axios
-    .post(url, null, headers)
-    .then(res => {
-      console.log(
-        `===addContact: recipient_id ${recipient_id} added to listId ${listId}===`
-      );
-      console.log(res.statusText);
-    })
-    .catch(err => console.log(err));
+export function addContact(listId, recipientId) {
+  const url = `https://api.sendgrid.com/v3/contactdb/lists/${listId}/recipients/${recipientId}`;
+  return (
+    axios
+      .post(url, null, headers)
+      // .then(res => {
+      //   console.log(
+      //     `===addContact: recipient_id ${recipient_id} added to listId ${listId}===`
+      //   );
+      //   console.log(res.statusText);
+      // })
+      .catch(err => console.log(err))
+  );
 }
 
 export function addContacts(listId, recipient_ids) {
@@ -254,17 +258,19 @@ export function getContacts(listId) {
   // })
   // .catch(err => console.log(err));
 }
-export function deleteContact() {
-  const url = `https://api.sendgrid.com/v3/contactdb/lists/${listId}/recipients/${recipient_id}`;
-  axios
-    .delete(url, headers)
-    .then(res => {
-      console.log(
-        `===deleteContact: recipient_id: ${recipient_id} deleted from listId ${listId}===`
-      );
-      console.log(res.statusText);
-    })
-    .catch(err => console.log(err));
+export function deleteContact(listId, recipientId) {
+  const url = `https://api.sendgrid.com/v3/contactdb/lists/${listId}/recipients/${recipientId}`;
+  return (
+    axios
+      .delete(url, headers)
+      // .then(res => {
+      //   console.log(
+      //     `===deleteContact: recipient_id: ${recipient_id} deleted from listId ${listId}===`
+      //   );
+      //   console.log(res.statusText);
+      // })
+      .catch(err => console.log(err))
+  );
 }
 
 //////////////////////////
