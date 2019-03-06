@@ -9,7 +9,6 @@ import LandingPage from './landingPage/LandingPage';
 import RefreshrsPage from './refreshrsPage/RefreshrsPage';
 
 /* BILLING */
-import Pricing from './billingPage/Pricing';
 import TakeMoney from './billingPage/TakeMoney';
 
 /* CLASSES */
@@ -35,7 +34,6 @@ export {
   ClassesPage,
   LandingPage,
   RefreshrsPage,
-  Pricing,
   TakeMoney,
   ClassCreateView,
   ClassEditView,

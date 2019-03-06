@@ -24,11 +24,6 @@ const styles = theme => ({
     flexFlow: 'column nowrap',
     justifyContent: 'space-around',
     alignItems: 'center',
-    //NEEDED TO CENTER VIEWS:
-    [theme.breakpoints.up('sm')]: {
-      width: `100% - ${200}px`,
-      marginRight: 200
-    }
   }
 });
 
