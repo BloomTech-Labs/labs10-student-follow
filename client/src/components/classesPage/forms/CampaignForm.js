@@ -51,14 +51,13 @@ const styles = theme => ({
     flexDirection: 'column'
   },
   activeCard: {
-    margin: 20,
-    width: 300,
+    margin: 10,
+    width: '90%',
     height: 300,
     padding: theme.spacing.unit * 3,
     justifyContent: 'space-between',
     display: 'flex',
     flexDirection: 'column',
-    border: '2px solid red'
   },
   dateField: {
     marginTop: 20
@@ -103,6 +102,12 @@ const styles = theme => ({
     width: 40,
     height: 40,
   },
+  scheduleDiv: {
+    margin: '1rem 0',
+  },
+  scheduleText: {
+    marginLeft: '1rem',
+  }
 });
 
 function CampaignForm(props) {
@@ -241,16 +246,41 @@ function CampaignForm(props) {
             defaultValue={today}
             onChange={e => alterTime(e)}
           />
-          <Typography variant={"p"} color="secondary">Input: {schedule.schedule0 || ""}</Typography>
-          <Typography variant={"p"} color="secondary">+2 days: {schedule.schedule1 || ""}</Typography>
-          <Typography variant={"p"} color="secondary">+2 weeks: {schedule.schedule2 || ""}</Typography>
-          <Typography variant={"p"} color="secondary">+2 months: {schedule.schedule3 || ""}</Typography>
+          <div className={classes.scheduleDiv}>
+            <Typography
+              variant={"p"}
+              color="secondary"
+            >
+              Input: {schedule.schedule0 || ""}
+            </Typography>
+            <Typography
+              className={classes.scheduleText}
+              variant={"p"}
+              color="secondary"
+            >
+              +2 days: {schedule.schedule1 || ""}
+            </Typography>
+            <Typography
+              className={classes.scheduleText}
+              variant={"p"}
+              color="secondary"
+            >
+              +2 weeks: {schedule.schedule2 || ""}
+            </Typography>
+            <Typography
+              className={classes.scheduleText}
+              variant={"p"}
+              color="secondary"
+            >
+              +2 months: {schedule.schedule3 || ""}
+            </Typography>
+          </div>
           <Button
             variant="outlined"
-            color="inherit"
+            color="secondary"
             onClick={scheduleRefreshr}
           >
-            Schedule this refreshr!
+            Load Schedule
           </Button>
         </Card>
       ) : (

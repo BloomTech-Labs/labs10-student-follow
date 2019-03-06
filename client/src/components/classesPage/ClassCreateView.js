@@ -16,7 +16,6 @@ import {
   scheduleRefreshr
   // addRefreshr, getRefreshr, getRefreshrs, updateRefreshr, deleteRefreshr, scheduleRefreshr, rescheduleRefreshr, getScheduleRefreshr, deleteScheduleRefreshr, sendTestRefreshr
 } from './SendgridOps';
-import submitClassData from './dbOps';
 
 const styles = theme => ({
   wrapper: {
@@ -254,7 +253,6 @@ function ClassCreateView(props) {
 
   return (
     <Grid className={props.classes.wrapper}>
-      {console.log(timeTriData)}
       {stage.onListForm ? (
         <ListForm
           file={file}
