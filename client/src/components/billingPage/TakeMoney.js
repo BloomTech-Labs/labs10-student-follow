@@ -33,14 +33,13 @@ const styles = theme => ({
     display: 'flex',
     flexFlow: 'column nowrap',
     alignItems: 'center',
-    margin: '0',
+    margin: '0'
   },
   modalContent: {
     background: theme.palette.primary.dark,
-    // border: `1px solid ${theme.palette.secondary.main}`,
     display: 'flex',
     flexFlow: 'column nowrap',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   modalContentText: {
     color: theme.palette.secondary.main,
@@ -73,51 +72,54 @@ const TakeMoney = props => {
     }
   };
 
-  // form dialog start
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
+  const handleToggle = () => {
+    setOpen(!open);
   };
 
   return props.variant === 'custom' ? (
     <>
-      <Button onClick={handleClickOpen} className={classes.button}>
+      <Button onClick={handleToggle} className={classes.button}>
         Contact Us
       </Button>
       <Dialog
         open={open}
-        onClose={handleClose}
+        onClose={handleToggle}
         aria-labelledby="form-dialog-title"
       >
-        <DialogTitle id="form-dialog-title" className={classes.modalTitle}>Contact Us</DialogTitle>
-        {/* <DialogContent>
-          <DialogContentText> */}
-        <DialogContent className={classes.modalContent}>
-          <DialogContentText className={classes.modalContentText}>
-            To subscribe to this website, please enter your email address here.
-            We will send updates occasionally.
-          </DialogContentText>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="name"
-            label="Email Address"
-            type="email"
-            fullWidth
-            className={classes.textField}
-          />
-        </DialogContent>
-        <DialogActions className ={classes.modalFooter}>
-          <Button onClick={handleClose} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={handleClose} color="primary">
-            Subscribe
-          </Button>
-        </DialogActions>
+        <form
+          name="Contact Us Form"
+          method="POST"
+          action="/"
+          data-netlify="true"
+        >
+          <DialogTitle id="form-dialog-title" className={classes.modalTitle}>
+            Contact Us
+          </DialogTitle>
+          <DialogContent className={classes.modalContent}>
+            <DialogContentText className={classes.modalContentText}>
+              To learn more about our custom options please leave us your email
+              and we'll get back to you as soon as possible.
+            </DialogContentText>
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name"
+              label="Email Address"
+              type="email"
+              name="email"
+              fullWidth
+              className={classes.textField}
+            />
+          </DialogContent>
+          <DialogActions className={classes.modalFooter}>
+            <Button onClick={handleToggle} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={handleToggle} color="primary" type="submit">
+              Submit
+            </Button>
+          </DialogActions>
+        </form>
       </Dialog>
     </>
   ) : (
