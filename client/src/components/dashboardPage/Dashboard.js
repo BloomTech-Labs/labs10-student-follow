@@ -98,6 +98,7 @@ const styles = theme => ({
 });
 
 const token = localStorage.getItem('accessToken');
+const teacherId = localStorage.getItem('user_id');
 
 // const headers = {
 //   headers: {
@@ -124,18 +125,24 @@ const headers = {
 
 const Dashboard = props => {
   // const name = localStorage.getItem('name'); // commented out until decide what to do w/ name
-  useEffect(() => {
+  useEffect(async () => {
     console.log(`Bearer ${token}`);
     props.getClasses();
     props.getRefreshrs();
     // console.log('Dashboard refreshr:', props.getRefreshrs());
-    axios
-      .get('http://localhost:9000/refreshrs', {
-        headers: { Authorization: `Bearer ${token}` }
-      })
-      .then(res => {
-        console.log('From use effect dash:', res);
-      });
+    try {
+      const response = await axios.get(
+        `http://localhost:9000/teachers/${teacherId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+      console.log('Response from teacher refreshrs ===', response);
+    } catch (error) {
+      console.log(error);
+    }
   }, []);
 
   const { userClasses, classes, userRefreshrs } = props;
