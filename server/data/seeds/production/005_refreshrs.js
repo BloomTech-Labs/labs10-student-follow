@@ -3,8 +3,8 @@ const faker = require('faker');
 const create = id => ({
   review_text: faker.lorem.sentence(20),
   name: faker.random.words(2),
-  typeform_url: `${id}`,
-  teacher_id: `${id * Math.ceil(Math.random())}`
+  typeform_url: `www.typeform.com`,
+  typeform_id: id
 });
 
 exports.seed = async function(knex, Promise) {

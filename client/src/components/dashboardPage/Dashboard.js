@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import { CardContent, Typography, Card, Icon, Button, Grid, withStyles } from '@material-ui/core';
+//import axios from 'axios'
 
 // TODO update refreshrs EDIT button on card w/ correct link
 
@@ -94,8 +95,11 @@ const Dashboard = props => {
   // const name = localStorage.getItem('name'); // commented out until decide what to do w/ name
   useEffect(() => {
     props.getClasses();
+    props.getRefreshrs()
   }, []);
-  const { allClasses, classes } = props;
+  
+
+  const { userClasses, classes, userRefreshrs } = props;
   const testClasses = [
     {
       classname: 'FSW438',
@@ -155,7 +159,7 @@ const Dashboard = props => {
   ];
   return (
     <Grid className={classes.wrapper}>
-      {console.log('PROPS', allClasses)}
+      {console.log('PROPS', userClasses, userRefreshrs)}
       {/* cant figure out what to do w/ the username right now */}
       {/* <Typography component="h2" color="secondary">
         Welcome {name}, 
@@ -177,11 +181,13 @@ const Dashboard = props => {
                 : c.classname}
             </Typography>
             <CardContent className={classes.classData}>
+              {/* Need analytics for these, stretch goals? */}
+
               <Typography component="p" className={classes.lists}>
                 Students: {c.numOfStudents}
               </Typography>
               <Typography component="p" className={classes.lists}>
-                Participation: {c.participationRate}%
+                Participation: {c.participationRate}
               </Typography>
               <Typography component="p" className={classes.lists}>
                 Refreshrs Sent: {c.refreshrsEmailed}

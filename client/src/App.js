@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Route, withRouter, Router } from 'react-router-dom';
+
+import { Route, withRouter } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
 import axios from 'axios';
@@ -12,7 +13,7 @@ import {
   Navcrumbs,
   RefreshrListView,
   Dashboard,
-  ClassesPage,
+  //ClassesPage,
   CampaignForm,
   ClassCreateView,
   ClassEditView,
@@ -49,26 +50,28 @@ const App = props => {
 
   /* STATE */
   const [url, setUrl] = useState('');
-  const [refreshrs, setRefreshrs] = useState([]);
+  const [userRefreshrs, setRefreshrs] = useState([]);
   const [questions, setQuestions] = useState([]);
-  const [allClasses, setClasses] = useState([]);
+  const [userClasses, setClasses] = useState([]);
   // const [students, setStudents] = useState([]);
   // const [teachers, setTeachers] = useState([]);
 
   /* METHODS */
 
-  //all refreshrs
+  //all refreshrs for user
 
-  const getRefreshrs = options => {
-    axios
-      .get('https://refreshr.herokuapp.com/refreshrs', options)
+  const getRefreshrs = () => {
+    axios({
+      method: 'get',
+      url: `https://localhost:9000/teachers/${user_id}/refreshrs`,
+      //url: `https://refreshr.herokuapp.com/teachers/${user_id}/refreshrs`,
+      headers: { Authorization: `Bearer ${token}` }
+    })
       .then(res => {
-        console.log('data', res.data);
+        console.log(res);
         setRefreshrs(res.data.refreshrs);
       })
-      .catch(err => {
-        console.log(err);
-      });
+      .catch(err => console.log(err));
   };
 
   //all Questions
@@ -83,6 +86,7 @@ const App = props => {
   //       console.log(err);
   //     });
   // }, []);
+
 
   //add questions
   const addQuestions = question => {
@@ -99,48 +103,24 @@ const App = props => {
       });
   };
 
-  //all classes
-  const getClasses = options => {
+  //all classes for user
+  const getClasses = () => {
     axios({
       method: 'get',
-      url: `https://refreshr.herokuapp.com/${user_id}`,
+      url: `https://localhost:9000/teachers/${user_id}/classes`,
+      //url: `https://refreshr.herokuapp.com/teachers/${user_id}/classes`,
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => {
         console.log(res);
-        setClasses(res.data.teacher.classes);
+        setClasses(res.data.classes);
       })
       .catch(err => console.log(err));
   };
 
-  // //all students
-  // const getStudents = options => {
-  //   axios
-  //     .get('https://refreshr.herokuapp.com/students', options)
-  //     .then(res => {
-  //       console.log('s', res.data.students);
-  //       setStudents(res.data.students);
-  //     })
-  //     .catch(err => {
-  //       console.log(err);
-  //     });
-  // };
-
-  // //all teachers
-  // const getTeachers = options => {
-  //   axios
-  //     .get('https://refreshr.herokuapp.com/teachers', options)
-  //     .then(res => {
-  //       console.log('t', res.data.teachers);
-  //       setTeachers(res.data.teachers);
-  //     })
-  //     .catch(err => {
-  //       console.log(err);
-  //     });
-  // };
-
   /* ROUTES */
   return (
+<<<<<<< HEAD
     console.log('APP:', props.theme),
     console.log('APP:', props.Url),
     (
@@ -215,6 +195,69 @@ const App = props => {
         </Grid>
       </>
     )
+=======
+    //console.log('APP:', props.theme),
+    <>
+      <Grid
+        container
+        direction="column"
+        spacing={0}
+        justify="space-between"
+        alignItems="center"
+        className={classes.container}
+      >
+        <Grid item>
+          <Navbar theme={props.theme} {...props} />
+          <Navcrumbs {...props} />
+        </Grid>
+        <Route exact path="/" render={props => <LandingPage {...props} />} />
+        <Grid item className={classes.routes}>
+          <Route
+            path="/dashboard"
+            render={props => (
+              <Dashboard
+                getClasses={getClasses}
+                userClasses={userClasses}
+                getRefreshrs={getRefreshrs}
+                userRefreshrs={userRefreshrs}
+              />
+            )}
+          />
+          <Route
+            exact
+            path="/refreshrs"
+            render={props => (
+              <RefreshrListView
+                getRefreshrs={getRefreshrs}
+                refreshrs={userRefreshrs}
+              />
+            )}
+          />
+          <Route path="/billing" render={props => <BillingPage />} />
+          <Route exact path="/classes" render={props => <ClassListView />} />
+          <Route
+            exact
+            path="/classes/edit/:id"
+            render={props => <ClassEditView {...props} />}
+          />
+          <Route
+            exact
+            path="/classes/create"
+            render={props => <ClassCreateView />}
+          />
+          <Route
+            exact
+            path="/refreshrs/create"
+            render={props => (
+              <Refreshr addQuestions={addQuestions} url={url} setUrl={setUrl} />
+            )}
+          />
+          <Route path="/campaign" render={props => <CampaignForm />} />{' '}
+          {/* for testing */}
+        </Grid>
+      </Grid>
+    </>
+>>>>>>> 2f6bd43e218ada851595c6615ea2e47743cd2f22
   );
 };
 

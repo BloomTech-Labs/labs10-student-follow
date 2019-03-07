@@ -67,9 +67,9 @@ function ClassListView(props) {
 
   async function getTeacherClasses(id) {
     try {
-      const res = await ax.get(`/teachers/${id}`);
+      const res = await ax.get(`/teachers/${id}/classes`);
       console.log(res.data);
-      setClassList(res.data.teacher.classes);
+      setClassList(res.data.classes);
     } catch (err) {
       console.log(err);
     }

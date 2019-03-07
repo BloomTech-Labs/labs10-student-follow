@@ -146,11 +146,12 @@ function CampaignForm(props) {
   it in the parent component and then pass down props to the children components */
   const getRefreshrs = async () => {
     try {
-      /* this should fetch the class's refreshrs from /refreshrs/classes/:classId,
+      /* this should fetch the class's refreshrs from /teachers/${userID}/refeshrs,
         but the endpoint is not live yet so I'm using this for testing */
       // const res = await axios.get('https://refreshr.herokuapp.com/refreshrs');
       const res = await ax.get(
-        'https://refreshr.herokuapp.com/refreshrs/teachers/190'
+        `/teachers/${userID}/refeshrs`
+        // 'https://refreshr.herokuapp.com/teachers/${userID}/refeshrs'
       );
       console.log(res.data);
       setRefreshrs(res.data);
@@ -254,28 +255,28 @@ function CampaignForm(props) {
           />
           <div className={classes.scheduleDiv}>
             <Typography
-              variant={"p"}
+              variant={"body2"}
               color="secondary"
             >
               Input: {schedule.schedule0 || ""}
             </Typography>
             <Typography
               className={classes.scheduleText}
-              variant={"p"}
+              variant={"body2"}
               color="secondary"
             >
               +2 days: {schedule.schedule1 || ""}
             </Typography>
             <Typography
               className={classes.scheduleText}
-              variant={"p"}
+              variant={"body2"}
               color="secondary"
             >
               +2 weeks: {schedule.schedule2 || ""}
             </Typography>
             <Typography
               className={classes.scheduleText}
-              variant={"p"}
+              variant={"body2"}
               color="secondary"
             >
               +2 months: {schedule.schedule3 || ""}
@@ -297,7 +298,7 @@ function CampaignForm(props) {
 
       <hr className={classes.hrStyle} />
 
-      <Typography variant="p" color="secondary" style={{ textAlign: 'center' }}>
+      <Typography variant="body2" color="secondary" style={{ textAlign: 'center' }}>
         Your Refreshrs
       </Typography>
 
