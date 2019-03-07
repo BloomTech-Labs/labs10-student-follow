@@ -83,14 +83,14 @@ const App = props => {
       .catch(err => {
         console.log(err);
       });
-    // }) = options => {
   }, []);
 
-  // add questions
+  //add questions
   const addQuestions = question => {
     console.log('Question from addQuestions ===', question);
     axios
       .post('https://refreshr.herokuapp.com/questions', question)
+      // .post('http://localhost/9000/questions', question)
       .then(res => {
         console.log('RES from add questions ===', res);
         setQuestions([]);

@@ -30,6 +30,7 @@ router.get('/:id', async (req, res, next) => {
 router.post('/', emptyCheck, async (req, res, next) => {
   const { body } = req;
   try {
+    console.log('Posting in question route');
     const newQuestionID = await db.addQuestion(body);
     res.status(responseStatus.postCreated).json({ newQuestionID });
   } catch (err) {

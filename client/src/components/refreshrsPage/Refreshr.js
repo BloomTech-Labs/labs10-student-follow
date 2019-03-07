@@ -100,6 +100,7 @@ const styles = theme => ({
 
 function Refreshr(props) {
   const { setUrl, url } = props;
+  const [reviewText, setReviewText] = useState('');
   const [refreshrName, addRefreshrName] = useState('');
   const [questionTextOne, setQuestionTextOne] = useState('');
   const [questionTextTwo, setQuestionTextTwo] = useState('');
@@ -110,6 +111,7 @@ function Refreshr(props) {
   const [a3Text, setA3Text] = useState('');
   const [a4Text, setA4Text] = useState('');
   const [questionObject, setQuestionObject] = useState({
+    reviewText,
     refreshrName,
     questionTextOne,
     questionTextTwo,
@@ -228,6 +230,26 @@ function Refreshr(props) {
               required
               placeholder="Enter Refreshr Name.."
               className={props.classes.inputName}
+            />
+          </FormGroup>
+
+          <hr className={props.classes.hrStyle} />
+
+          <h4 className={props.classes.subheaders}>Add Review Text</h4>
+
+          <FormGroup
+            className={props.classes.form1}
+            onSubmit={props.handleSubmit}
+          >
+            <Input
+              disableUnderline
+              onChange={e => setReviewText(e.target.value)}
+              name="classnameInput"
+              required
+              multiline
+              rows="4"
+              placeholder="Enter info about the Refreshr.."
+              className={props.classes.inputQuestion}
             />
           </FormGroup>
 
