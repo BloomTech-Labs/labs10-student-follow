@@ -37,16 +37,20 @@ const styles = theme => ({
   },
   modalContent: {
     background: theme.palette.primary.dark,
-    border: `1px solid ${theme.palette.secondary.main}`,
+    // border: `1px solid ${theme.palette.secondary.main}`,
     display: 'flex',
     flexFlow: 'column nowrap',
     alignItems: 'center',
-    margin: '0 0 10%',
   },
   modalContentText: {
-    color: 'white',
+    color: theme.palette.secondary.main,
+    margin: '10px 0'
   },
-
+  textField: {
+    background: theme.palette.secondary.main,
+    borderRadius: '4px',
+    padding: '1rem'
+  }
 });
 
 const TakeMoney = props => {
@@ -85,6 +89,8 @@ const TakeMoney = props => {
         aria-labelledby="form-dialog-title"
       >
         <DialogTitle id="form-dialog-title" className={classes.modalTitle}>Contact Us</DialogTitle>
+        {/* <DialogContent>
+          <DialogContentText> */}
         <DialogContent className={classes.modalContent}>
           <DialogContentText className={classes.modalContentText}>
             To subscribe to this website, please enter your email address here.
@@ -97,13 +103,14 @@ const TakeMoney = props => {
             label="Email Address"
             type="email"
             fullWidth
+            className={classes.textField}
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="primary">
+          <Button onClick={handleClose} color="secondary">
             Cancel
           </Button>
-          <Button onClick={handleClose} color="primary">
+          <Button onClick={handleClose} color="secondary">
             Subscribe
           </Button>
         </DialogActions>
