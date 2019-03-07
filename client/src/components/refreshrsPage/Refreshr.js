@@ -132,6 +132,14 @@ function Refreshr(props) {
       variables: {
         score: 0
       },
+      welcome_screens: [
+        {
+          title: 'Welcome to your Refreshr!',
+          properties: {
+            description: questionObject.reviewText
+          }
+        }
+      ],
       fields: [
         {
           title: 'Please enter your email address.',
@@ -188,12 +196,14 @@ function Refreshr(props) {
     setSubmitted(true);
   };
 
+  console.log('questionObject ...', questionObject);
   return (
     <Paper className={props.classes.container} elevation={24}>
       <Grid className={props.classes.wrapper}>
         <FormGroup
           onChange={() =>
             setQuestionObject({
+              reviewText,
               refreshrName,
               questionTextOne,
               questionTextTwo,
