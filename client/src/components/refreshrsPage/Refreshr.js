@@ -182,8 +182,7 @@ function Refreshr(props) {
         {
           headers
         }
-      );
-      setUrl(response.data._links.display);
+      ).then(res => console.log(res));
     } catch (error) {
       console.log(error);
     }
@@ -214,13 +213,13 @@ function Refreshr(props) {
           <hr className={props.classes.hrStyle} />
 
           <Typography
-            variant="p"
+            variant="body1"
             color="secondary"
             style={{ textAlign: 'center' }}
           >
             Refreshr Name
           </Typography>
-
+          
           <FormGroup
             className={props.classes.form1}
             onSubmit={props.handleSubmit}
@@ -240,7 +239,7 @@ function Refreshr(props) {
           <h4 className={props.classes.subheaders}>Create Questions</h4>
 
           <Typography
-            variant="p"
+            variant="body1"
             color="secondary"
             style={{ textAlign: 'center' }}
           >
@@ -302,7 +301,7 @@ function Refreshr(props) {
           <hr className={props.classes.hrStyle} />
 
           <Typography
-            variant="p"
+            variant="body1"
             color="secondary"
             style={{ textAlign: 'center' }}
           >

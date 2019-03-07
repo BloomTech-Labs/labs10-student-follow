@@ -56,7 +56,6 @@ const TakeMoney = props => {
         token={onToken}
         ComponentClass='div'
         stripeKey="pk_test_Y6iNnz4ImmbwJDcFA982Hahf"
-        className={classes.button}
         name="Refreshr"
         description="Purchase your subscription"
         panelLabel="Purchase"

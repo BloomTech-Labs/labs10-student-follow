@@ -1,8 +1,10 @@
 const db = require('../../config/dbConfig');
 
 module.exports = {
+  /* CALLS TO CLASSES DB */
   getAll: async () => {
-    const allClasses = await db('classes');
+    const allClasses = await db('classes')
+    .select('classes.name', 'classes.sg_list_id', 'tcr.sg_campaign_id')
     return allClasses;
   },
 
@@ -36,6 +38,7 @@ module.exports = {
       .where('classes.sg_list_id', id);
 
     const refreshrs = await db('refreshrs')
+<<<<<<< Updated upstream
       .select(
         'refreshrs.id',
         'tcr.date',
@@ -54,21 +57,29 @@ module.exports = {
         'questions_refreshrs.refreshr_id'
       )
       .join('questions', 'questions.id', 'questions_refreshrs.question_id')
+=======
+      .select('refreshrs.name as r_name', 'refreshrs.typeform_id', 'refreshrs.typeform_url')
+>>>>>>> Stashed changes
       .join(
         'teachers_classes_refreshrs as tcr',
-        'refreshrs.id',
+        'refreshrs.typeform_id',
         'tcr.refreshr_id'
       )
       .join('classes', 'classes.sg_list_id', 'tcr.class_id')
       .where('classes.sg_list_id', id);
 
-    return Promise.all([selectedClass, teacher, students, refreshrs]).then(
+    const campaigns = await db('teachers_classes_refreshrs as tcr')
+    .select('tcr.sg_campaign_id', 'tcr.date')
+    .join('classes', 'tcr.class_id', 'classes.sg_list_id')
+    .where('classes.sg_list_id', id)
+
+    return Promise.all([selectedClass, teacher, students, refreshrs, campaigns]).then(
       response => {
-        let [selectedClass, teacher, students, refreshrs] = response;
+        let [selectedClass, teacher, students, refreshrs, campaigns] = response;
         let result = {
-          id: selectedClass.sg_list_id,
+          sg_list_id: selectedClass.sg_list_id,
           name: selectedClass.name,
-          teacher: teacher.map(t => {
+          teachers: teacher.map(t => {
             return {
               teacher_id: t.t_id,
               name: `${t.t_first} ${t.t_last}`,
@@ -84,19 +95,16 @@ module.exports = {
           }),
           refreshrs: refreshrs.map(r => {
             return {
-              refreshr_id: r.id,
+              refreshr_id: r.typeform_id,
               name: r.r_name,
-              date: r.date,
-              review_text: r.review_text,
-              refreshr: {
-                question_id: r.question_id,
-                question: r.question,
-                wrong_answer_1: r.wrong_answer_1,
-                wrong_answer_2: r.wrong_answer_2,
-                wrong_answer_3: r.wrong_answer_3,
-                correct_answer: r.correct_answer
-              }
+              typeform_url: r.typeform_url,
             };
+          }),
+          campaigns: campaigns.map(c => {
+            return {
+              campaign_id: c.sg_campaign_id,
+              created_date: c.date
+            }
           })
         };
         return result;
@@ -109,20 +117,6 @@ module.exports = {
       .insert(classInfo)
       .returning('sg_list_id');
     return newClassID[0];
-  },
-
-  addRefreshr: async (class_id, refreshr, teacher_id) => {
-    // TODO: check for any classes with null refreshrs and insert there?
-    const result = await db('teachers_classes_refreshrs')
-      .returning(['class_id', 'refreshr_id', 'teacher_id'])
-      .insert({
-        class_id,
-        refreshr_id: refreshr.refreshr_id,
-        date: refreshr.date,
-        sg_campaign_id: refreshr.sg_campaign_id,
-        teacher_id
-      });
-    return result;
   },
 
   updateClass: async (id, updatedClass) => {
@@ -139,14 +133,55 @@ module.exports = {
     return deleteCount;
   },
 
+  /* CALLS TO STUDENTS_CLASSES */
+
   addStudent: async (class_id, student_id) => {
-    const ID = await db('students_classes').insert({ class_id, student_id });
-    return ID[0];
+    const result = await db('students_classes')
+    .returning(['class_id', 'student_id'])
+    .insert({ class_id, student_id })
+    return result;
   },
 
   removeStudent: (class_id, student_id) => {
     return db('students_classes')
       .where({ class_id, student_id })
       .delete();
-  }
+  },
+
+  /* HELPERS FOR TCR CALLS */
+
+  //REFRESHRS
+  addRefreshr: async (class_id, refreshr_id) => {
+    const result = await db('teachers_classes_refreshrs')
+      .returning(['class_id', 'refreshr_id'])
+      .insert({
+        class_id,
+        refreshr_id
+      });
+    return result;
+  },
+ 
+  removeRefreshr: (class_id, refreshr_id) => {
+    return db('teachers_classes_refreshrs')
+    .where({class_id, refreshr_id})
+    .delete()
+  },
+
+  //CAMPAIGNS
+  addCampaign: async (class_id, body) => {
+    const result = await db('teachers_classes_refreshrs')
+      .returning(['class_id', 'refreshr_id', 'teacher_id'])
+      .insert({
+        class_id,
+        ...body
+      });
+    return result;
+  },
+
+  removeCampaign: (class_id, sg_campaign_id) => {
+    return db('teachers_classes_refreshrs')
+    .where({class_id, sg_campaign_id})
+    .delete()
+  },
+
 };

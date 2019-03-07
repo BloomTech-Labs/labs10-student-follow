@@ -7,7 +7,6 @@ import {
   Typography,
   CardContent,
   Icon,
-  Paper,
   TextField
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
@@ -105,7 +104,7 @@ function ClassEditView(props) {
   const [teacherRefs, setTeacherRefs] = useState([]);
   const [classData, setClassData] = useState({
     name: '',
-    id: ''
+    sg_list_id: ''
   });
   const [selectedStudents, setSelectedStudents] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -169,7 +168,7 @@ function ClassEditView(props) {
   // }
 
   async function fetchTeacherRefreshrs(id) {
-    const res = await ax.get(`/refreshrs/teachers/${userID}`);
+    const res = await ax.get(`/teachers/${userID}/refreshrs`);
     const unassignedRefreshrs = res.data.filter(r => !refreshrs.includes(r)); // filter out refreshrs assigned to class
     setTeacherRefs(unassignedRefreshrs);
   }
@@ -297,7 +296,8 @@ function ClassEditView(props) {
 
     // add student/class to students_classes
     const classId = classData.id;
-    res = await ax.post(`/classes/${classId}`, {
+    console.log('classID:', classId);
+    res = await ax.post(`/classes/${classId}/students`, {
       student_id: newStudent.sg_recipient_id
     });
     console.log(res);
@@ -340,7 +340,7 @@ function ClassEditView(props) {
 
   async function dropStudents() {
     for (let student of selectedStudents) {
-      const res = await ax.delete(`/classes/${classId}/drop/${student}`);
+      const res = await ax.delete(`/classes/${classId}/students/${student}`);
       console.log('dropped:', res);
 
       // drop student from sg list

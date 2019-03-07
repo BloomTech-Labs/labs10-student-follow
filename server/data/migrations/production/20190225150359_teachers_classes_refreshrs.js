@@ -1,5 +1,6 @@
 exports.up = function(knex, Promise) {
   return knex.schema.createTable('teachers_classes_refreshrs', tbl => {
+    tbl.increments();
     tbl
       .string('class_id')
       .unsigned()
@@ -11,12 +12,12 @@ exports.up = function(knex, Promise) {
       .references('user_id')
       .inTable('teachers');
     tbl
-      .integer('refreshr_id')
+      .string('refreshr_id')
       .unsigned()
-      .references('id')
+      .references('typeform_id')
       .inTable('refreshrs');
     tbl.date('date');
-    tbl.string('sg_campaign_id').primary();
+    tbl.string('sg_campaign_id');
   });
 };
 

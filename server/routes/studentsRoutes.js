@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../data/helpers/studentsHelper');
-const management = require('../authentication');
 const {
   emptyCheck,
   whitespaceCheck
@@ -16,6 +15,17 @@ router.get('/', async (req, res, next) => {
     next(err);
   }
 });
+
+/*
+Returns: 
+student: {
+  id,
+  first_name,
+  last_name,
+  email,
+  classes: [{class_id, classname}]
+}
+*/
 
 router.get('/:id', async (req, res, next) => {
   const { id } = req.params;
@@ -32,23 +42,18 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
-router.post(
-  '/',
-  emptyCheck,
-  whitespaceCheck,
-  async (req, res, next) => {
-    const { body } = req;
-    console.log(body);
-    try {
-      const newStudentID = await db.addStudent(body);
-      console.log('new student it:', newStudentID);
-      res.status(responseStatus.postCreated).json({ newStudentID });
-    } catch (err) {
-      console.log(err);
-      next(err);
-    }
+router.post('/', emptyCheck, whitespaceCheck, async (req, res, next) => {
+  const { body } = req;
+  console.log(body);
+  try {
+    const newStudentID = await db.addStudent(body);
+    // console.log('new student it:', newStudentID);
+    res.status(responseStatus.postCreated).json({ newStudentID });
+  } catch (err) {
+    //console.log(err);
+    next(err);
   }
-);
+});
 
 router.put(
   '/:id',

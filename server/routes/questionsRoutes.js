@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../data/helpers/questionsHelper');
-const { emptyCheck } = require('../middleware/formattingMiddleware');
 const responseStatus = require('../config/responseStatusConfig');
 
 router.get('/', async (req, res, next) => {
@@ -13,6 +12,16 @@ router.get('/', async (req, res, next) => {
   }
 });
 
+/*
+Returns: 
+specifiedQuestion: {
+  question,
+  answer_1,
+  answer_2,
+  answer_3,
+  answer_4
+}
+*/
 router.get('/:id', async (req, res, next) => {
   const { id } = req.params;
   try {
@@ -27,7 +36,7 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
-router.post('/', emptyCheck, async (req, res, next) => {
+router.post('/', async (req, res, next) => {
   const { body } = req;
   try {
     const newQuestionID = await db.addQuestion(body);
@@ -37,7 +46,7 @@ router.post('/', emptyCheck, async (req, res, next) => {
   }
 });
 
-router.put('/:id', emptyCheck, async (req, res, next) => {
+router.put('/:id', async (req, res, next) => {
   const { id } = req.params;
   const { body } = req;
   try {

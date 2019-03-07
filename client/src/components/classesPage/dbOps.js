@@ -64,20 +64,20 @@ const submitClassData = async (
 
     // add students and class to students_classes table
     for (let student of newStudents) {
-      const scRes = await ax.post(`/classes/${newClassID}`, {
+      const scRes = await ax.post(`/classes/${newClassID}/students`, {
         student_id: student
       });
     }
 
     // add refreshr to tcr
-    const newRefreshr = {
+    const newCampaign = {
+      teacher_id: user_id,
       refreshr_id: campaignData.refreshr_id,
       date: campaignData.date,
       sg_campaign_id: campaignData.campaign_id
     };
-    const refRes = await ax.post(`/classes/${newClassID}/refreshrs`, {
-      teacher_id: user_id,
-      refreshr: newRefreshr
+    const refRes = await ax.post(`/classes/${newClassID}/campaigns`, {
+      campaign: newCampaign
     });
     console.log(refRes);
   } catch (err) {

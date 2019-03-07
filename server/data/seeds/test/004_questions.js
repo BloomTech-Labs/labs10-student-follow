@@ -2,10 +2,10 @@ const faker = require('faker');
 
 const create = () => ({
   question: faker.lorem.sentence(10),
-  wrong_answer_1: faker.lorem.sentence(5),
-  wrong_answer_2: faker.lorem.sentence(5),
-  wrong_answer_3: faker.lorem.sentence(5),
-  correct_answer: faker.lorem.sentence(5)
+  answer_1: faker.lorem.sentence(5),
+  answer_2: faker.lorem.sentence(5),
+  answer_3: faker.lorem.sentence(5),
+  answer_4: faker.lorem.sentence(5)
 });
 
 exports.seed = async function(knex, Promise) {
