@@ -50,6 +50,10 @@ const styles = theme => ({
     background: theme.palette.secondary.main,
     borderRadius: '4px',
     padding: '1rem'
+  },
+  modalFooter: {
+    background: theme.palette.secondary.main,
+    margin: '0'
   }
 });
 
@@ -106,11 +110,11 @@ const TakeMoney = props => {
             className={classes.textField}
           />
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="secondary">
+        <DialogActions className ={classes.modalFooter}>
+          <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleClose} color="secondary">
+          <Button onClick={handleClose} color="primary">
             Subscribe
           </Button>
         </DialogActions>
