@@ -19,7 +19,11 @@ module.exports = {
         'questions.id',
         'questions_refreshrs.question_id'
       )
-      .join('refreshrs', 'refreshrs.typeform_id', 'questions_refreshrs.refreshr_id')
+      .join(
+        'refreshrs',
+        'refreshrs.typeform_id',
+        'questions_refreshrs.refreshr_id'
+      )
       .where('refreshrs.typeform_id', id);
 
     const teacher = await db('teachers')
@@ -81,47 +85,34 @@ module.exports = {
 
   updateRefreshr: async (id, refreshr) => {
     const updateCount = await db('refreshrs')
-    .where('typeform_id', id)
-    .update(refreshr);
+      .where('typeform_id', id)
+      .update(refreshr);
     return updateCount;
   },
 
   deleteRefreshr: async id => {
     const deleteCount = await db('refreshrs')
-    .where('typeform_id', id)
-    .del();
+      .where('typeform_id', id)
+      .del();
     return deleteCount;
   },
 
-<<<<<<< HEAD
-  getTeacherRefreshrs: teacher_id => {
-    return db('refreshrs')
-      .where({ teacher_id })
-      .join(
-        'questions_refreshrs',
-        'questions_refreshrs.refreshr_id',
-        'refreshrs.id'
-      )
-      .join('questions', 'questions.id', 'questions_refreshrs.questions_id');
-=======
+  /* CALLS TO QUESTIONS_REFRESHRS */
 
- /* CALLS TO QUESTIONS_REFRESHRS */
- 
- //Connects question to refreshr
+  //Connects question to refreshr
   addQuestions: async (refreshr_id, question_id) => {
     //console.log(refreshr_id, question_id)
     const results = await db('questions_refreshrs')
-    .returning(['refreshr_id', 'question_id'])
-    .insert({refreshr_id, question_id})
-      
-      return results
+      .returning(['refreshr_id', 'question_id'])
+      .insert({ refreshr_id, question_id });
+
+    return results;
   },
 
   //removes connection between refreshr and question
   removeQuestion: (refreshr_id, question_id) => {
     return db('questions_refreshrs')
-      .where({refreshr_id, question_id})
+      .where({ refreshr_id, question_id })
       .delete();
->>>>>>> 2f6bd43e218ada851595c6615ea2e47743cd2f22
   }
 };

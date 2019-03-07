@@ -63,7 +63,8 @@ const App = props => {
   const getRefreshrs = () => {
     axios({
       method: 'get',
-      url: `https://localhost:9000/teachers/${user_id}/refreshrs`,
+      url: `http://localhost:9000/teachers/${user_id}/refreshrs`,
+      // url: `http://localhost:9000/refreshrs`,
       //url: `https://refreshr.herokuapp.com/teachers/${user_id}/refreshrs`,
       headers: { Authorization: `Bearer ${token}` }
     })
@@ -87,12 +88,11 @@ const App = props => {
   //     });
   // }, []);
 
-
   //add questions
   const addQuestions = question => {
     console.log('Question from addQuestions ===', question);
     axios
-      .post('https://refreshr.herokuapp.com/questions', question)
+      .post('http://refreshr.herokuapp.com/questions', question)
       // .post('http://localhost/9000/questions', question)
       .then(res => {
         console.log('RES from add questions ===', res);
@@ -107,7 +107,7 @@ const App = props => {
   const getClasses = () => {
     axios({
       method: 'get',
-      url: `https://localhost:9000/teachers/${user_id}/classes`,
+      url: `http://localhost:9000/teachers/${user_id}/classes`,
       //url: `https://refreshr.herokuapp.com/teachers/${user_id}/classes`,
       headers: { Authorization: `Bearer ${token}` }
     })
@@ -120,82 +120,6 @@ const App = props => {
 
   /* ROUTES */
   return (
-<<<<<<< HEAD
-    console.log('APP:', props.theme),
-    console.log('APP:', props.Url),
-    (
-      <>
-        <Grid
-          container
-          direction="column"
-          spacing={0}
-          justify="space-between"
-          alignItems="center"
-          className={classes.container}
-        >
-          <Grid item>
-            <Navbar theme={props.theme} {...props} />
-            <Navcrumbs {...props} />
-          </Grid>
-          <Route exact path="/" render={props => <LandingPage {...props} />} />
-          <Grid item className={classes.routes}>
-            <Route
-              path="/dashboard"
-              render={props => (
-                <Dashboard getClasses={getClasses} allClasses={allClasses} />
-              )}
-            />
-            <Route
-              exact
-              path="/refreshrs"
-              render={props => (
-                <RefreshrListView
-                  getRefreshrs={getRefreshrs}
-                  refreshrs={refreshrs}
-                />
-              )}
-            />
-            <Route path="/billing" render={props => <BillingPage />} />
-            <Route exact path="/classes" render={props => <ClassListView />} />
-            <Route
-              exact
-              path="/classes/edit/:id"
-              render={props => <ClassEditView {...props} />}
-            />
-            <Route
-              exact
-              path="/classes/create"
-              render={props => <ClassCreateView />}
-            />
-            <Route
-              exact
-              path="/refreshrs/create"
-              render={props => (
-                <Refreshr
-                  addQuestions={addQuestions}
-                  url={url}
-                  setUrl={setUrl}
-                />
-              )}
-            />
-            <Route
-              exact
-              path="/refreshrs/edit"
-              render={props => (
-                <Refreshr
-                  addQuestions={addQuestions}
-                  url={url}
-                  setUrl={setUrl}
-                />
-              )}
-            />
-            <Route path="/campaign" render={props => <CampaignForm />} />{' '}
-            {/* for testing */}
-          </Grid>
-        </Grid>
-      </>
-    )
-=======
     //console.log('APP:', props.theme),
     <>
       <Grid
@@ -257,7 +181,6 @@ const App = props => {
         </Grid>
       </Grid>
     </>
->>>>>>> 2f6bd43e218ada851595c6615ea2e47743cd2f22
   );
 };
 

@@ -1,9 +1,15 @@
 import React, { useEffect } from 'react';
 import { withRouter, Link } from 'react-router-dom';
-import { CardContent, Typography, Card, Icon, Button, Grid, withStyles } from '@material-ui/core';
-//import axios from 'axios'
-
-// TODO update refreshrs EDIT button on card w/ correct link
+import {
+  CardContent,
+  Typography,
+  Card,
+  Icon,
+  Button,
+  Grid,
+  withStyles
+} from '@material-ui/core';
+import axios from 'axios';
 
 const styles = theme => ({
   wrapper: {
@@ -11,7 +17,7 @@ const styles = theme => ({
     flexFlow: 'column nowrap',
     justifyContent: 'space-around',
     alignItems: 'center',
-    marginTop: '60px',
+    marginTop: '60px'
   },
   containers: {
     display: 'flex',
@@ -91,15 +97,49 @@ const styles = theme => ({
   }
 });
 
+const token = localStorage.getItem('accessToken');
+
+// const headers = {
+//   headers: {
+//     Authorization: `Bearer ${token}`
+//   },
+//   'Content-Type': 'application/json'
+// };
+
+const headers = {
+  Authorization: `Bearer ${token}`,
+  'Content-Type': 'application/json'
+};
+
+// const getSender = () => {
+//   const url = `https://api.sendgrid.com/v3/senders/${sender_id}`;
+//   axios
+//     .get(url, headers)
+//     .then(res => {
+//       console.log(`===getSender: ${res.data.nickname}===`);
+//       console.log(res.data);
+//     })
+//     .catch(err => console.log(err));
+// };
+
 const Dashboard = props => {
   // const name = localStorage.getItem('name'); // commented out until decide what to do w/ name
   useEffect(() => {
+    console.log(`Bearer ${token}`);
     props.getClasses();
-    props.getRefreshrs()
+    props.getRefreshrs();
+    // console.log('Dashboard refreshr:', props.getRefreshrs());
+    axios
+      .get('http://localhost:9000/refreshrs', {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+      .then(res => {
+        console.log('From use effect dash:', res);
+      });
   }, []);
-  
 
   const { userClasses, classes, userRefreshrs } = props;
+  console.log('Refreshr from Dash ===', userRefreshrs);
   const testClasses = [
     {
       classname: 'FSW438',
@@ -224,16 +264,18 @@ const Dashboard = props => {
       <Grid className={classes.classContainer}>
         {testRefreshrs.map(r => (
           <Card key={r.refreshr_id} className={classes.classCard}>
-            <Typography component="h4" className={classes.refreshrTitle}>
-              {r.refreshrName.length > 10
-                ? r.refreshrName.substring(0, 10) + '...'
-                : r.refreshrName}
-            </Typography>
-            <CardContent className={classes.classData}>
-              <Typography component="p" className={classes.lists}>
-                Classes Assigned: {r.classesAssigned}
+            <Link to="/" className={classes.links}>
+              <Typography component="h4" className={classes.refreshrTitle}>
+                {r.refreshrName.length > 10
+                  ? r.refreshrName.substring(0, 10) + '...'
+                  : r.refreshrName}
               </Typography>
-            </CardContent>
+              <CardContent className={classes.classData}>
+                <Typography component="p" className={classes.lists}>
+                  Classes Assigned: {r.classesAssigned}
+                </Typography>
+              </CardContent>
+            </Link>
             <Button color="primary" className={classes.lists}>
               <Link to="/" className={classes.links}>
                 Edit
