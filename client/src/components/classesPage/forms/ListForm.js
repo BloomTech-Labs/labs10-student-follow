@@ -225,10 +225,24 @@ function ListForm(props) {
   };
 
   const handleCheckBox = () => {
+    const googleProfile = JSON.parse(localStorage.getItem('profile'));
+    const teacherInfo = {
+      email: googleProfile.email,
+      first_name: googleProfile.given_name,
+      last_name: googleProfile.family_name
+    };
     props.setListData({
       ...props.listData,
       ccBool: !props.listData.ccBool
     });
+    if (!recipientData.some(r => r.email === teacherInfo.email)) {
+      props.setRecipientData(recipientData.concat(teacherInfo));
+    } else {
+      const recipientFiltered = recipientData.filter(
+        r => r.email !== teacherInfo.email
+      );
+      props.setRecipientData(recipientFiltered);
+    }
   };
 
   const handleNext = e => {
