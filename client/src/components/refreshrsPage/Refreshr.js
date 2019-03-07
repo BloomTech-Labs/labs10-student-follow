@@ -26,7 +26,6 @@ const styles = theme => ({
     marginBottom: theme.spacing.unit * 4,
     color: theme.palette.primary.contrastText,
     background: theme.palette.primary.dark,
-    marginLeft: '25%',
     [theme.breakpoints.down('md')]: {
       width: '60%',
       marginLeft: '20%'
