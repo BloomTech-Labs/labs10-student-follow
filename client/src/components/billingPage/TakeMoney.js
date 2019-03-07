@@ -1,12 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import StripeCheckout from 'react-stripe-checkout';
 import Logo from '../../LogoSmall.png';
-import { withStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  TextField,
+  withStyles
+} from '@material-ui/core';
 import axios from 'axios';
-// import Button from '@material-ui/core/Button';
-// import Icon from '@material-ui/core/Icon';
-// import classNames from 'classnames';
+
 const styles = theme => ({
   button: {
     background: theme.palette.secondary.main,
@@ -18,13 +24,34 @@ const styles = theme => ({
     width: '100%',
     marginBottom: '5%',
     '&:hover': {
-      background: theme.palette.secondary.dark,
+      background: theme.palette.secondary.dark
     }
-  }
+  },
+  modalTitle: {
+    background: theme.palette.secondary.main,
+    border: `1px solid ${theme.palette.secondary.main}`,
+    display: 'flex',
+    flexFlow: 'column nowrap',
+    alignItems: 'center',
+    margin: '0',
+  },
+  modalContent: {
+    background: theme.palette.primary.dark,
+    border: `1px solid ${theme.palette.secondary.main}`,
+    display: 'flex',
+    flexFlow: 'column nowrap',
+    alignItems: 'center',
+    margin: '0 0 10%',
+  },
+  modalContentText: {
+    color: 'white',
+  },
+
 });
 
 const TakeMoney = props => {
   const { classes } = props;
+  const [open, setOpen] = useState(false);
 
   const onToken = async token => {
     const url = 'http://localhost:9000/billing/charge';
@@ -38,23 +65,55 @@ const TakeMoney = props => {
     }
   };
 
-  const sendEmail = event => {
-    // this is a temporary solution. We should create a custom form rather than opening the email client
-    event.preventDefault();
-    window.location.href = `mailto:hello@refreshr.com`;
+  // form dialog start
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
   };
 
   return props.variant === 'custom' ? (
     <>
-      <Button onClick={sendEmail} className={classes.button}>
+      <Button onClick={handleClickOpen} className={classes.button}>
         Contact Us
       </Button>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="form-dialog-title"
+      >
+        <DialogTitle id="form-dialog-title" className={classes.modalTitle}>Contact Us</DialogTitle>
+        <DialogContent className={classes.modalContent}>
+          <DialogContentText className={classes.modalContentText}>
+            To subscribe to this website, please enter your email address here.
+            We will send updates occasionally.
+          </DialogContentText>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            label="Email Address"
+            type="email"
+            fullWidth
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleClose} color="primary">
+            Subscribe
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   ) : (
-    <div style={{width: '100%'}}>
+    <div style={{ width: '100%' }}>
       <StripeCheckout // This component uses the token created above to make a one time payment
         token={onToken}
-        ComponentClass='div'
+        ComponentClass="div"
         stripeKey="pk_test_Y6iNnz4ImmbwJDcFA982Hahf"
         className={classes.button}
         name="Refreshr"
@@ -63,10 +122,11 @@ const TakeMoney = props => {
         image={Logo} // We should have a second smaller logo image without text
         amount={props.variant} // Amount passed by buttonVariant in Pricing.js
         currency="USD"
-        email={localStorage.getItem('email')}> 
+        email={localStorage.getItem('email')}
+      >
         <Button className={classes.button}>Pay with Card</Button>
       </StripeCheckout>
-     </div> 
+    </div>
   );
 };
 
