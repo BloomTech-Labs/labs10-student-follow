@@ -1,12 +1,13 @@
 const express = require('express');
 const router = express.Router();
+const jwtCheck = require('../middlware/authMiddleware');
 const db = require('../data/helpers/refreshrHelper');
 const { emptyCheck } = require('../middleware/formattingMiddleware');
 const responseStatus = require('../config/responseStatusConfig');
 
 /* REFRESHRS TABLE CALLS */
 
-router.get('/', async (req, res, next) => {
+router.get('/', jwtCheck, async (req, res, next) => {
   try {
     const refreshrs = await db.getAll();
     res.status(responseStatus.success).json({ refreshrs });
@@ -27,7 +28,7 @@ refreshr: {
   ]
 }
 */
-router.get('/:id', async (req, res, next) => {
+router.get('/:id', jwtCheck, async (req, res, next) => {
   const { id } = req.params;
   try {
     const refreshr = await db.getRefreshr(id);
@@ -43,7 +44,7 @@ router.get('/:id', async (req, res, next) => {
 });
 
 /* Returns typeform_id as newRefreshrID*/
-router.post('/', emptyCheck, async (req, res, next) => {
+router.post('/',jwtCheck, emptyCheck, async (req, res, next) => {
   const { body } = req;
   try {
     const newRefreshrID = await db.addRefreshr(body);
@@ -54,7 +55,7 @@ router.post('/', emptyCheck, async (req, res, next) => {
   }
 });
 
-router.put('/:id', emptyCheck, async (req, res, next) => {
+router.put('/:id', jwtCheck, emptyCheck, async (req, res, next) => {
   const { id } = req.params;
   const { body } = req;
   try {
@@ -65,7 +66,7 @@ router.put('/:id', emptyCheck, async (req, res, next) => {
   }
 });
 
-router.delete('/:id', async (req, res, next) => {
+router.delete('/:id', jwtCheck, async (req, res, next) => {
   const { id } = req.params;
   try {
     const deletedRecords = await db.deleteRefreshr(id);
@@ -81,7 +82,7 @@ router.delete('/:id', async (req, res, next) => {
 Adds refreshr question connections to questions_refreshrs table
 returns the ID of the new connection
 */
-router.post('/:id/questions', async (req, res, next) => {
+router.post('/:id/questions', jwtCheck, async (req, res, next) => {
   const { question_id } = req.body;
   const { id } = req.params;
   //console.log("q", question_id, 'r', refreshr_id)
@@ -93,7 +94,7 @@ router.post('/:id/questions', async (req, res, next) => {
   }
 });
 
-router.delete('/:id/questions/:questionID', async (req, res, next) => {
+router.delete('/:id/questions/:questionID', jwtCheck, async (req, res, next) => {
   const { id, questionID } = req.params;
   try {
     const count = await db.removeQuestion(id, questionID);

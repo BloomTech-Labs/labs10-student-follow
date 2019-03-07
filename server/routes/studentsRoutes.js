@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const jwtCheck = require('../middlware/authMiddleware');
 const db = require('../data/helpers/studentsHelper');
 const {
   emptyCheck,
@@ -7,7 +8,7 @@ const {
 } = require('../middleware/formattingMiddleware');
 const responseStatus = require('../config/responseStatusConfig');
 
-router.get('/', async (req, res, next) => {
+router.get('/', jwtCheck, async (req, res, next) => {
   try {
     const students = await db.getAll();
     res.status(responseStatus.success).json({ students });
@@ -27,7 +28,7 @@ student: {
 }
 */
 
-router.get('/:id', async (req, res, next) => {
+router.get('/:id', jwtCheck, async (req, res, next) => {
   const { id } = req.params;
   try {
     const student = await db.getStudent(id);
@@ -42,7 +43,7 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
-router.post('/', emptyCheck, whitespaceCheck, async (req, res, next) => {
+router.post('/', jwtCheck, emptyCheck, whitespaceCheck, async (req, res, next) => {
   const { body } = req;
   console.log(body);
   try {
@@ -57,7 +58,7 @@ router.post('/', emptyCheck, whitespaceCheck, async (req, res, next) => {
 
 router.put(
   '/:id',
-
+  jwtCheck,
   emptyCheck,
   whitespaceCheck,
   async (req, res, next) => {
@@ -72,7 +73,7 @@ router.put(
   }
 );
 
-router.delete('/:id', async (req, res, next) => {
+router.delete('/:id', jwtCheck, async (req, res, next) => {
   const { id } = req.params;
   try {
     const deletedRecords = await db.deleteStudent(id);

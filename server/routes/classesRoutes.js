@@ -1,12 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../data/helpers/classesHelper');
+const jwtCheck = require('../middlware/authMiddleware');
 const { emptyCheck } = require('../middleware/formattingMiddleware');
 const responseStatus = require('../config/responseStatusConfig');
 
 /* CALLS TO CLASSES TABLE */
 
-router.get('/', async (req, res, next) => {
+router.get('/', jwtCheck, async (req, res, next) => {
   try {
     const classes = await db.getAll();
     res.status(responseStatus.success).json({ classes });
@@ -25,7 +26,7 @@ refreshrs: [{refreshr_id, name, typeform_url}],
 campaigns: [{campaign_id, created_date}]
 }
 */
-router.get('/:id', async (req, res, next) => {
+router.get('/:id', jwtCheck, async (req, res, next) => {
   const { id } = req.params;
   try {
     const specifiedClass = await db.getClass(id);
@@ -46,7 +47,7 @@ body must include:
 name,
 sg_list_id
 */
-router.post('/', emptyCheck, async (req, res, next) => {
+router.post('/', jwtCheck, emptyCheck, async (req, res, next) => {
   const { body } = req;
   try {
     const newClassID = await db.addClass(body);
@@ -56,7 +57,7 @@ router.post('/', emptyCheck, async (req, res, next) => {
   }
 });
 
-router.put('/:id', emptyCheck, async (req, res, next) => {
+router.put('/:id', jwtCheck, emptyCheck, async (req, res, next) => {
   const { id } = req.params;
   const { body } = req;
   try {
@@ -67,7 +68,7 @@ router.put('/:id', emptyCheck, async (req, res, next) => {
   }
 });
 
-router.delete('/:id', async (req, res, next) => {
+router.delete('/:id', jwtCheck, async (req, res, next) => {
   const { id } = req.params;
   try {
     const deletedRecords = await db.deleteClass(id);
@@ -80,7 +81,7 @@ router.delete('/:id', async (req, res, next) => {
 /* CALLS TO STUDENTS_CLASSES TABLE */
 
 //returns an array of students
-router.get('/:id/students', async (req, res, next) => {
+router.get('/:id/students', jwtCheck, async (req, res, next) => {
   const { id } = req.params;
   try {
     const results = await db.getClass(id);
@@ -98,7 +99,7 @@ router.get('/:id/students', async (req, res, next) => {
 /* adds a student to the class
  returns the id of that connection
 */
-router.post('/:id/students', async (req, res, next) => {
+router.post('/:id/students', jwtCheck, async (req, res, next) => {
   const { student_id } = req.body;
   const { id } = req.params;
   //console.log(student_id, class_id)
@@ -115,7 +116,7 @@ router.post('/:id/students', async (req, res, next) => {
   }
 });
 // drop a student from a class
-router.delete('/:id/students/:studentID', async (req, res, next) => {
+router.delete('/:id/students/:studentID', jwtCheck, async (req, res, next) => {
   const { id, studentID } = req.params;
   try {
     //console.log(id, studentId);
@@ -132,7 +133,7 @@ router.delete('/:id/students/:studentID', async (req, res, next) => {
 //REFRESHRS
 //returns an array of refreshrs
 
-router.get('/:id/refreshrs', async (req, res, next) => {
+router.get('/:id/refreshrs', jwtCheck, async (req, res, next) => {
   const { id } = req.params;
   try {
     const results = await db.getClass(id);
@@ -148,7 +149,7 @@ router.get('/:id/refreshrs', async (req, res, next) => {
 });
 
 //adds a refreshr to a class
-router.post('/:id/refreshrs', async (req, res, next) => {
+router.post('/:id/refreshrs', jwtCheck, async (req, res, next) => {
   const { id } = req.params;
   const { refreshr_id } = req.body;
   try {
@@ -165,7 +166,7 @@ router.post('/:id/refreshrs', async (req, res, next) => {
 
 //Removes refreshrs from a class
 
-router.delete('/:id/refreshrs/:refreshrID', async (req, res, next) => {
+router.delete('/:id/refreshrs/:refreshrID', jwtCheck, async (req, res, next) => {
   const { id, refreshrID } = req.params;
   try {
     const count = await db.removeRefreshr(id, refreshrID);
@@ -179,7 +180,7 @@ router.delete('/:id/refreshrs/:refreshrID', async (req, res, next) => {
 //TEACHERS
 // gets an array of teachers
 
-router.get('/:id/teachers', async (req, res, next) => {
+router.get('/:id/teachers', jwtCheck, async (req, res, next) => {
   const { id } = req.params;
   try {
     const results = await db.getClass(id);
@@ -198,7 +199,7 @@ router.get('/:id/teachers', async (req, res, next) => {
 
 // Returns an array of all campaigns associated with the class
 
-router.get('/:id/campaigns', async (req, res, next) => {
+router.get('/:id/campaigns', jwtCheck, async (req, res, next) => {
   const { id } = req.params;
   try {
     const results = await db.getClass(id);
@@ -220,7 +221,7 @@ refreshr_id,
 date,
 sg_campaign_id
 */
-router.post('/:id/campaigns', async (req, res, next) => {
+router.post('/:id/campaigns', jwtCheck, async (req, res, next) => {
   const { id } = req.params;
   const { body } = req;
   try {
@@ -239,7 +240,7 @@ router.post('/:id/campaigns', async (req, res, next) => {
 
 //Removes a campaign from a class
 
-router.delete('/:id/campaigns/:campaignID', async (req, res, next) => {
+router.delete('/:id/campaigns/:campaignID', jwtCheck, async (req, res, next) => {
   const { id, campaignID } = req.params;
   try {
     const count = await db.removeCampaign(id, campaignID);
