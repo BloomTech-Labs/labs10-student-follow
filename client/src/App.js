@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Route, withRouter } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
@@ -7,6 +7,7 @@ import {
   LandingPage,
   BillingPage,
   Refreshr,
+  RefreshrEdit,
   Navbar,
   Navcrumbs,
   RefreshrListView,
@@ -73,11 +74,27 @@ const App = props => {
       .catch(err => console.log(err));
   };
 
-  // add questions
+  //all Questions
+  useEffect(() => {
+    axios
+      .get('https://refreshr.herokuapp.com/questions')
+      .then(res => {
+        console.log('Getting questions', res.data.questions);
+        setQuestions(res.data.questions);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }, []);
+
+  //add questions
   const addQuestions = question => {
+    console.log('Question from addQuestions ===', question);
     axios
       .post('https://refreshr.herokuapp.com/questions', question)
+      // .post('http://localhost/9000/questions', question)
       .then(res => {
+        console.log('RES from add questions ===', res);
         setQuestions([]);
       })
       .catch(err => {

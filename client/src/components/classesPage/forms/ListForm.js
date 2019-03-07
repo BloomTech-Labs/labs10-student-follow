@@ -73,10 +73,10 @@ const styles = theme => ({
     width: '100%',
     display: 'flex',
     margin: '2rem 0',
+
     flexFlow: 'column nowrap',
     alignItems: 'center',
-    justifyContent: 'space-around',
-
+    justifyContent: 'space-around'
   },
   form3: {
     display: 'flex',
@@ -160,7 +160,7 @@ const styles = theme => ({
     alignItems: 'center'
   },
   unstageRecipientBtn: {
-    "&:hover": {
+    '&:hover': {
       cursor: 'pointer'
     }
   }
@@ -255,10 +255,12 @@ function ListForm(props) {
   };
 
   const unstageRecipient = (e, targetEmail) => {
-    e.preventDefault()
-    const filteredArr = props.recipientData.filter(r => r.email !== targetEmail)
-    setRecipientData(filteredArr)
-  }
+    e.preventDefault();
+    const filteredArr = props.recipientData.filter(
+      r => r.email !== targetEmail
+    );
+    setRecipientData(filteredArr);
+  };
 
   return (
     <Paper className={classes.container} elevation={24}>
@@ -390,29 +392,23 @@ function ListForm(props) {
 
       <hr className={classes.hrStyle} />
 
-
-      {
-        recipientData.length > 0 ? (
-          recipientData.map(
-            (recipient, i) => (
-              (
-                <div key={i} className={classes.recipientStaging}>
-                  <p style={{ color: 'white' }}>
-                    {i + 1}. {recipient.first_name} {recipient.last_name} ({recipient.email}) &nbsp;
-                  </p>
-                  <RemoveCircleOutline
-                    className={classes.unstageRecipientBtn}
-                    tooltip="Remove selected recipient"
-                    onClick={(e) => unstageRecipient(e, recipient.email)}
-                  />
-                </div>
-              )
-            )
-          )
-        ) : (
-            <p>You need to add new recipients.</p>
-          )
-      }
+      {recipientData.length > 0 ? (
+        recipientData.map((recipient, i) => (
+          <div key={i} className={classes.recipientStaging}>
+            <p style={{ color: 'white' }}>
+              {i + 1}. {recipient.first_name} {recipient.last_name} (
+              {recipient.email}) &nbsp;
+            </p>
+            <RemoveCircleOutline
+              className={classes.unstageRecipientBtn}
+              tooltip="Remove selected recipient"
+              onClick={e => unstageRecipient(e, recipient.email)}
+            />
+          </div>
+        ))
+      ) : (
+        <p>You need to add new recipients.</p>
+      )}
 
       <hr className={classes.hrStyle} />
 
