@@ -22,7 +22,7 @@ module.exports = {
     return Promise.all([student, classes]).then(response => {
       let [student, classes] = response;
       let result = {
-        id: student.id,
+        id: student.sg_recipient_id,
         first_name: student.first_name,
         last_name: student.last_name,
         email: student.email,
@@ -37,26 +37,28 @@ module.exports = {
     });
   },
 
+  addStudent: async student => {
+    const newStudentID = await db('students')
+      .insert(student)
+      .returning('sg_recipient_id');
+      //console.log('in helper:', newStudentID);
+    return newStudentID[0];
+
+  },
+
   updateStudent: async (id, student) => {
     const updateCount = await db('students')
-      .where({ id })
+      .where('sg_recipient_id', id)
       .update(student);
     return updateCount;
   },
 
   deleteStudent: async id => {
     const deleteCount = await db('students')
-      .where({ id })
+      .where('sg_recipient_id', id)
       .del();
     return deleteCount;
   },
 
-  addStudent: async student => {
-    const newStudentID = await db('students')
-      .insert(student)
-      .returning('sg_recipient_id');
-      console.log('in helper:', newStudentID);
-    return newStudentID[0];
-
-  }
+  
 };

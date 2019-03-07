@@ -1,14 +1,14 @@
 const express = require('express');
 const router = express.Router();
+const jwtCheck = require('../middleware/authMiddleware');
 const db = require('../data/helpers/studentsHelper');
-const management = require('../authentication');
 const {
   emptyCheck,
   whitespaceCheck
 } = require('../middleware/formattingMiddleware');
 const responseStatus = require('../config/responseStatusConfig');
 
-router.get('/', async (req, res, next) => {
+router.get('/', jwtCheck, async (req, res, next) => {
   try {
     const students = await db.getAll();
     res.status(responseStatus.success).json({ students });
@@ -17,7 +17,18 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-router.get('/:id', async (req, res, next) => {
+/*
+Returns: 
+student: {
+  id,
+  first_name,
+  last_name,
+  email,
+  classes: [{class_id, classname}]
+}
+*/
+
+router.get('/:id', jwtCheck, async (req, res, next) => {
   const { id } = req.params;
   try {
     const student = await db.getStudent(id);
@@ -32,27 +43,22 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
-router.post(
-  '/',
-  emptyCheck,
-  whitespaceCheck,
-  async (req, res, next) => {
-    const { body } = req;
-    console.log(body);
-    try {
-      const newStudentID = await db.addStudent(body);
-      console.log('new student it:', newStudentID);
-      res.status(responseStatus.postCreated).json({ newStudentID });
-    } catch (err) {
-      console.log(err);
-      next(err);
-    }
+router.post('/', jwtCheck, emptyCheck, whitespaceCheck, async (req, res, next) => {
+  const { body } = req;
+  console.log(body);
+  try {
+    const newStudentID = await db.addStudent(body);
+    // console.log('new student it:', newStudentID);
+    res.status(responseStatus.postCreated).json({ newStudentID });
+  } catch (err) {
+    //console.log(err);
+    next(err);
   }
-);
+});
 
 router.put(
   '/:id',
-
+  jwtCheck,
   emptyCheck,
   whitespaceCheck,
   async (req, res, next) => {
@@ -67,7 +73,7 @@ router.put(
   }
 );
 
-router.delete('/:id', async (req, res, next) => {
+router.delete('/:id', jwtCheck, async (req, res, next) => {
   const { id } = req.params;
   try {
     const deletedRecords = await db.deleteStudent(id);

@@ -16,7 +16,7 @@ import Button from '@material-ui/core/Button';
 
 /*-------- STYLES --------*/
 const styles = theme => ({
-  root: {
+  container: {
     display: 'flex'
   },
   drawer: {
@@ -72,7 +72,7 @@ const styles = theme => ({
     alignItems: 'stretch',
     textAlign: 'center'
   },
-  text: {
+  navRoutes: {
     textAlign: 'center',
     color: theme.palette.primary.contrastText
   },
@@ -94,7 +94,7 @@ const Navbar = props => {
     const primary = breadcrumbNameMap[to];
 
     return (
-      <li className={classes.text}>
+      <li className={classes.navRoutes}>
         <ListItem button component={RouterLink} to={to} {...other}>
           <ListItemText primary={primary} />
         </ListItem>
@@ -122,12 +122,11 @@ const Navbar = props => {
 
   const drawer = (
     <List component="nav" className={classes.list}>
-      <ListItemLink to="/refreshrs/create" className={classes.text} />
-      <ListItemLink to="/classes/create" className={classes.text} />
-      <ListItemLink to="/billing" className={classes.text} />
+      <ListItemLink to="/refreshrs/create" className={classes.navRoutes} />
+      <ListItemLink to="/classes/create" className={classes.navRoutes} />
+      <ListItemLink to="/billing" className={classes.navRoutes} />
     </List>
   );
-  console.log(location);
 
   /*-------- LOGIN/LOGOUT BUTTON --------*/
 
@@ -149,7 +148,7 @@ const Navbar = props => {
 
   if (location.pathname !== '/') {
     return (
-      <div className={classes.root}>
+      <div className={classes.container}>
         <AppBar position="fixed" elevation={20} className={classes.appBar}>
           <Toolbar className={classes.toolbar}>
             <Button
@@ -204,7 +203,7 @@ const Navbar = props => {
     );
   } else {
     return (
-      <div className={classes.root}>
+      <div className={classes.container}>
         <AppBar position="fixed" className={classes.appBar}>
           <Toolbar className={classes.toolbar}>
             <Button
@@ -215,7 +214,7 @@ const Navbar = props => {
                 handleLogIn();
               }}
             >
-              {location.pathname !== '/' ? 'Logout' : 'Login'}
+              {location.pathname !== '/' ? 'Logout' : 'Login/Signup'}
             </Button>
           </Toolbar>
         </AppBar>

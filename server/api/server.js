@@ -1,7 +1,7 @@
 const express = require('express');
 const configureMiddleware = require('../middleware/globalMiddleware');
 const errorHandler = require('../middleware/errorMiddleware')
-const {jwtCheck} = require('../middleware/authMiddleware')
+const jwtCheck = require('../middleware/authMiddleware')
 const server = express();
 
 configureMiddleware(server);

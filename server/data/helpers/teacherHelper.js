@@ -1,44 +1,48 @@
 const db = require('../../config/dbConfig');
 
 module.exports = {
-  getAll: async () => {
-    const allTeachers = await db('teachers').select(
-      'user_id',
-      'first_name',
-      'last_name',
-      'email'
-    );
 
+  /* CALLS TO TEACHERS DB */
+  getAll: async () => {
+    const allTeachers = await db('teachers')
     return allTeachers;
   },
 
-  getTeacher: async id => {
+  getTeacherDetails: async id => {
     const teacher = await db('teachers')
-      .select('user_id', 'first_name', 'last_name', 'email')
       .where('user_id', id)
       .first();
 
     const classes = await db('classes')
-      .select('classes.name as c_name', 'refreshrs.name as r_name', 'tcr.date', 'tcr.class_id')
       .join('teachers_classes_refreshrs as tcr', 'classes.sg_list_id', 'tcr.class_id')
-      .join('refreshrs', 'refreshrs.id', 'tcr.refreshr_id')
       .join('teachers', 'teachers.user_id', 'tcr.teacher_id')
       .where('teachers.user_id', id);
 
-    return Promise.all([teacher, classes]).then(response => {
+    const refreshrs = await db('refreshrs')
+    .join('teachers_classes_refreshrs as tcr', 'refreshrs.typeform_id', 'tcr.refreshr_id')
+    .join('teachers', 'teachers.user_id', 'tcr.teacher_id')
+    .where('teachers.user_id', id);
+
+    return Promise.all([teacher, classes, refreshrs]).then(response => {
       let [teacher, classes] = response;
       let result = {
-        id: teacher.user_id,
+        user_id: teacher.user_id,
         first_name: teacher.first_name,
         last_name: teacher.last_name,
         email: teacher.email,
         classes: classes.map(c => {
           return {
             class_id: c.class_id,
-            created_date: c.date,
-            classname: c.c_name,
+            classname: c.name,
           };
         }),
+        refreshrs: refreshrs.map(r => {
+          return {
+            refreshr_id: r.typeform_id,
+            name: r.name,
+            typeform_url: r.typeform_url,
+          }
+        })
       };
       return result;
     });
@@ -60,5 +64,43 @@ module.exports = {
       .where({ id })
       .del();
     return deleteCount;
+  },
+
+  /* HELPERS FOR TCR CALLS */
+
+  //REFRESHRS
+  addRefreshr: async (teacher_id, refreshr_id) => {
+    const result = await db('teachers_classes_refreshrs')
+      .returning(['teacher_id', 'refreshr_id'])
+      .insert({
+        teacher_id,
+        refreshr_id
+      });
+    return result;
+  },
+
+  removeRefreshr: (teacher_id, refreshr_id) => {
+    return db('teachers_classes_refreshrs')
+    .where({teacher_id, refreshr_id})
+    .delete()
+  },
+
+
+  //CLASSES
+  addClass: async (teacher_id, class_id) => {
+    const result = await db('teachers_classes_refreshrs')
+      .returning(['teacher_id', 'class_id'])
+      .insert({
+        teacher_id,
+        class_id
+      });
+    return result;
+  },
+
+  removeClass: (teacher_id, class_id) => {
+    return db('teachers_classes_refreshrs')
+    .where({teacher_id, class_id})
+    .delete()
   }
+  
 };

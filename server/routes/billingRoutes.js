@@ -22,7 +22,7 @@ router.post('/charge', async (req, res) => {
           : process.env.PLAN_ID_TWO
     });
     res.status(responseStatus.postCreated).send(customer);
-  } catch (error) {
+  } catch (err) {
     next(err);
   }
 });

@@ -22,6 +22,7 @@ import ListForm from './classesPage/forms/ListForm';
 import RefreshrListView from './refreshrsPage/RefreshrListView';
 import RefreshrCard from './refreshrsPage/RefreshrCard';
 import Refreshr from './refreshrsPage/Refreshr';
+import RefreshrEdit from './refreshrsPage/RefreshrEdit';
 
 /* MISC DATA */
 import ClassOperations from './classesPage/ClassOperations';
@@ -43,6 +44,7 @@ export {
   RefreshrListView,
   RefreshrCard,
   Refreshr,
+  RefreshrEdit,
   ClassOperations,
   Dashboard
 };
