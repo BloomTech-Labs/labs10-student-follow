@@ -43,7 +43,6 @@ const styles = theme => ({
 });
 
 const App = props => {
-  console.log('ENV:', process.env);
   const { classes } = props;
   const token = localStorage.getItem('accessToken');
   const user_id = localStorage.getItem('user_id');
@@ -73,17 +72,17 @@ const App = props => {
   };
 
   //all Questions
-  useEffect(() => {
-    axios
-      .get('https://refreshr.herokuapp.com/questions')
-      .then(res => {
-        console.log('Getting questions', res.data.questions);
-        setQuestions(res.data.questions);
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  }, []);
+  // useEffect(() => {
+  //   axios
+  //     .get('https://refreshr.herokuapp.com/questions')
+  //     .then(res => {
+  //       console.log('Getting questions', res.data.questions);
+  //       setQuestions(res.data.questions);
+  //     })
+  //     .catch(err => {
+  //       console.log(err);
+  //     });
+  // }, []);
 
   //add questions
   const addQuestions = question => {
