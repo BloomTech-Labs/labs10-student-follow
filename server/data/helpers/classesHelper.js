@@ -5,6 +5,7 @@ module.exports = {
   getAll: async () => {
     const allClasses = await db('classes')
     .select('classes.name', 'classes.sg_list_id', 'tcr.sg_campaign_id')
+    .join('teachers_classes_refreshrs as tcr', 'classes.sg_list_id', "tcr.class_id" )
     return allClasses;
   },
 
@@ -38,28 +39,7 @@ module.exports = {
       .where('classes.sg_list_id', id);
 
     const refreshrs = await db('refreshrs')
-<<<<<<< Updated upstream
-      .select(
-        'refreshrs.id',
-        'tcr.date',
-        'refreshrs.name as r_name',
-        'refreshrs.review_text',
-        'questions.id as question_id',
-        'questions.question',
-        'questions.wrong_answer_1',
-        'questions.wrong_answer_2',
-        'questions.wrong_answer_3',
-        'questions.correct_answer'
-      )
-      .join(
-        'questions_refreshrs',
-        'refreshrs.id',
-        'questions_refreshrs.refreshr_id'
-      )
-      .join('questions', 'questions.id', 'questions_refreshrs.question_id')
-=======
       .select('refreshrs.name as r_name', 'refreshrs.typeform_id', 'refreshrs.typeform_url')
->>>>>>> Stashed changes
       .join(
         'teachers_classes_refreshrs as tcr',
         'refreshrs.typeform_id',

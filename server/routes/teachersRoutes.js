@@ -5,7 +5,7 @@ const {
   emptyCheck,
   whitespaceCheck
 } = require('../middleware/formattingMiddleware');
-const jwtCheck = require('../middlware/authMiddleware');
+const jwtCheck = require('../middleware/authMiddleware');
 const responseStatus = require('../config/responseStatusConfig');
 
 /* CALLS TO TEACHERS TABLE */

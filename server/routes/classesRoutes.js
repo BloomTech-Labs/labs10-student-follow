@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../data/helpers/classesHelper');
-const jwtCheck = require('../middlware/authMiddleware');
+const jwtCheck = require('../middleware/authMiddleware');
 const { emptyCheck } = require('../middleware/formattingMiddleware');
 const responseStatus = require('../config/responseStatusConfig');
 
