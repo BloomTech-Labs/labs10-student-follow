@@ -13,7 +13,11 @@ import {
 import { withStyles } from '@material-ui/core/styles';
 import DeleteIcon from '@material-ui/icons/Delete';
 import RefreshrDialog from './RefreshrListDialog';
-import { addRecipient, addContact, deleteContact } from './SendgridOps';
+import {
+  addRecipient,
+  addContact,
+  deleteContact
+} from './SendgridOps';
 import axios from 'axios';
 
 const styles = theme => ({
@@ -42,6 +46,12 @@ const styles = theme => ({
   refreshrCard: {
     height: 200,
     border: '1px solid white',
+    margin: theme.spacing.unit * 3,
+    position: 'relative'
+  },
+  activeRefreshr: {
+    height: 200,
+    border: '1px solid red',
     margin: theme.spacing.unit * 3,
     position: 'relative'
   },
@@ -100,12 +110,17 @@ function ClassEditView(props) {
   const [selectedStudents, setSelectedStudents] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [addedStudents, setAddedStudents] = useState([]);
+  const [activeRefreshr, setActiveRefreshr] = useState(null);
 
+  // sendgrix axios instance
+  const sgAx = axios.create({
+    baseURL: 'https://api.sendgrid.com/v3',
+    headers: {
+      authorization: `Bearer ${process.env.REACT_APP_SENDGRID_API_KEY}`
+    }
+  });
   // get class details on mount
   useEffect(() => {
-    // fetchStudents();
-    // fetchRefreshrs();
-    // fetchTeacherRefreshrs();
     fetchClass();
     fetchTeacherRefreshrs();
   }, []);
@@ -154,20 +169,86 @@ function ClassEditView(props) {
   // }
 
   async function fetchTeacherRefreshrs(id) {
-    // this should be user id, not 35
     const res = await ax.get(`/refreshrs/teachers/${userID}`);
-    const unassignedRefreshrs = res.data.filter(r => !refreshrs.includes(r)); // unsure if this filter will work, need to test
+    const unassignedRefreshrs = res.data.filter(r => !refreshrs.includes(r)); // filter out refreshrs assigned to class
     setTeacherRefs(unassignedRefreshrs);
   }
 
-  function addRefreshr(id) {
-    const addedRefreshr = teacherRefs.filter(r => r.id === id);
-    // const updatedRefreshrs = refreshrs.concat(addedRefreshr); // this is messy :(
-    setRefreshrs([...refreshrs, ...addedRefreshr]);
+  async function addRefreshr(id) {
+    // date has been selected, send off to sendgrid and add to db
+    console.log(activeRefreshr);
+    // will need to refactor this later with moment?
+    const send_at = {
+      "send_at": Date.parse(activeRefreshr.date) / 1000,
+    }
+    console.log('send at:', send_at);
+    console.log(typeof send_at.send_at);
+
+    // create sendgrid campaign
+    const body = {
+      sender_id: 428251, // maybe we should move this to an env variable?
+      title: activeRefreshr.name,
+      subject: `Your Refreshr for ${classData.name} is here!`,
+      plain_content: 'this is plain content [unsubscribe]',
+      html_content: `<html> <head> <title></title> </head> <body> <p>Take your refreshr at this link: ${activeRefreshr.typeform_url} [unsubscribe] </p> </body> </html>`,
+      list_ids: [Number(classData.id)],
+      suppression_group_id: 9332, // permanent (Unsubscribe ID)
+    };
+    // console.log('body:', body);
+    let res = await sgAx.post('/campaigns', body);
+    console.log(res);
+    const sg_campaign_id = res.data.id;
+    console.log('sgid:', sg_campaign_id);
+
+    // attach sendgrid campaign id to active refreshr
+
+    const refreshr = {
+      ...activeRefreshr,
+      refreshr_id: activeRefreshr.id,
+      sg_campaign_id
+    }
+
+    // add refreshr to TCR table
+    res = await ax.post(`/classes/${classData.id}/refreshrs`, {
+      refreshr: refreshr,
+      teacher_id: userID
+    });
+
+    console.log(res)
+
+    // schedule campaign
+    res = await sgAx.post(`/campaigns/${sg_campaign_id}/schedules`, {
+      send_at: 1554206400
+    })
+    console.log(res);
+
+
+    // add refreshr to class refreshrs, remove from active refreshr
+    setRefreshrs(refreshrs.concat(activeRefreshr));
+    setActiveRefreshr(null);
+    console.log(refreshrs);
+  }
+
+  useEffect(() => {
+    console.log(activeRefreshr);
+  }, [activeRefreshr]);
+
+  function selectRefreshr(id) {
+    // remove refreshr from teacher refreshr list
     setTeacherRefs(teacherRefs.filter(r => r.id !== id));
+    console.log(id);
+    const [active] = teacherRefs.filter(r => r.id === id);
+    console.log(active);
+    setActiveRefreshr(active);
+  }
+
+  function setDate(e) {
+    console.log(e.target.value);
+    setActiveRefreshr({ ...activeRefreshr, date: e.target.value });
   }
 
   function removeRefreshr(id) {
+    // TODO: needs to be updated to kill sendgrid campaign, drop from TCR table
     const removedRefreshr = refreshrs.filter(r => r.id === id);
     setTeacherRefs([...teacherRefs, ...removedRefreshr]);
     setRefreshrs(refreshrs.filter(r => r.id !== id));
@@ -203,11 +284,9 @@ function ClassEditView(props) {
 
   async function addStudent(e) {
     e.preventDefault();
-    console.log(newStudent);
-    // add student to typeform recipients, get id back
+    // add student to sendgrid recipients, get id back
     const sgStudent = [newStudent];
     let res = await addRecipient(sgStudent);
-    console.log(res);
     console.log('recipient:', res.data.persisted_recipients);
 
     // attach id to newStudent
@@ -218,17 +297,15 @@ function ClassEditView(props) {
 
     // add student/class to students_classes
     const classId = classData.id;
-    console.log('classID:', classId);
     res = await ax.post(`/classes/${classId}`, {
       student_id: newStudent.sg_recipient_id
     });
     console.log(res);
 
-    // add student to class sendgrid contact list
+    // add student to class's sendgrid contact list
     res = await addContact(classData.id, newStudent.sg_recipient_id);
     console.log(res);
 
-    // setAddedStudents([...addedStudents, newStudent]);
     // clear new student input
     setNewStudent({
       first_name: '',
@@ -242,7 +319,6 @@ function ClassEditView(props) {
 
   async function changeClassName(e) {
     e.preventDefault();
-    console.log(e.target.className.value);
     const res = await ax.put(`/classes/${classId}`, {
       name: classData.name,
       sg_list_id: classData.id
@@ -305,7 +381,7 @@ function ClassEditView(props) {
           <Button type="submit">Change Class Name</Button>
         </form>
       </Typography>
-      <Grid classname={classes.settings}>
+      <Grid className={classes.settings}>
         <form onSubmit={e => addStudent(e)}>
           {makeInput('first_name', 'First Name')}
           {makeInput('last_name', 'Last Name')}
@@ -358,16 +434,35 @@ function ClassEditView(props) {
           {refreshrs.map(r => (
             <Card className={classes.refreshrCard} key={r.refreshr_id} raised>
               <CardContent>{r.name}</CardContent>
+              <CardContent>{r.date}</CardContent>
               <CardContent>
                 <DeleteIcon onClick={() => removeRefreshr(r.id)} />
               </CardContent>
             </Card>
           ))}
+          {activeRefreshr && (
+            <Card
+              className={classes.activeRefreshr}
+              key={activeRefreshr.id}
+              raised
+            >
+              <CardContent>{activeRefreshr.name}</CardContent>
+              <TextField
+                onChange={e => setDate(e)}
+                variant="outlined"
+                type="date"
+              />
+              {activeRefreshr.date && (
+                <Button onClick={addRefreshr}>Submit</Button>
+              )}
+            </Card>
+          )}
           <RefreshrDialog
             refreshrs={teacherRefs}
             open={modalIsOpen}
             handleClose={closeModal}
             addRefreshr={addRefreshr}
+            selectRefreshr={selectRefreshr}
           />
           <Card className={classes.refreshrCard} raised>
             <CardContent>

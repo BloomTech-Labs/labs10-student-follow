@@ -34,7 +34,7 @@ const RefreshrDialog = props => {
             {props.refreshrs.map(r => (
               <ListItem
                 button
-                onClick={() => props.addRefreshr(r.id)}
+                onClick={() => props.selectRefreshr(r.id)}
                 key={r.id}
               >
                 <ListItemText primary={r.name} />

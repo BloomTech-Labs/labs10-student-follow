@@ -196,7 +196,6 @@ function Refreshr(props) {
     setSubmitted(true);
   };
 
-  console.log('questionObject ...', questionObject);
   return (
     <Paper className={props.classes.container} elevation={24}>
       <Grid className={props.classes.wrapper}>

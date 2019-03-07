@@ -73,7 +73,10 @@ const styles = theme => ({
     width: '100%',
     display: 'flex',
     margin: '2rem 0',
-    justifyContent: 'space-evenly'
+
+    flexFlow: 'column nowrap',
+    alignItems: 'center',
+    justifyContent: 'space-around'
   },
   form3: {
     display: 'flex',
@@ -222,10 +225,24 @@ function ListForm(props) {
   };
 
   const handleCheckBox = () => {
+    const googleProfile = JSON.parse(localStorage.getItem('profile'));
+    const teacherInfo = {
+      email: googleProfile.email,
+      first_name: googleProfile.given_name,
+      last_name: googleProfile.family_name
+    };
     props.setListData({
       ...props.listData,
       ccBool: !props.listData.ccBool
     });
+    if (!recipientData.some(r => r.email === teacherInfo.email)) {
+      props.setRecipientData(recipientData.concat(teacherInfo));
+    } else {
+      const recipientFiltered = recipientData.filter(
+        r => r.email !== teacherInfo.email
+      );
+      props.setRecipientData(recipientFiltered);
+    }
   };
 
   const handleNext = e => {

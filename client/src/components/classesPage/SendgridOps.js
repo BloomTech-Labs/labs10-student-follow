@@ -35,7 +35,7 @@ export function addList(name) {
   const url = 'https://api.sendgrid.com/v3/contactdb/lists';
   const body = { name };
 
-  return new Promise(function(resolve, reject) {
+  return new Promise(function (resolve, reject) {
     axios
       .post(url, body, headers)
       .then(res => {
@@ -120,7 +120,7 @@ export function addRecipient(recipient) {
 
 export function addRecipients(recipients) {
   const url = `https://api.sendgrid.com/v3/contactdb/recipients`;
-  return new Promise(function(resolve, reject) {
+  return new Promise(function (resolve, reject) {
     axios
       .post(url, recipients, headers)
       .then(res => {
@@ -234,7 +234,7 @@ export function addContact(listId, recipientId) {
 export function addContacts(listId, recipient_ids) {
   const url = `https://api.sendgrid.com/v3/contactdb/lists/${listId}/recipients`;
 
-  return new Promise(function(resolve, reject) {
+  return new Promise(function (resolve, reject) {
     axios
       .post(url, recipient_ids, headers)
       .then(res => {
@@ -281,7 +281,7 @@ export function deleteContact(listId, recipientId) {
 export function addRefreshr(new_refreshr) {
   const url = 'https://api.sendgrid.com/v3/campaigns';
 
-  return new Promise(function(resolve, reject) {
+  return new Promise(function (resolve, reject) {
     axios
       .post(url, new_refreshr, headers)
       .then(res => {
@@ -346,7 +346,7 @@ export function deleteRefreshr() {
 
 export function scheduleRefreshr(timeData, campaign_id) {
   const url = `https://api.sendgrid.com/v3/campaigns/${campaign_id}/schedules`;
-  return new Promise(function(resolve, reject) {
+  return new Promise(function (resolve, reject) {
     axios
       .post(url, timeData, headers)
       .then(res => {
