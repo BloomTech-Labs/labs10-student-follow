@@ -92,8 +92,8 @@ const App = props => {
   const addQuestions = question => {
     console.log('Question from addQuestions ===', question);
     axios
-      .post('http://refreshr.herokuapp.com/questions', question)
-      // .post('http://localhost/9000/questions', question)
+      // .post('http://refreshr.herokuapp.com/questions', question)
+      .post('http://localhost:9000/questions', question)
       .then(res => {
         console.log('RES from add questions ===', res);
         setQuestions([]);

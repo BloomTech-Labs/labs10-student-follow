@@ -175,13 +175,12 @@ function Refreshr(props) {
       ]
     };
     try {
-      const response = await axios.post(
-        'https://api.typeform.com/forms',
-        data,
-        {
+      const response = await axios
+        .post('https://api.typeform.com/forms', data, {
           headers
-        }
-      ).then(res => console.log(res));
+        })
+        .then(res => res);
+      setUrl(response.data._links.display);
     } catch (error) {
       console.log(error);
     }
@@ -219,7 +218,7 @@ function Refreshr(props) {
           >
             Refreshr Name
           </Typography>
-          
+
           <FormGroup
             className={props.classes.form1}
             onSubmit={props.handleSubmit}
