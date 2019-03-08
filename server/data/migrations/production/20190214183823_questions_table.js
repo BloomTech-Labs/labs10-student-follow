@@ -1,11 +1,11 @@
 exports.up = function(knex, Promise) {
-  return knex.schema.createTable('questions', (tbl) => {
+  return knex.schema.createTable('questions', tbl => {
     tbl.increments();
     tbl.text('question');
-    tbl.string('wrong_answer_1');
-    tbl.string('wrong_answer_2');
-    tbl.string('wrong_answer_3');
-    tbl.string('correct_answer');
+    tbl.string('answer_1');
+    tbl.string('answer_2');
+    tbl.string('answer_3');
+    tbl.string('answer_4');
   });
 };
 

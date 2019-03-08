@@ -19,16 +19,16 @@ export const breadcrumbNameMap = {
 };
 
 const styles = theme => ({
-  root: {
+  container: {
     top: 70,
     position: 'absolute',
     left: '1%',
     color: theme.palette.primary.contrastText,
     display: 'flex',
     flexFlow: 'row nowrap',
-    alignItems: 'flex-start',
+    alignItems: 'flex-start'
   },
-  links: {
+  navRoutes: {
     fontSize: '1rem',
     color: theme.palette.primary.contrastText,
     display: 'block',
@@ -46,7 +46,7 @@ const Navcrumbs = props => {
   return (
     <NoSsr>
       <MemoryRouter initialEntries={['/dashboard']} initialIndex={0}>
-        <div className={classes.root}>
+        <div className={classes.container}>
           <Route>
             {() => {
               const pathnames = location.pathname
@@ -56,22 +56,32 @@ const Navcrumbs = props => {
               return (
                 <Breadcrumbs
                   arial-label="Breadcrumb"
-                  separator={<NavigateNextIcon fontSize="small" color='secondary' />}
+                  separator={
+                    <NavigateNextIcon fontSize="small" color="secondary" />
+                  }
                 >
-                  <Link component={RouterLink} className={classes.links} to="/dashboard" style={{display: `${location.pathname === '/' ? 'none' : 'flex' }`}}>
-                  Dashboard
+                  <Link
+                    component={RouterLink}
+                    className={classes.navRoutes}
+                    to="/dashboard"
+                    style={{
+                      display: `${location.pathname === '/' ? 'none' : 'flex'}`
+                    }}
+                  >
+                    Dashboard
                   </Link>
                   {pathnames.map((value, index) => {
                     const to = `/${pathnames.slice(0, index + 1).join('/')}`;
-                    return(
+                    return (
                       <Link
-                        className={classes.links}
+                        key={index}
+                        className={classes.navRoutes}
                         component={RouterLink}
-                        to={to} 
+                        to={to}
                       >
                         {breadcrumbNameMap[to]}
                       </Link>
-                    )
+                    );
                   })}
                 </Breadcrumbs>
               );

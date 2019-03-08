@@ -1,10 +1,10 @@
 exports.up = function(knex, Promise) {
-  return knex.schema.createTable('questions_refreshrs', (tbl) => {
+  return knex.schema.createTable('questions_refreshrs', tbl => {
     tbl.increments();
     tbl
-      .integer('refreshr_id')
+      .string('refreshr_id')
       .unsigned()
-      .references('id')
+      .references('typeform_id')
       .inTable('refreshrs');
     tbl
       .integer('question_id')

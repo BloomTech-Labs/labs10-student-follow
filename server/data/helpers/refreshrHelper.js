@@ -1,6 +1,7 @@
 const db = require('../../config/dbConfig');
 
 module.exports = {
+  /*CALLS TO REFRESHRS TABLE */
   getAll: async () => {
     const allRefreshrs = await db('refreshrs');
 
@@ -9,7 +10,7 @@ module.exports = {
 
   getRefreshr: async id => {
     const selectedRefreshr = await db('refreshrs')
-      .where({ id })
+      .where('typeform_id', id)
       .first();
 
     const questions = await db('questions')
@@ -18,8 +19,8 @@ module.exports = {
         'questions.id',
         'questions_refreshrs.question_id'
       )
-      .join('refreshrs', 'refreshrs.id', 'questions_refreshrs.refreshr_id')
-      .where('refreshrs.id', id);
+      .join('refreshrs', 'refreshrs.typeform_id', 'questions_refreshrs.refreshr_id')
+      .where('refreshrs.typeform_id', id);
 
     const teacher = await db('teachers')
       .select(
@@ -29,18 +30,18 @@ module.exports = {
         'teachers.email as t_email'
       )
       .join(
-        'teacher_classes_refreshrs as tcr',
+        'teachers_classes_refreshrs as tcr',
         'teachers.user_id',
         'tcr.teacher_id'
       )
-      .join('refreshrs', 'refreshrs.id', 'tcr.refreshr_id')
-      .where('refreshrs.id', id);
+      .join('refreshrs', 'refreshrs.typeform_id', 'tcr.refreshr_id')
+      .where('refreshrs.typeform_id', id);
 
     return Promise.all([selectedRefreshr, questions, teacher]).then(
       response => {
         let [selectedRefreshr, questions, teacher] = response;
         let result = {
-          id: selectedRefreshr.id,
+          typeform_id: selectedRefreshr.typeform_id,
           name: selectedRefreshr.name,
           review_text: selectedRefreshr.review_text,
           typeform_url: selectedRefreshr.typeform_url,
@@ -56,10 +57,10 @@ module.exports = {
               question_id: q.question_id,
               question: {
                 question_text: q.question,
-                wrong_answer_1: q.wrong_answer_1,
-                wrong_answer_2: q.wrong_answer_2,
-                wrong_answer_3: q.wrong_answer_3,
-                correct_answer: q.correct_answer
+                answer_1: q.answer_1,
+                answer_2: q.answer_2,
+                answer_3: q.answer_3,
+                answer_4: q.answer_4
               }
             };
           })
@@ -71,7 +72,7 @@ module.exports = {
   addRefreshr: async refreshr => {
     const newRefreshr = await db('refreshrs')
       .insert(refreshr)
-      .returning('id')
+      .returning('typeform_id')
       .then(id => {
         return id;
       });
@@ -80,26 +81,37 @@ module.exports = {
 
   updateRefreshr: async (id, refreshr) => {
     const updateCount = await db('refreshrs')
-      .where({ id })
-      .update(refreshr);
+    .where('typeform_id', id)
+    .update(refreshr);
     return updateCount;
   },
 
   deleteRefreshr: async id => {
     const deleteCount = await db('refreshrs')
-      .where({ id })
-      .del();
+    .where('typeform_id', id)
+    .del();
     return deleteCount;
   },
 
-  getTeacherRefreshrs: teacher_id => {
-    return db('refreshrs')
-      .where({ teacher_id })
-      .join(
-        'questions_refreshrs',
-        'questions_refreshrs.refreshr_id',
-        'refreshrs.id'
-      )
-      .join('questions', 'questions.id', 'questions_refreshrs.questions_id');
+
+
+ /* CALLS TO QUESTIONS_REFRESHRS */
+ 
+ //Connects question to refreshr
+  addQuestions: async (refreshr_id, question_id) => {
+    //console.log(refreshr_id, question_id)
+    const results = await db('questions_refreshrs')
+    .returning(['refreshr_id', 'question_id'])
+    .insert({refreshr_id, question_id})
+      
+      return results
+  },
+
+  //removes connection between refreshr and question
+  removeQuestion: (refreshr_id, question_id) => {
+    return db('questions_refreshrs')
+      .where({refreshr_id, question_id})
+      .delete();
+
   }
 };

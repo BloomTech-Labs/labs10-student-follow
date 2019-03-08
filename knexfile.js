@@ -2,6 +2,7 @@
 require('dotenv').config();
 const pg = require('pg');
 
+
 // pg.defaults.ssl = true; // this needs to be false in development, true when using heroku db
 
 module.exports = {
