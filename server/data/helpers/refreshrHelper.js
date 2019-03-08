@@ -94,6 +94,7 @@ module.exports = {
   },
 
 
+
  /* CALLS TO QUESTIONS_REFRESHRS */
  
  //Connects question to refreshr
@@ -111,5 +112,6 @@ module.exports = {
     return db('questions_refreshrs')
       .where({refreshr_id, question_id})
       .delete();
+
   }
 };
