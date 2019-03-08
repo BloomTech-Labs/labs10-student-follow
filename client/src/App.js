@@ -157,6 +157,17 @@ const App = props => {
               />
             )}
           />
+          <Route
+            path="/refreshrs/edit"
+            render={props => (
+              <RefreshrEdit
+                getClasses={getClasses}
+                userClasses={userClasses}
+                getRefreshrs={getRefreshrs}
+                userRefreshrs={userRefreshrs}
+              />
+            )}
+          />
           <Route path="/billing" render={props => <BillingPage />} />
           <Route exact path="/classes" render={props => <ClassListView />} />
           <Route

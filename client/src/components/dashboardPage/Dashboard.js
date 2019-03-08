@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import {
   CardContent,
@@ -100,36 +100,12 @@ const styles = theme => ({
 const token = localStorage.getItem('accessToken');
 const teacherId = localStorage.getItem('user_id');
 
-// const headers = {
-//   headers: {
-//     Authorization: `Bearer ${token}`
-//   },
-//   'Content-Type': 'application/json'
-// };
-
-const headers = {
-  Authorization: `Bearer ${token}`,
-  'Content-Type': 'application/json'
-};
-
-// const getSender = () => {
-//   const url = `https://api.sendgrid.com/v3/senders/${sender_id}`;
-//   axios
-//     .get(url, headers)
-//     .then(res => {
-//       console.log(`===getSender: ${res.data.nickname}===`);
-//       console.log(res.data);
-//     })
-//     .catch(err => console.log(err));
-// };
-
 const Dashboard = props => {
   // const name = localStorage.getItem('name'); // commented out until decide what to do w/ name
-  useEffect(async () => {
-    console.log(`Bearer ${token}`);
-    props.getClasses();
-    props.getRefreshrs();
-    // console.log('Dashboard refreshr:', props.getRefreshrs());
+  const [teacherRefreshrs, setTeacherRefreshrs] = useState([]);
+
+  async function getTeacherById() {
+    // You can await here
     try {
       const response = await axios.get(
         `http://localhost:9000/teachers/${teacherId}`,
@@ -139,14 +115,24 @@ const Dashboard = props => {
           }
         }
       );
-      console.log('Response from teacher refreshrs ===', response);
+      // console.log('Response from teacher refreshrs ===', response);
+      setTeacherRefreshrs(response);
     } catch (error) {
       console.log(error);
     }
+  }
+
+  useEffect(() => {
+    // console.log(`Bearer ${token}`);
+    props.getClasses();
+    props.getRefreshrs();
+    // console.log('Dashboard refreshr:', props.getRefreshrs());
+    getTeacherById();
   }, []);
 
   const { userClasses, classes, userRefreshrs } = props;
-  console.log('Refreshr from Dash ===', userRefreshrs);
+  // console.log('Refreshr from Dash ===', userRefreshrs);
+  // console.log('teacher refreshr => ', teacherRefreshrs.data);
   const testClasses = [
     {
       classname: 'FSW438',
@@ -177,36 +163,44 @@ const Dashboard = props => {
       class_id: 4
     }
   ];
-  const testRefreshrs = [
-    {
-      refreshrName: 'CSS Basics',
-      classesAssigned: 84,
-      refreshr_id: 1
-    },
-    {
-      refreshrName: 'Relational Databases',
-      classesAssigned: 21,
-      refreshr_id: 2
-    },
-    {
-      refreshrName: 'Relational Databases',
-      classesAssigned: 21,
-      refreshr_id: 3
-    },
-    {
-      refreshrName: 'Relational Databases',
-      classesAssigned: 21,
-      refreshr_id: 4
-    },
-    {
-      refreshrName: 'Relational Databases',
-      classesAssigned: 21,
-      refreshr_id: 5
-    }
-  ];
+  // const testRefreshrs = [
+  //   {
+  //     refreshrName: 'CSS Basics',
+  //     classesAssigned: 84,
+  //     refreshr_id: 1
+  //   },
+  //   {
+  //     refreshrName: 'Relational Databases',
+  //     classesAssigned: 21,
+  //     refreshr_id: 2
+  //   },
+  //   {
+  //     refreshrName: 'Relational Databases',
+  //     classesAssigned: 21,
+  //     refreshr_id: 3
+  //   },
+  //   {
+  //     refreshrName: 'Relational Databases',
+  //     classesAssigned: 21,
+  //     refreshr_id: 4
+  //   },
+  //   {
+  //     refreshrName: 'Relational Databases',
+  //     classesAssigned: 21,
+  //     refreshr_id: 5
+  //   }
+  // ];
+  // const redirect = url => {
+  //   console.log('Props from redirect', props);
+  //   props.history.push(url);
+  // };
   return (
     <Grid className={classes.wrapper}>
       {console.log('PROPS', userClasses, userRefreshrs)}
+      {console.log(
+        'userRefreshrs ==>',
+        userRefreshrs.map(data => data.typeform_url)
+      )}
       {/* cant figure out what to do w/ the username right now */}
       {/* <Typography component="h2" color="secondary">
         Welcome {name}, 
@@ -269,22 +263,28 @@ const Dashboard = props => {
         Refreshrs:
       </Typography>
       <Grid className={classes.classContainer}>
-        {testRefreshrs.map(r => (
-          <Card key={r.refreshr_id} className={classes.classCard}>
-            <Link to="/" className={classes.links}>
+        {userRefreshrs.map(r => (
+          <Card className={classes.classCard}>
+            {/* {console.log('R ===', r)} */}
+            <a
+              target="_blank"
+              href={r.typeform_url}
+              rel="noopener noreferrer"
+              className={classes.links}
+            >
               <Typography component="h4" className={classes.refreshrTitle}>
-                {r.refreshrName.length > 10
+                {/* {r.refreshrName.length > 10
                   ? r.refreshrName.substring(0, 10) + '...'
-                  : r.refreshrName}
+                  : r.refreshrName} */}
               </Typography>
               <CardContent className={classes.classData}>
                 <Typography component="p" className={classes.lists}>
                   Classes Assigned: {r.classesAssigned}
                 </Typography>
               </CardContent>
-            </Link>
+            </a>
             <Button color="primary" className={classes.lists}>
-              <Link to="/" className={classes.links}>
+              <Link to="/refreshrs/edit" className={classes.links}>
                 Edit
               </Link>
             </Button>

@@ -26,18 +26,11 @@ const styles = theme => ({
     marginBottom: theme.spacing.unit * 4,
     color: theme.palette.primary.contrastText,
     background: theme.palette.primary.dark,
-    marginLeft: '25%',
-    [theme.breakpoints.down('md')]: {
-      width: '60%',
-      marginLeft: '20%'
+    [theme.breakpoints.only('sm')]: {
+      width: '60vw'
     },
-    [theme.breakpoints.down('sm')]: {
-      width: '60%',
-      marginLeft: '15%'
-    },
-    [theme.breakpoints.down('xs')]: {
-      width: '100%',
-      marginLeft: '10%'
+    [theme.breakpoints.only('xs')]: {
+      width: '90vw'
     },
     width: '50%'
   },
@@ -126,6 +119,8 @@ function RefreshrEdit(props) {
 
   const createForm = async event => {
     event.preventDefault();
+    const { userClasses, classes, userRefreshrs } = props;
+    console.log('userRefreshrs in edit !', userClasses);
     const headers = {
       Authorization: `Bearer ${process.env.REACT_APP_TYPEFORM}`
     };
@@ -208,7 +203,7 @@ function RefreshrEdit(props) {
             color="secondary"
             style={{ textAlign: 'center' }}
           >
-            Create Your Refreshr
+            Edit Your Refreshr
           </Typography>
 
           <hr className={props.classes.hrStyle} />
