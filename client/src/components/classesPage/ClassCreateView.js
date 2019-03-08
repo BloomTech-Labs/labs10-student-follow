@@ -79,6 +79,7 @@ function ClassCreateView(props) {
 
   // Schedule campaign for 2 days after class date
   const sendAllToSendgrid = () => {
+    console.log(campaignData);
     // Add new list name
     addList(listData.classnameInput + " 2d")
       .then(res => {
@@ -107,6 +108,7 @@ function ClassCreateView(props) {
           console.log(`112`);
           console.log(newRefreshr);
           return addRefreshr(newRefreshr);
+          
         }
       })
 
