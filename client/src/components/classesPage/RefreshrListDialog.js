@@ -31,11 +31,11 @@ const RefreshrDialog = props => {
         <DialogTitle>Select a refreshr</DialogTitle>
         <div>
           <List>
-            {props.refreshrs.map(r => (
+            {props.refreshrs.map((r, i) => (
               <ListItem
                 button
                 onClick={() => props.selectRefreshr(r.id)}
-                key={r.id}
+                key={i}
               >
                 <ListItemText primary={r.name} />
               </ListItem>
