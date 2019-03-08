@@ -1,10 +1,9 @@
 const db = require('../../config/dbConfig');
 
 module.exports = {
-
   /* CALLS TO TEACHERS DB */
   getAll: async () => {
-    const allTeachers = await db('teachers')
+    const allTeachers = await db('teachers');
     return allTeachers;
   },
 
@@ -14,14 +13,24 @@ module.exports = {
       .first();
 
     const classes = await db('classes')
-      .join('teachers_classes_refreshrs as tcr', 'classes.sg_list_id', 'tcr.class_id')
+      .join(
+        'teachers_classes_refreshrs as tcr',
+        'classes.sg_list_id',
+        'tcr.class_id'
+      )
       .join('teachers', 'teachers.user_id', 'tcr.teacher_id')
       .where('teachers.user_id', id);
 
     const refreshrs = await db('refreshrs')
-    .join('teachers_classes_refreshrs as tcr', 'refreshrs.typeform_id', 'tcr.refreshr_id')
-    .join('teachers', 'teachers.user_id', 'tcr.teacher_id')
-    .where('teachers.user_id', id);
+      .join(
+        'teachers_classes_refreshrs as tcr',
+        'refreshrs.typeform_id',
+        'tcr.refreshr_id'
+      )
+      .join('teachers', 'teachers.user_id', 'tcr.teacher_id')
+      .where('teachers.user_id', id);
+
+    console.log('refreshrs:', refreshrs);
 
     return Promise.all([teacher, classes, refreshrs]).then(response => {
       let [teacher, classes] = response;
@@ -33,24 +42,24 @@ module.exports = {
         classes: classes.map(c => {
           return {
             class_id: c.class_id,
-            classname: c.name,
+            classname: c.name
           };
         }),
         refreshrs: refreshrs.map(r => {
           return {
             refreshr_id: r.typeform_id,
             name: r.name,
-            typeform_url: r.typeform_url,
-          }
+            typeform_url: r.typeform_url
+          };
         })
       };
       return result;
     });
   },
 
-  addTeacher: async (teacher) => {
-    const newTeacherID= await db('teachers').insert(teacher)
-    return newTeacherID[0]
+  addTeacher: async teacher => {
+    const newTeacherID = await db('teachers').insert(teacher);
+    return newTeacherID[0];
   },
   updateTeacher: async (id, teacher) => {
     const updateCount = await db('teachers')
@@ -81,10 +90,9 @@ module.exports = {
 
   removeRefreshr: (teacher_id, refreshr_id) => {
     return db('teachers_classes_refreshrs')
-    .where({teacher_id, refreshr_id})
-    .delete()
+      .where({ teacher_id, refreshr_id })
+      .delete();
   },
-
 
   //CLASSES
   addClass: async (teacher_id, class_id) => {
@@ -99,8 +107,7 @@ module.exports = {
 
   removeClass: (teacher_id, class_id) => {
     return db('teachers_classes_refreshrs')
-    .where({teacher_id, class_id})
-    .delete()
+      .where({ teacher_id, class_id })
+      .delete();
   }
-  
 };
