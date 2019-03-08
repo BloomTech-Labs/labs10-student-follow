@@ -66,11 +66,14 @@ const App = props => {
       method: 'get',
       url: `http://localhost:9000/teachers/${user_id}/refreshrs`,
       // url: `http://localhost:9000/refreshrs`,
+      //url: `http://localhost:9000/teachers/114/refreshrs`,
+
       //url: `https://refreshr.herokuapp.com/teachers/${user_id}/refreshrs`,
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => {
-        console.log(res);
+        //console.log(res);
+        console.log('REFRESHRS', res)
         setRefreshrs(res.data.refreshrs);
       })
       .catch(err => console.log(err));
@@ -133,8 +136,8 @@ const App = props => {
         className={classes.container}
       >
         <Grid item>
-          <Navbar theme={props.theme} {...props} />
-          <Navcrumbs {...props} />
+          <Navbar theme={props.theme} lock={props.lock}  />
+          <Navcrumbs location={props.location} history={props.history}/>
         </Grid>
         <Route exact path="/" render={props => <LandingPage {...props} />} />
         <Grid item className={classes.routes}>

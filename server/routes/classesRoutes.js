@@ -105,12 +105,10 @@ router.post('/:id/students', jwtCheck, async (req, res, next) => {
   //console.log(student_id, class_id)
   try {
     const results = await db.addStudent(id, student_id);
-    res
-      .status(responseStatus.postCreated)
-      .json({
-        message: `Student with id ${student_id} added to class with id ${id}.`,
-        results
-      });
+    res.status(responseStatus.postCreated).json({
+      message: `Student with id ${student_id} added to class with id ${id}.`,
+      results
+    });
   } catch (err) {
     next(err);
   }
@@ -166,16 +164,20 @@ router.post('/:id/refreshrs', jwtCheck, async (req, res, next) => {
 
 //Removes refreshrs from a class
 
-router.delete('/:id/refreshrs/:refreshrID', jwtCheck, async (req, res, next) => {
-  const { id, refreshrID } = req.params;
-  try {
-    const count = await db.removeRefreshr(id, refreshrID);
-    res.status(responseStatus.success).json({ removedRefreshrs: count });
-  } catch (err) {
-    console.log(err);
-    next(err);
+router.delete(
+  '/:id/refreshrs/:refreshrID',
+  jwtCheck,
+  async (req, res, next) => {
+    const { id, refreshrID } = req.params;
+    try {
+      const count = await db.removeRefreshr(id, refreshrID);
+      res.status(responseStatus.success).json({ removedRefreshrs: count });
+    } catch (err) {
+      console.log(err);
+      next(err);
+    }
   }
-});
+);
 
 //TEACHERS
 // gets an array of teachers
@@ -224,31 +226,40 @@ sg_campaign_id
 router.post('/:id/campaigns', jwtCheck, async (req, res, next) => {
   const { id } = req.params;
   const { body } = req;
-  try {
-    const results = await db.addCampaign(id, body);
+  db.cleanUpCampaigns(body.teacher_id, body.refreshr_id).then(deletedCount => {
+  db.addCampaign(id, body)
+   .then(results => {
     res.status(responseStatus.postCreated).json({
       message: `Campaign with id ${
         body.sg_campaign_id
       } added to class with id ${id} `,
-      results
+      results,
+      deletedCount
     });
-  } catch (err) {
-    console.log(err);
-    next(err);
-  }
+   })
+  }).catch(err => {
+    next(err)
+  })
+   
+   
+ 
 });
 
 //Removes a campaign from a class
 
-router.delete('/:id/campaigns/:campaignID', jwtCheck, async (req, res, next) => {
-  const { id, campaignID } = req.params;
-  try {
-    const count = await db.removeCampaign(id, campaignID);
-    res.status(responseStatus.success).json({ removedCampaigns: count });
-  } catch (err) {
-    console.log(err);
-    next(err);
+router.delete(
+  '/:id/campaigns/:campaignID',
+  jwtCheck,
+  async (req, res, next) => {
+    const { id, campaignID } = req.params;
+    try {
+      const count = await db.removeCampaign(id, campaignID);
+      res.status(responseStatus.success).json({ removedCampaigns: count });
+    } catch (err) {
+      console.log(err);
+      next(err);
+    }
   }
-});
+);
 
 module.exports = router;

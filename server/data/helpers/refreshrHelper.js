@@ -97,6 +97,8 @@ module.exports = {
     return deleteCount;
   },
 
+
+  /* CALLS TO QUESTIONS_REFRESHRS */
   //Connects question to refreshr
   addQuestions: async (refreshr_id, question_id) => {
     //console.log(refreshr_id, question_id)
