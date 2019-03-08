@@ -4,12 +4,9 @@ import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
 import { withRouter } from 'react-router-dom';
-import Image from '../landingPage/LandingImage.jpg';
-//import '../landingPage/LandingPage.css';
 import Card from '@material-ui/core/Card';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
-//import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
 
@@ -74,7 +71,7 @@ const LandingPage = props => {
             for the long-term.
             </Typography>
         </CardContent>
-        <CardMedia className={classes.backgroundImg} alt="desk with plant on it" image={Image} />
+      <CardMedia className={classes.backgroundImg} alt="desk with plant on it" image={'http://i65.tinypic.com/2pqouxh.jpg'} />
       </Card>
     </Grid>
   );
