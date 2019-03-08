@@ -30,8 +30,6 @@ module.exports = {
       .join('teachers', 'teachers.user_id', 'tcr.teacher_id')
       .where('teachers.user_id', id);
 
-    console.log('refreshrs:', refreshrs);
-
     return Promise.all([teacher, classes, refreshrs]).then(response => {
       let [teacher, classes] = response;
       let result = {

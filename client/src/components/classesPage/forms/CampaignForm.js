@@ -114,6 +114,7 @@ const styles = theme => ({
 function CampaignForm(props) {
   const [refreshrs, setRefreshrs] = useState([]);
   const [activeRefreshr, setActiveRefreshr] = useState(null);
+  const [scheduledRefreshrs, setScheduledRefreshrs] = useState([]);
 
   // For displaying on the page for the ease of user
   // current time, 2 days, 2 weeks, 2 months
@@ -151,8 +152,10 @@ function CampaignForm(props) {
         but the endpoint is not live yet so I'm using this for testing */
       // const res = await axios.get('https://refreshr.herokuapp.com/refreshrs');
       // setRefreshrs(res.data[0]);
+      const uid = localStorage.getItem('user_id');
       const res = await ax.get(
-        `/teachers/275/refreshrs`
+        // `/teachers/275/refreshrs`
+        `/teachers/${uid}/refreshrs`
         // 'https://refreshr.herokuapp.com/teachers/${userID}/refeshrs'
       );
       console.log(res.data);
@@ -180,7 +183,8 @@ function CampaignForm(props) {
     });
   };
 
-  const scheduleRefreshr = () => {
+  const scheduleRefreshr = e => {
+    console.log(e.target);
     props.setCampaignData({
       ...props.campaignData,
       title: 'Your Refreshr Is Here!',
@@ -191,12 +195,17 @@ function CampaignForm(props) {
       plain_content: `${activeRefreshr.review_text} [unsubscribe]`,
       refreshr_id: activeRefreshr.refreshr_id
     });
+    setScheduledRefreshrs([...scheduledRefreshrs, activeRefreshr]);
     setActiveRefreshr(null);
   };
 
+  // useEffect(() => {
+  //   console.log(activeRefreshr);
+  // }, [activeRefreshr]);
+
   useEffect(() => {
-    console.log(activeRefreshr);
-  }, [activeRefreshr]);
+    console.log(scheduledRefreshrs);
+  }, [scheduledRefreshrs]);
 
   const handleClick = id => {
     const [active] = refreshrs.filter(r => r.refreshr_id === id);
@@ -205,11 +214,13 @@ function CampaignForm(props) {
 
   const handleSubmit = e => {
     e.preventDefault();
-    props.sendAllToSendgrid();
+    props.sendAllToSendgrid(scheduledRefreshrs);
   };
 
   const alterTime = e => {
     e.preventDefault();
+    setActiveRefreshr({ ...activeRefreshr, date: e.target.value });
+
     const schedule0 = moment(`${e.target.value}T00:00:00`).format(
       'ddd, MMMM Do, YYYY ha'
     );
@@ -238,6 +249,8 @@ function CampaignForm(props) {
       { send_at: twoWeeksUnix },
       { send_at: twoMonthsUnix }
     ];
+    setActiveRefreshr({...activeRefreshr, timeTriData})
+
 
     setSchedule({
       ...schedule,
