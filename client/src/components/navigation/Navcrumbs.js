@@ -12,8 +12,8 @@ export const breadcrumbNameMap = {
   '/classes': 'Classes',
   '/refreshrs': 'Refreshrs',
   '/classes/edit': 'Edit Class',
-  '/classes/create': 'Create Class',
-  '/refreshrs/create': 'Create Refreshr',
+  '/classes/create': 'Create Classes',
+  '/refreshrs/create': 'Create Refreshrs',
   '/billing': 'Billing'
 };
 
