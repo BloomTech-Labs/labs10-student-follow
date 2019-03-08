@@ -1,9 +1,15 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { withRouter, Link } from 'react-router-dom';
-import { CardContent, Typography, Card, Icon, Button, Grid, withStyles } from '@material-ui/core';
-//import axios from 'axios'
-
-// TODO update refreshrs EDIT button on card w/ correct link
+import {
+  CardContent,
+  Typography,
+  Card,
+  Icon,
+  Button,
+  Grid,
+  withStyles
+} from '@material-ui/core';
+import axios from 'axios';
 
 const styles = theme => ({
   wrapper: {
@@ -11,7 +17,7 @@ const styles = theme => ({
     flexFlow: 'column nowrap',
     justifyContent: 'space-around',
     alignItems: 'center',
-    marginTop: '60px',
+    marginTop: '60px'
   },
   containers: {
     display: 'flex',
@@ -91,15 +97,42 @@ const styles = theme => ({
   }
 });
 
+const token = localStorage.getItem('accessToken');
+const teacherId = localStorage.getItem('user_id');
+
 const Dashboard = props => {
   // const name = localStorage.getItem('name'); // commented out until decide what to do w/ name
+  const [teacherRefreshrs, setTeacherRefreshrs] = useState([]);
+
+  async function getTeacherById() {
+    // You can await here
+    try {
+      const response = await axios.get(
+        `http://localhost:9000/teachers/${teacherId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+      // console.log('Response from teacher refreshrs ===', response);
+      setTeacherRefreshrs(response);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   useEffect(() => {
+    // console.log(`Bearer ${token}`);
     props.getClasses();
-    props.getRefreshrs()
+    props.getRefreshrs();
+    // console.log('Dashboard refreshr:', props.getRefreshrs());
+    getTeacherById();
   }, []);
-  
 
   const { userClasses, classes, userRefreshrs } = props;
+  // console.log('Refreshr from Dash ===', userRefreshrs);
+  // console.log('teacher refreshr => ', teacherRefreshrs.data);
   const testClasses = [
     {
       classname: 'FSW438',
@@ -130,36 +163,44 @@ const Dashboard = props => {
       class_id: 4
     }
   ];
-  const testRefreshrs = [
-    {
-      refreshrName: 'CSS Basics',
-      classesAssigned: 84,
-      refreshr_id: 1
-    },
-    {
-      refreshrName: 'Relational Databases',
-      classesAssigned: 21,
-      refreshr_id: 2
-    },
-    {
-      refreshrName: 'Relational Databases',
-      classesAssigned: 21,
-      refreshr_id: 3
-    },
-    {
-      refreshrName: 'Relational Databases',
-      classesAssigned: 21,
-      refreshr_id: 4
-    },
-    {
-      refreshrName: 'Relational Databases',
-      classesAssigned: 21,
-      refreshr_id: 5
-    }
-  ];
+  // const testRefreshrs = [
+  //   {
+  //     refreshrName: 'CSS Basics',
+  //     classesAssigned: 84,
+  //     refreshr_id: 1
+  //   },
+  //   {
+  //     refreshrName: 'Relational Databases',
+  //     classesAssigned: 21,
+  //     refreshr_id: 2
+  //   },
+  //   {
+  //     refreshrName: 'Relational Databases',
+  //     classesAssigned: 21,
+  //     refreshr_id: 3
+  //   },
+  //   {
+  //     refreshrName: 'Relational Databases',
+  //     classesAssigned: 21,
+  //     refreshr_id: 4
+  //   },
+  //   {
+  //     refreshrName: 'Relational Databases',
+  //     classesAssigned: 21,
+  //     refreshr_id: 5
+  //   }
+  // ];
+  // const redirect = url => {
+  //   console.log('Props from redirect', props);
+  //   props.history.push(url);
+  // };
   return (
     <Grid className={classes.wrapper}>
       {console.log('PROPS', userClasses, userRefreshrs)}
+      {console.log(
+        'userRefreshrs ==>',
+        userRefreshrs.map(data => data.typeform_url)
+      )}
       {/* cant figure out what to do w/ the username right now */}
       {/* <Typography component="h2" color="secondary">
         Welcome {name}, 
@@ -222,20 +263,28 @@ const Dashboard = props => {
         Refreshrs:
       </Typography>
       <Grid className={classes.classContainer}>
-        {testRefreshrs.map(r => (
-          <Card key={r.refreshr_id} className={classes.classCard}>
-            <Typography component="h4" className={classes.refreshrTitle}>
-              {r.refreshrName.length > 10
-                ? r.refreshrName.substring(0, 10) + '...'
-                : r.refreshrName}
-            </Typography>
-            <CardContent className={classes.classData}>
-              <Typography component="p" className={classes.lists}>
-                Classes Assigned: {r.classesAssigned}
+        {userRefreshrs.map(r => (
+          <Card className={classes.classCard}>
+            {/* {console.log('R ===', r)} */}
+            <a
+              target="_blank"
+              href={r.typeform_url}
+              rel="noopener noreferrer"
+              className={classes.links}
+            >
+              <Typography component="h4" className={classes.refreshrTitle}>
+                {/* {r.refreshrName.length > 10
+                  ? r.refreshrName.substring(0, 10) + '...'
+                  : r.refreshrName} */}
               </Typography>
-            </CardContent>
+              <CardContent className={classes.classData}>
+                <Typography component="p" className={classes.lists}>
+                  Classes Assigned: {r.classesAssigned}
+                </Typography>
+              </CardContent>
+            </a>
             <Button color="primary" className={classes.lists}>
-              <Link to="/" className={classes.links}>
+              <Link to="/refreshrs/edit" className={classes.links}>
                 Edit
               </Link>
             </Button>

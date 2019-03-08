@@ -64,7 +64,10 @@ const App = props => {
   const getRefreshrs = () => {
     axios({
       method: 'get',
-      url: `http://localhost:9000/teachers/114/refreshrs`,
+      url: `http://localhost:9000/teachers/${user_id}/refreshrs`,
+      // url: `http://localhost:9000/refreshrs`,
+      //url: `http://localhost:9000/teachers/114/refreshrs`,
+
       //url: `https://refreshr.herokuapp.com/teachers/${user_id}/refreshrs`,
       headers: { Authorization: `Bearer ${token}` }
     })
@@ -78,24 +81,24 @@ const App = props => {
 
   //all Questions
 
-  useEffect(() => {
-    axios
-      .get('https://refreshr.herokuapp.com/questions')
-      .then(res => {
-        console.log('Getting questions', res.data.questions);
-        setQuestions(res.data.questions);
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  }, []);
+  // useEffect(() => {
+  //   axios
+  //     .get('https://refreshr.herokuapp.com/questions')
+  //     .then(res => {
+  //       console.log('Getting questions', res.data.questions);
+  //       setQuestions(res.data.questions);
+  //     })
+  //     .catch(err => {
+  //       console.log(err);
+  //     });
+  // }, []);
 
   //add questions
   const addQuestions = question => {
     console.log('Question from addQuestions ===', question);
     axios
-      .post('https://refreshr.herokuapp.com/questions', question)
-      // .post('http://localhost/9000/questions', question)
+      // .post('http://refreshr.herokuapp.com/questions', question)
+      .post('http://localhost:9000/questions', question)
       .then(res => {
         console.log('RES from add questions ===', res);
         setQuestions([]);
@@ -156,6 +159,17 @@ const App = props => {
               <RefreshrListView
                 getRefreshrs={getRefreshrs}
                 refreshrs={userRefreshrs}
+              />
+            )}
+          />
+          <Route
+            path="/refreshrs/edit"
+            render={props => (
+              <RefreshrEdit
+                getClasses={getClasses}
+                userClasses={userClasses}
+                getRefreshrs={getRefreshrs}
+                userRefreshrs={userRefreshrs}
               />
             )}
           />
