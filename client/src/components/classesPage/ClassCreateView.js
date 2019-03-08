@@ -87,7 +87,7 @@ function ClassCreateView(props) {
     }
   });
 
-  const token = localStorage.getItem('access_token');
+  const token = localStorage.getItem('accessToken');
 
   const ax = axios.create({
     // baseURL: 'https://refreshr.herokuapp.com' // production
@@ -97,7 +97,7 @@ function ClassCreateView(props) {
     }
   });
 
-  const sgDb = async refreshr => {
+  const sgDb = async refreshr_id => {
     // create list
     console.log(listData.classnameInput);
     console.log(recipientData);
@@ -108,10 +108,18 @@ function ClassCreateView(props) {
     console.log('res:', res);
     const list = res.data.id;
 
-    // save list to db
+    // save class and list to db
+    const classRes = await ax.post('/classes', {
+      name: listData.classnameInput,
+      sg_list_id: list
+    });
+
+    const { classId } = classRes.data.newClassID;
+
+    console.log(classId);
 
     // create recipients and add to list
-    const students = [];
+    const students = []; // to keep track of student id's for insert into students_classes
     for (let recipient of recipientData) {
       // create sg recipient
       console.log(recipient);
@@ -119,10 +127,15 @@ function ClassCreateView(props) {
       [recipient_id] = recipient_id.data.persisted_recipients;
       console.log('recipient id:', recipient_id);
 
-      // save student to db
+      // save student to students table
       recipient.sg_recipient_id = recipient_id;
-      const studentPost = await ax.post('/students', recipient);
-      console.log(studentPost);
+      const studentRes = await ax.post('/students', recipient);
+      console.log(studentRes);
+
+      // add student and class to students_classes
+      ax.post(`/classes/${list}/students`, {
+        student_id: recipient_id
+      });
 
       // add recipient to list
       const res = await sgAx.post(
@@ -144,7 +157,16 @@ function ClassCreateView(props) {
       campaign_ids.push(refreshrRes.data.id);
     }
     console.log(campaign_ids);
+
     // attach the campaign id and post to tcr table
+    const teacher_id = localStorage.getItem('user_id');
+    const refreshr = {
+      teacher_id,
+      refreshr_id: 
+
+
+    }
+
 
     // schedule the three campaigns
     for (let i = 0; i < 3; i++) {
