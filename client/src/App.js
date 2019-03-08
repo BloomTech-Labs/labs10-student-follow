@@ -64,7 +64,7 @@ const App = props => {
   const getRefreshrs = () => {
     axios({
       method: 'get',
-      url: `http://localhost:9000/teachers/28/refreshrs`,
+      url: `http://localhost:9000/teachers/114/refreshrs`,
       //url: `https://refreshr.herokuapp.com/teachers/${user_id}/refreshrs`,
       headers: { Authorization: `Bearer ${token}` }
     })

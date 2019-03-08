@@ -19,7 +19,11 @@ module.exports = {
         'questions.id',
         'questions_refreshrs.question_id'
       )
-      .join('refreshrs', 'refreshrs.typeform_id', 'questions_refreshrs.refreshr_id')
+      .join(
+        'refreshrs',
+        'refreshrs.typeform_id',
+        'questions_refreshrs.refreshr_id'
+      )
       .where('refreshrs.typeform_id', id);
 
     const teacher = await db('teachers')
@@ -81,36 +85,34 @@ module.exports = {
 
   updateRefreshr: async (id, refreshr) => {
     const updateCount = await db('refreshrs')
-    .where('typeform_id', id)
-    .update(refreshr);
+      .where('typeform_id', id)
+      .update(refreshr);
     return updateCount;
   },
 
   deleteRefreshr: async id => {
     const deleteCount = await db('refreshrs')
-    .where('typeform_id', id)
-    .del();
+      .where('typeform_id', id)
+      .del();
     return deleteCount;
   },
 
+  /* CALLS TO QUESTIONS_REFRESHRS */
 
-
- /* CALLS TO QUESTIONS_REFRESHRS */
- 
- //Connects question to refreshr
+  //Connects question to refreshr
   addQuestions: async (refreshr_id, question_id) => {
     //console.log(refreshr_id, question_id)
     const results = await db('questions_refreshrs')
-    .returning(['refreshr_id', 'question_id'])
-    .insert({refreshr_id, question_id})
-      
-      return results
+      .returning(['refreshr_id', 'question_id'])
+      .insert({ refreshr_id, question_id });
+
+    return results;
   },
 
   //removes connection between refreshr and question
   removeQuestion: (refreshr_id, question_id) => {
     return db('questions_refreshrs')
-      .where({refreshr_id, question_id})
+      .where({ refreshr_id, question_id })
       .delete();
 
   }

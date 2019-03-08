@@ -1,10 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
-import {
-  ListForm,
-  CampaignForm
-} from '../index.js';
+import { ListForm, CampaignForm } from '../index.js';
+import axios from 'axios';
 import {
   addList,
   // getList, getLists, updateList, deleteList,
@@ -22,7 +20,7 @@ const styles = theme => ({
     display: 'flex',
     flexFlow: 'column nowrap',
     justifyContent: 'space-around',
-    alignItems: 'center',
+    alignItems: 'center'
   }
 });
 
@@ -48,7 +46,7 @@ function ClassCreateView(props) {
     plain_content: '' // requires [unsubscribe]
   });
 
-  const [timeTriData, setTimeTriData] = useState([])
+  const [timeTriData, setTimeTriData] = useState([]);
 
   // const [timeData, setTimeData] = useState({
   //   send_at: null
@@ -77,11 +75,133 @@ function ClassCreateView(props) {
     plain_content: campaignData.plain_content // requires [unsubscribe]
   };
 
+  useEffect(() => {
+    console.log(campaignData);
+  }, [campaignData]);
+
+  // sendgrix axios instance
+  const sgAx = axios.create({
+    baseURL: 'https://api.sendgrid.com/v3',
+    headers: {
+      authorization: `Bearer ${process.env.REACT_APP_SENDGRID_API_KEY}`
+    }
+  });
+
+  const token = localStorage.getItem('accessToken');
+
+  const ax = axios.create({
+    // baseURL: 'https://refreshr.herokuapp.com' // production
+    baseURL: 'http://localhost:9000',
+    headers: {
+      authorization: `Bearer ${token}` // development
+    }
+  });
+
+  const sgDb = async refreshrs => {
+    let firstPass = true; // flag to ensure we don't submit the same list to sendgrid
+    let list; // to store list id
+    for (let refreshr of refreshrs) {
+      console.log('list:', list);
+      console.log('refreshr:', refreshr);
+      // create list
+      console.log(listData.classnameInput);
+      console.log(recipientData);
+      if (firstPass) {
+        let body = {
+          name: listData.classnameInput
+        };
+        let res = await sgAx.post('/contactdb/lists', body);
+        console.log('res:', res);
+        list = res.data.id;
+        firstPass = false; // so we don't try to create duplicate lists
+
+        // save class and list to db
+        const classRes = await ax.post('/classes', {
+          name: listData.classnameInput,
+          sg_list_id: list
+        });
+
+        console.log(classRes);
+        const classId = classRes.data.newClassID;
+
+        console.log(classId);
+
+        // create recipients and add to list
+        const students = []; // to keep track of student id's for insert into students_classes
+        for (let recipient of recipientData) {
+          // create sg recipient
+          console.log(recipient);
+          let recipient_id = await sgAx.post('/contactdb/recipients', [
+            recipient
+          ]);
+          [recipient_id] = recipient_id.data.persisted_recipients;
+          console.log('recipient id:', recipient_id);
+
+          // save student to students table (only on first pass)
+          recipient.sg_recipient_id = recipient_id;
+          const studentRes = await ax.post('/students', recipient);
+          console.log(studentRes);
+
+          // add student and class to students_classes
+          ax.post(`/classes/${list}/students`, {
+            student_id: recipient_id
+          });
+
+          // add recipient to list
+          const res = await sgAx.post(
+            `/contactdb/lists/${list}/recipients/${recipient_id}`
+          );
+          console.log('add recipient:', res);
+        }
+      }
+
+      // create campaign 1, 2, 3
+      // console.log(newRefreshr);
+      // console.log(timeTriData);
+      newRefreshr.list_ids = [list];
+
+      // create three campaigns with the refreshr
+      const campaign_ids = [];
+      for (let i = 0; i < 3; i++) {
+        const refreshrRes = await sgAx.post('/campaigns', newRefreshr);
+        console.log(refreshrRes);
+        campaign_ids.push(refreshrRes.data.id);
+      }
+      console.log(campaign_ids);
+
+      // attach the campaign id and post to tcr table
+      const teacher_id = localStorage.getItem('user_id');
+      const tcrRefreshr = {
+        teacher_id,
+        refreshr_id: refreshr.refreshr_id,
+        date: refreshr.date,
+        sg_campaign_id: list
+      };
+      const tcrRes = await ax.post(`/classes/${list}/campaigns`, tcrRefreshr);
+      console.log(tcrRes);
+
+      console.log('tcrRefreshr:', tcrRefreshr);
+
+      // schedule the three campaigns
+      for (let i = 0; i < 3; i++) {
+        // const time = {
+        //   send_at: timeTriData[i]
+        // };
+        // console.log(time);
+        const res = await sgAx.post(
+          `/campaigns/${campaign_ids[i]}/schedules`,
+          refreshr.timeTriData[i]
+        );
+        console.log(res);
+      }
+    }
+  };
+
   // Schedule campaign for 2 days after class date
   const sendAllToSendgrid = () => {
     console.log(campaignData);
     // Add new list name
-    addList(listData.classnameInput + " 2d")
+    addList(listData.classnameInput + ' 2d')
       .then(res => {
         validated.list_ids.push(res.data.id);
         console.log(`91`);
@@ -129,11 +249,11 @@ function ClassCreateView(props) {
           validated.schedule_code = res.status;
           console.log(
             `Success! Your campaign ${res.data.id} is scheduled for ${
-            res.data.send_at
+              res.data.send_at
             }. Status is "${res.data.status}"!`
           );
           // setTimeout(() => {
-          sendAllToSendgrid2()
+          sendAllToSendgrid2();
           // }, 2000);
           // setTimeout(() => {
           //   campaignData.campaign_id = validated.campaign_id; // tacking on for submitCD
@@ -151,7 +271,7 @@ function ClassCreateView(props) {
 
   // Schedule campaign for 2 weeks after class date
   const sendAllToSendgrid2 = () => {
-    addList(listData.classnameInput + " 2wk")
+    addList(listData.classnameInput + ' 2wk')
       .then(res => {
         validated.list_ids.push(res.data.id);
         console.log(`160`);
@@ -181,11 +301,11 @@ function ClassCreateView(props) {
           validated.schedule_code = res.status;
           console.log(
             `Success! Your campaign ${res.data.id} is scheduled for ${
-            res.data.send_at
+              res.data.send_at
             }. Status is "${res.data.status}"!`
           );
           // setTimeout(() => {
-          sendAllToSendgrid3()
+          sendAllToSendgrid3();
           // }, 2000);
           // setTimeout(() => {
           //   campaignData.campaign_id = validated.campaign_id; // tacking on for submitCD
@@ -199,11 +319,11 @@ function ClassCreateView(props) {
         }
       })
       .catch(err => console.log(err));
-  }
+  };
 
   // Schedule campaign for 2 months after class date
   const sendAllToSendgrid3 = () => {
-    addList(listData.classnameInput + " 2mo")
+    addList(listData.classnameInput + ' 2mo')
       .then(res => {
         validated.list_ids.push(res.data.id);
         console.log(`212`);
@@ -231,7 +351,7 @@ function ClassCreateView(props) {
           validated.schedule_code = res.status;
           console.log(
             `Success! Your campaign ${res.data.id} is scheduled for ${
-            res.data.send_at
+              res.data.send_at
             }. Status is "${res.data.status}"!`
           );
           // setTimeout(() => {
@@ -246,7 +366,7 @@ function ClassCreateView(props) {
         }
       })
       .catch(err => console.log(err));
-  }
+  };
 
   return (
     <Grid className={props.classes.wrapper}>
@@ -269,7 +389,7 @@ function ClassCreateView(props) {
           setCampaignData={setCampaignData}
           stage={stage}
           setStage={setStage}
-          sendAllToSendgrid={sendAllToSendgrid}
+          sendAllToSendgrid={sgDb}
           // setTimeData={setTimeData}
           timeTriData={timeTriData}
           setTimeTriData={setTimeTriData}

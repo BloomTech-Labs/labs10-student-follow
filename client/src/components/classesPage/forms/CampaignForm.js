@@ -13,7 +13,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import ArrowBack from '@material-ui/icons/ArrowBack';
 import Send from '@material-ui/icons/Send';
-import moment from 'moment'
+import moment from 'moment';
 
 const styles = theme => ({
   container: {
@@ -57,7 +57,7 @@ const styles = theme => ({
     padding: theme.spacing.unit * 3,
     justifyContent: 'space-between',
     display: 'flex',
-    flexDirection: 'column',
+    flexDirection: 'column'
   },
   dateField: {
     marginTop: 20
@@ -100,19 +100,21 @@ const styles = theme => ({
     color: theme.palette.primary.main,
     background: theme.palette.secondary.main,
     width: 40,
-    height: 40,
+    height: 40
   },
   scheduleDiv: {
     margin: '1rem 0',
+    display: 'none' // temporary because i can't see the button
   },
   scheduleText: {
-    marginLeft: '1rem',
+    marginLeft: '1rem'
   }
 });
 
 function CampaignForm(props) {
   const [refreshrs, setRefreshrs] = useState([]);
   const [activeRefreshr, setActiveRefreshr] = useState(null);
+  const [scheduledRefreshrs, setScheduledRefreshrs] = useState([]);
 
   // For displaying on the page for the ease of user
   // current time, 2 days, 2 weeks, 2 months
@@ -120,8 +122,8 @@ function CampaignForm(props) {
     schedule0: null,
     schedule1: null,
     schedule2: null,
-    schedule3: null,
-  })
+    schedule3: null
+  });
 
   const { classes } = props;
   let today = new Date(); // to set default for date inputs
@@ -149,12 +151,15 @@ function CampaignForm(props) {
       /* this should fetch the class's refreshrs from /teachers/${userID}/refeshrs,
         but the endpoint is not live yet so I'm using this for testing */
       // const res = await axios.get('https://refreshr.herokuapp.com/refreshrs');
+      // setRefreshrs(res.data[0]);
+      const uid = localStorage.getItem('user_id');
       const res = await ax.get(
-        `/teachers/${userID}/refeshrs`
+        // `/teachers/275/refreshrs`
+        `/teachers/${uid}/refreshrs`
         // 'https://refreshr.herokuapp.com/teachers/${userID}/refeshrs'
       );
       console.log(res.data);
-      setRefreshrs(res.data);
+      setRefreshrs(res.data.refreshrs);
     } catch (err) {
       console.log(err);
     }
@@ -178,7 +183,8 @@ function CampaignForm(props) {
     });
   };
 
-  const scheduleRefreshr = () => {
+  const scheduleRefreshr = e => {
+    console.log(e.target);
     props.setCampaignData({
       ...props.campaignData,
       title: 'Your Refreshr Is Here!',
@@ -187,50 +193,75 @@ function CampaignForm(props) {
         activeRefreshr.review_text
       } [unsubscribe]</p></body></html>`,
       plain_content: `${activeRefreshr.review_text} [unsubscribe]`,
-      refreshr_id: activeRefreshr.id
+      refreshr_id: activeRefreshr.refreshr_id
     });
+    setScheduledRefreshrs([...scheduledRefreshrs, activeRefreshr]);
     setActiveRefreshr(null);
   };
 
+  // useEffect(() => {
+  //   console.log(activeRefreshr);
+  // }, [activeRefreshr]);
+
+  useEffect(() => {
+    console.log(scheduledRefreshrs);
+  }, [scheduledRefreshrs]);
+
   const handleClick = id => {
-    const [active] = refreshrs.filter(r => r.id === id);
+    const [active] = refreshrs.filter(r => r.refreshr_id === id);
     setActiveRefreshr(active);
   };
 
   const handleSubmit = e => {
     e.preventDefault();
-    props.sendAllToSendgrid();
+    props.sendAllToSendgrid(scheduledRefreshrs);
   };
 
-  const alterTime = (e) => {
-    e.preventDefault()
-    const schedule0 = moment(`${e.target.value}T00:00:00`).format('ddd, MMMM Do, YYYY ha')
-    const schedule1 = moment(`${e.target.value}T00:00:00`).add(2, 'day').format('ddd, MMMM Do, YYYY ha')
-    const schedule2 = moment(`${e.target.value}T00:00:00`).add(2, 'weeks').format('ddd, MMMM Do, YYYY ha')
-    const schedule3 = moment(`${e.target.value}T00:00:00`).add(2, 'month').format('ddd, MMMM Do, YYYY ha')
+  const alterTime = e => {
+    e.preventDefault();
+    setActiveRefreshr({ ...activeRefreshr, date: e.target.value });
 
-    const twoDaysUnix = moment(`${e.target.value}T00:00:00`).add(2, 'day').unix()
-    const twoWeeksUnix = moment(`${e.target.value}T00:00:00`).add(2, 'weeks').unix()
-    const twoMonthsUnix = moment(`${e.target.value}T00:00:00`).add(2, 'month').unix()
+    const schedule0 = moment(`${e.target.value}T00:00:00`).format(
+      'ddd, MMMM Do, YYYY ha'
+    );
+    const schedule1 = moment(`${e.target.value}T00:00:00`)
+      .add(2, 'day')
+      .format('ddd, MMMM Do, YYYY ha');
+    const schedule2 = moment(`${e.target.value}T00:00:00`)
+      .add(2, 'weeks')
+      .format('ddd, MMMM Do, YYYY ha');
+    const schedule3 = moment(`${e.target.value}T00:00:00`)
+      .add(2, 'month')
+      .format('ddd, MMMM Do, YYYY ha');
+
+    const twoDaysUnix = moment(`${e.target.value}T00:00:00`)
+      .add(2, 'day')
+      .unix();
+    const twoWeeksUnix = moment(`${e.target.value}T00:00:00`)
+      .add(2, 'weeks')
+      .unix();
+    const twoMonthsUnix = moment(`${e.target.value}T00:00:00`)
+      .add(2, 'month')
+      .unix();
 
     const timeTriData = [
       { send_at: twoDaysUnix },
       { send_at: twoWeeksUnix },
-      { send_at: twoMonthsUnix },
-    ]
+      { send_at: twoMonthsUnix }
+    ];
+    setActiveRefreshr({...activeRefreshr, timeTriData})
+
 
     setSchedule({
       ...schedule,
       schedule0,
       schedule1,
       schedule2,
-      schedule3,
-    })
+      schedule3
+    });
 
-    props.setTimeTriData([
-      ...timeTriData
-    ])
-  }
+    props.setTimeTriData([...timeTriData]);
+  };
 
   return (
     <Grid container className={classes.container}>
@@ -254,32 +285,29 @@ function CampaignForm(props) {
             onChange={e => alterTime(e)}
           />
           <div className={classes.scheduleDiv}>
-            <Typography
-              variant={"body2"}
-              color="secondary"
-            >
-              Input: {schedule.schedule0 || ""}
+            <Typography variant={'body2'} color="secondary">
+              Input: {schedule.schedule0 || ''}
             </Typography>
             <Typography
               className={classes.scheduleText}
-              variant={"body2"}
+              variant={'body2'}
               color="secondary"
             >
-              +2 days: {schedule.schedule1 || ""}
+              +2 days: {schedule.schedule1 || ''}
             </Typography>
             <Typography
               className={classes.scheduleText}
-              variant={"body2"}
+              variant={'body2'}
               color="secondary"
             >
-              +2 weeks: {schedule.schedule2 || ""}
+              +2 weeks: {schedule.schedule2 || ''}
             </Typography>
             <Typography
               className={classes.scheduleText}
-              variant={"body2"}
+              variant={'body2'}
               color="secondary"
             >
-              +2 months: {schedule.schedule3 || ""}
+              +2 months: {schedule.schedule3 || ''}
             </Typography>
           </div>
           <Button
@@ -298,23 +326,27 @@ function CampaignForm(props) {
 
       <hr className={classes.hrStyle} />
 
-      <Typography variant="body2" color="secondary" style={{ textAlign: 'center' }}>
+      <Typography
+        variant="body2"
+        color="secondary"
+        style={{ textAlign: 'center' }}
+      >
         Your Refreshrs
       </Typography>
 
       <Grid className={classes.cardList}>
         {refreshrs.map(refreshr => (
           <Card
-            onClick={() => handleClick(refreshr.id)}
+            onClick={() => handleClick(refreshr.refreshr_id)}
             className={classes.card}
-            key={refreshr.id}
-            id={refreshr.id}
+            key={refreshr.refreshr_id}
+            id={refreshr.refreshr_id}
             raised
           >
             <Typography variant="subtitle2">{refreshr.name}</Typography>
           </Card>
         ))}
-        <Link to="/questions/create">
+        <Link to="/refreshrs/create">
           <Card className={`${classes.card} ${classes.iconCard}`}>
             <Icon color="action" style={{ fontSize: 60 }}>
               add_circle
