@@ -43,26 +43,38 @@ router.get('/:id', jwtCheck, async (req, res, next) => {
   }
 });
 
-router.post('/', jwtCheck, emptyCheck, whitespaceCheck, async (req, res, next) => {
-  const { body } = req;
-  try {
-    const newTeacherID = await db.addTeacher(body);
-    res.status(responseStatus.postCreated).json({ newTeacherID });
-  } catch (err) {
-    next(err);
+router.post(
+  '/',
+  jwtCheck,
+  emptyCheck,
+  whitespaceCheck,
+  async (req, res, next) => {
+    const { body } = req;
+    try {
+      const newTeacherID = await db.addTeacher(body);
+      res.status(responseStatus.postCreated).json({ newTeacherID });
+    } catch (err) {
+      next(err);
+    }
   }
-});
+);
 
-router.put('/:id', jwtCheck, emptyCheck, whitespaceCheck, async (req, res, next) => {
-  const { id } = req.params;
-  const { body } = req;
-  try {
-    const updatedRecords = await db.updateTeacher(id, body);
-    res.status(responseStatus.success).json({ updatedRecords });
-  } catch (err) {
-    next(err);
+router.put(
+  '/:id',
+  jwtCheck,
+  emptyCheck,
+  whitespaceCheck,
+  async (req, res, next) => {
+    const { id } = req.params;
+    const { body } = req;
+    try {
+      const updatedRecords = await db.updateTeacher(id, body);
+      res.status(responseStatus.success).json({ updatedRecords });
+    } catch (err) {
+      next(err);
+    }
   }
-});
+);
 
 router.delete('/:id', jwtCheck, async (req, res, next) => {
   const { id } = req.params;
@@ -158,16 +170,20 @@ router.post('/:id/refreshrs', jwtCheck, async (req, res, next) => {
 });
 
 //removes the link between the Refreshr and the teacher
-router.delete('/:id/refreshrs/:refreshrID', jwtCheck, async (req, res, next) => {
-  const { id, refreshrID } = req.params;
-  try {
-    const count = await db.removeRefreshr(id, refreshrID);
-    res.status(responseStatus.success).json({ removedRefreshrs: count });
-  } catch (err) {
-    console.log(err);
-    next(err);
+router.delete(
+  '/:id/refreshrs/:refreshrID',
+  jwtCheck,
+  async (req, res, next) => {
+    const { id, refreshrID } = req.params;
+    try {
+      const count = await db.removeRefreshr(id, refreshrID);
+      res.status(responseStatus.success).json({ removedRefreshrs: count });
+    } catch (err) {
+      console.log(err);
+      next(err);
+    }
   }
-});
+);
 
 
 module.exports = router;

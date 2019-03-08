@@ -26,18 +26,11 @@ const styles = theme => ({
     marginBottom: theme.spacing.unit * 4,
     color: theme.palette.primary.contrastText,
     background: theme.palette.primary.dark,
-    marginLeft: '25%',
-    [theme.breakpoints.down('md')]: {
-      width: '60%',
-      marginLeft: '20%'
+    [theme.breakpoints.only('sm')]: {
+      width: '60vw'
     },
-    [theme.breakpoints.down('sm')]: {
-      width: '60%',
-      marginLeft: '15%'
-    },
-    [theme.breakpoints.down('xs')]: {
-      width: '100%',
-      marginLeft: '10%'
+    [theme.breakpoints.only('xs')]: {
+      width: '90vw'
     },
     width: '50%'
   },
@@ -98,15 +91,12 @@ const styles = theme => ({
   }
 });
 
-function RefreshrEdit(props) {
+function Refreshr(props) {
   const { setUrl, url } = props;
+  const [reviewText, setReviewText] = useState('');
   const [refreshrName, addRefreshrName] = useState('');
   const [questionTextOne, setQuestionTextOne] = useState('');
   const [questionTextTwo, setQuestionTextTwo] = useState('');
-  const [a1, setA1] = useState(false);
-  const [a2, setA2] = useState(false);
-  const [a3, setA3] = useState(false);
-  const [a4, setA4] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
   const [a1Text, setA1Text] = useState('');
@@ -114,10 +104,11 @@ function RefreshrEdit(props) {
   const [a3Text, setA3Text] = useState('');
   const [a4Text, setA4Text] = useState('');
   const [questionObject, setQuestionObject] = useState({
+    reviewText,
     refreshrName,
     questionTextOne,
     questionTextTwo,
-    answers: { a1Text, a1, a2Text, a2, a3Text, a3, a4Text, a4 }
+    answers: { a1Text, a2Text, a3Text, a4Text }
   });
 
   const StyleDisplay = styled.a`
@@ -134,6 +125,14 @@ function RefreshrEdit(props) {
       variables: {
         score: 0
       },
+      welcome_screens: [
+        {
+          title: 'Welcome to your Refreshr!',
+          properties: {
+            description: questionObject.reviewText
+          }
+        }
+      ],
       fields: [
         {
           title: 'Please enter your email address.',
@@ -176,19 +175,21 @@ function RefreshrEdit(props) {
       ]
     };
     try {
-      const response = await axios.post(
-        'https://api.typeform.com/forms',
-        data,
-        {
+      const response = await axios
+        .post('https://api.typeform.com/forms', data, {
           headers
-        }
-      );
-      setUrl(response.data._links.display);
+        })
+        .then(res => console.log(res));
     } catch (error) {
       console.log(error);
     }
     setSubmitted(true);
   };
+
+  const { userClasses, classes, userRefreshrs } = props;
+  console.log('userClasses', userClasses);
+  console.log('classes', classes);
+  console.log('userRefreshrs', userRefreshrs);
 
   return (
     <Paper className={props.classes.container} elevation={24}>
@@ -196,10 +197,11 @@ function RefreshrEdit(props) {
         <FormGroup
           onChange={() =>
             setQuestionObject({
+              reviewText,
               refreshrName,
               questionTextOne,
               questionTextTwo,
-              answers: { a1Text, a1, a2Text, a2, a3Text, a3, a4Text, a4 }
+              answers: { a1Text, a2Text, a3Text, a4Text }
             })
           }
         >
@@ -208,13 +210,13 @@ function RefreshrEdit(props) {
             color="secondary"
             style={{ textAlign: 'center' }}
           >
-            Create Your Refreshr
+            Edit Your Refreshr
           </Typography>
 
           <hr className={props.classes.hrStyle} />
 
           <Typography
-            variant="p"
+            variant="body1"
             color="secondary"
             style={{ textAlign: 'center' }}
           >
@@ -237,10 +239,30 @@ function RefreshrEdit(props) {
 
           <hr className={props.classes.hrStyle} />
 
+          <h4 className={props.classes.subheaders}>Add Review Text</h4>
+
+          <FormGroup
+            className={props.classes.form1}
+            onSubmit={props.handleSubmit}
+          >
+            <Input
+              disableUnderline
+              onChange={e => setReviewText(e.target.value)}
+              name="classnameInput"
+              required
+              multiline
+              rows="4"
+              placeholder="Enter info about the Refreshr.."
+              className={props.classes.inputQuestion}
+            />
+          </FormGroup>
+
+          <hr className={props.classes.hrStyle} />
+
           <h4 className={props.classes.subheaders}>Create Questions</h4>
 
           <Typography
-            variant="p"
+            variant="body1"
             color="secondary"
             style={{ textAlign: 'center' }}
           >
@@ -302,7 +324,7 @@ function RefreshrEdit(props) {
           <hr className={props.classes.hrStyle} />
 
           <Typography
-            variant="p"
+            variant="body1"
             color="secondary"
             style={{ textAlign: 'center' }}
           >
@@ -326,7 +348,6 @@ function RefreshrEdit(props) {
           </FormGroup>
 
           <hr className={props.classes.hrStyle} />
-
           <Button
             variant="contained"
             color="primary"
@@ -344,4 +365,4 @@ function RefreshrEdit(props) {
   );
 }
 
-export default withStyles(styles)(RefreshrEdit);
+export default withStyles(styles)(Refreshr);

@@ -44,7 +44,7 @@ router.get('/:id', jwtCheck, async (req, res, next) => {
 });
 
 /* Returns typeform_id as newRefreshrID*/
-router.post('/',jwtCheck, emptyCheck, async (req, res, next) => {
+router.post('/', jwtCheck, emptyCheck, async (req, res, next) => {
   const { body } = req;
   try {
     const newRefreshrID = await db.addRefreshr(body);
@@ -94,15 +94,19 @@ router.post('/:id/questions', jwtCheck, async (req, res, next) => {
   }
 });
 
-router.delete('/:id/questions/:questionID', jwtCheck, async (req, res, next) => {
-  const { id, questionID } = req.params;
-  try {
-    const count = await db.removeQuestion(id, questionID);
-    res.status(responseStatus.success).json({ removedQuestions: count });
-  } catch (err) {
-    console.log(err);
-    next(err);
+router.delete(
+  '/:id/questions/:questionID',
+  jwtCheck,
+  async (req, res, next) => {
+    const { id, questionID } = req.params;
+    try {
+      const count = await db.removeQuestion(id, questionID);
+      res.status(responseStatus.success).json({ removedQuestions: count });
+    } catch (err) {
+      console.log(err);
+      next(err);
+    }
   }
-});
+);
 
 module.exports = router;
