@@ -105,12 +105,10 @@ router.post('/:id/students', jwtCheck, async (req, res, next) => {
   //console.log(student_id, class_id)
   try {
     const results = await db.addStudent(id, student_id);
-    res
-      .status(responseStatus.postCreated)
-      .json({
-        message: `Student with id ${student_id} added to class with id ${id}.`,
-        results
-      });
+    res.status(responseStatus.postCreated).json({
+      message: `Student with id ${student_id} added to class with id ${id}.`,
+      results
+    });
   } catch (err) {
     next(err);
   }
@@ -166,16 +164,20 @@ router.post('/:id/refreshrs', jwtCheck, async (req, res, next) => {
 
 //Removes refreshrs from a class
 
-router.delete('/:id/refreshrs/:refreshrID', jwtCheck, async (req, res, next) => {
-  const { id, refreshrID } = req.params;
-  try {
-    const count = await db.removeRefreshr(id, refreshrID);
-    res.status(responseStatus.success).json({ removedRefreshrs: count });
-  } catch (err) {
-    console.log(err);
-    next(err);
+router.delete(
+  '/:id/refreshrs/:refreshrID',
+  jwtCheck,
+  async (req, res, next) => {
+    const { id, refreshrID } = req.params;
+    try {
+      const count = await db.removeRefreshr(id, refreshrID);
+      res.status(responseStatus.success).json({ removedRefreshrs: count });
+    } catch (err) {
+      console.log(err);
+      next(err);
+    }
   }
-});
+);
 
 //TEACHERS
 // gets an array of teachers
@@ -245,15 +247,19 @@ router.post('/:id/campaigns', jwtCheck, async (req, res, next) => {
 
 //Removes a campaign from a class
 
-router.delete('/:id/campaigns/:campaignID', jwtCheck, async (req, res, next) => {
-  const { id, campaignID } = req.params;
-  try {
-    const count = await db.removeCampaign(id, campaignID);
-    res.status(responseStatus.success).json({ removedCampaigns: count });
-  } catch (err) {
-    console.log(err);
-    next(err);
+router.delete(
+  '/:id/campaigns/:campaignID',
+  jwtCheck,
+  async (req, res, next) => {
+    const { id, campaignID } = req.params;
+    try {
+      const count = await db.removeCampaign(id, campaignID);
+      res.status(responseStatus.success).json({ removedCampaigns: count });
+    } catch (err) {
+      console.log(err);
+      next(err);
+    }
   }
-});
+);
 
 module.exports = router;
