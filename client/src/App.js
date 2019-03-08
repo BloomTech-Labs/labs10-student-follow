@@ -131,7 +131,7 @@ const App = props => {
         className={classes.container}
       >
         <Grid item>
-          <Navbar theme={props.theme}  />
+          <Navbar theme={props.theme} lock={props.lock}  />
           <Navcrumbs location={props.location} history={props.history}/>
         </Grid>
         <Route exact path="/" render={props => <LandingPage {...props} />} />
