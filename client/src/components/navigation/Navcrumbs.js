@@ -3,18 +3,17 @@
 import React from 'react';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import { withStyles } from '@material-ui/core/styles';
-import Link from '@material-ui/core/Link';
 import NoSsr from '@material-ui/core/NoSsr';
 import Breadcrumbs from '@material-ui/lab/Breadcrumbs';
 import MemoryRouter from 'react-router/MemoryRouter';
-import Route from 'react-router/Route';
-import { Link as RouterLink, withRouter } from 'react-router-dom';
+import { Typography } from '@material-ui/core';
 
 export const breadcrumbNameMap = {
-  '/refreshrs': 'Refreshrs',
   '/classes': 'Classes',
-  '/refreshrs/create': 'Create Refreshrs',
+  '/refreshrs': 'Refreshrs',
+  '/classes/edit': 'Edit Class',
   '/classes/create': 'Create Classes',
+  '/refreshrs/create': 'Create Refreshrs',
   '/billing': 'Billing'
 };
 
@@ -39,58 +38,48 @@ const styles = theme => ({
   }
 });
 
-const Navcrumbs = props => {
-  const { classes, location } = props;
+
+const Navcrumbs = (props) => {
+  const { classes, location, history } = props;
+  const paths = location.pathname.split('/').filter(path => path)
 
   // Use NoSsr to avoid SEO issues with the documentation website.
   return (
     <NoSsr>
       <MemoryRouter initialEntries={['/dashboard']} initialIndex={0}>
         <div className={classes.container}>
-          <Route>
-            {() => {
-              const pathnames = location.pathname
-                .split('/')
-                .filter(path => path);
-
-              return (
                 <Breadcrumbs
                   arial-label="Breadcrumb"
                   separator={
                     <NavigateNextIcon fontSize="small" color="secondary" />
                   }
                 >
-                  <Link
-                    component={RouterLink}
-                    className={classes.navRoutes}
-                    to="/dashboard"
+                  <Typography
+                    className={classes.navRoutes} 
+                    onClick={(e) => {e.preventDefault(); history.push('/dashboard')}}                 
                     style={{
                       display: `${location.pathname === '/' ? 'none' : 'flex'}`
                     }}
                   >
                     Dashboard
-                  </Link>
-                  {pathnames.map((value, index) => {
-                    const to = `/${pathnames.slice(0, index + 1).join('/')}`;
+                  </Typography>
+                  {paths.map((value, index) => {
+                    const to = `/${paths.slice(0, index + 1).join('/')}`;
                     return (
-                      <Link
-                        key={index}
+                      <Typography
+                        key={to}
                         className={classes.navRoutes}
-                        component={RouterLink}
-                        to={to}
+                        onClick={(e) => {e.preventDefault(); history.push(to)}}
                       >
                         {breadcrumbNameMap[to]}
-                      </Link>
+                      </Typography>
                     );
                   })}
                 </Breadcrumbs>
-              );
-            }}
-          </Route>
         </div>
       </MemoryRouter>
     </NoSsr>
   );
 };
 
-export default withRouter(withStyles(styles)(Navcrumbs));
+export default withStyles(styles)(Navcrumbs);

@@ -34,7 +34,7 @@ const styles = theme => ({
     }
   },
   menuButton: {
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.up('sm')]: {
       display: 'none'
     }
   },
@@ -122,8 +122,8 @@ const Navbar = props => {
 
   const drawer = (
     <List component="nav" className={classes.list}>
-      <ListItemLink to="/refreshrs/create" className={classes.navRoutes} />
       <ListItemLink to="/classes/create" className={classes.navRoutes} />
+      <ListItemLink to="/refreshrs/create" className={classes.navRoutes} />
       <ListItemLink to="/billing" className={classes.navRoutes} />
     </List>
   );

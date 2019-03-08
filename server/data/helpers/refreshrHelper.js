@@ -114,5 +114,6 @@ module.exports = {
     return db('questions_refreshrs')
       .where({ refreshr_id, question_id })
       .delete();
+
   }
 };

@@ -86,6 +86,7 @@ module.exports = {
     return result;
   },
 
+
   removeRefreshr: (teacher_id, refreshr_id) => {
     return db('teachers_classes_refreshrs')
       .where({ teacher_id, refreshr_id })

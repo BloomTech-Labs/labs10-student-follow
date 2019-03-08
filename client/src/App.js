@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
+
 import { Route, withRouter } from 'react-router-dom';
+
 import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
 import axios from 'axios';
@@ -43,7 +45,6 @@ const styles = theme => ({
 });
 
 const App = props => {
-  //console.log('ENV:', process.env);
   const { classes } = props;
   const token = localStorage.getItem('accessToken');
   const user_id = localStorage.getItem('user_id');
@@ -68,13 +69,15 @@ const App = props => {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => {
-        console.log(res);
+        //console.log(res);
+        console.log('REFRESHRS', res)
         setRefreshrs(res.data.refreshrs);
       })
       .catch(err => console.log(err));
   };
 
   //all Questions
+
   useEffect(() => {
     axios
       .get('https://refreshr.herokuapp.com/questions')
@@ -130,8 +133,8 @@ const App = props => {
         className={classes.container}
       >
         <Grid item>
-          <Navbar theme={props.theme} {...props} />
-          <Navcrumbs {...props} />
+          <Navbar theme={props.theme} lock={props.lock}  />
+          <Navcrumbs location={props.location} history={props.history}/>
         </Grid>
         <Route exact path="/" render={props => <LandingPage {...props} />} />
         <Grid item className={classes.routes}>

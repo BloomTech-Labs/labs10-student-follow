@@ -274,7 +274,7 @@ function ListForm(props) {
 
       <hr className={classes.hrStyle} />
 
-      <Typography variant="p" color="secondary" style={{ textAlign: 'center' }}>
+      <Typography variant="body1" color="secondary" style={{ textAlign: 'center' }}>
         Class Name
       </Typography>
 
@@ -305,7 +305,7 @@ function ListForm(props) {
 
       <hr className={classes.hrStyle} />
 
-      <Typography variant="p" color="secondary" style={{ textAlign: 'center' }}>
+      <Typography variant="body1" color="secondary" style={{ textAlign: 'center' }}>
         CSV File
       </Typography>
 
@@ -343,7 +343,7 @@ function ListForm(props) {
 
       <hr className={classes.hrStyle} />
 
-      <Typography variant="p" color="secondary" style={{ textAlign: 'center' }}>
+      <Typography variant="body1" color="secondary" style={{ textAlign: 'center' }}>
         Recipient Name
       </Typography>
 
