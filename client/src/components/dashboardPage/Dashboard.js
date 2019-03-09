@@ -71,7 +71,9 @@ const styles = theme => ({
     flexDirection: 'column',
     margin: '1rem',
     background: 'white',
-    width: '200px'
+    width: '200px',
+    textDecoration: 'none',
+    color: theme.palette.secondary.contrastText
   },
   refreshrNewCard: {
     display: 'flex',
@@ -97,72 +99,134 @@ const styles = theme => ({
   }
 });
 
-const token = localStorage.getItem('accessToken');
-const teacherId = localStorage.getItem('user_id');
-
 const Dashboard = props => {
   // const name = localStorage.getItem('name'); // commented out until decide what to do w/ name
-  const [teacherRefreshrs, setTeacherRefreshrs] = useState([]);
-
-  async function getTeacherById() {
-    // You can await here
-    try {
-      const response = await axios.get(
-        `http://localhost:9000/teachers/${teacherId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
-      );
-      // console.log('Response from teacher refreshrs ===', response);
-      setTeacherRefreshrs(response);
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  const { userClasses, classes, userRefreshrs, getClasses, getRefreshrs } = props;
 
   useEffect(() => {
-    // console.log(`Bearer ${token}`);
-    props.getClasses();
-    props.getRefreshrs();
-    // console.log('Dashboard refreshr:', props.getRefreshrs());
-    getTeacherById();
+    getClasses();
+    getRefreshrs();
   }, []);
 
-  const { userClasses, classes, userRefreshrs } = props;
-  // console.log('Refreshr from Dash ===', userRefreshrs);
+  
+  return (
+    <Grid className={classes.wrapper}>
+      <Typography
+        component="h2"
+        color="secondary"
+        className={classes.cardSectionLabels}
+      >
+        Classes:
+      </Typography>
+      <Grid className={classes.classContainer}>
+        {userClasses.map(c => (
+          <Link key={c.class_id} to={`classes/edit/${c.class_id}`} style={{textDecoration: 'none'}}>
+          <Card className={classes.classCard}>
+            <Typography component="h4" className={classes.classTitle}>
+              {c.classname.length > 10
+                ? c.classname.substring(0, 10) + '...'
+                : c.classname}
+            </Typography>
+            <CardContent className={classes.classData}>
+              {/* Need analytics for these, stretch goals? */}
+
+              <Typography component="p" className={classes.lists}>
+                Students: {c.numOfStudents}
+              </Typography>
+              <Typography component="p" className={classes.lists}>
+                Participation: {c.participationRate}
+              </Typography>
+              <Typography component="p" className={classes.lists}>
+                Refreshrs Sent: {c.refreshrsEmailed}
+              </Typography>
+            </CardContent>
+          </Card></Link>
+        ))}
+        <Card className={classes.classCard}>
+          <Typography component="h4" className={classes.classTitle}>
+            New Class
+          </Typography>
+          <Icon className={classes.icon} color="primary">
+            <Link to="/classes/create" className={classes.links}>
+              add_circle
+            </Link>
+          </Icon>
+        </Card>
+      </Grid>
+      <Typography
+        component="h2"
+        color="secondary"
+        className={classes.cardSectionLabels}
+      >
+        Refreshrs:
+      </Typography>
+      <Grid className={classes.classContainer}>
+        {userRefreshrs.map(r => (
+          <Link key={r.refreshr_id} to={`refreshrs/edit/${r.refreshr_id}`} style={{textDecoration: 'none'}}>
+          <Card className={classes.classCard}>
+            {/* {console.log('R ===', r)} */}
+              <Typography component="h4" className={classes.refreshrTitle}>
+                {/* {r.refreshrName.length > 10
+                  ? r.refreshrName.substring(0, 10) + '...'
+                  : r.refreshrName} */}
+              </Typography>
+              <CardContent className={classes.classData}>
+                <Typography component="p" className={classes.lists}>
+                  Classes Assigned: {r.classesAssigned}
+                </Typography>
+              </CardContent>
+          </Card>
+          </Link>
+        ))}
+        <Card className={classes.refreshrNewCard}>
+          <Typography component="h4" className={classes.refreshrTitle}>
+            New Refreshr
+          </Typography>
+          <Icon className={classes.refreshrIcon} color="primary">
+            <Link to="/refreshrs/create" className={classes.links}>
+              add_circle
+            </Link>
+          </Icon>
+        </Card>
+      </Grid>
+    </Grid>
+  );
+}
+export default withRouter(withStyles(styles)(Dashboard));
+
+
+// console.log('Refreshr from Dash ===', userRefreshrs);
   // console.log('teacher refreshr => ', teacherRefreshrs.data);
-  const testClasses = [
-    {
-      classname: 'FSW438',
-      numOfStudents: 84,
-      participationRate: 76,
-      refreshrsEmailed: 67,
-      class_id: 1
-    },
-    {
-      classname: 'Android 74',
-      numOfStudents: 84,
-      participationRate: 78,
-      refreshrsEmailed: 36,
-      class_id: 2
-    },
-    {
-      classname: 'Android 74',
-      numOfStudents: 84,
-      participationRate: 78,
-      refreshrsEmailed: 36,
-      class_id: 3
-    },
-    {
-      classname: 'Android 74',
-      numOfStudents: 84,
-      participationRate: 78,
-      refreshrsEmailed: 36,
-      class_id: 4
-    }
-  ];
+  // const testClasses = [
+  //   {
+  //     classname: 'FSW438',
+  //     numOfStudents: 84,
+  //     participationRate: 76,
+  //     refreshrsEmailed: 67,
+  //     class_id: 1
+  //   },
+  //   {
+  //     classname: 'Android 74',
+  //     numOfStudents: 84,
+  //     participationRate: 78,
+  //     refreshrsEmailed: 36,
+  //     class_id: 2
+  //   },
+  //   {
+  //     classname: 'Android 74',
+  //     numOfStudents: 84,
+  //     participationRate: 78,
+  //     refreshrsEmailed: 36,
+  //     class_id: 3
+  //   },
+  //   {
+  //     classname: 'Android 74',
+  //     numOfStudents: 84,
+  //     participationRate: 78,
+  //     refreshrsEmailed: 36,
+  //     class_id: 4
+  //   }
+  // ];
   // const testRefreshrs = [
   //   {
   //     refreshrName: 'CSS Basics',
@@ -194,114 +258,14 @@ const Dashboard = props => {
   //   console.log('Props from redirect', props);
   //   props.history.push(url);
   // };
-  return (
-    <Grid className={classes.wrapper}>
-      {console.log('PROPS', userClasses, userRefreshrs)}
+
+     /* {console.log('PROPS', userClasses, userRefreshrs)}
       {console.log(
         'userRefreshrs ==>',
         userRefreshrs.map(data => data.typeform_url)
-      )}
-      {/* cant figure out what to do w/ the username right now */}
-      {/* <Typography component="h2" color="secondary">
+      )} 
+      cant figure out what to do w/ the username right now
+      <Typography component="h2" color="secondary">
         Welcome {name}, 
-      </Typography> */}
-      {/* end username */}
-      <Typography
-        component="h2"
-        color="secondary"
-        className={classes.cardSectionLabels}
-      >
-        Classes:
-      </Typography>
-      <Grid className={classes.classContainer}>
-        {testClasses.map(c => (
-          <Card key={c.class_id} className={classes.classCard}>
-            <Typography component="h4" className={classes.classTitle}>
-              {c.classname.length > 10
-                ? c.classname.substring(0, 10) + '...'
-                : c.classname}
-            </Typography>
-            <CardContent className={classes.classData}>
-              {/* Need analytics for these, stretch goals? */}
-
-              <Typography component="p" className={classes.lists}>
-                Students: {c.numOfStudents}
-              </Typography>
-              <Typography component="p" className={classes.lists}>
-                Participation: {c.participationRate}
-              </Typography>
-              <Typography component="p" className={classes.lists}>
-                Refreshrs Sent: {c.refreshrsEmailed}
-              </Typography>
-            </CardContent>
-            <Button color="primary" className={classes.lists}>
-              <Link
-                to={`/classes/edit/${c.class_id}`}
-                className={classes.links}
-              >
-                Edit
-              </Link>
-            </Button>
-          </Card>
-        ))}
-        <Card className={classes.classCard}>
-          <Typography component="h4" className={classes.classTitle}>
-            New Class
-          </Typography>
-          <Icon className={classes.icon} color="primary">
-            <Link to="/classes/create" className={classes.links}>
-              add_circle
-            </Link>
-          </Icon>
-        </Card>
-      </Grid>
-      <Typography
-        component="h2"
-        color="secondary"
-        className={classes.cardSectionLabels}
-      >
-        Refreshrs:
-      </Typography>
-      <Grid className={classes.classContainer}>
-        {userRefreshrs.map(r => (
-          <Card className={classes.classCard}>
-            {/* {console.log('R ===', r)} */}
-            <a
-              target="_blank"
-              href={r.typeform_url}
-              rel="noopener noreferrer"
-              className={classes.links}
-            >
-              <Typography component="h4" className={classes.refreshrTitle}>
-                {/* {r.refreshrName.length > 10
-                  ? r.refreshrName.substring(0, 10) + '...'
-                  : r.refreshrName} */}
-              </Typography>
-              <CardContent className={classes.classData}>
-                <Typography component="p" className={classes.lists}>
-                  Classes Assigned: {r.classesAssigned}
-                </Typography>
-              </CardContent>
-            </a>
-            <Button color="primary" className={classes.lists}>
-              <Link to="/refreshrs/edit" className={classes.links}>
-                Edit
-              </Link>
-            </Button>
-          </Card>
-        ))}
-        <Card className={classes.refreshrNewCard}>
-          <Typography component="h4" className={classes.refreshrTitle}>
-            New Refreshr
-          </Typography>
-          <Icon className={classes.refreshrIcon} color="primary">
-            <Link to="/refreshrs/create" className={classes.links}>
-              add_circle
-            </Link>
-          </Icon>
-        </Card>
-      </Grid>
-    </Grid>
-  );
-};
-export default withRouter(withStyles(styles)(Dashboard));
+      </Typography> 
+       end username */

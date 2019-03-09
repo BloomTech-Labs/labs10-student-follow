@@ -13,7 +13,7 @@ import {
   Navbar,
   Navcrumbs,
   RefreshrListView,
-  Dashboard,
+  Dashboard
   //ClassesPage,
   CampaignForm,
   ClassCreateView,
@@ -43,14 +43,20 @@ const styles = theme => ({
     }
   }
 });
+//Nick: 107121249233689789684
+//Justin: 111419810728121424056
+//Chaya:  117894219650456694049
+//Tim: 118406831139005715496
 
 const App = props => {
   const { classes } = props;
   const token = localStorage.getItem('accessToken');
   const user_id = localStorage.getItem('user_id');
+  console.log(user_id)
 
   /* STATE */
   const [url, setUrl] = useState('');
+  const [message, setMessage] = useState('')
   const [userRefreshrs, setRefreshrs] = useState([]);
   const [questions, setQuestions] = useState([]);
   const [userClasses, setClasses] = useState([]);
@@ -117,7 +123,7 @@ const App = props => {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => {
-        console.log(res);
+        console.log('CLASSES:', res);
         setClasses(res.data.classes);
       })
       .catch(err => console.log(err));
