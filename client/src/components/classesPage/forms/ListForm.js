@@ -31,7 +31,7 @@ const styles = theme => ({
     [theme.breakpoints.only('xs')]: {
       width: '90vw'
     },
-    width: '100%'
+    maxWidth: 600
   },
   input1: {
     marginBottom: theme.spacing.unit,
