@@ -21,6 +21,7 @@ import RefreshrDialog from './RefreshrListDialog';
 import { addRecipient, addContact, deleteContact } from './SendgridOps';
 import axios from 'axios';
 import Settings from './components/Settings';
+import Students from './components/Students';
 
 const styles = theme => ({
   wrapper: {
@@ -85,17 +86,6 @@ const styles = theme => ({
     border: '1px solid red',
     margin: theme.spacing.unit * 3,
     position: 'relative'
-  },
-  studentList: {
-    display: 'flex',
-    flexFlow: 'column wrap',
-    border: `1px solid ${theme.palette.secondary.main}`,
-    flexWrap: 'wrap',
-    [theme.breakpoints.only('xs')]: {
-      width: '70%'
-    },
-    maxHeight: theme.spacing.unit * 50,
-    padding: theme.spacing.unit * 2
   },
 
   inputBtnDiv: {
@@ -193,16 +183,19 @@ function ClassEditView(props) {
     // baseURL: 'https://refreshr.herokuapp.com' // production
   });
   const [students, setStudents] = useState([]);
+  const [selectedStudents, setSelectedStudents] = useState([]);
   const [refreshrs, setRefreshrs] = useState([]);
   const [teacherRefs, setTeacherRefs] = useState([]);
   const [classData, setClassData] = useState({
     name: '',
     sg_list_id: ''
   });
-  const [selectedStudents, setSelectedStudents] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [addedStudents, setAddedStudents] = useState([]);
   const [activeRefreshr, setActiveRefreshr] = useState(null);
+
+  useEffect(() => {
+    console.log('selectedStudents:', selectedStudents);
+  }, [selectedStudents]);
 
   // sendgrix axios instance
   const sgAx = axios.create({
@@ -231,9 +224,6 @@ function ClassEditView(props) {
   }, [teacherRefs]);
 
 */
-  useEffect(() => {
-    console.log('selectedStudents:', selectedStudents);
-  }, [selectedStudents]);
 
   async function fetchClass() {
     const res = await ax.get(`/classes/${classId}`);
@@ -350,17 +340,6 @@ function ClassEditView(props) {
     setRefreshrs(refreshrs.filter(r => r.id !== id));
   }
 
-  function selectStudent(e) {
-    const studentId = e.target.value;
-    let updatedStudents = selectedStudents;
-    if (e.target.checked) {
-      updatedStudents = selectedStudents.concat(studentId);
-    } else {
-      updatedStudents = selectedStudents.filter(s => s !== studentId);
-    }
-    setSelectedStudents(updatedStudents);
-  }
-
   function closeModal() {
     setModalIsOpen(false);
   }
@@ -439,7 +418,7 @@ function ClassEditView(props) {
     console.log(classData);
   }, [classData]);
 
-  async function dropStudents() {
+  async function dropStudents(selectedStudents) {
     for (let student of selectedStudents) {
       const res = await ax.delete(`/classes/${classId}/students/${student}`);
       console.log('dropped:', res);
@@ -480,59 +459,14 @@ function ClassEditView(props) {
         classData={classData}
       />
       <hr className={classes.hrStyle} />
+      <Students
+        makeInput={makeInput}
+        addStudent={addStudent}
+        students={students}
+        selectedStudents={selectedStudents}
+        setSelectedStudents={setSelectedStudents}
+      />
 
-      <Typography variant="h6" className={classes.title} gutterBottom>
-        Current Students
-      </Typography>
-      <Card className={classes.studentList}>
-        {students.map((s, i) => (
-          <Grid key={i}>
-            <span>{`${s.name}`}</span>
-            <Checkbox
-              color="secondary"
-              value={`${s.student_id}`}
-              checked={selectedStudents.includes(s.student_id)}
-              onClick={e => selectStudent(e)}
-            />
-          </Grid>
-        ))}
-        {addedStudents.map((s, i) => (
-          <Grid key={i}>
-            <span style={{ fontWeight: 'bold' }}>{`${s.first_name} ${
-              s.last_name
-            }`}</span>
-            <Checkbox
-              color="primary"
-              value={`${s.student_id}`}
-              checked={selectedStudents.includes(s.student_id)}
-              onClick={e => selectStudent(e)}
-            />
-          </Grid>
-        ))}
-      </Card>
-      <FormGroup className={classes.settingsBox}>
-        <Typography variant="body1" gutterBottom>
-          Add a Student
-        </Typography>
-        {makeInput('email', 'Email')}
-        {makeInput('first_name', 'First Name')}
-        {makeInput('last_name', 'Last Name')}
-        <Fab
-          elevation={20}
-          aria-label="Add"
-          className={classes.btn}
-          onClick={e => addStudent(e)}
-        >
-          <GroupAdd />
-        </Fab>
-      </FormGroup>
-      <Grid className={classes.buttonBox}>
-        {selectedStudents.length ? (
-          <Button variant="outlined" onClick={dropStudents}>
-            Remove selected from class
-          </Button>
-        ) : null}
-      </Grid>
       <hr className={classes.hrStyle} />
 
       <Grid>
