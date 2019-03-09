@@ -7,8 +7,15 @@ import {
   Typography,
   CardContent,
   Icon,
-  TextField
+  Paper,
+  TextField, 
+  FormGroup,
+  Input,
+  Fab,
+  
 } from '@material-ui/core';
+import Update from '@material-ui/icons/Update';
+import GroupAdd from '@material-ui/icons/GroupAdd';
 import { withStyles } from '@material-ui/core/styles';
 import DeleteIcon from '@material-ui/icons/Delete';
 import RefreshrDialog from './RefreshrListDialog';
@@ -21,32 +28,71 @@ import axios from 'axios';
 
 const styles = theme => ({
   wrapper: {
-    marginTop: theme.spacing.unit * 6,
-    display: 'flex',
-    flexDirection: 'column',
     border: `1px solid ${theme.palette.secondary.main}`,
     ...theme.mixins.gutters(),
+    display: 'flex',
+    flexFlow: 'column nowrap',
+    justifyContent: 'space-between',
     alignItems: 'center',
+    paddingTop: theme.spacing.unit * 4,
+    paddingBottom: theme.spacing.unit * 8,
+    marginTop: theme.spacing.unit * 6,
+    marginBottom: theme.spacing.unit * 4,
     color: theme.palette.primary.contrastText,
     background: theme.palette.primary.dark,
-    [theme.breakpoints.down('sm')]: {
-      width: '80%'
+    [theme.breakpoints.only('sm')]: {
+      width: '60vw'
     },
-    [theme.breakpoints.only('md')]: {
-      width: '60%'
-    }
+    [theme.breakpoints.only('xs')]: {
+      width: '90vw'
+    },
+    [theme.breakpoints.up('md')]: {
+      width: '50vw'
+    },
+
   },
+
+  nameForm: {
+    // border: `1px solid ${theme.palette.secondary.main}`,
+    display: 'flex',
+    flexFlow: 'column nowrap',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    padding: '5%'
+  },
+
   refreshrList: {
     display: 'flex',
-    flexWrap: 'wrap',
-    border: `1px solid ${theme.palette.secondary.main}`,
-    padding: theme.spacing.unit * 8
+    padding: theme.spacing.unit ,
+    [theme.breakpoints.only('xs')]: {
+      flexFlow: 'column nowrap',
+      justifyContent: 'space-between',
+      alignItems: 'center'
+    },
   },
   refreshrCard: {
-    height: 200,
     border: '1px solid white',
-    margin: theme.spacing.unit * 3,
-    position: 'relative'
+    background: theme.palette.secondary.main,
+    margin: theme.spacing.unit,
+    display: 'flex',
+    flexFlow: 'column nowrap',
+    alignItems:'center',
+    [theme.breakpoints.only('xs')]: {
+      width: '100%'
+    },
+  },
+  refreshrContent: {
+    color: theme.palette.primary.dark,
+    fontSize: '1.2rem'
+  },
+
+  refreshrIcon: {
+    alignSelf: 'flex-end',
+    margin: '5%',
+    color: theme.palette.primary.dark,
+    '&:hover': {
+      cursor: 'pointer'
+    }
   },
   activeRefreshr: {
     height: 200,
@@ -59,31 +105,93 @@ const styles = theme => ({
     flexFlow: 'column wrap',
     border: `1px solid ${theme.palette.secondary.main}`,
     flexWrap: 'wrap',
-    width: '80%',
+    [theme.breakpoints.only('xs')]: {
+      width: '70%',
+    },
     maxHeight: theme.spacing.unit * 50,
-    padding: theme.spacing.unit * 6
+    padding: theme.spacing.unit * 2
   },
-  buttonBox: {
-    height: 50
+
+
+  inputBtnDiv: {
+    border: '1px solid red',
+    display: 'flex',
+    flexFlow: 'column nowrap',
+    paddingLeft: '10%'
   },
+  btn: {
+    marginRight: theme.spacing.unit * 2,
+    marginTop: theme.spacing.unit * 2,
+    color: theme.palette.primary.main,
+    background: theme.palette.secondary.main,
+    width: 40,
+    height: 40
+  },
+  
   icon: {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -40%)'
+    alignSelf: 'center',
+    '&:hover':{
+      cursor: 'pointer'
+    }
+  },
+  newTitle: {
+    color: `${theme.palette.secondary.contrastText}`,
+    textAlign: 'center',
+    fontSize: '1.6rem'
+  },
+  newRefCard: {
+    display: 'flex',
+    flexFlow: 'column nowrap',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    height: 200
   },
   title: {
-    color: `${theme.palette.primary.contrastText}`
+    color: `${theme.palette.primary.contrastText}`,
+    textAlign: 'center'
   },
   settingsBox: {
     display: 'flex',
+    flexFlow: 'column nowrap',
+    justifyContent: 'space-around',
     alignItems: 'center',
-    justifyContent: 'center',
+    padding: '5%',
+    [theme.breakpoints.down('sm')]: {
+      flexDirection: 'column',
+      alignItems: 'center'
+    },
+    //border: '1px solid purple',
     margin: theme.spacing.unit * 2
   },
   inputs: {
+    marginBottom: theme.spacing.unit,
+    padding: '.75%',
+    paddingLeft: 70,
+    background: theme.palette.secondary.main,
     color: theme.palette.primary.main,
-    backgroundColor: theme.palette.secondary.main
+    fontSize: '1em',
+    width: 200,
+    borderRadius: 5,
+    // [theme.breakpoints.only('xs')]: {
+    //   marginRight: '5%'
+    // }
+  },
+  hrStyle: {
+    margin: '1rem auto',
+    width: '100%'
+  },
+  saveButton: {
+    background: theme.palette.secondary.main,
+    color: theme.palette.primary.dark,
+    padding: '1%',
+    display: 'flex',
+    flexFlow: 'row nowrap',
+    fontSize: '1.2rem',
+    width: '50%',
+    marginTop: '5%',
+    '&:hover': {
+      background: theme.palette.secondary.dark,
+    }
   }
 });
 
@@ -169,7 +277,8 @@ function ClassEditView(props) {
 
   async function fetchTeacherRefreshrs(id) {
     const res = await ax.get(`/teachers/${userID}/refreshrs`);
-    const unassignedRefreshrs = res.data.filter(r => !refreshrs.includes(r)); // filter out refreshrs assigned to class
+    console.log('RES:', res)
+    const unassignedRefreshrs = res.data.refreshrs.filter(r => !refreshrs.includes(r)); // filter out refreshrs assigned to class
     setTeacherRefs(unassignedRefreshrs);
   }
 
@@ -274,6 +383,10 @@ function ClassEditView(props) {
     email: ''
   });
 
+  useEffect(() => {
+    console.log("NEW STUDENT",newStudent);
+  }, [newStudent])
+
   const handleChange = e => {
     setNewStudent({
       ...newStudent,
@@ -359,10 +472,10 @@ function ClassEditView(props) {
     onChange = handleChange
   ) => {
     return (
-      <TextField
+      <Input
         className={classes.inputs}
-        variant="outlined"
-        label={label}
+        disableUnderline
+        placeholder={label}
         onChange={onChange}
         name={name}
         value={value}
@@ -371,30 +484,33 @@ function ClassEditView(props) {
   };
 
   return (
-    <Grid className={props.classes.wrapper}>
-      <Typography variant="h6" className={classes.title}>
+    <Paper className={props.classes.wrapper}>
+      <Typography variant="h6"
+        color="secondary"
+        style={{ textAlign: 'center' }}>
         Settings
-        <form onSubmit={e => changeClassName(e)}>
+      </Typography>
+        <FormGroup className={classes.nameForm} >
+        <Typography variant="body1" gutterBottom>
+          Edit Classname
+        </Typography>  
+        {/* <div className={classes.inputBtnDiv}>   */}
           {makeInput('className', 'Class Name', classData.name, e =>
             handleClassChange(e)
           )}
-          <Button type="submit">Change Class Name</Button>
-        </form>
+        <Fab elevation={20} aria-label="Update" className={classes.btn} onClick={e => changeClassName(e)}>
+          <Update />
+        </Fab>
+        {/* </div>           */}
+        </FormGroup>
+        <hr className={classes.hrStyle} />
+
+      <Typography variant="h6" className={classes.title} gutterBottom>
+        Current Students
       </Typography>
-      <Grid className={classes.settings}>
-        <form onSubmit={e => addStudent(e)}>
-          {makeInput('first_name', 'First Name')}
-          {makeInput('last_name', 'Last Name')}
-          {makeInput('email', 'Email')}
-          <Button type="submit">Add Student</Button>
-        </form>
-      </Grid>
-      <Typography variant="h6" className={classes.title}>
-        Students
-      </Typography>
-      <Grid className={classes.studentList}>
-        {students.map(s => (
-          <Grid key={s.student_id}>
+      <Card className={classes.studentList}>
+        {students.map((s, i) => (
+          <Grid key={i}>
             <span>{`${s.name}`}</span>
             <Checkbox
               color="secondary"
@@ -417,7 +533,18 @@ function ClassEditView(props) {
             />
           </Grid>
         ))}
-      </Grid>
+      </Card>
+      <FormGroup className={classes.settingsBox}>
+        <Typography variant="body1" gutterBottom>
+          Add a Student
+        </Typography> 
+          {makeInput('email', 'Email')}
+          {makeInput('first_name', 'First Name')}
+          {makeInput('last_name', 'Last Name')}
+        <Fab elevation={20} aria-label="Add" className={classes.btn} onClick={e => addStudent(e)}>
+          <GroupAdd />
+        </Fab>
+        </FormGroup>
       <Grid className={classes.buttonBox}>
         {selectedStudents.length ? (
           <Button variant="outlined" onClick={dropStudents}>
@@ -425,19 +552,19 @@ function ClassEditView(props) {
           </Button>
         ) : null}
       </Grid>
+      <hr className={classes.hrStyle} />
 
       <Grid>
-        <Typography variant="h6" className={classes.title}>
+        <Typography variant="h6" className={classes.title} gutterBottom>
           Refreshrs
         </Typography>
         <Grid className={classes.refreshrList}>
-          {refreshrs.map(r => (
-            <Card className={classes.refreshrCard} key={r.refreshr_id} raised>
-              <CardContent>{r.name}</CardContent>
-              <CardContent>{r.date}</CardContent>
-              <CardContent>
-                <DeleteIcon onClick={() => removeRefreshr(r.id)} />
-              </CardContent>
+          {refreshrs.map((r,i) => (
+            <Card className={classes.refreshrCard} key={i} raised>
+              <CardContent className={classes.refreshrContent}>{r.name}</CardContent>
+              <CardContent className={classes.refreshrContent}>{r.date}</CardContent>
+                <DeleteIcon  onClick={() => removeRefreshr(r.id)}  className={classes.refreshrIcon}/>
+
             </Card>
           ))}
           {activeRefreshr && (
@@ -465,8 +592,8 @@ function ClassEditView(props) {
             selectRefreshr={selectRefreshr}
           />
           <Card className={classes.refreshrCard} raised>
-            <CardContent>
-              <Typography className={classes.title}>Add a Refreshr</Typography>
+            <CardContent className={classes.newRefCard}>
+              <Typography variant='h4' className={classes.newTitle}>Add a Refreshr</Typography>
               <Icon
                 className={classes.icon}
                 color="action"
@@ -479,8 +606,8 @@ function ClassEditView(props) {
           </Card>
         </Grid>
       </Grid>
-      <Button variant="outlined">Save Changes</Button>
-    </Grid>
+      <Button variant="outlined" className={classes.saveButton}>Save Changes</Button>
+    </Paper>
   );
 }
 

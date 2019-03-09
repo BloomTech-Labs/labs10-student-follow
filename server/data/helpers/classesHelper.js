@@ -158,6 +158,15 @@ module.exports = {
     return result;
   },
 
+  cleanUpCampaigns: async(teacher_id, refreshr_id) => {
+    const result = await db('teachers_classes_refreshrs')
+    .where({teacher_id, refreshr_id})
+    .whereNull("sg_campaign_id")
+    .delete()
+
+  },
+
+
   removeCampaign: (class_id, sg_campaign_id) => {
     return db('teachers_classes_refreshrs')
     .where({class_id, sg_campaign_id})
