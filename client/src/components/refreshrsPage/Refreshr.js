@@ -94,6 +94,7 @@ const styles = theme => ({
 function Refreshr(props) {
   const { setUrl, url } = props; // possibly needs changing
   const [typeformId, setTypeformId] = useState('');
+  const [refreshrId, setRefreshrId] = useState('');
   const [reviewText, setReviewText] = useState('');
   const [refreshrName, addRefreshrName] = useState('');
   const [questionTextOne, setQuestionTextOne] = useState('');
@@ -112,13 +113,16 @@ function Refreshr(props) {
     answers: { a1Text, a2Text, a3Text, a4Text }
   });
 
-  const StyleDisplay = styled.a`
-    ${{ display: submitted ? 'block' : 'none' }}
-  `;
-
   const headers = {
     Authorization: `Bearer ${process.env.REACT_APP_TYPEFORM}`
   };
+
+  const userId = localStorage.getItem('user_id');
+  const token = localStorage.getItem('accessToken');
+
+  const StyleDisplay = styled.a`
+    ${{ display: submitted ? 'block' : 'none' }}
+  `;
 
   const createForm = async event => {
     event.preventDefault();
@@ -191,24 +195,57 @@ function Refreshr(props) {
     setSubmitted(true);
   };
 
-  //post the newly created refreshr to the refreshrs table
+  //post the newly created refreshr to the refreshrs table. Returns refreshr id
   const addRefreshr = async id => {
-    console.log('From addRefreshr yeahhhh');
     try {
       const response = await axios
         .post('http://localhost:9000/refreshrs', id, {
-          headers
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
         })
         .then(res => res);
+      setRefreshrId(response);
       console.log('New Refreshr ID ===', response);
     } catch (error) {
       console.log(error);
     }
   };
 
-  const userId = localStorage.getItem('user_id');
-  console.log('USer id ==', userId);
-  console.log('typeformId ==>', typeformId);
+  //post the refreshr id to the teachers table
+  const addRefreshrId = async id => {
+    try {
+      const response = await axios
+        .post(`http://localhost:9000/teachers/${userId}/refreshrs`, id, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+        .then(res => res);
+      console.log('Res from id => teachers ===', response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  //gets refreshrs associated with the logged in teacher
+  const getTeacherRefreshrs = async () => {
+    try {
+      const response = await axios
+        .get(`http://localhost:9000/teachers/${userId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+        .then(res => res);
+      console.log('Getting teachers 🙏 ===', response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // console.log('USer id ==', userId);
+  // console.log('typeformId ==>', typeformId);
   return (
     <Paper className={props.classes.container} elevation={24}>
       <Grid className={props.classes.wrapper}>
@@ -374,6 +411,8 @@ function Refreshr(props) {
               props.addQuestions(questionObject);
               createForm(e);
               addRefreshr(typeformId);
+              addRefreshrId(refreshrId);
+              getTeacherRefreshrs();
             }}
           >
             Submit
