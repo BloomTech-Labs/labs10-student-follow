@@ -29,12 +29,12 @@ const options = {
   loginAfterSignup: true,
   additionalSignUpFields: [
     {
-      name: 'first_name',
+      name: 'given_name',
       placeholder: 'First Name',
       icon: 'http://i63.tinypic.com/2z886rs.png'
     },
     {
-      name: 'last_name',
+      name: 'family_name',
       placeholder: 'Last Name',
       icon: 'http://i63.tinypic.com/2z886rs.png'
     }
