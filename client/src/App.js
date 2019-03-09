@@ -43,15 +43,19 @@ const styles = theme => ({
     }
   }
 });
+//Nick: 107121249233689789684
+//Justin: 111419810728121424056
+//Chaya:  117894219650456694049
+//Tim: 118406831139005715496
 
 const App = props => {
   const { classes } = props;
   const token = localStorage.getItem('accessToken');
   const user_id = localStorage.getItem('user_id');
+  console.log(user_id)
 
   /* STATE */
   const [message, setMessage] = useState('')
-  const [url, setUrl] = useState('');
   const [userRefreshrs, setRefreshrs] = useState([]);
   const [questions, setQuestions] = useState([]);
   const [userClasses, setClasses] = useState([]);
@@ -73,8 +77,7 @@ const App = props => {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => {
-        //console.log(res);
-        //console.log('REFRESHRS', res)
+        console.log('REFRESHRS', res)
         setRefreshrs(res.data.refreshrs);
       })
       .catch(err => console.log(err));
@@ -142,7 +145,7 @@ const App = props => {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => {
-        console.log(res);
+        console.log('CLASSES:', res);
         setClasses(res.data.classes);
       })
       .catch(err => console.log(err));
@@ -170,6 +173,7 @@ const App = props => {
             path="/dashboard"
             render={props => (
               <Dashboard
+                token={token}
                 getClasses={getClasses}
                 userClasses={userClasses}
                 getRefreshrs={getRefreshrs}
