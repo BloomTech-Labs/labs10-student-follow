@@ -12,6 +12,20 @@ const styles = theme => ({
     justifyContent: 'space-around',
     alignItems: 'center',
     padding: '5%'
+  },
+  inputBtnDiv: {
+    border: '1px solid red',
+    display: 'flex',
+    flexFlow: 'column nowrap',
+    paddingLeft: '10%'
+  },
+  btn: {
+    marginRight: theme.spacing.unit * 2,
+    marginTop: theme.spacing.unit * 2,
+    color: theme.palette.primary.main,
+    background: theme.palette.secondary.main,
+    width: 40,
+    height: 40
   }
 });
 

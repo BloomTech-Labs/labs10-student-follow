@@ -16,12 +16,11 @@ import {
 import Update from '@material-ui/icons/Update';
 import GroupAdd from '@material-ui/icons/GroupAdd';
 import { withStyles } from '@material-ui/core/styles';
-import DeleteIcon from '@material-ui/icons/Delete';
-import RefreshrDialog from './RefreshrListDialog';
 import { addRecipient, addContact, deleteContact } from './SendgridOps';
 import axios from 'axios';
 import Settings from './components/Settings';
 import Students from './components/Students';
+import Refreshrs from './components/Refreshrs';
 
 const styles = theme => ({
   wrapper: {
@@ -48,31 +47,6 @@ const styles = theme => ({
     }
   },
 
-  refreshrList: {
-    display: 'flex',
-    padding: theme.spacing.unit,
-    [theme.breakpoints.only('xs')]: {
-      flexFlow: 'column nowrap',
-      justifyContent: 'space-between',
-      alignItems: 'center'
-    }
-  },
-  refreshrCard: {
-    border: '1px solid white',
-    background: theme.palette.secondary.main,
-    margin: theme.spacing.unit,
-    display: 'flex',
-    flexFlow: 'column nowrap',
-    alignItems: 'center',
-    [theme.breakpoints.only('xs')]: {
-      width: '100%'
-    }
-  },
-  refreshrContent: {
-    color: theme.palette.primary.dark,
-    fontSize: '1.2rem'
-  },
-
   refreshrIcon: {
     alignSelf: 'flex-end',
     margin: '5%',
@@ -81,13 +55,6 @@ const styles = theme => ({
       cursor: 'pointer'
     }
   },
-  activeRefreshr: {
-    height: 200,
-    border: '1px solid red',
-    margin: theme.spacing.unit * 3,
-    position: 'relative'
-  },
-
   inputBtnDiv: {
     border: '1px solid red',
     display: 'flex',
@@ -113,13 +80,6 @@ const styles = theme => ({
     color: `${theme.palette.secondary.contrastText}`,
     textAlign: 'center',
     fontSize: '1.6rem'
-  },
-  newRefCard: {
-    display: 'flex',
-    flexFlow: 'column nowrap',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    height: 200
   },
   title: {
     color: `${theme.palette.primary.contrastText}`,
@@ -190,7 +150,6 @@ function ClassEditView(props) {
     name: '',
     sg_list_id: ''
   });
-  const [modalIsOpen, setModalIsOpen] = useState(false);
   const [activeRefreshr, setActiveRefreshr] = useState(null);
 
   useEffect(() => {
@@ -328,20 +287,11 @@ function ClassEditView(props) {
     setActiveRefreshr(active);
   }
 
-  function setDate(e) {
-    console.log(e.target.value);
-    setActiveRefreshr({ ...activeRefreshr, date: e.target.value });
-  }
-
   function removeRefreshr(id) {
     // TODO: needs to be updated to kill sendgrid campaign, drop from TCR table
     const removedRefreshr = refreshrs.filter(r => r.id === id);
     setTeacherRefs([...teacherRefs, ...removedRefreshr]);
     setRefreshrs(refreshrs.filter(r => r.id !== id));
-  }
-
-  function closeModal() {
-    setModalIsOpen(false);
   }
 
   const [newStudent, setNewStudent] = useState({
@@ -426,7 +376,7 @@ function ClassEditView(props) {
       // drop student from sg list
       deleteContact(classId, student);
     }
-    fetchClass(); // better way to do this than calling this here?
+    fetchClass(); // better way to do this than calling this again here?
 
     // reset selected students
     setSelectedStudents([]);
@@ -468,70 +418,14 @@ function ClassEditView(props) {
       />
 
       <hr className={classes.hrStyle} />
-
-      <Grid>
-        <Typography variant="h6" className={classes.title} gutterBottom>
-          Refreshrs
-        </Typography>
-        <Grid className={classes.refreshrList}>
-          {refreshrs.map((r, i) => (
-            <Card className={classes.refreshrCard} key={i} raised>
-              <CardContent className={classes.refreshrContent}>
-                {r.name}
-              </CardContent>
-              <CardContent className={classes.refreshrContent}>
-                {r.date}
-              </CardContent>
-              <DeleteIcon
-                onClick={() => removeRefreshr(r.id)}
-                className={classes.refreshrIcon}
-              />
-            </Card>
-          ))}
-          {activeRefreshr && (
-            <Card
-              className={classes.activeRefreshr}
-              key={activeRefreshr.id}
-              raised
-            >
-              <CardContent>{activeRefreshr.name}</CardContent>
-              <TextField
-                onChange={e => setDate(e)}
-                variant="outlined"
-                type="date"
-              />
-              {activeRefreshr.date && (
-                <Button onClick={addRefreshr}>Submit</Button>
-              )}
-            </Card>
-          )}
-          <RefreshrDialog
-            refreshrs={teacherRefs}
-            open={modalIsOpen}
-            handleClose={closeModal}
-            addRefreshr={addRefreshr}
-            selectRefreshr={selectRefreshr}
-          />
-          <Card className={classes.refreshrCard} raised>
-            <CardContent className={classes.newRefCard}>
-              <Typography variant="h4" className={classes.newTitle}>
-                Add a Refreshr
-              </Typography>
-              <Icon
-                className={classes.icon}
-                color="action"
-                style={{ fontSize: 60 }}
-                onClick={() => setModalIsOpen(!modalIsOpen)}
-              >
-                add_circle
-              </Icon>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
-      <Button variant="outlined" className={classes.saveButton}>
-        Save Changes
-      </Button>
+      <Refreshrs
+        refreshrs={refreshrs}
+        removeRefreshr={removeRefreshr}
+        activeRefreshr={activeRefreshr}
+        addRefreshr={addRefreshr}
+        selectRefreshr={selectRefreshr}
+        teacherRefs={teacherRefs}
+      />
     </Paper>
   );
 }

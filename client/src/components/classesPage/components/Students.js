@@ -22,6 +22,31 @@ const styles = theme => ({
     },
     maxHeight: theme.spacing.unit * 50,
     padding: theme.spacing.unit * 2
+  },
+  settingsBox: {
+    display: 'flex',
+    flexFlow: 'column nowrap',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    padding: '5%',
+    [theme.breakpoints.down('sm')]: {
+      flexDirection: 'column',
+      alignItems: 'center'
+    },
+    //border: '1px solid purple',
+    margin: theme.spacing.unit * 2
+  },
+  title: {
+    color: `${theme.palette.primary.contrastText}`,
+    textAlign: 'center'
+  },
+  btn: {
+    marginRight: theme.spacing.unit * 2,
+    marginTop: theme.spacing.unit * 2,
+    color: theme.palette.primary.main,
+    background: theme.palette.secondary.main,
+    width: 40,
+    height: 40
   }
 });
 
