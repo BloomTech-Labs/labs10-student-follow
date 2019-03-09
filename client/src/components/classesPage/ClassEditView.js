@@ -368,7 +368,7 @@ function ClassEditView(props) {
     console.log(classData);
   }, [classData]);
 
-  async function dropStudents(selectedStudents) {
+  async function dropStudents() {
     for (let student of selectedStudents) {
       const res = await ax.delete(`/classes/${classId}/students/${student}`);
       console.log('dropped:', res);
@@ -415,6 +415,7 @@ function ClassEditView(props) {
         students={students}
         selectedStudents={selectedStudents}
         setSelectedStudents={setSelectedStudents}
+        dropStudents={dropStudents}
       />
 
       <hr className={classes.hrStyle} />
@@ -422,6 +423,7 @@ function ClassEditView(props) {
         refreshrs={refreshrs}
         removeRefreshr={removeRefreshr}
         activeRefreshr={activeRefreshr}
+        setActiveRefreshr={setActiveRefreshr}
         addRefreshr={addRefreshr}
         selectRefreshr={selectRefreshr}
         teacherRefs={teacherRefs}
