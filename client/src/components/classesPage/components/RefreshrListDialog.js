@@ -40,7 +40,7 @@ const RefreshrDialog = props => {
                 <ListItemText primary={r.name} />
               </ListItem>
             ))}
-            <Link className={classes.link} to="/questions/create">
+            <Link className={classes.link} to="/refreshrs/create">
               <ListItem>
                 <AddIcon />
                 <ListItemText primary={'Create a new refreshr'} />
