@@ -151,6 +151,7 @@ function ClassEditView(props) {
     sg_list_id: ''
   });
   const [activeRefreshr, setActiveRefreshr] = useState(null);
+  const [isEditingClass, setIsEditingClass] = useState(false);
 
   useEffect(() => {
     console.log('selectedStudents:', selectedStudents);
@@ -353,6 +354,7 @@ function ClassEditView(props) {
       name: classData.name,
       sg_list_id: classData.id
     });
+    setIsEditingClass(false);
     console.log(res);
   }
 
@@ -407,6 +409,8 @@ function ClassEditView(props) {
         changeClassName={changeClassName}
         makeInput={makeInput}
         classData={classData}
+        isEditingClass={isEditingClass}
+        setIsEditingClass={setIsEditingClass}
       />
       <hr className={classes.hrStyle} />
       <Students

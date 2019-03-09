@@ -1,5 +1,6 @@
-import React from 'react';
-import { Typography, FormGroup, Fab } from '@material-ui/core';
+import React, { useState, useEffect } from 'react';
+import { Typography, FormControl, Fab } from '@material-ui/core';
+import { Create } from '@material-ui/icons';
 import { withStyles } from '@material-ui/core/styles';
 
 import Update from '@material-ui/icons/Update';
@@ -40,24 +41,40 @@ function Settings(props) {
       >
         Settings
       </Typography>
-      <FormGroup className={classes.nameForm}>
-        <Typography variant="body1" gutterBottom>
-          Edit Classname
-        </Typography>
-        {/* <div className={classes.inputBtnDiv}>   */}
-        {props.makeInput('className', 'Class Name', props.classData.name, e =>
-          props.handleClassChange(e)
-        )}
-        <Fab
-          elevation={20}
-          aria-label="Update"
-          className={classes.btn}
-          onClick={e => props.changeClassName(e)}
+      {props.isEditingClass ? (
+        <form
+          className={classes.nameForm}
+          onSubmit={e => props.changeClassName(e)}
         >
-          <Update />
-        </Fab>
-        {/* </div>           */}
-      </FormGroup>
+          <Typography variant="body1" gutterBottom>
+            Edit Classname
+          </Typography>
+          {props.isEditingClass &&
+            props.makeInput(
+              'className',
+              'Class Name',
+              props.classData.name,
+              e => {
+                props.handleClassChange(e);
+              }
+            )}
+          <Fab
+            elevation={20}
+            aria-label="Update"
+            className={classes.btn}
+            onClick={e => props.changeClassName(e)}
+          >
+            <Update />
+          </Fab>
+        </form>
+      ) : (
+        <>
+          <Typography variant="body1" gutterBottom>
+            {props.classData.name}
+          </Typography>
+          <Create onClick={() => props.setIsEditingClass(true)} />
+        </>
+      )}
     </>
   );
 }
