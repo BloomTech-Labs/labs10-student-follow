@@ -8,23 +8,19 @@ import {
   CardContent,
   Icon,
   Paper,
-  TextField, 
+  TextField,
   FormGroup,
   Input,
-  Fab,
-  
+  Fab
 } from '@material-ui/core';
 import Update from '@material-ui/icons/Update';
 import GroupAdd from '@material-ui/icons/GroupAdd';
 import { withStyles } from '@material-ui/core/styles';
 import DeleteIcon from '@material-ui/icons/Delete';
 import RefreshrDialog from './RefreshrListDialog';
-import {
-  addRecipient,
-  addContact,
-  deleteContact
-} from './SendgridOps';
+import { addRecipient, addContact, deleteContact } from './SendgridOps';
 import axios from 'axios';
+import Settings from './components/Settings';
 
 const styles = theme => ({
   wrapper: {
@@ -48,27 +44,17 @@ const styles = theme => ({
     },
     [theme.breakpoints.up('md')]: {
       width: '50vw'
-    },
-
-  },
-
-  nameForm: {
-    // border: `1px solid ${theme.palette.secondary.main}`,
-    display: 'flex',
-    flexFlow: 'column nowrap',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    padding: '5%'
+    }
   },
 
   refreshrList: {
     display: 'flex',
-    padding: theme.spacing.unit ,
+    padding: theme.spacing.unit,
     [theme.breakpoints.only('xs')]: {
       flexFlow: 'column nowrap',
       justifyContent: 'space-between',
       alignItems: 'center'
-    },
+    }
   },
   refreshrCard: {
     border: '1px solid white',
@@ -76,10 +62,10 @@ const styles = theme => ({
     margin: theme.spacing.unit,
     display: 'flex',
     flexFlow: 'column nowrap',
-    alignItems:'center',
+    alignItems: 'center',
     [theme.breakpoints.only('xs')]: {
       width: '100%'
-    },
+    }
   },
   refreshrContent: {
     color: theme.palette.primary.dark,
@@ -106,12 +92,11 @@ const styles = theme => ({
     border: `1px solid ${theme.palette.secondary.main}`,
     flexWrap: 'wrap',
     [theme.breakpoints.only('xs')]: {
-      width: '70%',
+      width: '70%'
     },
     maxHeight: theme.spacing.unit * 50,
     padding: theme.spacing.unit * 2
   },
-
 
   inputBtnDiv: {
     border: '1px solid red',
@@ -127,10 +112,10 @@ const styles = theme => ({
     width: 40,
     height: 40
   },
-  
+
   icon: {
     alignSelf: 'center',
-    '&:hover':{
+    '&:hover': {
       cursor: 'pointer'
     }
   },
@@ -171,7 +156,7 @@ const styles = theme => ({
     color: theme.palette.primary.main,
     fontSize: '1em',
     width: 200,
-    borderRadius: 5,
+    borderRadius: 5
     // [theme.breakpoints.only('xs')]: {
     //   marginRight: '5%'
     // }
@@ -190,7 +175,7 @@ const styles = theme => ({
     width: '50%',
     marginTop: '5%',
     '&:hover': {
-      background: theme.palette.secondary.dark,
+      background: theme.palette.secondary.dark
     }
   }
 });
@@ -277,8 +262,10 @@ function ClassEditView(props) {
 
   async function fetchTeacherRefreshrs(id) {
     const res = await ax.get(`/teachers/${userID}/refreshrs`);
-    console.log('RES:', res)
-    const unassignedRefreshrs = res.data.refreshrs.filter(r => !refreshrs.includes(r)); // filter out refreshrs assigned to class
+    console.log('RES:', res);
+    const unassignedRefreshrs = res.data.refreshrs.filter(
+      r => !refreshrs.includes(r)
+    ); // filter out refreshrs assigned to class
     setTeacherRefs(unassignedRefreshrs);
   }
 
@@ -287,8 +274,8 @@ function ClassEditView(props) {
     console.log(activeRefreshr);
     // will need to refactor this later with moment?
     const send_at = {
-      "send_at": Date.parse(activeRefreshr.date) / 1000,
-    }
+      send_at: Date.parse(activeRefreshr.date) / 1000
+    };
     console.log('send at:', send_at);
     console.log(typeof send_at.send_at);
 
@@ -298,9 +285,11 @@ function ClassEditView(props) {
       title: activeRefreshr.name,
       subject: `Your Refreshr for ${classData.name} is here!`,
       plain_content: 'this is plain content [unsubscribe]',
-      html_content: `<html> <head> <title></title> </head> <body> <p>Take your refreshr at this link: ${activeRefreshr.typeform_url} [unsubscribe] </p> </body> </html>`,
+      html_content: `<html> <head> <title></title> </head> <body> <p>Take your refreshr at this link: ${
+        activeRefreshr.typeform_url
+      } [unsubscribe] </p> </body> </html>`,
       list_ids: [Number(classData.id)],
-      suppression_group_id: 9332, // permanent (Unsubscribe ID)
+      suppression_group_id: 9332 // permanent (Unsubscribe ID)
     };
     // console.log('body:', body);
     let res = await sgAx.post('/campaigns', body);
@@ -314,7 +303,7 @@ function ClassEditView(props) {
       ...activeRefreshr,
       refreshr_id: activeRefreshr.id,
       sg_campaign_id
-    }
+    };
 
     // add refreshr to TCR table
     res = await ax.post(`/classes/${classData.id}/refreshrs`, {
@@ -322,14 +311,13 @@ function ClassEditView(props) {
       teacher_id: userID
     });
 
-    console.log(res)
+    console.log(res);
 
     // schedule campaign
     res = await sgAx.post(`/campaigns/${sg_campaign_id}/schedules`, {
       send_at: 1554206400
-    })
+    });
     console.log(res);
-
 
     // add refreshr to class refreshrs, remove from active refreshr
     setRefreshrs(refreshrs.concat(activeRefreshr));
@@ -384,8 +372,8 @@ function ClassEditView(props) {
   });
 
   useEffect(() => {
-    console.log("NEW STUDENT",newStudent);
-  }, [newStudent])
+    console.log('NEW STUDENT', newStudent);
+  }, [newStudent]);
 
   const handleChange = e => {
     setNewStudent({
@@ -485,25 +473,13 @@ function ClassEditView(props) {
 
   return (
     <Paper className={props.classes.wrapper}>
-      <Typography variant="h6"
-        color="secondary"
-        style={{ textAlign: 'center' }}>
-        Settings
-      </Typography>
-        <FormGroup className={classes.nameForm} >
-        <Typography variant="body1" gutterBottom>
-          Edit Classname
-        </Typography>  
-        {/* <div className={classes.inputBtnDiv}>   */}
-          {makeInput('className', 'Class Name', classData.name, e =>
-            handleClassChange(e)
-          )}
-        <Fab elevation={20} aria-label="Update" className={classes.btn} onClick={e => changeClassName(e)}>
-          <Update />
-        </Fab>
-        {/* </div>           */}
-        </FormGroup>
-        <hr className={classes.hrStyle} />
+      <Settings
+        handleClassChange={handleClassChange}
+        changeClassName={changeClassName}
+        makeInput={makeInput}
+        classData={classData}
+      />
+      <hr className={classes.hrStyle} />
 
       <Typography variant="h6" className={classes.title} gutterBottom>
         Current Students
@@ -537,14 +513,19 @@ function ClassEditView(props) {
       <FormGroup className={classes.settingsBox}>
         <Typography variant="body1" gutterBottom>
           Add a Student
-        </Typography> 
-          {makeInput('email', 'Email')}
-          {makeInput('first_name', 'First Name')}
-          {makeInput('last_name', 'Last Name')}
-        <Fab elevation={20} aria-label="Add" className={classes.btn} onClick={e => addStudent(e)}>
+        </Typography>
+        {makeInput('email', 'Email')}
+        {makeInput('first_name', 'First Name')}
+        {makeInput('last_name', 'Last Name')}
+        <Fab
+          elevation={20}
+          aria-label="Add"
+          className={classes.btn}
+          onClick={e => addStudent(e)}
+        >
           <GroupAdd />
         </Fab>
-        </FormGroup>
+      </FormGroup>
       <Grid className={classes.buttonBox}>
         {selectedStudents.length ? (
           <Button variant="outlined" onClick={dropStudents}>
@@ -559,12 +540,18 @@ function ClassEditView(props) {
           Refreshrs
         </Typography>
         <Grid className={classes.refreshrList}>
-          {refreshrs.map((r,i) => (
+          {refreshrs.map((r, i) => (
             <Card className={classes.refreshrCard} key={i} raised>
-              <CardContent className={classes.refreshrContent}>{r.name}</CardContent>
-              <CardContent className={classes.refreshrContent}>{r.date}</CardContent>
-                <DeleteIcon  onClick={() => removeRefreshr(r.id)}  className={classes.refreshrIcon}/>
-
+              <CardContent className={classes.refreshrContent}>
+                {r.name}
+              </CardContent>
+              <CardContent className={classes.refreshrContent}>
+                {r.date}
+              </CardContent>
+              <DeleteIcon
+                onClick={() => removeRefreshr(r.id)}
+                className={classes.refreshrIcon}
+              />
             </Card>
           ))}
           {activeRefreshr && (
@@ -593,7 +580,9 @@ function ClassEditView(props) {
           />
           <Card className={classes.refreshrCard} raised>
             <CardContent className={classes.newRefCard}>
-              <Typography variant='h4' className={classes.newTitle}>Add a Refreshr</Typography>
+              <Typography variant="h4" className={classes.newTitle}>
+                Add a Refreshr
+              </Typography>
               <Icon
                 className={classes.icon}
                 color="action"
@@ -606,7 +595,9 @@ function ClassEditView(props) {
           </Card>
         </Grid>
       </Grid>
-      <Button variant="outlined" className={classes.saveButton}>Save Changes</Button>
+      <Button variant="outlined" className={classes.saveButton}>
+        Save Changes
+      </Button>
     </Paper>
   );
 }
