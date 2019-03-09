@@ -190,7 +190,7 @@ function ClassEditView(props) {
     setStudents(res.data.specifiedClass.students);
     setRefreshrs(res.data.specifiedClass.refreshrs);
     setClassData({
-      id: res.data.specifiedClass.id,
+      id: res.data.specifiedClass.sg_list_id,
       name: res.data.specifiedClass.name
     });
   }
