@@ -20,7 +20,8 @@ const styles = theme => ({
     display: 'flex',
     flexFlow: 'column nowrap',
     justifyContent: 'space-around',
-    alignItems: 'center'
+    alignItems: 'center',
+    maxWidth: 600
   }
 });
 

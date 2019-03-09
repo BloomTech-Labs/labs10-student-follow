@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   Grid,
+  Paper,
   TextField,
   Card,
   Typography,
@@ -29,14 +30,14 @@ const styles = theme => ({
     marginBottom: theme.spacing.unit * 4,
     color: theme.palette.primary.contrastText,
     background: theme.palette.primary.dark,
-    [theme.breakpoints.down('sm')]: {
-      width: '80%'
+    [theme.breakpoints.only('sm')]: {
+      width: '60vw'
     },
-    [theme.breakpoints.only('md')]: {
-      width: '60%'
+    [theme.breakpoints.only('xs')]: {
+      width: '90vw'
     },
-    width: '50%'
-  },
+    width: 600
+  },  
   cardList: {
     display: 'flex',
     justifyContent: 'center'
@@ -264,7 +265,7 @@ function CampaignForm(props) {
   };
 
   return (
-    <Grid container className={classes.container}>
+    <Paper className={classes.container} elevation={24}>
       <Typography
         variant="h6"
         color="secondary"
@@ -383,7 +384,7 @@ function CampaignForm(props) {
           </Fab>
         </div>
       </div>
-    </Grid>
+    </Paper>
   );
 }
 
