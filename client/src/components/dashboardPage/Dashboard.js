@@ -104,6 +104,14 @@ const Dashboard = props => {
   // const name = localStorage.getItem('name'); // commented out until decide what to do w/ name
   const [teacherRefreshrs, setTeacherRefreshrs] = useState([]);
 
+  useEffect(() => {
+    // console.log(`Bearer ${token}`);
+    props.getClasses();
+    props.getRefreshrs();
+    // console.log('Dashboard refreshr:', props.getRefreshrs());
+    getTeacherById();
+  }, []);
+
   async function getTeacherById() {
     // You can await here
     try {
@@ -121,14 +129,6 @@ const Dashboard = props => {
       console.log(error);
     }
   }
-
-  useEffect(() => {
-    // console.log(`Bearer ${token}`);
-    props.getClasses();
-    props.getRefreshrs();
-    // console.log('Dashboard refreshr:', props.getRefreshrs());
-    getTeacherById();
-  }, []);
 
   const { userClasses, classes, userRefreshrs } = props;
   // console.log('Refreshr from Dash ===', userRefreshrs);

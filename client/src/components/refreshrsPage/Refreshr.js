@@ -92,7 +92,8 @@ const styles = theme => ({
 });
 
 function Refreshr(props) {
-  const { setUrl, url } = props;
+  const { setUrl, url } = props; // possibly needs changing
+  const [typeformId, setTypeformId] = useState('');
   const [reviewText, setReviewText] = useState('');
   const [refreshrName, addRefreshrName] = useState('');
   const [questionTextOne, setQuestionTextOne] = useState('');
@@ -115,11 +116,12 @@ function Refreshr(props) {
     ${{ display: submitted ? 'block' : 'none' }}
   `;
 
+  const headers = {
+    Authorization: `Bearer ${process.env.REACT_APP_TYPEFORM}`
+  };
+
   const createForm = async event => {
     event.preventDefault();
-    const headers = {
-      Authorization: `Bearer ${process.env.REACT_APP_TYPEFORM}`
-    };
     const data = {
       title: questionObject.refreshrName,
       variables: {
@@ -180,6 +182,8 @@ function Refreshr(props) {
           headers
         })
         .then(res => res);
+      console.log('REsponse from refreshr posting', response.data.id);
+      setTypeformId(response.data.id);
       setUrl(response.data._links.display);
     } catch (error) {
       console.log(error);
@@ -187,6 +191,24 @@ function Refreshr(props) {
     setSubmitted(true);
   };
 
+  //post the newly created refreshr to the refreshrs table
+  const addRefreshr = async id => {
+    console.log('From addRefreshr yeahhhh');
+    try {
+      const response = await axios
+        .post('http://localhost:9000/refreshrs', id, {
+          headers
+        })
+        .then(res => res);
+      console.log('New Refreshr ID ===', response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const userId = localStorage.getItem('user_id');
+  console.log('USer id ==', userId);
+  console.log('typeformId ==>', typeformId);
   return (
     <Paper className={props.classes.container} elevation={24}>
       <Grid className={props.classes.wrapper}>
@@ -351,6 +373,7 @@ function Refreshr(props) {
             onClick={e => {
               props.addQuestions(questionObject);
               createForm(e);
+              addRefreshr(typeformId);
             }}
           >
             Submit

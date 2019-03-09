@@ -186,11 +186,11 @@ function Refreshr(props) {
     setSubmitted(true);
   };
 
-  const { userClasses, classes, userRefreshrs } = props;
+  const { userClasses, classes, userRefreshrs, questions } = props;
   console.log('userClasses', userClasses);
   console.log('classes', classes);
   console.log('userRefreshrs', userRefreshrs);
-
+  console.log('questions =>>', questions);
   return (
     <Paper className={props.classes.container} elevation={24}>
       <Grid className={props.classes.wrapper}>
