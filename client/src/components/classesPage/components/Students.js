@@ -7,9 +7,11 @@ import {
   Checkbox,
   Button,
   FormGroup,
-  Fab
+  Fab,
+  ExpansionPanel,
+  ExpansionPanelSummary
 } from '@material-ui/core';
-import { GroupAdd } from '@material-ui/icons';
+import { GroupAdd, ExpandMore } from '@material-ui/icons';
 
 const styles = theme => ({
   studentList: {
@@ -47,12 +49,19 @@ const styles = theme => ({
     background: theme.palette.secondary.main,
     width: 40,
     height: 40
+  },
+  hiddenButton: {
+    display: 'none'
+  },
+  expansionPanel: {
+    marginTop: theme.spacing.unit * 3,
+    borderRadius: '5px',
+    border: `1px solid ${theme.palette.secondary.main}`
   }
 });
 
 function students(props) {
   const { classes } = props;
-  const [addedStudents, setAddedStudents] = useState([]);
 
   function selectStudent(e) {
     const studentId = e.target.value;
@@ -82,36 +91,31 @@ function students(props) {
             />
           </Grid>
         ))}
-        {addedStudents.map((s, i) => (
-          <Grid key={i}>
-            <span style={{ fontWeight: 'bold' }}>{`${s.first_name} ${
-              s.last_name
-            }`}</span>
-            <Checkbox
-              color="primary"
-              value={`${s.student_id}`}
-              checked={props.selectedStudents.includes(s.student_id)}
-              onClick={e => selectStudent(e)}
-            />
-          </Grid>
-        ))}
       </Card>
-      <FormGroup className={classes.settingsBox}>
-        <Typography variant="body1" gutterBottom>
-          Add a Student
-        </Typography>
-        {props.makeInput('email', 'Email')}
-        {props.makeInput('first_name', 'First Name')}
-        {props.makeInput('last_name', 'Last Name')}
-        <Fab
-          elevation={20}
-          aria-label="Add"
-          className={classes.btn}
-          onClick={e => props.addStudent(e)}
+      <ExpansionPanel className={classes.expansionPanel}>
+        <ExpansionPanelSummary expandIcon={<ExpandMore />}>
+          <Typography variant="body2" gutterBottom>
+            Add a Student
+          </Typography>
+        </ExpansionPanelSummary>
+        <form
+          className={classes.settingsBox}
+          onSubmit={e => props.addStudent(e)}
         >
-          <GroupAdd />
-        </Fab>
-      </FormGroup>
+          {props.makeInput('email', 'Email')}
+          {props.makeInput('first_name', 'First Name')}
+          {props.makeInput('last_name', 'Last Name')}
+          <Fab
+            elevation={20}
+            aria-label="Add"
+            className={classes.btn}
+            onClick={e => props.addStudent(e)}
+          >
+            <button type="submit" className={classes.hiddenButton} />
+            <GroupAdd />
+          </Fab>
+        </form>
+      </ExpansionPanel>
       <Grid className={classes.buttonBox}>
         {props.selectedStudents.length ? (
           <Button variant="outlined" onClick={props.dropStudents}>

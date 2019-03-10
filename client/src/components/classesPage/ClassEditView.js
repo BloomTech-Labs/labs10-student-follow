@@ -152,6 +152,7 @@ function ClassEditView(props) {
   });
   const [activeRefreshr, setActiveRefreshr] = useState(null);
   const [isEditingClass, setIsEditingClass] = useState(false);
+  const [isEditingStudents, setIsEditingStudents] = useState(false);
 
   useEffect(() => {
     console.log('selectedStudents:', selectedStudents);
@@ -411,6 +412,8 @@ function ClassEditView(props) {
         classData={classData}
         isEditingClass={isEditingClass}
         setIsEditingClass={setIsEditingClass}
+        isEditingStudents={isEditingStudents}
+        setIsEditingStudents={isEditingStudents}
       />
       <hr className={classes.hrStyle} />
       <Students
