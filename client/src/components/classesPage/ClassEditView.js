@@ -145,6 +145,7 @@ function ClassEditView(props) {
   const [students, setStudents] = useState([]);
   const [selectedStudents, setSelectedStudents] = useState([]);
   const [refreshrs, setRefreshrs] = useState([]);
+  const [displayRefreshrs, setDisplayRefreshrs] = useState([]); // to filter multiple campaigns
   const [teacherRefs, setTeacherRefs] = useState([]);
   const [classData, setClassData] = useState({
     name: '',
@@ -198,6 +199,20 @@ function ClassEditView(props) {
   }
 
   useEffect(() => {
+    // filter out unique refreshrs
+    let uniqueRefreshrIds = [];
+    let uniqueRefreshrs = [];
+    refreshrs.map(r => {
+      if (!uniqueRefreshrIds.includes(r.refreshr_id)) {
+        uniqueRefreshrIds.push(r.refreshr_id);
+        uniqueRefreshrs.push(r);
+      }
+    });
+    setDisplayRefreshrs(uniqueRefreshrs);
+    console.log(displayRefreshrs);
+  }, [refreshrs]);
+
+  useEffect(() => {
     console.log('classData:', classData);
   }, [classData]);
 
@@ -217,7 +232,15 @@ function ClassEditView(props) {
     const unassignedRefreshrs = res.data.refreshrs.filter(
       r => !refreshrs.includes(r)
     ); // filter out refreshrs assigned to class
-    setTeacherRefs(unassignedRefreshrs);
+    const uniqueRefreshrs = [];
+    const uniqueRefreshrIds = [];
+    unassignedRefreshrs.map(r => {
+      if (!uniqueRefreshrIds.includes(r.refreshr_id)) {
+        uniqueRefreshrIds.push(r.refreshr_id);
+        uniqueRefreshrs.push(r);
+      }
+    });
+    setTeacherRefs(uniqueRefreshrs);
   }
 
   async function addRefreshr(id) {
@@ -294,7 +317,9 @@ function ClassEditView(props) {
     const [removedRefreshr] = refreshrs.filter(r => r.id === id);
     console.log(removedRefreshr);
 
-    // cancel sendgrid campaign
+    // get all campaigns associated with the refreshr
+
+    // cancel sendgrid campaigns
     let res = await sgAx.delete(`/campaigns/${removedRefreshr.sg_campaign_id}`);
     console.log(res);
 
@@ -444,7 +469,7 @@ function ClassEditView(props) {
 
       <hr className={classes.hrStyle} />
       <Refreshrs
-        refreshrs={refreshrs}
+        refreshrs={displayRefreshrs}
         removeRefreshr={removeRefreshr}
         activeRefreshr={activeRefreshr}
         setActiveRefreshr={setActiveRefreshr}
