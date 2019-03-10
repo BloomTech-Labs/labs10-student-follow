@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Grid,
   Typography,
@@ -110,87 +110,30 @@ function Refreshr(props) {
     questionTextTwo,
     answers: { a1Text, a2Text, a3Text, a4Text }
   });
+  const typeformId = window.location.pathname.slice(-6);
 
   const StyleDisplay = styled.a`
     ${{ display: submitted ? 'block' : 'none' }}
   `;
 
-  const createForm = async event => {
-    event.preventDefault();
-    const headers = {
-      Authorization: `Bearer ${process.env.REACT_APP_TYPEFORM}`
-    };
-    const data = {
-      title: questionObject.refreshrName,
-      variables: {
-        score: 0
-      },
-      welcome_screens: [
-        {
-          title: 'Welcome to your Refreshr!',
-          properties: {
-            description: questionObject.reviewText
-          }
-        }
-      ],
-      fields: [
-        {
-          title: 'Please enter your email address.',
-          type: 'email',
-          validations: {
-            required: true
-          }
-        },
-        {
-          ref: 'question_1',
-          title: questionObject.questionTextOne,
-          type: 'multiple_choice',
-          properties: {
-            randomize: true,
-            choices: [
-              {
-                ref: 'correct',
-                label: questionObject.answers.a1Text
-              },
-              {
-                ref: 'incorrect_1',
-                label: questionObject.answers.a2Text
-              },
-              {
-                ref: 'incorrect_2',
-                label: questionObject.answers.a3Text
-              },
-              {
-                ref: 'incorrect_3',
-                label: questionObject.answers.a4Text
-              }
-            ]
-          }
-        },
-        {
-          ref: 'question_2',
-          title: questionObject.questionTextTwo,
-          type: 'short_text'
-        }
-      ]
-    };
-    try {
-      const response = await axios
-        .post('https://api.typeform.com/forms', data, {
-          headers
-        })
-        .then(res => console.log(res));
-    } catch (error) {
-      console.log(error);
-    }
-    setSubmitted(true);
+  const headers = {
+    Authorization: `Bearer ${process.env.REACT_APP_TYPEFORM}`
   };
 
+  useEffect(() => {
+    axios({
+      method: 'get',
+      url: `https://api.typeform.com/forms/${typeformId}`,
+      headers: { Authorization: `Bearer ${process.env.REACT_APP_TYPEFORM}` }
+    })
+      .then(res => {
+        console.log('FROM USE EFFECT', res);
+      })
+      .catch(err => console.log(err));
+  });
+
   const { userClasses, classes, userRefreshrs, questions } = props;
-  console.log('userClasses', userClasses);
-  console.log('classes', classes);
-  console.log('userRefreshrs', userRefreshrs);
-  console.log('questions =>>', questions);
+
   return (
     <Paper className={props.classes.container} elevation={24}>
       <Grid className={props.classes.wrapper}>
@@ -353,7 +296,6 @@ function Refreshr(props) {
             color="primary"
             onClick={e => {
               props.addQuestions(questionObject);
-              createForm(e);
             }}
           >
             Submit

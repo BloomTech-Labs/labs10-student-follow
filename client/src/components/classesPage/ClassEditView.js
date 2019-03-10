@@ -8,23 +8,19 @@ import {
   CardContent,
   Icon,
   Paper,
-  TextField, 
+  TextField,
   FormGroup,
   Input,
-  Fab,
-  
+  Fab
 } from '@material-ui/core';
 import Update from '@material-ui/icons/Update';
 import GroupAdd from '@material-ui/icons/GroupAdd';
 import { withStyles } from '@material-ui/core/styles';
-import DeleteIcon from '@material-ui/icons/Delete';
-import RefreshrDialog from './RefreshrListDialog';
-import {
-  addRecipient,
-  addContact,
-  deleteContact
-} from './SendgridOps';
+import { addRecipient, addContact, deleteContact } from './SendgridOps';
 import axios from 'axios';
+import Settings from './components/Settings';
+import Students from './components/Students';
+import Refreshrs from './components/Refreshrs';
 
 const styles = theme => ({
   wrapper: {
@@ -48,42 +44,7 @@ const styles = theme => ({
     },
     [theme.breakpoints.up('md')]: {
       width: '50vw'
-    },
-
-  },
-
-  nameForm: {
-    // border: `1px solid ${theme.palette.secondary.main}`,
-    display: 'flex',
-    flexFlow: 'column nowrap',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    padding: '5%'
-  },
-
-  refreshrList: {
-    display: 'flex',
-    padding: theme.spacing.unit ,
-    [theme.breakpoints.only('xs')]: {
-      flexFlow: 'column nowrap',
-      justifyContent: 'space-between',
-      alignItems: 'center'
-    },
-  },
-  refreshrCard: {
-    border: '1px solid white',
-    background: theme.palette.secondary.main,
-    margin: theme.spacing.unit,
-    display: 'flex',
-    flexFlow: 'column nowrap',
-    alignItems:'center',
-    [theme.breakpoints.only('xs')]: {
-      width: '100%'
-    },
-  },
-  refreshrContent: {
-    color: theme.palette.primary.dark,
-    fontSize: '1.2rem'
+    }
   },
 
   refreshrIcon: {
@@ -94,25 +55,6 @@ const styles = theme => ({
       cursor: 'pointer'
     }
   },
-  activeRefreshr: {
-    height: 200,
-    border: '1px solid red',
-    margin: theme.spacing.unit * 3,
-    position: 'relative'
-  },
-  studentList: {
-    display: 'flex',
-    flexFlow: 'column wrap',
-    border: `1px solid ${theme.palette.secondary.main}`,
-    flexWrap: 'wrap',
-    [theme.breakpoints.only('xs')]: {
-      width: '70%',
-    },
-    maxHeight: theme.spacing.unit * 50,
-    padding: theme.spacing.unit * 2
-  },
-
-
   inputBtnDiv: {
     border: '1px solid red',
     display: 'flex',
@@ -127,10 +69,10 @@ const styles = theme => ({
     width: 40,
     height: 40
   },
-  
+
   icon: {
     alignSelf: 'center',
-    '&:hover':{
+    '&:hover': {
       cursor: 'pointer'
     }
   },
@@ -138,13 +80,6 @@ const styles = theme => ({
     color: `${theme.palette.secondary.contrastText}`,
     textAlign: 'center',
     fontSize: '1.6rem'
-  },
-  newRefCard: {
-    display: 'flex',
-    flexFlow: 'column nowrap',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    height: 200
   },
   title: {
     color: `${theme.palette.primary.contrastText}`,
@@ -171,7 +106,7 @@ const styles = theme => ({
     color: theme.palette.primary.main,
     fontSize: '1em',
     width: 200,
-    borderRadius: 5,
+    borderRadius: 5
     // [theme.breakpoints.only('xs')]: {
     //   marginRight: '5%'
     // }
@@ -190,7 +125,7 @@ const styles = theme => ({
     width: '50%',
     marginTop: '5%',
     '&:hover': {
-      background: theme.palette.secondary.dark,
+      background: theme.palette.secondary.dark
     }
   }
 });
@@ -208,16 +143,19 @@ function ClassEditView(props) {
     // baseURL: 'https://refreshr.herokuapp.com' // production
   });
   const [students, setStudents] = useState([]);
+  const [selectedStudents, setSelectedStudents] = useState([]);
   const [refreshrs, setRefreshrs] = useState([]);
   const [teacherRefs, setTeacherRefs] = useState([]);
   const [classData, setClassData] = useState({
     name: '',
     sg_list_id: ''
   });
-  const [selectedStudents, setSelectedStudents] = useState([]);
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [addedStudents, setAddedStudents] = useState([]);
   const [activeRefreshr, setActiveRefreshr] = useState(null);
+  const [isEditingClass, setIsEditingClass] = useState(false);
+
+  useEffect(() => {
+    console.log('selectedStudents:', selectedStudents);
+  }, [selectedStudents]);
 
   // sendgrix axios instance
   const sgAx = axios.create({
@@ -246,9 +184,6 @@ function ClassEditView(props) {
   }, [teacherRefs]);
 
 */
-  useEffect(() => {
-    console.log('selectedStudents:', selectedStudents);
-  }, [selectedStudents]);
 
   async function fetchClass() {
     const res = await ax.get(`/classes/${classId}`);
@@ -256,7 +191,7 @@ function ClassEditView(props) {
     setStudents(res.data.specifiedClass.students);
     setRefreshrs(res.data.specifiedClass.refreshrs);
     setClassData({
-      id: res.data.specifiedClass.id,
+      id: res.data.specifiedClass.sg_list_id,
       name: res.data.specifiedClass.name
     });
   }
@@ -277,8 +212,10 @@ function ClassEditView(props) {
 
   async function fetchTeacherRefreshrs(id) {
     const res = await ax.get(`/teachers/${userID}/refreshrs`);
-    console.log('RES:', res)
-    const unassignedRefreshrs = res.data.refreshrs.filter(r => !refreshrs.includes(r)); // filter out refreshrs assigned to class
+    console.log('RES:', res);
+    const unassignedRefreshrs = res.data.refreshrs.filter(
+      r => !refreshrs.includes(r)
+    ); // filter out refreshrs assigned to class
     setTeacherRefs(unassignedRefreshrs);
   }
 
@@ -287,8 +224,8 @@ function ClassEditView(props) {
     console.log(activeRefreshr);
     // will need to refactor this later with moment?
     const send_at = {
-      "send_at": Date.parse(activeRefreshr.date) / 1000,
-    }
+      send_at: Date.parse(activeRefreshr.date) / 1000
+    };
     console.log('send at:', send_at);
     console.log(typeof send_at.send_at);
 
@@ -298,9 +235,11 @@ function ClassEditView(props) {
       title: activeRefreshr.name,
       subject: `Your Refreshr for ${classData.name} is here!`,
       plain_content: 'this is plain content [unsubscribe]',
-      html_content: `<html> <head> <title></title> </head> <body> <p>Take your refreshr at this link: ${activeRefreshr.typeform_url} [unsubscribe] </p> </body> </html>`,
+      html_content: `<html> <head> <title></title> </head> <body> <p>Take your refreshr at this link: ${
+        activeRefreshr.typeform_url
+      } [unsubscribe] </p> </body> </html>`,
       list_ids: [Number(classData.id)],
-      suppression_group_id: 9332, // permanent (Unsubscribe ID)
+      suppression_group_id: 9332 // permanent (Unsubscribe ID)
     };
     // console.log('body:', body);
     let res = await sgAx.post('/campaigns', body);
@@ -314,7 +253,7 @@ function ClassEditView(props) {
       ...activeRefreshr,
       refreshr_id: activeRefreshr.id,
       sg_campaign_id
-    }
+    };
 
     // add refreshr to TCR table
     res = await ax.post(`/classes/${classData.id}/refreshrs`, {
@@ -322,14 +261,13 @@ function ClassEditView(props) {
       teacher_id: userID
     });
 
-    console.log(res)
+    console.log(res);
 
     // schedule campaign
     res = await sgAx.post(`/campaigns/${sg_campaign_id}/schedules`, {
       send_at: 1554206400
-    })
+    });
     console.log(res);
-
 
     // add refreshr to class refreshrs, remove from active refreshr
     setRefreshrs(refreshrs.concat(activeRefreshr));
@@ -350,31 +288,11 @@ function ClassEditView(props) {
     setActiveRefreshr(active);
   }
 
-  function setDate(e) {
-    console.log(e.target.value);
-    setActiveRefreshr({ ...activeRefreshr, date: e.target.value });
-  }
-
   function removeRefreshr(id) {
     // TODO: needs to be updated to kill sendgrid campaign, drop from TCR table
     const removedRefreshr = refreshrs.filter(r => r.id === id);
     setTeacherRefs([...teacherRefs, ...removedRefreshr]);
     setRefreshrs(refreshrs.filter(r => r.id !== id));
-  }
-
-  function selectStudent(e) {
-    const studentId = e.target.value;
-    let updatedStudents = selectedStudents;
-    if (e.target.checked) {
-      updatedStudents = selectedStudents.concat(studentId);
-    } else {
-      updatedStudents = selectedStudents.filter(s => s !== studentId);
-    }
-    setSelectedStudents(updatedStudents);
-  }
-
-  function closeModal() {
-    setModalIsOpen(false);
   }
 
   const [newStudent, setNewStudent] = useState({
@@ -384,8 +302,8 @@ function ClassEditView(props) {
   });
 
   useEffect(() => {
-    console.log("NEW STUDENT",newStudent);
-  }, [newStudent])
+    console.log('NEW STUDENT', newStudent);
+  }, [newStudent]);
 
   const handleChange = e => {
     setNewStudent({
@@ -436,6 +354,7 @@ function ClassEditView(props) {
       name: classData.name,
       sg_list_id: classData.id
     });
+    setIsEditingClass(false);
     console.log(res);
   }
 
@@ -459,7 +378,7 @@ function ClassEditView(props) {
       // drop student from sg list
       deleteContact(classId, student);
     }
-    fetchClass(); // better way to do this than calling this here?
+    fetchClass(); // better way to do this than calling this again here?
 
     // reset selected students
     setSelectedStudents([]);
@@ -485,128 +404,34 @@ function ClassEditView(props) {
 
   return (
     <Paper className={props.classes.wrapper}>
-      <Typography variant="h6"
-        color="secondary"
-        style={{ textAlign: 'center' }}>
-        Settings
-      </Typography>
-        <FormGroup className={classes.nameForm} >
-        <Typography variant="body1" gutterBottom>
-          Edit Classname
-        </Typography>  
-        {/* <div className={classes.inputBtnDiv}>   */}
-          {makeInput('className', 'Class Name', classData.name, e =>
-            handleClassChange(e)
-          )}
-        <Fab elevation={20} aria-label="Update" className={classes.btn} onClick={e => changeClassName(e)}>
-          <Update />
-        </Fab>
-        {/* </div>           */}
-        </FormGroup>
-        <hr className={classes.hrStyle} />
-
-      <Typography variant="h6" className={classes.title} gutterBottom>
-        Current Students
-      </Typography>
-      <Card className={classes.studentList}>
-        {students.map((s, i) => (
-          <Grid key={i}>
-            <span>{`${s.name}`}</span>
-            <Checkbox
-              color="secondary"
-              value={`${s.student_id}`}
-              checked={selectedStudents.includes(s.student_id)}
-              onClick={e => selectStudent(e)}
-            />
-          </Grid>
-        ))}
-        {addedStudents.map((s, i) => (
-          <Grid key={i}>
-            <span style={{ fontWeight: 'bold' }}>{`${s.first_name} ${
-              s.last_name
-            }`}</span>
-            <Checkbox
-              color="primary"
-              value={`${s.student_id}`}
-              checked={selectedStudents.includes(s.student_id)}
-              onClick={e => selectStudent(e)}
-            />
-          </Grid>
-        ))}
-      </Card>
-      <FormGroup className={classes.settingsBox}>
-        <Typography variant="body1" gutterBottom>
-          Add a Student
-        </Typography> 
-          {makeInput('email', 'Email')}
-          {makeInput('first_name', 'First Name')}
-          {makeInput('last_name', 'Last Name')}
-        <Fab elevation={20} aria-label="Add" className={classes.btn} onClick={e => addStudent(e)}>
-          <GroupAdd />
-        </Fab>
-        </FormGroup>
-      <Grid className={classes.buttonBox}>
-        {selectedStudents.length ? (
-          <Button variant="outlined" onClick={dropStudents}>
-            Remove selected from class
-          </Button>
-        ) : null}
-      </Grid>
+      <Settings
+        handleClassChange={handleClassChange}
+        changeClassName={changeClassName}
+        makeInput={makeInput}
+        classData={classData}
+        isEditingClass={isEditingClass}
+        setIsEditingClass={setIsEditingClass}
+      />
       <hr className={classes.hrStyle} />
+      <Students
+        makeInput={makeInput}
+        addStudent={addStudent}
+        students={students}
+        selectedStudents={selectedStudents}
+        setSelectedStudents={setSelectedStudents}
+        dropStudents={dropStudents}
+      />
 
-      <Grid>
-        <Typography variant="h6" className={classes.title} gutterBottom>
-          Refreshrs
-        </Typography>
-        <Grid className={classes.refreshrList}>
-          {refreshrs.map((r,i) => (
-            <Card className={classes.refreshrCard} key={i} raised>
-              <CardContent className={classes.refreshrContent}>{r.name}</CardContent>
-              <CardContent className={classes.refreshrContent}>{r.date}</CardContent>
-                <DeleteIcon  onClick={() => removeRefreshr(r.id)}  className={classes.refreshrIcon}/>
-
-            </Card>
-          ))}
-          {activeRefreshr && (
-            <Card
-              className={classes.activeRefreshr}
-              key={activeRefreshr.id}
-              raised
-            >
-              <CardContent>{activeRefreshr.name}</CardContent>
-              <TextField
-                onChange={e => setDate(e)}
-                variant="outlined"
-                type="date"
-              />
-              {activeRefreshr.date && (
-                <Button onClick={addRefreshr}>Submit</Button>
-              )}
-            </Card>
-          )}
-          <RefreshrDialog
-            refreshrs={teacherRefs}
-            open={modalIsOpen}
-            handleClose={closeModal}
-            addRefreshr={addRefreshr}
-            selectRefreshr={selectRefreshr}
-          />
-          <Card className={classes.refreshrCard} raised>
-            <CardContent className={classes.newRefCard}>
-              <Typography variant='h4' className={classes.newTitle}>Add a Refreshr</Typography>
-              <Icon
-                className={classes.icon}
-                color="action"
-                style={{ fontSize: 60 }}
-                onClick={() => setModalIsOpen(!modalIsOpen)}
-              >
-                add_circle
-              </Icon>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
-      <Button variant="outlined" className={classes.saveButton}>Save Changes</Button>
+      <hr className={classes.hrStyle} />
+      <Refreshrs
+        refreshrs={refreshrs}
+        removeRefreshr={removeRefreshr}
+        activeRefreshr={activeRefreshr}
+        setActiveRefreshr={setActiveRefreshr}
+        addRefreshr={addRefreshr}
+        selectRefreshr={selectRefreshr}
+        teacherRefs={teacherRefs}
+      />
     </Paper>
   );
 }

@@ -4,11 +4,11 @@ import {
   Typography,
   FormGroup,
   withStyles,
-  Button,
   Paper,
-  Input
+  Input,
+  Fab
 } from '@material-ui/core';
-import styled from 'styled-components';
+import Send from '@material-ui/icons/Send';
 
 const axios = require('axios');
 
@@ -32,7 +32,7 @@ const styles = theme => ({
     [theme.breakpoints.only('xs')]: {
       width: '90vw'
     },
-    width: '50%'
+    maxWidth: 600
   },
   textField: {
     background: '#FFFFFF',
@@ -88,18 +88,34 @@ const styles = theme => ({
   hrStyle: {
     margin: '1rem auto',
     width: '100%'
+  },
+  buttonDiv: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    [theme.breakpoints.down('md')]: {
+      marginTop: theme.spacing.unit * 2
+    }
+  },
+  submitBtn: {
+    marginLeft: theme.spacing.unit,
+    color: theme.palette.primary.main,
+    background: theme.palette.secondary.main,
+    width: 40,
+    height: 40
+  },
+  submitText: {
+    marginRight: theme.spacing.unit
   }
 });
 
 function Refreshr(props) {
-  const { setUrl, url } = props; // possibly needs changing
-  const [typeformId, setTypeformId] = useState('');
-  const [refreshrId, setRefreshrId] = useState('');
+  const { sendRefreshrToDB, classes } = props;
   const [reviewText, setReviewText] = useState('');
   const [refreshrName, addRefreshrName] = useState('');
   const [questionTextOne, setQuestionTextOne] = useState('');
   const [questionTextTwo, setQuestionTextTwo] = useState('');
-  const [submitted, setSubmitted] = useState(false);
+  //const [submitted, setSubmitted] = useState(false);
 
   const [a1Text, setA1Text] = useState('');
   const [a2Text, setA2Text] = useState('');
@@ -112,31 +128,27 @@ function Refreshr(props) {
     questionTextTwo,
     answers: { a1Text, a2Text, a3Text, a4Text }
   });
+  console.log('Props from ref', props);
 
   const headers = {
     Authorization: `Bearer ${process.env.REACT_APP_TYPEFORM}`
   };
-
-  const userId = localStorage.getItem('user_id');
-  const token = localStorage.getItem('accessToken');
-
-  const StyleDisplay = styled.a`
-    ${{ display: submitted ? 'block' : 'none' }}
-  `;
-
+  /* We should use this later on other pages
+    that way we can give the user an indication that an action was successful
+  */
+  //   const StyleDisplay = styled.a`
+  //   ${{ display: submitted ? 'block' : 'none' }}
+  // `;
   const createForm = async event => {
     event.preventDefault();
     const data = {
-      title: questionObject.refreshrName,
+      title: 'Refreshr',
       variables: {
         score: 0
       },
       welcome_screens: [
         {
-          title: 'Welcome to your Refreshr!',
-          properties: {
-            description: questionObject.reviewText
-          }
+          title: questionObject.refreshrName
         }
       ],
       fields: [
@@ -152,6 +164,7 @@ function Refreshr(props) {
           title: questionObject.questionTextOne,
           type: 'multiple_choice',
           properties: {
+            description: questionObject.reviewText,
             randomize: true,
             choices: [
               {
@@ -176,79 +189,87 @@ function Refreshr(props) {
         {
           ref: 'question_2',
           title: questionObject.questionTextTwo,
-          type: 'short_text'
+          type: 'short_text',
+          properties: {
+            description: questionObject.reviewText
+          }
         }
       ]
     };
     try {
-      const response = await axios
+      await axios
         .post('https://api.typeform.com/forms', data, {
           headers
         })
-        .then(res => res);
-      console.log('REsponse from refreshr posting', response.data.id);
-      setTypeformId(response.data.id);
-      setUrl(response.data._links.display);
+        .then(res => {
+          const newRefreshr = {
+            name: res.data.title,
+            review_text: res.data.fields[1].properties.description,
+            typeform_id: res.data.id,
+            typeform_url: res.data._links.display
+          };
+          sendRefreshrToDB(newRefreshr);
+        });
     } catch (error) {
       console.log(error);
     }
-    setSubmitted(true);
+    //setSubmitted(true);
   };
 
   //post the newly created refreshr to the refreshrs table. Returns refreshr id
-  const addRefreshr = async id => {
-    try {
-      const response = await axios
-        .post('http://localhost:9000/refreshrs', id, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        })
-        .then(res => res);
-      setRefreshrId(response);
-      console.log('New Refreshr ID ===', response);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const addRefreshr = async id => {
+  //   try {
+  //     const response = await axios
+  //       .post('http://localhost:9000/refreshrs', id, {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`
+  //         }
+  //       })
+  //       .then(res => res);
+  //     setRefreshrId(response);
+  //     console.log('New Refreshr ID ===', response);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
-  //post the refreshr id to the teachers table
-  const addRefreshrId = async id => {
-    try {
-      const response = await axios
-        .post(`http://localhost:9000/teachers/${userId}/refreshrs`, id, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        })
-        .then(res => res);
-      console.log('Res from id => teachers ===', response);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // //post the refreshr id to the teachers table
+  // const addRefreshrId = async id => {
+  //   try {
+  //     const response = await axios
+  //       .post(`http://localhost:9000/teachers/${userId}/refreshrs`, id, {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`
+  //         }
+  //       })
+  //       .then(res => res);
+  //     console.log('Res from id => teachers ===', response);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
-  //gets refreshrs associated with the logged in teacher
-  const getTeacherRefreshrs = async () => {
-    try {
-      const response = await axios
-        .get(`http://localhost:9000/teachers/${userId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        })
-        .then(res => res);
-      console.log('Getting teachers 🙏 ===', response);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // //gets refreshrs associated with the logged in teacher
+  // const getTeacherRefreshrs = async () => {
+  //   try {
+  //     const response = await axios
+  //       .get(`http://localhost:9000/teachers/${userId}`, {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`
+  //         }
+  //       })
+  //       .then(res => res);
+  //     console.log('Getting teachers 🙏 ===', response);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   // console.log('USer id ==', userId);
   // console.log('typeformId ==>', typeformId);
   return (
-    <Paper className={props.classes.container} elevation={24}>
-      <Grid className={props.classes.wrapper}>
+    <Paper className={classes.container} elevation={24}>
+      <Grid className={classes.wrapper}>
         <FormGroup
           onChange={() =>
             setQuestionObject({
@@ -260,46 +281,34 @@ function Refreshr(props) {
             })
           }
         >
-          <Typography
-            variant="h6"
-            color="secondary"
-            style={{ textAlign: 'center' }}
-          >
+          <Typography variant="h6" color="secondary" align={'center'}>
             Create Your Refreshr
           </Typography>
 
-          <hr className={props.classes.hrStyle} />
+          <hr className={classes.hrStyle} />
 
-          <Typography
-            variant="body1"
-            color="secondary"
-            style={{ textAlign: 'center' }}
-          >
+          <Typography variant="body1" color="secondary" align={'center'}>
             Refreshr Name
           </Typography>
 
-          <FormGroup
-            className={props.classes.form1}
-            onSubmit={props.handleSubmit}
-          >
+          <FormGroup className={classes.form1} onSubmit={props.handleSubmit}>
             <Input
               disableUnderline
               onChange={e => addRefreshrName(e.target.value)}
               name="classnameInput"
               required
               placeholder="Enter Refreshr Name.."
-              className={props.classes.inputName}
+              className={classes.inputName}
             />
           </FormGroup>
 
-          <hr className={props.classes.hrStyle} />
+          <hr className={classes.hrStyle} />
 
-          <h4 className={props.classes.subheaders}>Add Review Text</h4>
+          <Typography variant={'body1'} color="secondary" align={'center'}>
+            Add Review Text
+          </Typography>
 
-          <FormGroup
-            className={props.classes.form1}
-            onSubmit={props.handleSubmit}
-          >
+          <FormGroup className={classes.form1} onSubmit={props.handleSubmit}>
             <Input
               disableUnderline
               onChange={e => setReviewText(e.target.value)}
@@ -308,25 +317,25 @@ function Refreshr(props) {
               multiline
               rows="4"
               placeholder="Enter info about the Refreshr.."
-              className={props.classes.inputQuestion}
+              className={classes.inputQuestion}
             />
           </FormGroup>
 
-          <hr className={props.classes.hrStyle} />
-
-          <h4 className={props.classes.subheaders}>Create Questions</h4>
+          <hr className={classes.hrStyle} />
 
           <Typography
-            variant="body1"
+            variant={'body1'}
             color="secondary"
-            style={{ textAlign: 'center' }}
+            align={'center'}
+            gutterBottom
           >
-            Question 1: Multiple Choice Response
+            Create Questions
           </Typography>
-          <FormGroup
-            className={props.classes.form1}
-            onSubmit={props.handleSubmit}
-          >
+
+          <Typography variant={'caption'} color="secondary" align={'center'}>
+            Multiple Choice Question
+          </Typography>
+          <FormGroup className={classes.form1} onSubmit={props.handleSubmit}>
             <Input
               disableUnderline
               onChange={e => setQuestionTextOne(e.target.value)}
@@ -335,19 +344,19 @@ function Refreshr(props) {
               multiline
               rows="4"
               placeholder="Enter question.."
-              className={props.classes.inputQuestion}
+              className={classes.inputQuestion}
             />
           </FormGroup>
 
           <FormGroup>
-            <form className={props.classes.multipleChoice}>
+            <form className={classes.multipleChoice}>
               <Input
                 disableUnderline
                 onChange={e => setA1Text(e.target.value)}
                 name="classnameInput"
                 required
                 placeholder="Answer one.."
-                className={props.classes.inputMultipleChoice}
+                className={classes.inputMultipleChoice}
               />
               <Input
                 disableUnderline
@@ -355,7 +364,7 @@ function Refreshr(props) {
                 onChange={e => setA2Text(e.target.value)}
                 required
                 placeholder="Answer two.."
-                className={props.classes.inputMultipleChoice}
+                className={classes.inputMultipleChoice}
               />
               <Input
                 disableUnderline
@@ -363,7 +372,7 @@ function Refreshr(props) {
                 name="classnameInput"
                 required
                 placeholder="Answer three.."
-                className={props.classes.inputMultipleChoice}
+                className={classes.inputMultipleChoice}
               />
               <Input
                 disableUnderline
@@ -371,25 +380,18 @@ function Refreshr(props) {
                 name="classnameInput"
                 required
                 placeholder="Answer four.."
-                className={props.classes.inputMultipleChoice}
+                className={classes.inputMultipleChoice}
               />
             </form>
           </FormGroup>
 
-          <hr className={props.classes.hrStyle} />
+          <hr className={classes.hrStyle} />
 
-          <Typography
-            variant="body1"
-            color="secondary"
-            style={{ textAlign: 'center' }}
-          >
-            Question 2: Text Response
+          <Typography variant={'caption'} color="secondary" align={'center'}>
+            Short Answer Question
           </Typography>
 
-          <FormGroup
-            className={props.classes.form1}
-            onSubmit={props.handleSubmit}
-          >
+          <FormGroup className={classes.form1} onSubmit={props.handleSubmit}>
             <Input
               disableUnderline
               name="classnameInput"
@@ -398,26 +400,33 @@ function Refreshr(props) {
               multiline
               rows="4"
               placeholder="Enter question.."
-              className={props.classes.inputQuestion}
+              className={classes.inputQuestion}
             />
           </FormGroup>
 
-          <hr className={props.classes.hrStyle} />
-
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={e => {
-              props.addQuestions(questionObject);
-              createForm(e);
-              addRefreshr(typeformId);
-              addRefreshrId(refreshrId);
-              getTeacherRefreshrs();
-            }}
-          >
-            Submit
-          </Button>
-          <StyleDisplay>View your Refreshr here: {url}</StyleDisplay>
+          <hr className={classes.hrStyle} />
+          <div className={classes.buttonDiv}>
+            <Typography
+              variant="body2"
+              color="secondary"
+              className={classes.submitText}
+            >
+              SUBMIT
+            </Typography>
+            <Fab
+              elevation={20}
+              aria-label="Submit"
+              className={classes.submitBtn}
+            >
+              <Send
+                onClick={e => {
+                  props.addQuestions(questionObject);
+                  createForm(e);
+                }}
+              />
+            </Fab>
+            {/* <StyleDisplay>View your Refreshr here: {url}</StyleDisplay> */}
+          </div>
         </FormGroup>
       </Grid>
     </Paper>
