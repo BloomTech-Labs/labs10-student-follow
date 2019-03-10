@@ -94,7 +94,7 @@ function students(props) {
       </Card>
       <ExpansionPanel className={classes.expansionPanel}>
         <ExpansionPanelSummary expandIcon={<ExpandMore />}>
-          <Typography variant="body2" gutterBottom>
+          <Typography variant="body1" gutterBottom>
             Add a Student
           </Typography>
         </ExpansionPanelSummary>
@@ -102,7 +102,7 @@ function students(props) {
           className={classes.settingsBox}
           onSubmit={e => props.addStudent(e)}
         >
-          {props.makeInput('email', 'Email')}
+          {props.makeInput('email', 'Email', undefined, undefined, 'email')}
           {props.makeInput('first_name', 'First Name')}
           {props.makeInput('last_name', 'Last Name')}
           <Fab
