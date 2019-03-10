@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import moment from 'moment';
 import {
   Grid,
   Checkbox,
@@ -142,6 +143,13 @@ function ClassEditView(props) {
     }
     // baseURL: 'https://refreshr.herokuapp.com' // production
   });
+  // sendgrix axios instance
+  const sgAx = axios.create({
+    baseURL: 'https://api.sendgrid.com/v3',
+    headers: {
+      authorization: `Bearer ${process.env.REACT_APP_SENDGRID_API_KEY}`
+    }
+  });
   const [students, setStudents] = useState([]);
   const [selectedStudents, setSelectedStudents] = useState([]);
   const [refreshrs, setRefreshrs] = useState([]);
@@ -155,17 +163,10 @@ function ClassEditView(props) {
   const [isEditingClass, setIsEditingClass] = useState(false);
   const [isEditingStudents, setIsEditingStudents] = useState(false);
 
-  useEffect(() => {
-    console.log('selectedStudents:', selectedStudents);
-  }, [selectedStudents]);
+  // useEffect(() => {
+  //   console.log('selectedStudents:', selectedStudents);
+  // }, [selectedStudents]);
 
-  // sendgrix axios instance
-  const sgAx = axios.create({
-    baseURL: 'https://api.sendgrid.com/v3',
-    headers: {
-      authorization: `Bearer ${process.env.REACT_APP_SENDGRID_API_KEY}`
-    }
-  });
   // get class details on mount
   useEffect(() => {
     fetchClass();
@@ -181,11 +182,10 @@ function ClassEditView(props) {
     console.log('refreshrs:', refreshrs);
   }, [refreshrs]);
 
+*/
   useEffect(() => {
     console.log('teacherRefs:', teacherRefs);
   }, [teacherRefs]);
-
-*/
 
   async function fetchClass() {
     const res = await ax.get(`/classes/${classId}`);
@@ -216,16 +216,6 @@ function ClassEditView(props) {
     console.log('classData:', classData);
   }, [classData]);
 
-  // async function fetchStudents() {
-  //   const res = await ax.get(`/classes/${classId}/students`);
-  //   setStudents(res.data);
-  // }
-
-  // async function fetchRefreshrs() {
-  //   const res = await ax.get(`/classes/${classId}/refreshrs`);
-  //   setRefreshrs(res.data);
-  // }
-
   async function fetchTeacherRefreshrs(id) {
     const res = await ax.get(`/teachers/${userID}/refreshrs`);
     console.log('RES:', res);
@@ -234,6 +224,7 @@ function ClassEditView(props) {
     ); // filter out refreshrs assigned to class
     const uniqueRefreshrs = [];
     const uniqueRefreshrIds = [];
+    // filter out duplicate refreshrs
     unassignedRefreshrs.map(r => {
       if (!uniqueRefreshrIds.includes(r.refreshr_id)) {
         uniqueRefreshrIds.push(r.refreshr_id);
@@ -247,11 +238,28 @@ function ClassEditView(props) {
     // date has been selected, send off to sendgrid and add to db
     console.log(activeRefreshr);
     // will need to refactor this later with moment?
-    const send_at = {
-      send_at: Date.parse(activeRefreshr.date) / 1000
-    };
-    console.log('send at:', send_at);
-    console.log(typeof send_at.send_at);
+    // const send_at = {
+    //   send_at: Date.parse(activeRefreshr.date) / 1000
+    // };
+    // console.log('send at:', send_at);
+    // console.log(typeof send_at.send_at);
+
+    // set 3 refreshr times
+    const twoDaysUnix = moment(`${activeRefreshr.date}T00:00:00`)
+      .add(2, 'day')
+      .unix();
+    const twoWeeksUnix = moment(`${activeRefreshr.date}T00:00:00`)
+      .add(2, 'weeks')
+      .unix();
+    const twoMonthsUnix = moment(`${activeRefreshr.date}T00:00:00`)
+      .add(2, 'month')
+      .unix();
+
+    activeRefreshr.timeTriData = [
+      { send_at: twoDaysUnix },
+      { send_at: twoWeeksUnix },
+      { send_at: twoMonthsUnix }
+    ];
 
     // create sendgrid campaign
     const body = {
@@ -266,32 +274,38 @@ function ClassEditView(props) {
       suppression_group_id: 9332 // permanent (Unsubscribe ID)
     };
     // console.log('body:', body);
-    let res = await sgAx.post('/campaigns', body);
-    console.log(res);
-    const sg_campaign_id = res.data.id;
-    console.log('sgid:', sg_campaign_id);
 
-    // attach sendgrid campaign id to active refreshr
+    // create three campaigns
+    for (let i = 0; i < 3; i++) {
+      let res = await sgAx.post('/campaigns', body);
+      console.log(res);
+      const sg_campaign_id = res.data.id;
+      console.log('sgid:', sg_campaign_id);
 
-    const refreshr = {
-      ...activeRefreshr,
-      refreshr_id: activeRefreshr.id,
-      sg_campaign_id
-    };
+      // attach sendgrid campaign id to active refreshr
+      // const refreshr = {
+      //   ...activeRefreshr,
+      //   refreshr_id: activeRefreshr.id,
+      //   sg_campaign_id
+      // };
+      activeRefreshr.sg_campaign_id = sg_campaign_id;
 
-    // add refreshr to TCR table
-    res = await ax.post(`/classes/${classData.id}/refreshrs`, {
-      refreshr: refreshr,
-      teacher_id: userID
-    });
+      // add refreshr to TCR table
+      res = await ax.post(`/classes/${classData.id}/campaigns`, {
+        refreshr_id: activeRefreshr.refreshr_id,
+        teacher_id: userID,
+        date: activeRefreshr.date,
+        sg_campaign_id
+      });
 
-    console.log(res);
-
-    // schedule campaign
-    res = await sgAx.post(`/campaigns/${sg_campaign_id}/schedules`, {
-      send_at: 1554206400
-    });
-    console.log(res);
+      console.log(res);
+      // schedule campaign
+      res = await sgAx.post(
+        `/campaigns/${sg_campaign_id}/schedules`,
+        activeRefreshr.timeTriData[i]
+      );
+      console.log(res);
+    }
 
     // add refreshr to class refreshrs, remove from active refreshr
     setRefreshrs(refreshrs.concat(activeRefreshr));
@@ -324,7 +338,7 @@ function ClassEditView(props) {
     console.log(res);
 
     // drop from TCR table
-    res = ax.delete(
+    res = await ax.delete(
       `/classes/${classData.id}/refreshrs/${removedRefreshr.refreshr_id}`
     );
     console.log(res);

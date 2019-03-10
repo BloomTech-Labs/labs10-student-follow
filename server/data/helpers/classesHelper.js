@@ -47,7 +47,8 @@ module.exports = {
         'refreshrs.name as r_name',
         'refreshrs.typeform_id',
         'refreshrs.typeform_url',
-        'tcr.sg_campaign_id'
+        'tcr.sg_campaign_id',
+        'tcr.date'
       )
       .join(
         'teachers_classes_refreshrs as tcr',
@@ -92,7 +93,8 @@ module.exports = {
             refreshr_id: r.typeform_id,
             name: r.r_name,
             typeform_url: r.typeform_url,
-            sg_campaign_id: r.sg_campaign_id
+            sg_campaign_id: r.sg_campaign_id,
+            date: r.date
           };
         }),
         campaigns: campaigns.map(c => {
