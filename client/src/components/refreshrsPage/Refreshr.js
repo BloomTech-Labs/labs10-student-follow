@@ -231,7 +231,11 @@ function Refreshr(props) {
           }
         >
           <Typography variant="h6" color="secondary" align={'center'}>
-            Create Your Refreshr
+            Add Refreshr
+          </Typography>
+
+          <Typography variant="h8" color="secondary" align={'center'}>
+            Create the Refreshr quiz that you will send to your students.
           </Typography>
 
           <hr className={classes.hrStyle} />
