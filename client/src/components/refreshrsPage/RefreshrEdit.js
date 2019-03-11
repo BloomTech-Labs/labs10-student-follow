@@ -97,7 +97,7 @@ function Refreshr(props) {
   const [refreshrName, addRefreshrName] = useState('');
   const [questionTextOne, setQuestionTextOne] = useState('');
   const [questionTextTwo, setQuestionTextTwo] = useState('');
-  const [submitted, setSubmitted] = useState(false);
+  // const [submitted, setSubmitted] = useState(false);
   const [typeformWelcome, setTypefromWelcome] = useState([]);
   const [typeformQ1Props, setTypeformQ1Props] = useState([]);
   const [typeformAnswers, setTypeformAnswers] = useState([]);
@@ -117,13 +117,9 @@ function Refreshr(props) {
   });
   const typeformId = window.location.pathname.slice(-6);
 
-  const StyleDisplay = styled.a`
-    ${{ display: submitted ? 'block' : 'none' }}
-  `;
-
-  const headers = {
-    Authorization: `Bearer ${process.env.REACT_APP_TYPEFORM}`
-  };
+  // const StyleDisplay = styled.a`
+  //   ${{ display: submitted ? 'block' : 'none' }}
+  // `;
 
   useEffect(() => {
     axios({
@@ -300,7 +296,6 @@ function Refreshr(props) {
               multiline
               rows="4"
               value={typeformQ2.title}
-              // placeholder="Enter question.."
               className={props.classes.inputQuestion}
             />
           </FormGroup>
@@ -315,7 +310,7 @@ function Refreshr(props) {
           >
             Submit
           </Button>
-          <StyleDisplay>View your Refreshr here: {url}</StyleDisplay>
+          {/* <StyleDisplay>View your Refreshr here: {url}</StyleDisplay> */}
         </FormGroup>
       </Grid>
     </Paper>

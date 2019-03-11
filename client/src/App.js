@@ -89,16 +89,17 @@ const App = props => {
       data: refreshr
     })
       .then(res => {
-        //console.log(res)
+        console.log('Res from 116', res.data.newRefreshrID);
         axios({
           method: 'post',
           //Development
           url: `http://localhost:9000/teachers/${user_id}/refreshrs`,
           //Production
-          //url: 'http://refreshr.herokuapp.com/questions'
+          // url: 'http://refreshr.herokuapp.com/questions',
           headers: { Authorization: `Bearer ${token}` },
-          data: res.data.newRefreshrID
+          data: { refreshr_id: res.data.newRefreshrID }
         }).then(res => {
+          console.log('Res from send ref', res);
           setMessage(res.data.message);
         });
       })
