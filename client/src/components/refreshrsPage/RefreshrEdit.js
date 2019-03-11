@@ -144,7 +144,8 @@ function Refreshr(props) {
 
   const { userClasses, classes, userRefreshrs, questions } = props;
   const answers = typeformAnswers.map(answer => answer.label);
-  // console.log('typeformText =>', typeformAnswers.map(answer => answer.label));
+
+  console.log('typeformText =>', typeformQ1.title);
 
   return (
     <Paper className={props.classes.container} elevation={24}>
@@ -236,7 +237,8 @@ function Refreshr(props) {
               required
               multiline
               rows="4"
-              placeholder="Enter question.."
+              value={typeformQ1.title}
+              // placeholder="Enter question.."
               className={props.classes.inputQuestion}
             />
           </FormGroup>
