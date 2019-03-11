@@ -61,7 +61,7 @@ const styles = theme => ({
     paddingLeft: '10px'
   },
   cardSectionLabels: {
-    marginLeft: '2rem',
+    // marginLeft: '2rem',
     [theme.breakpoints.down('sm')]: {
       margin: '0'
     }
@@ -94,6 +94,10 @@ const styles = theme => ({
   refreshrIcon: {
     fontSize: '70px',
     margin: '1rem auto'
+  },
+  hrStyle: {
+    margin: '1rem auto',
+    width: '80%'
   }
 });
 
@@ -170,6 +174,20 @@ const Dashboard = props => {
         'userRefreshrs ==>',
         userRefreshrs.map(data => data.typeform_url)
       )}
+      <Typography
+        variant="h6"
+        color="secondary"
+        style={{ textAlign: 'center' }}
+      >
+        Dashboard
+      </Typography>
+
+      <Typography variant="h8" color="secondary" align={'center'}>
+        View the Classes and Refreshrs that you've created.
+      </Typography>
+
+      <hr className={props.classes.hrStyle} />
+
       {/* cant figure out what to do w/ the username right now */}
       {/* <Typography component="h2" color="secondary">
         Welcome {name}, 
@@ -182,6 +200,7 @@ const Dashboard = props => {
       >
         Classes:
       </Typography>
+
       <Grid className={classes.classContainer}>
         {testClasses.map(c => (
           <Card key={c.class_id} className={classes.classCard}>
@@ -224,6 +243,7 @@ const Dashboard = props => {
           </Icon>
         </Card>
       </Grid>
+      <hr className={props.classes.hrStyle} />
       <Typography
         component="h2"
         color="secondary"
