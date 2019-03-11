@@ -209,7 +209,6 @@ function Refreshr(props) {
               required
               multiline
               rows="4"
-              // placeholder="Enter info about the Refreshr.."
               value={typeformQ1Props.description}
               className={props.classes.inputQuestion}
             />
@@ -238,7 +237,6 @@ function Refreshr(props) {
               multiline
               rows="4"
               value={typeformQ1.title}
-              // placeholder="Enter question.."
               className={props.classes.inputQuestion}
             />
           </FormGroup>
@@ -251,7 +249,6 @@ function Refreshr(props) {
                 name="classnameInput"
                 required
                 value={answers[0]}
-                // placeholder="Answer one.."
                 className={props.classes.inputMultipleChoice}
               />
               <Input
@@ -259,7 +256,6 @@ function Refreshr(props) {
                 name="classnameInput"
                 onChange={e => setA2Text(e.target.value)}
                 required
-                // placeholder="Answer two.."
                 value={answers[1]}
                 className={props.classes.inputMultipleChoice}
               />
@@ -268,7 +264,6 @@ function Refreshr(props) {
                 onChange={e => setA3Text(e.target.value)}
                 name="classnameInput"
                 required
-                // placeholder="Answer three.."
                 value={answers[2]}
                 className={props.classes.inputMultipleChoice}
               />
@@ -277,7 +272,6 @@ function Refreshr(props) {
                 onChange={e => setA4Text(e.target.value)}
                 name="classnameInput"
                 required
-                // placeholder="Answer four.."
                 value={answers[3]}
                 className={props.classes.inputMultipleChoice}
               />
