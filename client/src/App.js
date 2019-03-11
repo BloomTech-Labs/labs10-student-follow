@@ -52,7 +52,7 @@ const App = props => {
   const { classes } = props;
   const token = localStorage.getItem('accessToken');
   const user_id = localStorage.getItem('user_id');
-  console.log(user_id)
+  //console.log(user_id)
 
   /* STATE */
   const [message, setMessage] = useState('')
@@ -77,7 +77,7 @@ const App = props => {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => {
-        console.log('REFRESHRS', res)
+        //console.log('REFRESHRS', res)
         setRefreshrs(res.data.refreshrs);
       })
       .catch(err => console.log(err));
@@ -94,7 +94,7 @@ const App = props => {
       data: refreshr
     })
     .then(res => {
-      //console.log(res)
+    //console.log(res.data.newRefreshrID)
       axios({
       method: 'post',
               //Development
@@ -102,9 +102,10 @@ const App = props => {
       //Production
       //url: 'http://refreshr.herokuapp.com/questions'
       headers: { Authorization: `Bearer ${token}` },
-      data: res.data.newRefreshrID
+      data: {refreshr_id: res.data.newRefreshrID}
       })
       .then(res => {
+       // console.log(res.data.message)
         setMessage(res.data.message)
       })
     })
@@ -145,11 +146,12 @@ const App = props => {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => {
-        console.log('CLASSES:', res);
+        //console.log('CLASSES:', res);
         setClasses(res.data.classes);
       })
       .catch(err => console.log(err));
   };
+
 
   /* ROUTES */
   return (

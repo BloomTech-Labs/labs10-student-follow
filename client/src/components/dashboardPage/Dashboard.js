@@ -1,289 +1,215 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import {
-  CardContent,
   Typography,
   Card,
-  Icon,
-  Button,
   Grid,
-  withStyles
+  withStyles,
+  Paper
 } from '@material-ui/core';
-import axios from 'axios';
+//import axios from 'axios';
 
 const styles = theme => ({
-  wrapper: {
-    display: 'flex',
-    flexFlow: 'column nowrap',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    marginTop: '60px'
+  container: {
+    [theme.breakpoints.up('md')]: {
+      width: '80vw',
+      display: 'flex',
+      flexFlow: 'row nowrap',
+      justifyContent: 'space-around'
+    }
   },
-  containers: {
+  sectionWrapper: {
+    border: `1px solid ${theme.palette.secondary.main}`,
     display: 'flex',
     flexFlow: 'column nowrap',
-    background: 'white',
-    justifyContent: 'space-around',
+    justifyContent: 'flex-start',
     alignItems: 'center',
-    width: '200px',
-    height: '100px',
-    margin: '0 5%',
-    border: '1px solid red'
+    paddingTop: theme.spacing.unit * 4,
+    paddingBottom: theme.spacing.unit * 8,
+    marginTop: theme.spacing.unit * 8,
+    marginBottom: theme.spacing.unit * 4,
+    color: theme.palette.primary.contrastText,
+    background: theme.palette.primary.dark,
+    [theme.breakpoints.only('sm')]: {
+      width: '60vw'
+    },
+    [theme.breakpoints.only('xs')]: {
+      width: '90vw'
+    },
+    [theme.breakpoints.up('md')]: {
+      marginLeft: '2.5%',
+      marginRight: '2.5%',
+      padding: '2.5%',
+      width: 500
+    }
   },
   classContainer: {
+    boxSizing: 'border-box',
     display: 'flex',
     flexFlow: 'row wrap',
     justifyContent: 'space-evenly',
-    ...theme.mixins.gutters(),
     alignItems: 'center',
-    paddingBottom: theme.spacing.unit * 2,
+    width: '100%',
+    padding: '1%',
     [theme.breakpoints.down('sm')]: {
-      flexDirection: 'column',
-      alignItems: 'center',
-      width: '18rem'
+      width: '90%',
+      padding: 5
     }
-  },
-  lists: {
-    fontSize: '1rem'
   },
   links: {
     color: 'inherit',
     textDecoration: 'none'
   },
-  classTitle: {
-    background: '#9D69A3',
-    color: '#FFFFFF',
-    paddingLeft: '10px'
-  },
-  refreshrTitle: {
-    background: '#488286',
-    color: '#FFFFFF',
-    paddingLeft: '10px'
-  },
   cardSectionLabels: {
-    marginLeft: '2rem',
+    margin: 0,
+    padding: 0
+  },
+  cardTitle: {
+    color: theme.palette.secondary.contrastText,
+    textAlign: 'center',
+    fontSize: '1rem'
+  },
+  card: {
+    display: 'flex',
+    flexFlow: 'column nowrap',
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: '5% 0',
+    background: theme.palette.secondary.main,
+    width: 125,
+    height: 125,
+    color: theme.palette.secondary.contrastText,
     [theme.breakpoints.down('sm')]: {
-      margin: '0'
+      margin: '10% 0'
+    },
+    '&:hover': {
+      background: theme.palette.secondary.dark
     }
   },
-  classCard: {
-    display: 'flex',
-    flexDirection: 'column',
-    margin: '1rem',
-    background: 'white',
-    width: '200px',
-    textDecoration: 'none',
-    color: theme.palette.secondary.contrastText
-  },
-  refreshrNewCard: {
-    display: 'flex',
-    flexDirection: 'column',
-    margin: '1rem',
-    background: 'white',
-    width: '200px',
-    height: '130px'
-  },
-  buttonDiv: {
-    justifyContent: 'space-around'
-  },
-  classData: {
-    paddingLeft: '10px'
-  },
-  icon: {
-    fontSize: '70px',
-    margin: '2rem auto'
-  },
-  refreshrIcon: {
-    fontSize: '70px',
-    margin: '1rem auto'
-  }
 });
 
 const Dashboard = props => {
   // const name = localStorage.getItem('name'); // commented out until decide what to do w/ name
-  const { userClasses, classes, userRefreshrs, getClasses, getRefreshrs, token } = props;
+  const {
+    userClasses,
+    classes,
+    userRefreshrs,
+    getClasses,
+    getRefreshrs
+    // getStats,
+    // token
+  } = props;
 
   useEffect(() => {
     getClasses();
     getRefreshrs();
   }, []);
 
-  
   return (
-    <Grid className={classes.wrapper}>
-      <Typography
-        component="h2"
-        color="secondary"
-        className={classes.cardSectionLabels}
-      >
-        Classes:
-      </Typography>
-      <Grid className={classes.classContainer}>
-        {userClasses.map(c => {
-          //Hooks cannot be used within the return I believe,
-          // I will need to figure out how to pull the student numbers
-          // const [students, setStudents] = useState([])
-            // axios({
-            //   method: 'get',
-            //   url: `http://localhost:9000/classes/${c.class_id}/students`,
-        
-            //   //url: `https://refreshr.herokuapp.com/classes/${id}/students`,
-            //   headers: { Authorization: `Bearer ${token}` }
-            // })
-            //   .then(res => {
-            //     const [students, setStudents] = useState([])
-
-            //     console.log('Students', res)
-            //     setStudents(res.data.students);
-            //   })
-            //   .catch(err => console.log(err));
-          
-          return(
-          <Link key={c.class_id} to={`classes/edit/${c.class_id}`} style={{textDecoration: 'none'}}>
-          <Card className={classes.classCard}>
-            <Typography component="h4" className={classes.classTitle}>
-              {c.classname.length > 10
-                ? c.classname.substring(0, 10) + '...'
-                : c.classname}
-            </Typography>
-            <CardContent className={classes.classData}>
-              {/* Need analytics for these, stretch goals? */}
-
-              <Typography component="p" className={classes.lists}>
-              {/* Students: {students.length} */}
-              </Typography>
-              <Typography component="p" className={classes.lists}>
-                Participation: {c.participationRate}
-              </Typography>
-              <Typography component="p" className={classes.lists}>
-                Refreshrs Assigned: '0'              </Typography>
-            </CardContent>
-          </Card></Link>
-        )})}
-        <Card className={classes.classCard}>
-          <Typography component="h4" className={classes.classTitle}>
-            New Class
-          </Typography>
-          <Icon className={classes.icon} color="primary">
-            <Link to="/classes/create" className={classes.links}>
-              add_circle
-            </Link>
-          </Icon>
-        </Card>
-      </Grid>
-      <Typography
-        component="h2"
-        color="secondary"
-        className={classes.cardSectionLabels}
-      >
-        Refreshrs:
-      </Typography>
-      <Grid className={classes.classContainer}>
-        {userRefreshrs.map(r => (
-          <Link key={r.refreshr_id} to={`refreshrs/edit/${r.refreshr_id}`} style={{textDecoration: 'none'}}>
-          <Card className={classes.classCard}>
-            {/* {console.log('R ===', r)} */}
-              <Typography component="h4" className={classes.refreshrTitle}>
-                {/* {r.refreshrName.length > 10
-                  ? r.refreshrName.substring(0, 10) + '...'
-                  : r.refreshrName} */}
-              </Typography>
-              <CardContent className={classes.classData}>
-                <Typography component="p" className={classes.lists}>
-                  Classes Assigned: {r.classesAssigned}
-                </Typography>
-              </CardContent>
-          </Card>
-          </Link>
-        ))}
-        <Card className={classes.refreshrNewCard}>
-          <Typography component="h4" className={classes.refreshrTitle}>
-            New Refreshr
-          </Typography>
-          <Icon className={classes.refreshrIcon} color="primary">
-            <Link to="/refreshrs/create" className={classes.links}>
-              add_circle
-            </Link>
-          </Icon>
-        </Card>
-      </Grid>
-    </Grid>
+    <div className={classes.container}>
+      <Paper className={classes.sectionWrapper} elevation={24} >
+        <Typography
+          variant="h6"
+          color="secondary"
+          className={classes.cardSectionLabels}
+        >
+          Current Classes
+        </Typography>
+        <Grid className={classes.classContainer}>
+          {userClasses.map(c => {
+            return (
+              //console.log(stats),
+              <Link
+                key={c.class_id}
+                to={`classes/edit/${c.class_id}`}
+                style={{ textDecoration: 'none' }}
+              >
+                <Card className={classes.card}>
+                  <Typography className={classes.cardTitle}>
+                    {c.classname}
+                  </Typography>
+                </Card>
+              </Link>
+            );
+          })}
+        </Grid>
+      </Paper>
+      <Paper className={classes.sectionWrapper} elevation={24}>
+        <Typography
+          variant="h6"
+          color="secondary"
+          className={classes.cardSectionLabels}
+        >
+          Current Refreshrs
+        </Typography>
+        <Grid className={classes.classContainer}>
+          {userRefreshrs.map(r => {
+            //console.log(r)
+            //let participationRate = 0
+            return (
+              <Link
+                key={r.refreshr_id}
+                to={`refreshrs/edit/${r.refreshr_id}`}
+                style={{ textDecoration: 'none' }}
+              >
+                <Card className={classes.card}>
+                  {/* {console.log('R ===', r)} */}
+                  <Typography className={classes.cardTitle}>
+                    {r.name}
+                  </Typography>
+                </Card>
+              </Link>
+            );
+          })}
+        </Grid>
+      </Paper>
+    </div>
   );
-}
+};
 export default withRouter(withStyles(styles)(Dashboard));
 
+//<CardContent className={classes.classData}>
+/* <Typography component="p" className={classes.lists}>
+  Classes Assigned: {r.classesAssigned}
+</Typography> */
+//</CardContent>
+//<CardContent className={classes.classData}>
+/* Need analytics for these, stretch goals? */
 
-// console.log('Refreshr from Dash ===', userRefreshrs);
-  // console.log('teacher refreshr => ', teacherRefreshrs.data);
-  // const testClasses = [
-  //   {
-  //     classname: 'FSW438',
-  //     numOfStudents: 84,
-  //     participationRate: 76,
-  //     refreshrsEmailed: 67,
-  //     class_id: 1
-  //   },
-  //   {
-  //     classname: 'Android 74',
-  //     numOfStudents: 84,
-  //     participationRate: 78,
-  //     refreshrsEmailed: 36,
-  //     class_id: 2
-  //   },
-  //   {
-  //     classname: 'Android 74',
-  //     numOfStudents: 84,
-  //     participationRate: 78,
-  //     refreshrsEmailed: 36,
-  //     class_id: 3
-  //   },
-  //   {
-  //     classname: 'Android 74',
-  //     numOfStudents: 84,
-  //     participationRate: 78,
-  //     refreshrsEmailed: 36,
-  //     class_id: 4
-  //   }
-  // ];
-  // const testRefreshrs = [
-  //   {
-  //     refreshrName: 'CSS Basics',
-  //     classesAssigned: 84,
-  //     refreshr_id: 1
-  //   },
-  //   {
-  //     refreshrName: 'Relational Databases',
-  //     classesAssigned: 21,
-  //     refreshr_id: 2
-  //   },
-  //   {
-  //     refreshrName: 'Relational Databases',
-  //     classesAssigned: 21,
-  //     refreshr_id: 3
-  //   },
-  //   {
-  //     refreshrName: 'Relational Databases',
-  //     classesAssigned: 21,
-  //     refreshr_id: 4
-  //   },
-  //   {
-  //     refreshrName: 'Relational Databases',
-  //     classesAssigned: 21,
-  //     refreshr_id: 5
-  //   }
-  // ];
-  // const redirect = url => {
-  //   console.log('Props from redirect', props);
-  //   props.history.push(url);
-  // };
+/* <Typography component="p" className={classes.lists}>
+  Students: {stats.numOfStudents}
+</Typography>
+<Typography component="p" className={classes.lists}>
+  Participation: {c.participationRate}
+</Typography>
+<Typography component="p" className={classes.lists}>
+  Refreshrs Assigned: {0}
+</Typography> */
+//</CardContent>
 
-     /* {console.log('PROPS', userClasses, userRefreshrs)}
-      {console.log(
-        'userRefreshrs ==>',
-        userRefreshrs.map(data => data.typeform_url)
-      )} 
-      cant figure out what to do w/ the username right now
-      <Typography component="h2" color="secondary">
-        Welcome {name}, 
-      </Typography> 
-       end username */
+//   var stats = {numOfStudents: 0, numOfRefreshrs: 0, participationRate: 0}
+//   axios.all([
+//     axios({
+//       method: 'get',
+//       url: `http://localhost:9000/classes/${c.class_id}/students`,
+
+//       //url: `https://refreshr.herokuapp.com/classes/${id}/students`,
+//       headers: { Authorization: `Bearer ${token}` }
+//     }),
+//    axios({
+//           method: 'get',
+//           url: `http://localhost:9000/classes/${c.class_id}/refreshrs`,
+
+//           //url: `https://refreshr.herokuapp.com/classes/${id}/refreshrs`,
+//           headers: { Authorization: `Bearer ${token}` }
+//      })
+
+//  ])
+//  .then(([s, r]) => {
+//    console.log(s.data.students.length, r.data.refreshrs.length)
+//    stats.numOfStudents = s.data.students.length
+//    stats.numOfRefreshrs = r.data.refreshrs.length
+//    return
+//  })
+//  .catch(err => console.log(err))
+//   //console.log(stats)
