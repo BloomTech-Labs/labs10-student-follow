@@ -327,7 +327,7 @@ function ClassEditView(props) {
   }
 
   async function removeRefreshr(id) {
-    // TODO: needs to be updated to kill sendgrid campaign, drop from TCR table
+    // TODO: needs to be updated to kill all 3 sendgrid campaigns, drop from TCR table
     const [removedRefreshr] = refreshrs.filter(r => r.id === id);
     console.log(removedRefreshr);
 
@@ -344,8 +344,8 @@ function ClassEditView(props) {
     console.log(res);
 
     // add refreshr to teacher refs, remove from class refreshr list
-    setTeacherRefs([...teacherRefs, removedRefreshr]);
     setRefreshrs(refreshrs.filter(r => r.id !== id));
+    setTeacherRefs([...teacherRefs, removedRefreshr]);
   }
 
   const [newStudent, setNewStudent] = useState({

@@ -141,7 +141,16 @@ router.get('/:id/refreshrs', jwtCheck, async (req, res, next) => {
   const { id } = req.params;
   try {
     const results = await db.getTeacherDetails(id);
-    res.status(responseStatus.success).json({ refreshrs: results.refreshrs });
+    const refreshrs = results.refreshrs;
+    const uniqueRefreshrs = [];
+    const uniqueIds = [];
+    for (let refreshr of refreshrs) {
+      if (!uniqueIds.includes(refreshr.refreshr_id)) {
+        uniqueIds.push(refreshr.refreshr_id);
+        uniqueRefreshrs.push(refreshr);
+      }
+    }
+    res.status(responseStatus.success).json({ refreshrs: uniqueRefreshrs }); // can move this to front end
   } catch (err) {
     if (TypeError) {
       console.log(err);
@@ -184,6 +193,5 @@ router.delete(
     }
   }
 );
-
 
 module.exports = router;
