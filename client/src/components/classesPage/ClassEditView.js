@@ -216,6 +216,14 @@ function ClassEditView(props) {
     console.log('classData:', classData);
   }, [classData]);
 
+  useEffect(() => {
+    console.log('refreshrs:', refreshrs);
+  }, [refreshrs]);
+
+  useEffect(() => {
+    console.log('displayRefreshrs:', displayRefreshrs);
+  }, [displayRefreshrs]);
+
   async function fetchTeacherRefreshrs(id) {
     const res = await ax.get(`/teachers/${userID}/refreshrs`);
     console.log('RES:', res);
@@ -317,8 +325,9 @@ function ClassEditView(props) {
     }
 
     // add refreshr to class refreshrs, remove from active refreshr
-    setRefreshrs(refreshrs.concat(activeRefreshr));
+    // setRefreshrs(refreshrs.concat(activeRefreshr));
     setActiveRefreshr(null);
+    fetchClass(); // need to update class data here
     console.log(refreshrs);
   }
 
@@ -336,25 +345,24 @@ function ClassEditView(props) {
   }
 
   async function removeRefreshr(id) {
-    // TODO: needs to be updated to kill all 3 sendgrid campaigns, drop from TCR table
-    const [removedRefreshr] = refreshrs.filter(r => r.id === id);
-    console.log(removedRefreshr);
-
-    // get all campaigns associated with the refreshr
+    const removedRefreshrs = refreshrs.filter(r => r.id === id);
+    console.log(removedRefreshrs);
 
     // cancel sendgrid campaigns
-    let res = await sgAx.delete(`/campaigns/${removedRefreshr.sg_campaign_id}`);
-    console.log(res);
+    for (let refreshr of removedRefreshrs) {
+      let res = await sgAx.delete(`/campaigns/${refreshr.sg_campaign_id}`);
+      console.log(res);
 
-    // drop from TCR table
-    res = await ax.delete(
-      `/classes/${classData.id}/refreshrs/${removedRefreshr.refreshr_id}`
-    );
-    console.log(res);
+      // drop from TCR table
+      res = await ax.delete(
+        `/classes/${classData.id}/campaigns/${refreshr.sg_campaign_id}`
+      );
+      console.log(res);
+    }
 
     // add refreshr to teacher refs, remove from class refreshr list
     setRefreshrs(refreshrs.filter(r => r.id !== id));
-    setTeacherRefs([...teacherRefs, removedRefreshr]);
+    setTeacherRefs([...teacherRefs, removedRefreshrs[0]]);
   }
 
   const [newStudent, setNewStudent] = useState({
