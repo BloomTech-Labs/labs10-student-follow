@@ -162,6 +162,7 @@ const App = props => {
           <Navbar theme={props.theme} lock={props.lock} />
           <Navcrumbs location={props.location} history={props.history} />
         </Grid>
+        <h1>dshdhaskjd</h1>
         <Route exact path="/" render={props => <LandingPage {...props} />} />
         <Grid item className={classes.routes}>
           <Route

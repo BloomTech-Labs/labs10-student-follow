@@ -16,8 +16,8 @@ const styles = theme => ({
     display: 'flex',
     flexFlow: 'column nowrap',
     justifyContent: 'space-around',
-    alignItems: 'center',
-    marginTop: '60px'
+    alignItems: 'center'
+    // marginTop: '60px'
   },
   containers: {
     display: 'flex',
@@ -103,6 +103,7 @@ const styles = theme => ({
 
 const token = localStorage.getItem('accessToken');
 const teacherId = localStorage.getItem('user_id');
+const firstName = localStorage.getItem('name').split(' ')[0];
 
 const Dashboard = props => {
   // const name = localStorage.getItem('name'); // commented out until decide what to do w/ name
@@ -174,12 +175,13 @@ const Dashboard = props => {
         'userRefreshrs ==>',
         userRefreshrs.map(data => data.typeform_url)
       )}
+
       <Typography
         variant="h6"
         color="secondary"
         style={{ textAlign: 'center' }}
       >
-        Dashboard
+        {`${firstName}'s Dashboard`}
       </Typography>
 
       <Typography variant="h8" color="secondary" align={'center'}>
