@@ -226,7 +226,9 @@ function Refreshr(props) {
     } catch (error) {
       console.log(error);
     }
+    // fire snackbar
     handleSnackbar();
+
     //setSubmitted(true);
   };
 
@@ -246,16 +248,6 @@ function Refreshr(props) {
           }}
           message={<span id="message-id">Refreshr Created!</span>}
           action={[
-            // TODO can add this undo button back when
-            // TODO we have deleteRefreshr working
-            // <Button
-            //   key="undo"
-            //   color="secondary"
-            //   size="small"
-            //   onClick={handleSnackbar}
-            // >
-            //   UNDO
-            // </Button>,
             <IconButton
               key="close"
               aria-label="Close"
