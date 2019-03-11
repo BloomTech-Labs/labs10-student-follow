@@ -55,6 +55,7 @@ const App = props => {
   //console.log(user_id)
 
   /* STATE */
+
   const [message, setMessage] = useState('')
   const [userRefreshrs, setRefreshrs] = useState([]);
   const [questions, setQuestions] = useState([]);
@@ -77,13 +78,12 @@ const App = props => {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => {
-        //console.log('REFRESHRS', res)
         setRefreshrs(res.data.refreshrs);
       })
       .catch(err => console.log(err));
   };
 
-  const sendRefreshrToDB = (refreshr) => {
+  const sendRefreshrToDB = refreshr => {
     axios({
       method: 'post',
       //Development
@@ -93,6 +93,7 @@ const App = props => {
       headers: { Authorization: `Bearer ${token}` },
       data: refreshr
     })
+
     .then(res => {
     //console.log(res.data.newRefreshrID)
       axios({
@@ -108,11 +109,10 @@ const App = props => {
        // console.log(res.data.message)
         setMessage(res.data.message)
       })
-    })
-    .catch(err => {
-      console.log(err)
-    })
-  }
+      .catch(err => {
+        console.log(err);
+      });
+  };
 
   //add questions
   const addQuestions = question => {
@@ -124,10 +124,10 @@ const App = props => {
       //Production
       //url: 'http://refreshr.herokuapp.com/questions'
       headers: { Authorization: `Bearer ${token}` },
-      data:  question 
+      data: question
     })
       .then(res => {
-        console.log(res)
+        console.log(res);
         //console.log('RES from add questions ===', res);
         setQuestions([]);
         //console.log(questions)
@@ -166,8 +166,8 @@ const App = props => {
         className={classes.container}
       >
         <Grid item>
-          <Navbar theme={props.theme} lock={props.lock}  />
-          <Navcrumbs location={props.location} history={props.history}/>
+          <Navbar theme={props.theme} lock={props.lock} />
+          <Navcrumbs location={props.location} history={props.history} />
         </Grid>
         <Route exact path="/" render={props => <LandingPage {...props} />} />
         <Grid item className={classes.routes}>
@@ -201,6 +201,7 @@ const App = props => {
                 userClasses={userClasses}
                 getRefreshrs={getRefreshrs}
                 userRefreshrs={userRefreshrs}
+                questions={questions}
               />
             )}
           />
@@ -220,7 +221,10 @@ const App = props => {
             exact
             path="/refreshrs/create"
             render={props => (
-          <Refreshr addQuestions={addQuestions} sendRefreshrToDB={sendRefreshrToDB} />
+              <Refreshr
+                addQuestions={addQuestions}
+                sendRefreshrToDB={sendRefreshrToDB}
+              />
             )}
           />
           <Route path="/campaign" render={props => <CampaignForm />} />{' '}

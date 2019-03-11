@@ -272,9 +272,17 @@ function ListForm(props) {
         Add Class
       </Typography>
 
+      <Typography variant="h8" color="secondary" align={'center'}>
+        Create a class by importing your students or manually adding them.
+      </Typography>
+
       <hr className={classes.hrStyle} />
 
-      <Typography variant="body1" color="secondary" style={{ textAlign: 'center' }}>
+      <Typography
+        variant="body1"
+        color="secondary"
+        style={{ textAlign: 'center' }}
+      >
         Class Name
       </Typography>
 
@@ -305,7 +313,11 @@ function ListForm(props) {
 
       <hr className={classes.hrStyle} />
 
-      <Typography variant="body1" color="secondary" style={{ textAlign: 'center' }}>
+      <Typography
+        variant="body1"
+        color="secondary"
+        style={{ textAlign: 'center' }}
+      >
         CSV File
       </Typography>
 
@@ -343,7 +355,11 @@ function ListForm(props) {
 
       <hr className={classes.hrStyle} />
 
-      <Typography variant="body1" color="secondary" style={{ textAlign: 'center' }}>
+      <Typography
+        variant="body1"
+        color="secondary"
+        style={{ textAlign: 'center' }}
+      >
         Recipient Name
       </Typography>
 

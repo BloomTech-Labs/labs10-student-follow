@@ -128,6 +128,11 @@ function Refreshr(props) {
     questionTextTwo,
     answers: { a1Text, a2Text, a3Text, a4Text }
   });
+  console.log('Props from ref', props);
+
+  const headers = {
+    Authorization: `Bearer ${process.env.REACT_APP_TYPEFORM}`
+  };
   /* We should use this later on other pages
     that way we can give the user an indication that an action was successful
   */
@@ -136,9 +141,6 @@ function Refreshr(props) {
   // `;
   const createForm = async event => {
     event.preventDefault();
-    const headers = {
-      Authorization: `Bearer ${process.env.REACT_APP_TYPEFORM}`
-    };
     const data = {
       title: 'Refreshr',
       variables: {
@@ -229,7 +231,11 @@ function Refreshr(props) {
           }
         >
           <Typography variant="h6" color="secondary" align={'center'}>
-            Create Your Refreshr
+            Add Refreshr
+          </Typography>
+
+          <Typography variant="h8" color="secondary" align={'center'}>
+            Create the Refreshr quiz that you will send to your students.
           </Typography>
 
           <hr className={classes.hrStyle} />

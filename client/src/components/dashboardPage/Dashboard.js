@@ -61,6 +61,7 @@ const styles = theme => ({
     textDecoration: 'none'
   },
   cardSectionLabels: {
+
     margin: 0,
     padding: 0
   },
@@ -90,6 +91,7 @@ const styles = theme => ({
 
 const Dashboard = props => {
   // const name = localStorage.getItem('name'); // commented out until decide what to do w/ name
+
   const {
     userClasses,
     classes,
@@ -130,6 +132,7 @@ const Dashboard = props => {
                   </Typography>
                 </Card>
               </Link>
+
             );
           })}
         </Grid>
@@ -167,49 +170,3 @@ const Dashboard = props => {
   );
 };
 export default withRouter(withStyles(styles)(Dashboard));
-
-//<CardContent className={classes.classData}>
-/* <Typography component="p" className={classes.lists}>
-  Classes Assigned: {r.classesAssigned}
-</Typography> */
-//</CardContent>
-//<CardContent className={classes.classData}>
-/* Need analytics for these, stretch goals? */
-
-/* <Typography component="p" className={classes.lists}>
-  Students: {stats.numOfStudents}
-</Typography>
-<Typography component="p" className={classes.lists}>
-  Participation: {c.participationRate}
-</Typography>
-<Typography component="p" className={classes.lists}>
-  Refreshrs Assigned: {0}
-</Typography> */
-//</CardContent>
-
-//   var stats = {numOfStudents: 0, numOfRefreshrs: 0, participationRate: 0}
-//   axios.all([
-//     axios({
-//       method: 'get',
-//       url: `http://localhost:9000/classes/${c.class_id}/students`,
-
-//       //url: `https://refreshr.herokuapp.com/classes/${id}/students`,
-//       headers: { Authorization: `Bearer ${token}` }
-//     }),
-//    axios({
-//           method: 'get',
-//           url: `http://localhost:9000/classes/${c.class_id}/refreshrs`,
-
-//           //url: `https://refreshr.herokuapp.com/classes/${id}/refreshrs`,
-//           headers: { Authorization: `Bearer ${token}` }
-//      })
-
-//  ])
-//  .then(([s, r]) => {
-//    console.log(s.data.students.length, r.data.refreshrs.length)
-//    stats.numOfStudents = s.data.students.length
-//    stats.numOfRefreshrs = r.data.refreshrs.length
-//    return
-//  })
-//  .catch(err => console.log(err))
-//   //console.log(stats)
