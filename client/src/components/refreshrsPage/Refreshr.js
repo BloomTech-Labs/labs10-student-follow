@@ -134,18 +134,14 @@ function Refreshr(props) {
 
   // start snackbars
   const [openBool, setOpenBool] = useState(false);
-  const handleClose = (event, reason) => {
+  const handleSnackbar = (event, reason) => {
     if (reason === 'clickaway') {
       return;
     }
-    setOpenBool(false);
+    setOpenBool(!openBool);
   };
-
-  const handleClick = () => {
-    setOpenBool(true);
-  };
-
   // end snackbar
+
   /* We should use this later on other pages
     that way we can give the user an indication that an action was successful
   */
@@ -229,7 +225,7 @@ function Refreshr(props) {
     } catch (error) {
       console.log(error);
     }
-    handleClick();
+    handleSnackbar();
     //setSubmitted(true);
   };
 
@@ -243,7 +239,7 @@ function Refreshr(props) {
           }}
           open={openBool}
           autoHideDuration={6000}
-          onClose={handleClose}
+          onClose={handleSnackbar}
           ContentProps={{
             'aria-describedby': 'message-id'
           }}
@@ -253,7 +249,7 @@ function Refreshr(props) {
               key="undo"
               color="secondary"
               size="small"
-              onClick={handleClose}
+              onClick={handleSnackbar}
             >
               UNDO
             </Button>,
@@ -262,7 +258,7 @@ function Refreshr(props) {
               aria-label="Close"
               color="inherit"
               className={classes.close}
-              onClick={handleClose}
+              onClick={handleSnackbar}
             >
               <Close />
             </IconButton>
