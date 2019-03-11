@@ -219,19 +219,28 @@ function ClassEditView(props) {
   async function fetchTeacherRefreshrs(id) {
     const res = await ax.get(`/teachers/${userID}/refreshrs`);
     console.log('RES:', res);
-    const unassignedRefreshrs = res.data.refreshrs.filter(
-      r => !refreshrs.includes(r)
-    ); // filter out refreshrs assigned to class
-    const uniqueRefreshrs = [];
-    const uniqueRefreshrIds = [];
+    console.log(refreshrs);
+
+    const classRefreshrIds = refreshrs.map(r => r.refreshr_id);
+    console.log(classRefreshrIds);
+    const unassignedRefreshrIds = res.data.refreshrs.filter(
+      r => !classRefreshrIds.includes(r.refreshr_id)
+    );
+    const unassignedRefreshrs = res.data.refreshrs.filter(r =>
+      unassignedRefreshrIds.includes(r.refreshr_id)
+    );
+    // const uniqueRefreshrs = [];
+    // const uniqueRefreshrIds = [];
     // filter out duplicate refreshrs
-    unassignedRefreshrs.map(r => {
-      if (!uniqueRefreshrIds.includes(r.refreshr_id)) {
-        uniqueRefreshrIds.push(r.refreshr_id);
-        uniqueRefreshrs.push(r);
-      }
-    });
-    setTeacherRefs(uniqueRefreshrs);
+    // unassignedRefreshrs.map(r => {
+    //   if (!uniqueRefreshrIds.includes(r.refreshr_id)) {
+    //     uniqueRefreshrIds.push(r.refreshr_id);
+    //     uniqueRefreshrs.push(r);
+    //   }
+    // });
+    console.log(unassignedRefreshrs);
+
+    setTeacherRefs(unassignedRefreshrs);
   }
 
   async function addRefreshr(id) {

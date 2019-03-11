@@ -216,7 +216,7 @@ function CampaignForm(props) {
 
   const alterTime = e => {
     e.preventDefault();
-    setActiveRefreshr({ ...activeRefreshr, date: e.target.value });
+    const date = e.target.value;
 
     const schedule0 = moment(`${e.target.value}T00:00:00`).format(
       'ddd, MMMM Do, YYYY ha'
@@ -246,7 +246,8 @@ function CampaignForm(props) {
       { send_at: twoWeeksUnix },
       { send_at: twoMonthsUnix }
     ];
-    setActiveRefreshr({ ...activeRefreshr, timeTriData });
+    setActiveRefreshr({ ...activeRefreshr, timeTriData, date });
+    console.log(activeRefreshr);
 
     setSchedule({
       ...schedule,

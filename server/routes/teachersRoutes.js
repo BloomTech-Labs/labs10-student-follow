@@ -144,13 +144,14 @@ router.get('/:id/refreshrs', jwtCheck, async (req, res, next) => {
     const refreshrs = results.refreshrs;
     const uniqueRefreshrs = [];
     const uniqueIds = [];
+    // we can move this whole filter to the front end if we need to
     for (let refreshr of refreshrs) {
       if (!uniqueIds.includes(refreshr.refreshr_id)) {
         uniqueIds.push(refreshr.refreshr_id);
         uniqueRefreshrs.push(refreshr);
       }
     }
-    res.status(responseStatus.success).json({ refreshrs: uniqueRefreshrs }); // can move this to front end
+    res.status(responseStatus.success).json({ refreshrs: uniqueRefreshrs });
   } catch (err) {
     if (TypeError) {
       console.log(err);
