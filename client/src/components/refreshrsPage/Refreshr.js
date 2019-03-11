@@ -6,9 +6,12 @@ import {
   withStyles,
   Paper,
   Input,
-  Fab
+  Fab,
+  Snackbar,
+  IconButton,
+  Button
 } from '@material-ui/core';
-import Send from '@material-ui/icons/Send';
+import { Send, Close } from '@material-ui/icons';
 
 const axios = require('axios');
 
@@ -128,6 +131,21 @@ function Refreshr(props) {
     questionTextTwo,
     answers: { a1Text, a2Text, a3Text, a4Text }
   });
+
+  // start snackbars
+  const [openBool, setOpenBool] = useState(false);
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenBool(false);
+  };
+
+  const handleClick = () => {
+    setOpenBool(true);
+  };
+
+  // end snackbar
   /* We should use this later on other pages
     that way we can give the user an indication that an action was successful
   */
@@ -211,12 +229,45 @@ function Refreshr(props) {
     } catch (error) {
       console.log(error);
     }
+    handleClick();
     //setSubmitted(true);
   };
 
   return (
     <Paper className={classes.container} elevation={24}>
       <Grid className={classes.wrapper}>
+        <Snackbar
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left'
+          }}
+          open={openBool}
+          autoHideDuration={6000}
+          onClose={handleClose}
+          ContentProps={{
+            'aria-describedby': 'message-id'
+          }}
+          message={<span id="message-id">Refreshr Created!</span>}
+          action={[
+            <Button
+              key="undo"
+              color="secondary"
+              size="small"
+              onClick={handleClose}
+            >
+              UNDO
+            </Button>,
+            <IconButton
+              key="close"
+              aria-label="Close"
+              color="inherit"
+              className={classes.close}
+              onClick={handleClose}
+            >
+              <Close />
+            </IconButton>
+          ]}
+        />
         <FormGroup
           onChange={() =>
             setQuestionObject({
