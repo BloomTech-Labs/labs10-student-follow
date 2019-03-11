@@ -138,7 +138,6 @@ function Refreshr(props) {
       .catch(err => console.log(err));
   }, []);
 
-  const { userClasses, classes, userRefreshrs, questions } = props;
   const answers = typeformAnswers.map(answer => answer.label);
 
   console.log('typeformText =>', typeformQ2);
