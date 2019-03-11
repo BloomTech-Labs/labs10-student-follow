@@ -216,57 +216,6 @@ function Refreshr(props) {
     //setSubmitted(true);
   };
 
-  //post the newly created refreshr to the refreshrs table. Returns refreshr id
-  // const addRefreshr = async id => {
-  //   try {
-  //     const response = await axios
-  //       .post('http://localhost:9000/refreshrs', id, {
-  //         headers: {
-  //           Authorization: `Bearer ${token}`
-  //         }
-  //       })
-  //       .then(res => res);
-  //     setRefreshrId(response);
-  //     console.log('New Refreshr ID ===', response);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
-  // //post the refreshr id to the teachers table
-  // const addRefreshrId = async id => {
-  //   try {
-  //     const response = await axios
-  //       .post(`http://localhost:9000/teachers/${userId}/refreshrs`, id, {
-  //         headers: {
-  //           Authorization: `Bearer ${token}`
-  //         }
-  //       })
-  //       .then(res => res);
-  //     console.log('Res from id => teachers ===', response);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
-  // //gets refreshrs associated with the logged in teacher
-  // const getTeacherRefreshrs = async () => {
-  //   try {
-  //     const response = await axios
-  //       .get(`http://localhost:9000/teachers/${userId}`, {
-  //         headers: {
-  //           Authorization: `Bearer ${token}`
-  //         }
-  //       })
-  //       .then(res => res);
-  //     console.log('Getting teachers 🙏 ===', response);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
-  // console.log('USer id ==', userId);
-  // console.log('typeformId ==>', typeformId);
   return (
     <Paper className={classes.container} elevation={24}>
       <Grid className={classes.wrapper}>
