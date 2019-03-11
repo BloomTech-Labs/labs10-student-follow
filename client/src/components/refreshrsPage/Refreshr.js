@@ -136,6 +136,7 @@ function Refreshr(props) {
   const [openBool, setOpenBool] = useState(false);
   const handleSnackbar = (event, reason) => {
     if (reason === 'clickaway') {
+      // clickaway is if they click the 'x' to close the pop-up
       return;
     }
     setOpenBool(!openBool);
@@ -238,26 +239,27 @@ function Refreshr(props) {
             horizontal: 'left'
           }}
           open={openBool}
-          autoHideDuration={6000}
+          autoHideDuration={4000}
           onClose={handleSnackbar}
           ContentProps={{
             'aria-describedby': 'message-id'
           }}
           message={<span id="message-id">Refreshr Created!</span>}
           action={[
-            <Button
-              key="undo"
-              color="secondary"
-              size="small"
-              onClick={handleSnackbar}
-            >
-              UNDO
-            </Button>,
+            // TODO can add this undo button back when
+            // TODO we have deleteRefreshr working
+            // <Button
+            //   key="undo"
+            //   color="secondary"
+            //   size="small"
+            //   onClick={handleSnackbar}
+            // >
+            //   UNDO
+            // </Button>,
             <IconButton
               key="close"
               aria-label="Close"
               color="inherit"
-              className={classes.close}
               onClick={handleSnackbar}
             >
               <Close />
