@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 import { Route, withRouter } from 'react-router-dom';
 
@@ -93,7 +93,6 @@ const App = props => {
       headers: { Authorization: `Bearer ${token}` },
       data: refreshr
     })
-
     .then(res => {
     //console.log(res.data.newRefreshrID)
       axios({
@@ -112,7 +111,8 @@ const App = props => {
       .catch(err => {
         console.log(err);
       });
-  };
+  })
+};
 
   //add questions
   const addQuestions = question => {
