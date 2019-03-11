@@ -104,6 +104,14 @@ const Dashboard = props => {
   // const name = localStorage.getItem('name'); // commented out until decide what to do w/ name
   const [teacherRefreshrs, setTeacherRefreshrs] = useState([]);
 
+  useEffect(() => {
+    // console.log(`Bearer ${token}`);
+    props.getClasses();
+    props.getRefreshrs();
+    console.log('Dashboard refreshr:', props.getRefreshrs());
+    getTeacherById();
+  }, []);
+
   async function getTeacherById() {
     // You can await here
     try {
@@ -121,14 +129,6 @@ const Dashboard = props => {
       console.log(error);
     }
   }
-
-  useEffect(() => {
-    // console.log(`Bearer ${token}`);
-    props.getClasses();
-    props.getRefreshrs();
-    // console.log('Dashboard refreshr:', props.getRefreshrs());
-    getTeacherById();
-  }, []);
 
   const { userClasses, classes, userRefreshrs } = props;
   // console.log('Refreshr from Dash ===', userRefreshrs);
@@ -163,37 +163,6 @@ const Dashboard = props => {
       class_id: 4
     }
   ];
-  // const testRefreshrs = [
-  //   {
-  //     refreshrName: 'CSS Basics',
-  //     classesAssigned: 84,
-  //     refreshr_id: 1
-  //   },
-  //   {
-  //     refreshrName: 'Relational Databases',
-  //     classesAssigned: 21,
-  //     refreshr_id: 2
-  //   },
-  //   {
-  //     refreshrName: 'Relational Databases',
-  //     classesAssigned: 21,
-  //     refreshr_id: 3
-  //   },
-  //   {
-  //     refreshrName: 'Relational Databases',
-  //     classesAssigned: 21,
-  //     refreshr_id: 4
-  //   },
-  //   {
-  //     refreshrName: 'Relational Databases',
-  //     classesAssigned: 21,
-  //     refreshr_id: 5
-  //   }
-  // ];
-  // const redirect = url => {
-  //   console.log('Props from redirect', props);
-  //   props.history.push(url);
-  // };
   return (
     <Grid className={classes.wrapper}>
       {console.log('PROPS', userClasses, userRefreshrs)}
@@ -263,6 +232,7 @@ const Dashboard = props => {
         Refreshrs:
       </Typography>
       <Grid className={classes.classContainer}>
+        {console.log('USER REF *_*', userRefreshrs)}
         {userRefreshrs.map(r => (
           <Card className={classes.classCard}>
             {/* {console.log('R ===', r)} */}
@@ -284,7 +254,10 @@ const Dashboard = props => {
               </CardContent>
             </a>
             <Button color="primary" className={classes.lists}>
-              <Link to="/refreshrs/edit" className={classes.links}>
+              <Link
+                to={`/refreshrs/edit/${r.refreshr_id}`}
+                className={classes.links}
+              >
                 Edit
               </Link>
             </Button>

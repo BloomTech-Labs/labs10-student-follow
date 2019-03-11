@@ -50,7 +50,7 @@ const App = props => {
   const user_id = localStorage.getItem('user_id');
 
   /* STATE */
-  const [message, setMessage] = useState('')
+  const [message, setMessage] = useState('');
   const [url, setUrl] = useState('');
   const [userRefreshrs, setRefreshrs] = useState([]);
   const [questions, setQuestions] = useState([]);
@@ -73,14 +73,12 @@ const App = props => {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => {
-        //console.log(res);
-        //console.log('REFRESHRS', res)
         setRefreshrs(res.data.refreshrs);
       })
       .catch(err => console.log(err));
   };
 
-  const sendRefreshrToDB = (refreshr) => {
+  const sendRefreshrToDB = refreshr => {
     axios({
       method: 'post',
       //Development
@@ -90,25 +88,25 @@ const App = props => {
       headers: { Authorization: `Bearer ${token}` },
       data: refreshr
     })
-    .then(res => {
-      //console.log(res)
-      axios({
-      method: 'post',
-              //Development
-      url: `http://localhost:9000/teachers/${user_id}/refreshrs`,
-      //Production
-      //url: 'http://refreshr.herokuapp.com/questions'
-      headers: { Authorization: `Bearer ${token}` },
-      data: res.data.newRefreshrID
-      })
       .then(res => {
-        setMessage(res.data.message)
+        console.log('Res from 116', res.data.newRefreshrID);
+        axios({
+          method: 'post',
+          //Development
+          url: `http://localhost:9000/teachers/${user_id}/refreshrs`,
+          //Production
+          // url: 'http://refreshr.herokuapp.com/questions',
+          headers: { Authorization: `Bearer ${token}` },
+          data: { refreshr_id: res.data.newRefreshrID }
+        }).then(res => {
+          console.log('Res from send ref', res);
+          setMessage(res.data.message);
+        });
       })
-    })
-    .catch(err => {
-      console.log(err)
-    })
-  }
+      .catch(err => {
+        console.log(err);
+      });
+  };
 
   //add questions
   const addQuestions = question => {
@@ -120,10 +118,10 @@ const App = props => {
       //Production
       //url: 'http://refreshr.herokuapp.com/questions'
       headers: { Authorization: `Bearer ${token}` },
-      data:  question 
+      data: question
     })
       .then(res => {
-        console.log(res)
+        console.log(res);
         //console.log('RES from add questions ===', res);
         setQuestions([]);
         //console.log(questions)
@@ -161,8 +159,8 @@ const App = props => {
         className={classes.container}
       >
         <Grid item>
-          <Navbar theme={props.theme} lock={props.lock}  />
-          <Navcrumbs location={props.location} history={props.history}/>
+          <Navbar theme={props.theme} lock={props.lock} />
+          <Navcrumbs location={props.location} history={props.history} />
         </Grid>
         <Route exact path="/" render={props => <LandingPage {...props} />} />
         <Grid item className={classes.routes}>
@@ -195,6 +193,7 @@ const App = props => {
                 userClasses={userClasses}
                 getRefreshrs={getRefreshrs}
                 userRefreshrs={userRefreshrs}
+                questions={questions}
               />
             )}
           />
@@ -214,7 +213,10 @@ const App = props => {
             exact
             path="/refreshrs/create"
             render={props => (
-          <Refreshr addQuestions={addQuestions} sendRefreshrToDB={sendRefreshrToDB} />
+              <Refreshr
+                addQuestions={addQuestions}
+                sendRefreshrToDB={sendRefreshrToDB}
+              />
             )}
           />
           <Route path="/campaign" render={props => <CampaignForm />} />{' '}
