@@ -61,7 +61,7 @@ const styles = theme => ({
     paddingLeft: '10px'
   },
   cardSectionLabels: {
-    marginLeft: '2rem',
+    // marginLeft: '2rem',
     [theme.breakpoints.down('sm')]: {
       margin: '0'
     }
@@ -94,6 +94,10 @@ const styles = theme => ({
   refreshrIcon: {
     fontSize: '70px',
     margin: '1rem auto'
+  },
+  hrStyle: {
+    margin: '1rem auto',
+    width: '80%'
   }
 });
 
@@ -103,6 +107,14 @@ const teacherId = localStorage.getItem('user_id');
 const Dashboard = props => {
   // const name = localStorage.getItem('name'); // commented out until decide what to do w/ name
   const [teacherRefreshrs, setTeacherRefreshrs] = useState([]);
+
+  useEffect(() => {
+    // console.log(`Bearer ${token}`);
+    props.getClasses();
+    props.getRefreshrs();
+    console.log('Dashboard refreshr:', props.getRefreshrs());
+    getTeacherById();
+  }, []);
 
   async function getTeacherById() {
     // You can await here
@@ -121,14 +133,6 @@ const Dashboard = props => {
       console.log(error);
     }
   }
-
-  useEffect(() => {
-    // console.log(`Bearer ${token}`);
-    props.getClasses();
-    props.getRefreshrs();
-    // console.log('Dashboard refreshr:', props.getRefreshrs());
-    getTeacherById();
-  }, []);
 
   const { userClasses, classes, userRefreshrs } = props;
   // console.log('Refreshr from Dash ===', userRefreshrs);
@@ -163,37 +167,6 @@ const Dashboard = props => {
       class_id: 4
     }
   ];
-  // const testRefreshrs = [
-  //   {
-  //     refreshrName: 'CSS Basics',
-  //     classesAssigned: 84,
-  //     refreshr_id: 1
-  //   },
-  //   {
-  //     refreshrName: 'Relational Databases',
-  //     classesAssigned: 21,
-  //     refreshr_id: 2
-  //   },
-  //   {
-  //     refreshrName: 'Relational Databases',
-  //     classesAssigned: 21,
-  //     refreshr_id: 3
-  //   },
-  //   {
-  //     refreshrName: 'Relational Databases',
-  //     classesAssigned: 21,
-  //     refreshr_id: 4
-  //   },
-  //   {
-  //     refreshrName: 'Relational Databases',
-  //     classesAssigned: 21,
-  //     refreshr_id: 5
-  //   }
-  // ];
-  // const redirect = url => {
-  //   console.log('Props from redirect', props);
-  //   props.history.push(url);
-  // };
   return (
     <Grid className={classes.wrapper}>
       {console.log('PROPS', userClasses, userRefreshrs)}
@@ -201,6 +174,20 @@ const Dashboard = props => {
         'userRefreshrs ==>',
         userRefreshrs.map(data => data.typeform_url)
       )}
+      <Typography
+        variant="h6"
+        color="secondary"
+        style={{ textAlign: 'center' }}
+      >
+        Dashboard
+      </Typography>
+
+      <Typography variant="h8" color="secondary" align={'center'}>
+        View the Classes and Refreshrs that you've created.
+      </Typography>
+
+      <hr className={props.classes.hrStyle} />
+
       {/* cant figure out what to do w/ the username right now */}
       {/* <Typography component="h2" color="secondary">
         Welcome {name}, 
@@ -213,6 +200,7 @@ const Dashboard = props => {
       >
         Classes:
       </Typography>
+
       <Grid className={classes.classContainer}>
         {testClasses.map(c => (
           <Card key={c.class_id} className={classes.classCard}>
@@ -255,6 +243,7 @@ const Dashboard = props => {
           </Icon>
         </Card>
       </Grid>
+      <hr className={props.classes.hrStyle} />
       <Typography
         component="h2"
         color="secondary"
@@ -263,6 +252,7 @@ const Dashboard = props => {
         Refreshrs:
       </Typography>
       <Grid className={classes.classContainer}>
+        {console.log('USER REF *_*', userRefreshrs)}
         {userRefreshrs.map(r => (
           <Card className={classes.classCard}>
             {/* {console.log('R ===', r)} */}
@@ -284,7 +274,10 @@ const Dashboard = props => {
               </CardContent>
             </a>
             <Button color="primary" className={classes.lists}>
-              <Link to="/refreshrs/edit" className={classes.links}>
+              <Link
+                to={`/refreshrs/edit/${r.refreshr_id}`}
+                className={classes.links}
+              >
                 Edit
               </Link>
             </Button>
