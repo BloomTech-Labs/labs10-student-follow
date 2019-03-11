@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Grid,
   Typography,
@@ -97,7 +97,12 @@ function Refreshr(props) {
   const [refreshrName, addRefreshrName] = useState('');
   const [questionTextOne, setQuestionTextOne] = useState('');
   const [questionTextTwo, setQuestionTextTwo] = useState('');
-  const [submitted, setSubmitted] = useState(false);
+  // const [submitted, setSubmitted] = useState(false);
+  const [typeformWelcome, setTypefromWelcome] = useState([]);
+  const [typeformQ1Props, setTypeformQ1Props] = useState([]);
+  const [typeformAnswers, setTypeformAnswers] = useState([]);
+  const [typeformQ1, setTypeformQ1] = useState([]);
+  const [typeformQ2, setTypeformQ2] = useState([]);
 
   const [a1Text, setA1Text] = useState('');
   const [a2Text, setA2Text] = useState('');
@@ -110,86 +115,32 @@ function Refreshr(props) {
     questionTextTwo,
     answers: { a1Text, a2Text, a3Text, a4Text }
   });
+  const typeformId = window.location.pathname.slice(-6);
 
-  const StyleDisplay = styled.a`
-    ${{ display: submitted ? 'block' : 'none' }}
-  `;
+  // const StyleDisplay = styled.a`
+  //   ${{ display: submitted ? 'block' : 'none' }}
+  // `;
 
-  const createForm = async event => {
-    event.preventDefault();
-    const headers = {
-      Authorization: `Bearer ${process.env.REACT_APP_TYPEFORM}`
-    };
-    const data = {
-      title: questionObject.refreshrName,
-      variables: {
-        score: 0
-      },
-      welcome_screens: [
-        {
-          title: 'Welcome to your Refreshr!',
-          properties: {
-            description: questionObject.reviewText
-          }
-        }
-      ],
-      fields: [
-        {
-          title: 'Please enter your email address.',
-          type: 'email',
-          validations: {
-            required: true
-          }
-        },
-        {
-          ref: 'question_1',
-          title: questionObject.questionTextOne,
-          type: 'multiple_choice',
-          properties: {
-            randomize: true,
-            choices: [
-              {
-                ref: 'correct',
-                label: questionObject.answers.a1Text
-              },
-              {
-                ref: 'incorrect_1',
-                label: questionObject.answers.a2Text
-              },
-              {
-                ref: 'incorrect_2',
-                label: questionObject.answers.a3Text
-              },
-              {
-                ref: 'incorrect_3',
-                label: questionObject.answers.a4Text
-              }
-            ]
-          }
-        },
-        {
-          ref: 'question_2',
-          title: questionObject.questionTextTwo,
-          type: 'short_text'
-        }
-      ]
-    };
-    try {
-      const response = await axios
-        .post('https://api.typeform.com/forms', data, {
-          headers
-        })
-        .then(res => console.log(res));
-    } catch (error) {
-      console.log(error);
-    }
-    setSubmitted(true);
-  };
+  useEffect(() => {
+    axios({
+      method: 'get',
+      url: `https://api.typeform.com/forms/${typeformId}`,
+      headers: { Authorization: `Bearer ${process.env.REACT_APP_TYPEFORM}` }
+    })
+      .then(res => {
+        console.log('FROM USE EFFECT', res);
+        setTypefromWelcome(res.data.welcome_screens[0]);
+        setTypeformQ1Props(res.data.fields[1].properties);
+        setTypeformAnswers(res.data.fields[1].properties.choices);
+        setTypeformQ1(res.data.fields[1]);
+        setTypeformQ2(res.data.fields[2]);
+      })
+      .catch(err => console.log(err));
+  }, []);
 
-  const { userClasses, classes, userRefreshrs } = props;
-  console.log('userClasses', userClasses);
-  console.log('classes', classes);
-  console.log('userRefreshrs', userRefreshrs);
+  const answers = typeformAnswers.map(answer => answer.label);
+
+  console.log('typeformText =>', typeformQ2);
 
   return (
     <Paper className={props.classes.container} elevation={24}>
@@ -232,7 +183,8 @@ function Refreshr(props) {
               onChange={e => addRefreshrName(e.target.value)}
               name="classnameInput"
               required
-              placeholder="Enter Refreshr Name.."
+              type="text"
+              value={typeformWelcome.title}
               className={props.classes.inputName}
             />
           </FormGroup>
@@ -252,7 +204,7 @@ function Refreshr(props) {
               required
               multiline
               rows="4"
-              placeholder="Enter info about the Refreshr.."
+              value={typeformQ1Props.description}
               className={props.classes.inputQuestion}
             />
           </FormGroup>
@@ -279,7 +231,7 @@ function Refreshr(props) {
               required
               multiline
               rows="4"
-              placeholder="Enter question.."
+              value={typeformQ1.title}
               className={props.classes.inputQuestion}
             />
           </FormGroup>
@@ -291,7 +243,7 @@ function Refreshr(props) {
                 onChange={e => setA1Text(e.target.value)}
                 name="classnameInput"
                 required
-                placeholder="Answer one.."
+                value={answers[0]}
                 className={props.classes.inputMultipleChoice}
               />
               <Input
@@ -299,7 +251,7 @@ function Refreshr(props) {
                 name="classnameInput"
                 onChange={e => setA2Text(e.target.value)}
                 required
-                placeholder="Answer two.."
+                value={answers[1]}
                 className={props.classes.inputMultipleChoice}
               />
               <Input
@@ -307,7 +259,7 @@ function Refreshr(props) {
                 onChange={e => setA3Text(e.target.value)}
                 name="classnameInput"
                 required
-                placeholder="Answer three.."
+                value={answers[2]}
                 className={props.classes.inputMultipleChoice}
               />
               <Input
@@ -315,7 +267,7 @@ function Refreshr(props) {
                 onChange={e => setA4Text(e.target.value)}
                 name="classnameInput"
                 required
-                placeholder="Answer four.."
+                value={answers[3]}
                 className={props.classes.inputMultipleChoice}
               />
             </form>
@@ -342,7 +294,7 @@ function Refreshr(props) {
               required
               multiline
               rows="4"
-              placeholder="Enter question.."
+              value={typeformQ2.title}
               className={props.classes.inputQuestion}
             />
           </FormGroup>
@@ -353,12 +305,11 @@ function Refreshr(props) {
             color="primary"
             onClick={e => {
               props.addQuestions(questionObject);
-              createForm(e);
             }}
           >
             Submit
           </Button>
-          <StyleDisplay>View your Refreshr here: {url}</StyleDisplay>
+          {/* <StyleDisplay>View your Refreshr here: {url}</StyleDisplay> */}
         </FormGroup>
       </Grid>
     </Paper>

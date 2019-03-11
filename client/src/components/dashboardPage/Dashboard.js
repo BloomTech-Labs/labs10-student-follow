@@ -61,7 +61,7 @@ const styles = theme => ({
     paddingLeft: '10px'
   },
   cardSectionLabels: {
-    marginLeft: '2rem',
+    // marginLeft: '2rem',
     [theme.breakpoints.down('sm')]: {
       margin: '0'
     }
@@ -96,6 +96,10 @@ const styles = theme => ({
   refreshrIcon: {
     fontSize: '70px',
     margin: '1rem auto'
+  },
+  hrStyle: {
+    margin: '1rem auto',
+    width: '80%'
   }
 });
 
@@ -118,6 +122,7 @@ const Dashboard = props => {
       >
         Classes:
       </Typography>
+
       <Grid className={classes.classContainer}>
         {userClasses.map(c => (
           <Link key={c.class_id} to={`classes/edit/${c.class_id}`} style={{textDecoration: 'none'}}>
@@ -153,6 +158,7 @@ const Dashboard = props => {
           </Icon>
         </Card>
       </Grid>
+      <hr className={props.classes.hrStyle} />
       <Typography
         component="h2"
         color="secondary"
@@ -161,6 +167,7 @@ const Dashboard = props => {
         Refreshrs:
       </Typography>
       <Grid className={classes.classContainer}>
+        {console.log('USER REF *_*', userRefreshrs)}
         {userRefreshrs.map(r => (
           <Link key={r.refreshr_id} to={`refreshrs/edit/${r.refreshr_id}`} style={{textDecoration: 'none'}}>
           <Card className={classes.classCard}>
@@ -175,6 +182,18 @@ const Dashboard = props => {
                   Classes Assigned: {r.classesAssigned}
                 </Typography>
               </CardContent>
+<<<<<<< HEAD
+=======
+            </a>
+            <Button color="primary" className={classes.lists}>
+              <Link
+                to={`/refreshrs/edit/${r.refreshr_id}`}
+                className={classes.links}
+              >
+                Edit
+              </Link>
+            </Button>
+>>>>>>> 096783bb3894b78b6ce46a54adaf355bb2f2a336
           </Card>
           </Link>
         ))}

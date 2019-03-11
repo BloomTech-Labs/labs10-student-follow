@@ -55,6 +55,7 @@ const App = props => {
   console.log(user_id)
 
   /* STATE */
+  const [message, setMessage] = useState('');
   const [url, setUrl] = useState('');
   const [message, setMessage] = useState('')
   const [userRefreshrs, setRefreshrs] = useState([]);
@@ -78,36 +79,58 @@ const App = props => {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => {
-        //console.log(res);
-        console.log('REFRESHRS', res)
         setRefreshrs(res.data.refreshrs);
       })
       .catch(err => console.log(err));
   };
 
-  //all Questions
-
-  // useEffect(() => {
-  //   axios
-  //     .get('https://refreshr.herokuapp.com/questions')
-  //     .then(res => {
-  //       console.log('Getting questions', res.data.questions);
-  //       setQuestions(res.data.questions);
-  //     })
-  //     .catch(err => {
-  //       console.log(err);
-  //     });
-  // }, []);
+  const sendRefreshrToDB = refreshr => {
+    axios({
+      method: 'post',
+      //Development
+      url: 'http://localhost:9000/refreshrs',
+      //Production
+      //url: 'http://refreshr.herokuapp.com/questions'
+      headers: { Authorization: `Bearer ${token}` },
+      data: refreshr
+    })
+      .then(res => {
+        console.log('Res from 116', res.data.newRefreshrID);
+        axios({
+          method: 'post',
+          //Development
+          url: `http://localhost:9000/teachers/${user_id}/refreshrs`,
+          //Production
+          // url: 'http://refreshr.herokuapp.com/questions',
+          headers: { Authorization: `Bearer ${token}` },
+          data: { refreshr_id: res.data.newRefreshrID }
+        }).then(res => {
+          console.log('Res from send ref', res);
+          setMessage(res.data.message);
+        });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
 
   //add questions
   const addQuestions = question => {
-    console.log('Question from addQuestions ===', question);
-    axios
-      // .post('http://refreshr.herokuapp.com/questions', question)
-      .post('http://localhost:9000/questions', question)
+    //console.log('Question from addQuestions ===', question);
+    axios({
+      method: 'post',
+      //Development
+      url: 'http://localhost:9000/questions',
+      //Production
+      //url: 'http://refreshr.herokuapp.com/questions'
+      headers: { Authorization: `Bearer ${token}` },
+      data: question
+    })
       .then(res => {
-        console.log('RES from add questions ===', res);
+        console.log(res);
+        //console.log('RES from add questions ===', res);
         setQuestions([]);
+        //console.log(questions)
       })
       .catch(err => {
         console.log(err);
@@ -142,8 +165,8 @@ const App = props => {
         className={classes.container}
       >
         <Grid item>
-          <Navbar theme={props.theme} lock={props.lock}  />
-          <Navcrumbs location={props.location} history={props.history}/>
+          <Navbar theme={props.theme} lock={props.lock} />
+          <Navcrumbs location={props.location} history={props.history} />
         </Grid>
         <Route exact path="/" render={props => <LandingPage {...props} />} />
         <Grid item className={classes.routes}>
@@ -176,6 +199,7 @@ const App = props => {
                 userClasses={userClasses}
                 getRefreshrs={getRefreshrs}
                 userRefreshrs={userRefreshrs}
+                questions={questions}
               />
             )}
           />
@@ -195,7 +219,10 @@ const App = props => {
             exact
             path="/refreshrs/create"
             render={props => (
-              <Refreshr addQuestions={addQuestions} url={url} setUrl={setUrl} />
+              <Refreshr
+                addQuestions={addQuestions}
+                sendRefreshrToDB={sendRefreshrToDB}
+              />
             )}
           />
           <Route path="/campaign" render={props => <CampaignForm />} />{' '}
