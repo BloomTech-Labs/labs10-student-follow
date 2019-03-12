@@ -1,6 +1,6 @@
 # [Refreshr App](https://refreshr-app.netlify.com) (Lambda School Labs 10)
 
-![Refreshr Logo](./logo.png "Refresh your mind")
+![Refreshr Logo](./src/logo.png "Refresh your mind")
 
 - [App Home](https://refreshr-app.netlify.com)
 
@@ -10,7 +10,7 @@
 
 - **Chaya Otikor** | [Github](https://github.com/cotikor)
 
-- **Justin Lowry** | [Github](https://github.com/dividedsky)
+- **Justin Lowry** | [Github](https://github.com/dividedsky) | [LinkedIn](https://www.linkedin.com/in/justin-lowry-792960180/)
 
 - **Nick O'Ferrall** | [Github](https://github.com/nickoferrall) | [LinkedIn](https://www.linkedin.com/in/nickoferrall/)
 
@@ -23,21 +23,24 @@
 ## Project Overview
 
 ```
-"Learning is difficult. Teaching is hard. When learners have small triggers to remember content over a spread out period of time they retain more. Send customizable quizzes on scheduled intervals of 2 days, 2 weeks and 2 months after the initial lecture."
+"Learning is difficult. Teaching is hard. When learners have small triggers to remember content over a spread out period of time they retain more. Send customizable refreshrs at scheduled intervals after the initial lecture."
 ```
 
-- `Refreshr` aims to help students retain information through the spaced-learning method and periodic, scheduled quizzes called "refreshrs". This project was designed for our Lambda School Labs Capstone Project.
+- `Refreshr` aims to help students retain information through the spaced-learning method with periodic, scheduled quizzes called "refreshrs"
+- Students receive a "refreshr" with a short introductory review paragraph, a multiple choice question, and a short answer question all contained within a nice easy to follow format provided by the Typeform service
+- The app schedules refreshrs to be sent out via email during specified times (2 days, 2 weeks, and 2 months) via the enterprise level mailing service called Sendgrid
+- This project was designed for our Lambda School Labs 10 Capstone Project
 
 ### Key Features
 
 ```md
 - Create a class and manage students in the class
-- Create and edit Refreshrs
-- A Refreshr should have a 2 day, 2 week, and 2 month review
-- A Refreshr review item should have text and a multiple choice question
-- Assign a Refreshr to a class with a lecture time to automate the delivery of quizzes
-- The Refreshr s should be automatically delivered via email
-- A teacher should be able to see the participation rate in dashboard
+- Create and edit Refreshrs to be sent out
+- Assign a Refreshr to a class
+- Schedule and automate delivery of refreshrs
+- The Refreshrs automatically get delivered via email
+- Auth0 is used to sign into the app
+- Stripe is used to handle credit cards
 ```
 
 ---
@@ -47,7 +50,7 @@
 ### Frontend
 
 ```md
-# React (JavaScript Library)
+# React (JavaScript Frontend Library)
 
 - React features reusable components, fast rendering with the virtual DOM, great ecosystem with plugins, and state-management in the component
 ```
@@ -55,36 +58,41 @@
 ```md
 # React Hooks (Library Feature)
 
-- React Hooks a new stable feature as of the v16.8 release and features the ability of functional components to have state and various life-cycle methods
+- React Hooks a new stable feature as of the v16.8 release
+- Features the ability of functional components to have state and various life-cycle methods
 ```
 
 ```md
 # Material-UI Library (Styling Library)
 
 - MUI features a professional UI, lends credibility due to having a similar look to other google sites, and prevent global CSS leaks
+- Self-supporting components, open-sourced, and disinctive look
+- Library complete with icons, color, typography, layouts, breakpoints, and more
 ```
 
 ### Backend
 
 ```md
-# NodeJS
+# NodeJS (JavaScript Backend Library)
 
-- NodeJS features V8 JavaScript engine (particularly well suited to live updated) and has a robust NodeJS ecosystem
-
-# ExpressJS
-
-- ExpressJS is a library built to smooth out operations on top of the NodeJS language
+- NodeJS features V8 JavaScript engine, particularly well suited to live updates, and has a robust NodeJS ecosystem
 ```
 
 ```md
-# PostgreSQL (Database)
+# ExpressJS (Server framework for NodeJS)
 
-- PostgreSQL is a production grade database, blends well w/ deployment technology, and widely used (2nd most popular db package on npm, good documentation, good support)
+- ExpressJS is a library built to optimize operations on top of the NodeJS language
+```
+
+```md
+# PostgreSQL (Relational Database)
+
+- PostgreSQL is a production grade database, blends well with deployment technology, great documentation, widely used, second most popular database package on npm
 ```
 
 #### Data Model
 
-![Data Model](./dataModel.png "Refreshr Data Model")
+![Data Model](./src/dataModel.png "Refreshr Data Model")
 
 ### Deployment
 
@@ -112,24 +120,39 @@
 # Sendgrid
 - Sendgrid is an email service, part of the Twilio company, which gives developers access to the Sendgrid V3 API to control email campaigns, set lists, set senders, set recipients, and many other features.
 - Our purposes with Refreshr is to use it to schedule refreshrs and to email students out with a magic link back to our platform in order to take their refreshr.
-- The five specific operation types involved are campaigns, list, list recipients, senders, and recipients.
-- More information on [Sendgrid V3 documentation](https://sendgrid.api-docs.io/v3.0)
+- [Sendgrid V3 Documentation](https://sendgrid.api-docs.io/v3.0)
 ```
+
+```md
+# Typeform
+- Creates interactive experiences for users and collect more data
+- The beautiful forms are presented in a conversational format to foster a friendly experience that invites more answers
+- With our app, the typeform invites our students to take the refreshr with order so they don't get overwhelmed
+- [Typeform's Developer Platform](https://developer.typeform.com/)
+```
+
+```md
+# Papa Parse
+- Fast javascript CSV parser for the browser
+- Abiliy to parse local files, remote files
+- Convert JSON to CSV
+- Helps convert student's informations in the Refreshr app
+- [Papa Parse Home](https://www.papaparse.com/)
+```
+
 
 ```
 # Other APIs
 - Auth0 - authorization and authentication service
 - Stripe - payment portal service
-- Axios - Promise based HTTP client for the browser and node.js
-- SendGrid - Email service
-- Papaparse - CSV parser package
+- Axios - promise based HTTP client for the browser and NodeJS
 - Knex - SQL Query Builder for Javascript
-- Material-UI - UI Design library
-- Jest/React-Testing-Library/Jest-Dom - Testing libraries
-- Supertest - Testing library
+- Jest/React-Testing-Library/Jest-Dom - testing libraries
 - Dotenv - load local environment variables for env
-- Cors - Cross Origin Bridge
-- Faker - Simulates fake data
+- Cors - cross origin bridge
+- Faker - simulates fake data
+- MomentJS - package to work with time data
+- React Lazy Load Image Component - package with placeholder and image loading features
 ```
 
 ---
@@ -137,7 +160,8 @@
 ## Environment Variables
 
 ```md
-SENDGRID_API_KEY=Official Key from API (Source: https://app.sendgrid.com/settings/api_keys)
+SENDGRID_API_KEY=Obtain key from API (Source: https://app.sendgrid.com/settings/api_keys)
+REACT_APP_TYPEFORM=Obtain key from API (Source: https://developer.typeform.com)
 ```
 
 ---
@@ -192,5 +216,5 @@ SENDGRID_API_KEY=Official Key from API (Source: https://app.sendgrid.com/setting
 ## Additional Documentation
 
 ```md
-- For the backend documentation, please visit [Backend Documentation]().
+- For the backend documentation, please visit [Backend Documentation](https://github.com/Lambda-School-Labs/labs10-student-follow/blob/master/README.md).
 ```
