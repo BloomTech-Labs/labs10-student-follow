@@ -89,11 +89,16 @@ const styles = theme => ({
     '&:hover': {
       background: theme.palette.secondary.dark
     }
+  },
+  hrStyle: {
+    margin: '1rem auto',
+    width: '80%'
   }
 });
 
+const firstName = localStorage.getItem('name').split(' ')[0];
+
 const Dashboard = props => {
-  // const name = localStorage.getItem('name'); // commented out until decide what to do w/ name
   const {
     userClasses,
     classes,
@@ -108,63 +113,79 @@ const Dashboard = props => {
   }, []);
 
   return (
-    <div className={classes.container}>
-      <Paper className={classes.sectionWrapper} elevation={24}>
-        <Typography
-          variant="h6"
-          color="secondary"
-          className={classes.cardSectionLabels}
-        >
-          Current Classes
-        </Typography>
-        <Grid className={classes.classContainer}>
-          {userClasses.map(c => {
-            return (
-              //console.log(stats),
-              <Link
-                key={c.class_id}
-                to={`classes/edit/${c.class_id}`}
-                style={{ textDecoration: 'none' }}
-              >
-                <Card className={classes.card}>
-                  <Typography className={classes.cardTitle}>
-                    {c.classname}
-                  </Typography>
-                </Card>
-              </Link>
-            );
-          })}
-        </Grid>
-      </Paper>
-      <Paper className={classes.sectionWrapper} elevation={24}>
-        <Typography
-          variant="h6"
-          color="secondary"
-          className={classes.cardSectionLabels}
-        >
-          Current Refreshrs
-        </Typography>
-        <Grid className={classes.classContainer}>
-          {userRefreshrs.map(r => {
-            //console.log(r)
-            //let participationRate = 0
-            return (
-              <Link
-                key={r.refreshr_id}
-                to={`refreshrs/edit/${r.refreshr_id}`}
-                style={{ textDecoration: 'none' }}
-              >
-                <Card className={classes.card}>
-                  {/* {console.log('R ===', r)} */}
-                  <Typography className={classes.cardTitle}>
-                    {r.name}
-                  </Typography>
-                </Card>
-              </Link>
-            );
-          })}
-        </Grid>
-      </Paper>
+    <div>
+      <Typography
+        variant="h6"
+        color="secondary"
+        style={{ textAlign: 'center' }}
+      >
+        {`${firstName}'s Dashboard`}
+      </Typography>
+
+      <Typography variant="h8" color="secondary" align={'center'}>
+        View the Classes and Refreshrs that you've created.
+      </Typography>
+
+      <hr className={classes.hrStyle} />
+
+      <div className={classes.container}>
+        <Paper className={classes.sectionWrapper} elevation={24}>
+          <Typography
+            variant="h6"
+            color="secondary"
+            className={classes.cardSectionLabels}
+          >
+            Current Classes
+          </Typography>
+          <Grid className={classes.classContainer}>
+            {userClasses.map(c => {
+              return (
+                //console.log(stats),
+                <Link
+                  key={c.class_id}
+                  to={`classes/edit/${c.class_id}`}
+                  style={{ textDecoration: 'none' }}
+                >
+                  <Card className={classes.card}>
+                    <Typography className={classes.cardTitle}>
+                      {c.classname}
+                    </Typography>
+                  </Card>
+                </Link>
+              );
+            })}
+          </Grid>
+        </Paper>
+        <Paper className={classes.sectionWrapper} elevation={24}>
+          <Typography
+            variant="h6"
+            color="secondary"
+            className={classes.cardSectionLabels}
+          >
+            Current Refreshrs
+          </Typography>
+          <Grid className={classes.classContainer}>
+            {userRefreshrs.map(r => {
+              //console.log(r)
+              //let participationRate = 0
+              return (
+                <Link
+                  key={r.refreshr_id}
+                  to={`refreshrs/edit/${r.refreshr_id}`}
+                  style={{ textDecoration: 'none' }}
+                >
+                  <Card className={classes.card}>
+                    {console.log('R ===', r)}
+                    <Typography className={classes.cardTitle}>
+                      {r.name}
+                    </Typography>
+                  </Card>
+                </Link>
+              );
+            })}
+          </Grid>
+        </Paper>
+      </div>
     </div>
   );
 };
