@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
 import { ListForm, CampaignForm } from '../index.js';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import axios from 'axios';
 import {
   addList,
@@ -22,6 +23,24 @@ const styles = theme => ({
     justifyContent: 'space-around',
     alignItems: 'center',
     maxWidth: 600
+  },
+  loadingWrapper: {
+    display: 'flex',
+    flexFlow: 'column nowrap',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    maxWidth: 600,
+    position: 'relative',
+    backgroundColor: 'white',
+    filter: 'blur(2px)',
+    height: '100vh',
+    width: '100vh'
+  },
+  loading: {
+    position: 'absolute',
+    top: '40%',
+    color: 'blue',
+    zIndex: '1'
   }
 });
 
@@ -48,6 +67,7 @@ function ClassCreateView(props) {
   });
 
   const [timeTriData, setTimeTriData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   // const [timeData, setTimeData] = useState({
   //   send_at: null
@@ -99,96 +119,106 @@ function ClassCreateView(props) {
   });
 
   const sgDb = async refreshrs => {
-    let firstPass = true; // flag to ensure we don't submit the same list to sendgrid
-    let list; // to store list id
-    for (let refreshr of refreshrs) {
-      console.log('list:', list);
-      console.log('refreshr:', refreshr);
-      // create list
-      console.log(listData.classnameInput);
-      console.log(recipientData);
-      if (firstPass) {
-        let body = {
-          name: listData.classnameInput
-        };
-        let res = await sgAx.post('/contactdb/lists', body);
-        console.log('res:', res);
-        list = res.data.id;
-        firstPass = false; // so we don't try to create duplicate lists
+    try {
+      setIsLoading(true);
+      let firstPass = true; // flag to ensure we don't submit the same list to sendgrid
+      let list; // to store list id
+      for (let refreshr of refreshrs) {
+        // console.log('list:', list);
+        // console.log('refreshr:', refreshr);
+        // create list
+        // console.log(listData.classnameInput);
+        // console.log(recipientData);
+        if (firstPass) {
+          let body = {
+            name: listData.classnameInput
+          };
+          let res = await sgAx.post('/contactdb/lists', body);
+          console.log('res:', res);
+          list = res.data.id;
+          firstPass = false; // so we don't try to create duplicate lists
 
-        // save class and list to db
-        const classRes = await ax.post('/classes', {
-          name: listData.classnameInput,
-          sg_list_id: list
-        });
-
-        console.log(classRes);
-        const classId = classRes.data.newClassID;
-
-        console.log(classId);
-
-        // create recipients and add to list
-        const students = []; // to keep track of student id's for insert into students_classes
-        for (let recipient of recipientData) {
-          // create sg recipient
-          console.log(recipient);
-          let recipient_id = await sgAx.post('/contactdb/recipients', [
-            recipient
-          ]);
-          [recipient_id] = recipient_id.data.persisted_recipients;
-          console.log('recipient id:', recipient_id);
-
-          // save student to students table (only on first pass)
-          recipient.sg_recipient_id = recipient_id;
-          const studentRes = await ax.post('/students', recipient);
-          console.log(studentRes);
-
-          // add student and class to students_classes
-          ax.post(`/classes/${list}/students`, {
-            student_id: recipient_id
+          // save class and list to db
+          const classRes = await ax.post('/classes', {
+            name: listData.classnameInput,
+            sg_list_id: list
           });
 
-          // add recipient to list
-          const res = await sgAx.post(
-            `/contactdb/lists/${list}/recipients/${recipient_id}`
-          );
-          console.log('add recipient:', res);
+          console.log(classRes);
+          const classId = classRes.data.newClassID;
+
+          console.log(classId);
+
+          // create recipients and add to list
+          const students = []; // to keep track of student id's for insert into students_classes
+          for (let recipient of recipientData) {
+            // create sg recipient
+            console.log(recipient);
+            let recipient_id = await sgAx.post('/contactdb/recipients', [
+              recipient
+            ]);
+            [recipient_id] = recipient_id.data.persisted_recipients;
+            console.log('recipient id:', recipient_id);
+
+            // save student to students table (only on first pass)
+            recipient.sg_recipient_id = recipient_id;
+            const studentRes = await ax.post('/students', recipient);
+            console.log(studentRes);
+
+            // add student and class to students_classes
+            ax.post(`/classes/${list}/students`, {
+              student_id: recipient_id
+            });
+
+            // add recipient to list
+            const res = await sgAx.post(
+              `/contactdb/lists/${list}/recipients/${recipient_id}`
+            );
+            console.log('add recipient:', res);
+          }
         }
+
+        // assign the class list to the refreshr
+        newRefreshr.list_ids = [list];
+
+        // create three campaigns with the refreshr
+        const teacher_id = localStorage.getItem('user_id');
+        for (let i = 0; i < 3; i++) {
+          const refreshrRes = await sgAx.post('/campaigns', newRefreshr);
+          console.log(refreshrRes);
+
+          const campaign_id = refreshrRes.data.id;
+          console.log('campaign id:', campaign_id);
+
+          // attach campaign id to the refreshr and post to tcr table
+          const tcrRefreshr = {
+            teacher_id,
+            refreshr_id: refreshr.refreshr_id,
+            date: refreshr.date,
+            sg_campaign_id: campaign_id
+          };
+          const tcrRes = await ax.post(
+            `/classes/${list}/campaigns`,
+            tcrRefreshr
+          );
+          console.log(tcrRes);
+
+          // console.log('tcrRefreshr:', tcrRefreshr);
+          // console.log(refreshr.timeTriData[i]);
+          // console.log('refreshr', refreshr);
+
+          // schedule the three campaigns
+          const res = await sgAx.post(
+            `/campaigns/${campaign_id}/schedules`,
+            refreshr.timeTriData[i]
+          );
+          console.log(res);
+        }
+        setIsLoading(false);
       }
-
-      // assign the class list to the refreshr
-      newRefreshr.list_ids = [list];
-
-      // create three campaigns with the refreshr
-      const teacher_id = localStorage.getItem('user_id');
-      for (let i = 0; i < 3; i++) {
-        const refreshrRes = await sgAx.post('/campaigns', newRefreshr);
-        console.log(refreshrRes);
-
-        const campaign_id = refreshrRes.data.id;
-        console.log('campaign id:', campaign_id);
-
-        // attach campaign id to the refreshr and post to tcr table
-        const tcrRefreshr = {
-          teacher_id,
-          refreshr_id: refreshr.refreshr_id,
-          date: refreshr.date,
-          sg_campaign_id: campaign_id
-        };
-        const tcrRes = await ax.post(`/classes/${list}/campaigns`, tcrRefreshr);
-        console.log(tcrRes);
-
-        // console.log('tcrRefreshr:', tcrRefreshr);
-        // console.log(refreshr.timeTriData[i]);
-        // console.log('refreshr', refreshr);
-
-        // schedule the three campaigns
-        const res = await sgAx.post(
-          `/campaigns/${campaign_id}/schedules`,
-          refreshr.timeTriData[i]
-        );
-        console.log(res);
-      }
+    } catch (err) {
+      console.log(err);
+      setIsLoading(false);
     }
   };
 
@@ -363,33 +393,46 @@ function ClassCreateView(props) {
   };
 
   return (
-    <Grid className={props.classes.wrapper}>
-      {stage.onListForm ? (
-        <ListForm
-          file={file}
-          setFile={setFile}
-          recipientData={recipientData}
-          listData={listData}
-          setListData={setListData}
-          stage={stage}
-          setStage={setStage}
-          setRecipientData={setRecipientData}
+    <>
+      {isLoading && (
+        <CircularProgress
+          size={80}
+          thickness={4}
+          className={props.classes.loading}
         />
-      ) : null}
+      )}
+      <Grid
+        className={
+          isLoading ? props.classes.loadingWrapper : props.classes.wrapper
+        }
+      >
+        {stage.onListForm ? (
+          <ListForm
+            file={file}
+            setFile={setFile}
+            recipientData={recipientData}
+            listData={listData}
+            setListData={setListData}
+            stage={stage}
+            setStage={setStage}
+            setRecipientData={setRecipientData}
+          />
+        ) : null}
 
-      {stage.onCampaignForm ? (
-        <CampaignForm
-          campaignData={campaignData}
-          setCampaignData={setCampaignData}
-          stage={stage}
-          setStage={setStage}
-          sendAllToSendgrid={sgDb}
-          // setTimeData={setTimeData}
-          timeTriData={timeTriData}
-          setTimeTriData={setTimeTriData}
-        />
-      ) : null}
-    </Grid>
+        {stage.onCampaignForm ? (
+          <CampaignForm
+            campaignData={campaignData}
+            setCampaignData={setCampaignData}
+            stage={stage}
+            setStage={setStage}
+            sendAllToSendgrid={sgDb}
+            // setTimeData={setTimeData}
+            timeTriData={timeTriData}
+            setTimeTriData={setTimeTriData}
+          />
+        ) : null}
+      </Grid>
+    </>
   );
 }
 
