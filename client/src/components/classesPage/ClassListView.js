@@ -49,8 +49,10 @@ function ClassListView(props) {
   const [classList, setClassList] = useState([]);
 
   const ax = axios.create({
-    baseURL: 'https://refreshr.herokuapp.com', // production
-    //baseURL: 'http://localhost:9000', // development
+    //PRODUCTION
+    //baseURL: 'https://refreshr.herokuapp.com',
+    //DEVELOPMENT
+    baseURL: 'http://localhost:9000',
     headers: {
       authorization: `Bearer ${token}`
     }
