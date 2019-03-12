@@ -1,4 +1,4 @@
-# [Refreshr Ap Frontend](https://refreshr-app.netlify.com) (Lambda School Labs 10)
+# [Refreshr App Frontend](https://refreshr-app.netlify.com) (Lambda School Labs 10)
 
 ![Refreshr Logo](./src/logo.png "Refresh your mind")
 
