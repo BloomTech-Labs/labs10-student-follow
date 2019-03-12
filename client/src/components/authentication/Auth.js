@@ -80,7 +80,7 @@ lock.on('authenticated', authResult => {
       //PRODUCTION
       //url: 'https://refreshr.herokuapp.com/teachers',
       //DEVELOPMENT
-      url: 'http:localhost:9000/teachers',
+      url: 'http://localhost:9000/teachers',
 
       headers: { Authorization: `Bearer ${authResult.accessToken}` },
       data: body
