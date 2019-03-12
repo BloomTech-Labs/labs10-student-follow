@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { withRouter, Link } from 'react-router-dom';
+
 import {
   Typography,
   Card,
@@ -61,9 +62,17 @@ const styles = theme => ({
     textDecoration: 'none'
   },
   cardSectionLabels: {
-
     margin: 0,
     padding: 0
+  },
+  classCard: {
+    display: 'flex',
+    flexDirection: 'column',
+    margin: '1rem',
+    background: 'white',
+    width: '200px',
+    textDecoration: 'none',
+    color: theme.palette.secondary.contrastText
   },
   cardTitle: {
     color: theme.palette.secondary.contrastText,
@@ -91,15 +100,12 @@ const styles = theme => ({
 
 const Dashboard = props => {
   // const name = localStorage.getItem('name'); // commented out until decide what to do w/ name
-
   const {
     userClasses,
     classes,
     userRefreshrs,
     getClasses,
     getRefreshrs
-    // getStats,
-    // token
   } = props;
 
   useEffect(() => {
@@ -132,7 +138,6 @@ const Dashboard = props => {
                   </Typography>
                 </Card>
               </Link>
-
             );
           })}
         </Grid>

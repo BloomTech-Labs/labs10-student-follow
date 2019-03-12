@@ -70,11 +70,9 @@ const App = props => {
   const getRefreshrs = () => {
     axios({
       method: 'get',
-      url: `http://localhost:9000/teachers/${user_id}/refreshrs`,
-      // url: `http://localhost:9000/refreshrs`,
-      //url: `http://localhost:9000/teachers/114/refreshrs`,
+      //url: `http://localhost:9000/teachers/${user_id}/refreshrs`,
 
-      //url: `https://refreshr.herokuapp.com/teachers/${user_id}/refreshrs`,
+      url: `https://refreshr.herokuapp.com/teachers/${user_id}/refreshrs`,
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => {
@@ -87,9 +85,9 @@ const App = props => {
     axios({
       method: 'post',
       //Development
-      url: 'http://localhost:9000/refreshrs',
+      //url: 'http://localhost:9000/refreshrs',
       //Production
-      //url: 'http://refreshr.herokuapp.com/questions'
+      url: 'https://refreshr.herokuapp.com/refreshrs',
       headers: { Authorization: `Bearer ${token}` },
       data: refreshr
     })
@@ -97,10 +95,10 @@ const App = props => {
     //console.log(res.data.newRefreshrID)
       axios({
       method: 'post',
-              //Development
-      url: `http://localhost:9000/teachers/${user_id}/refreshrs`,
+      //Development
+      //url: `http://localhost:9000/teachers/${user_id}/refreshrs`,
       //Production
-      //url: 'http://refreshr.herokuapp.com/questions'
+      url: `https://refreshr.herokuapp.com/teachers/${user_id}/refreshrs`,
       headers: { Authorization: `Bearer ${token}` },
       data: {refreshr_id: res.data.newRefreshrID}
       })
@@ -120,9 +118,9 @@ const App = props => {
     axios({
       method: 'post',
       //Development
-      url: 'http://localhost:9000/questions',
+      //url: 'http://localhost:9000/questions',
       //Production
-      //url: 'http://refreshr.herokuapp.com/questions'
+      url: 'https://refreshr.herokuapp.com/questions',
       headers: { Authorization: `Bearer ${token}` },
       data: question
     })
@@ -141,8 +139,8 @@ const App = props => {
   const getClasses = () => {
     axios({
       method: 'get',
-      url: `http://localhost:9000/teachers/${user_id}/classes`,
-      //url: `https://refreshr.herokuapp.com/teachers/${user_id}/classes`,
+      //url: `http://localhost:9000/teachers/${user_id}/classes`,
+      url: `https://refreshr.herokuapp.com/teachers/${user_id}/classes`,
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => {

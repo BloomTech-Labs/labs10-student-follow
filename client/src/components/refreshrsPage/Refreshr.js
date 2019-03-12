@@ -113,7 +113,7 @@ const styles = theme => ({
 });
 
 function Refreshr(props) {
-  const { sendRefreshrToDB, classes } = props;
+  const { sendRefreshrToDB, classes, addQuestions } = props;
   const [reviewText, setReviewText] = useState('');
   const [refreshrName, addRefreshrName] = useState('');
   const [questionTextOne, setQuestionTextOne] = useState('');
@@ -411,7 +411,7 @@ function Refreshr(props) {
             >
               <Send
                 onClick={e => {
-                  props.addQuestions(questionObject);
+                  addQuestions(questionObject);
                   createForm(e);
                 }}
               />
