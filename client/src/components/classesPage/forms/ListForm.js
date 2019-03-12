@@ -1,12 +1,21 @@
 import React, { useState } from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import { Paper, FormGroup, Fab, Input, Button } from '@material-ui/core';
+import {
+  Paper,
+  FormGroup,
+  Fab,
+  Input,
+  Button,
+  IconButton,
+  Snackbar
+} from '@material-ui/core';
 import Checkbox from '@material-ui/core/Checkbox';
 import CloudUpload from '@material-ui/icons/CloudUpload';
 import GroupAdd from '@material-ui/icons/GroupAdd';
 import ArrowForward from '@material-ui/icons/ArrowForward';
 import RemoveCircleOutline from '@material-ui/icons/RemoveCircleOutline';
 import Attachment from '@material-ui/icons/Attachment';
+import { Close } from '@material-ui/icons';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Typography from '@material-ui/core/Typography';
 import BigPapa from 'papaparse';
@@ -235,6 +244,7 @@ function ListForm(props) {
       ...props.listData,
       ccBool: !props.listData.ccBool
     });
+    handleSnackbar();
     if (!recipientData.some(r => r.email === teacherInfo.email)) {
       props.setRecipientData(recipientData.concat(teacherInfo));
     } else {
@@ -262,8 +272,47 @@ function ListForm(props) {
     setRecipientData(filteredArr);
   };
 
+  // start snackbars
+  const [ccSnackBool, setCcSnackBool] = useState(false);
+  const ccSnackText =
+    props.listData.ccBool === true
+      ? 'Email added to classroom list.'
+      : 'Email removed from classroom list.';
+  const handleSnackbar = (event, reason) => {
+    if (reason === 'clickaway') {
+      // clickaway is if they fire the snackbar before it's gone
+      return;
+    }
+    setCcSnackBool(!ccSnackBool);
+  };
+  // end snackbar
+
   return (
     <Paper className={classes.container} elevation={24}>
+      {/* start snackbars */}
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left'
+        }}
+        open={ccSnackBool}
+        autoHideDuration={4000}
+        onClose={handleSnackbar}
+        ContentProps={{
+          'aria-describedby': 'message-id'
+        }}
+        message={<span id="message-id">{ccSnackText}</span>}
+        action={[
+          <IconButton
+            key="close"
+            aria-label="Close"
+            color="inherit"
+            onClick={handleSnackbar}
+          >
+            <Close />
+          </IconButton>
+        ]}
+      />
       <Typography
         variant="h6"
         color="secondary"
