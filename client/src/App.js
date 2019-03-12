@@ -47,7 +47,7 @@ const styles = theme => ({
 //Justin: 111419810728121424056
 //Chaya:  117894219650456694049
 //Tim: 118406831139005715496
-//Sawyer: 117948376948362801545 
+//Sawyer: 117948376948362801545
 
 const App = props => {
   const { classes } = props;
@@ -57,11 +57,11 @@ const App = props => {
 
   /* STATE */
 
-  const [message, setMessage] = useState('')
+  const [message, setMessage] = useState('');
   const [userRefreshrs, setRefreshrs] = useState([]);
   const [questions, setQuestions] = useState([]);
   const [userClasses, setClasses] = useState([]);
-  const [refreshrID, setRefreshrID] = useState('')
+  const [refreshrID, setRefreshrID] = useState('');
   // const [students, setStudents] = useState([]);
   // const [teachers, setTeachers] = useState([]);
 
@@ -76,7 +76,7 @@ const App = props => {
 
       //url: `https://refreshr.herokuapp.com/teachers/${user_id}/refreshrs`,
       headers: { Authorization: `Bearer ${token}` }
-      })
+    })
       .then(res => {
         setRefreshrs(res.data.refreshrs);
       })
@@ -92,28 +92,27 @@ const App = props => {
       //url: 'https://refreshr.herokuapp.com/refreshrs',
       headers: { Authorization: `Bearer ${token}` },
       data: refreshr
-    })
-    .then(res => {
-    //console.log(res.data.newRefreshrID)
-      setRefreshrID(res.data.newRefreshrID)
+    }).then(res => {
+      //console.log(res.data.newRefreshrID)
+      setRefreshrID(res.data.newRefreshrID);
       axios({
-      method: 'post',
-      //Development
-      url: `http://localhost:9000/teachers/${user_id}/refreshrs`,
-      //Production
-      //url: `https://refreshr.herokuapp.com/teachers/${user_id}/refreshrs`,
-      headers: { Authorization: `Bearer ${token}` },
-      data: {refreshr_id: res.data.newRefreshrID}
+        method: 'post',
+        //Development
+        url: `http://localhost:9000/teachers/${user_id}/refreshrs`,
+        //Production
+        //url: `https://refreshr.herokuapp.com/teachers/${user_id}/refreshrs`,
+        headers: { Authorization: `Bearer ${token}` },
+        data: { refreshr_id: res.data.newRefreshrID }
       })
-      .then(res => {
-       // console.log(res.data.message)
-        setMessage(res.data.message)
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  })
-};
+        .then(res => {
+          // console.log(res.data.message)
+          setMessage(res.data.message);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    });
+  };
 
   //add questions
   const addQuestions = question => {
@@ -135,14 +134,13 @@ const App = props => {
           //Production
           //url: `https://refreshr.herokuapp.com/refreshrs/${refreshrID}/questions`,
           headers: { Authorization: `Bearer ${token}` },
-          data: {question_id: res.data.newQuestionID},
-        //console.log('RES from add questions ===', res);
-      })
-      .then(res => {
-        // console.log(res.data.message)
-        setQuestions([])
-        setMessage(res.data.message)
-       })
+          data: { question_id: res.data.newQuestionID }
+          //console.log('RES from add questions ===', res);
+        }).then(res => {
+          // console.log(res.data.message)
+          setQuestions([]);
+          setMessage(res.data.message);
+        });
         //console.log(questions)
       })
       .catch(err => {
@@ -164,7 +162,6 @@ const App = props => {
       })
       .catch(err => console.log(err));
   };
-
 
   /* ROUTES */
   return (

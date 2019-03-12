@@ -8,7 +8,6 @@ import {
   Paper,
   Input
 } from '@material-ui/core';
-import styled from 'styled-components';
 
 const axios = require('axios');
 
@@ -79,26 +78,42 @@ const styles = theme => ({
   },
   form1: {
     display: 'flex',
+    wrap: 'wrap-reverse',
     flexDirection: 'column',
     flexFlow: 'column nowrap',
     justifyContent: 'space-evenly',
     alignItems: 'center',
     padding: theme.spacing.unit * 2
   },
+  edit: {
+    display: 'flex',
+    wrap: 'nowrap',
+    marginTop: '2%',
+    width: '100%',
+    alignItems: 'center',
+    alignContent: 'center',
+    direction: 'row',
+    cursor: 'pointer'
+  },
   hrStyle: {
     margin: '1rem auto',
     width: '100%'
+  },
+  editText: {
+    margin: '0%',
+    paddingLeft: '1%'
   }
 });
 
 function Refreshr(props) {
   const { setUrl, url } = props;
   const [reviewText, setReviewText] = useState('');
-  const [refreshrName, addRefreshrName] = useState('');
+  const [refreshrName, setRefreshrName] = useState('');
   const [questionTextOne, setQuestionTextOne] = useState('');
   const [questionTextTwo, setQuestionTextTwo] = useState('');
+  const [multiChoiceAnswers, setMultiChoiceAnswers] = useState([]);
   // const [submitted, setSubmitted] = useState(false);
-  const [typeformWelcome, setTypefromWelcome] = useState([]);
+  // const [typeformWelcome, setTypefromWelcome] = useState([]);
   const [typeformQ1Props, setTypeformQ1Props] = useState([]);
   const [typeformAnswers, setTypeformAnswers] = useState([]);
   const [typeformQ1, setTypeformQ1] = useState([]);
@@ -128,20 +143,25 @@ function Refreshr(props) {
       headers: { Authorization: `Bearer ${process.env.REACT_APP_TYPEFORM}` }
     })
       .then(res => {
+        const answers = res.data.fields[1].properties.choices.map(
+          answer => answer.label
+        );
         console.log('FROM USE EFFECT', res);
-        setTypefromWelcome(res.data.welcome_screens[0]);
-        setTypeformQ1Props(res.data.fields[1].properties);
-        setTypeformAnswers(res.data.fields[1].properties.choices);
+        setRefreshrName(res.data.welcome_screens[0]);
+        setReviewText(res.data.fields[1].properties);
+        setA1Text(answers[0]);
+        setA2Text(answers[1]);
+        setA3Text(answers[2]);
+        setA4Text(answers[3]);
         setTypeformQ1(res.data.fields[1]);
         setTypeformQ2(res.data.fields[2]);
       })
       .catch(err => console.log(err));
   }, []);
 
-  const answers = typeformAnswers.map(answer => answer.label);
-
-  console.log('typeformText =>', typeformQ2);
-
+  const answers = multiChoiceAnswers;
+  console.log('Multi + => ', a1Text);
+  // console.log('multiChoiceAnswers => ', answers[0]);
   return (
     <Paper className={props.classes.container} elevation={24}>
       <Grid className={props.classes.wrapper}>
@@ -180,13 +200,17 @@ function Refreshr(props) {
           >
             <Input
               disableUnderline
-              onChange={e => addRefreshrName(e.target.value)}
+              onChange={e => setRefreshrName(e.target.value)}
               name="classnameInput"
               required
               type="text"
-              value={typeformWelcome.title}
+              value={refreshrName.title}
               className={props.classes.inputName}
             />
+            <FormGroup className={props.classes.edit}>
+              <i className="fas fa-pen" />
+              <h4 className={props.classes.editText}>Edit</h4>
+            </FormGroup>
           </FormGroup>
 
           <hr className={props.classes.hrStyle} />
@@ -204,7 +228,8 @@ function Refreshr(props) {
               required
               multiline
               rows="4"
-              value={typeformQ1Props.description}
+              value={reviewText}
+              // value={typeformQ1Props.description}
               className={props.classes.inputQuestion}
             />
           </FormGroup>
@@ -243,7 +268,7 @@ function Refreshr(props) {
                 onChange={e => setA1Text(e.target.value)}
                 name="classnameInput"
                 required
-                value={answers[0]}
+                value={a1Text}
                 className={props.classes.inputMultipleChoice}
               />
               <Input
@@ -251,7 +276,7 @@ function Refreshr(props) {
                 name="classnameInput"
                 onChange={e => setA2Text(e.target.value)}
                 required
-                value={answers[1]}
+                value={a2Text}
                 className={props.classes.inputMultipleChoice}
               />
               <Input
@@ -259,7 +284,7 @@ function Refreshr(props) {
                 onChange={e => setA3Text(e.target.value)}
                 name="classnameInput"
                 required
-                value={answers[2]}
+                value={a3Text}
                 className={props.classes.inputMultipleChoice}
               />
               <Input
@@ -267,7 +292,7 @@ function Refreshr(props) {
                 onChange={e => setA4Text(e.target.value)}
                 name="classnameInput"
                 required
-                value={answers[3]}
+                value={a4Text}
                 className={props.classes.inputMultipleChoice}
               />
             </form>
@@ -307,7 +332,7 @@ function Refreshr(props) {
               props.addQuestions(questionObject);
             }}
           >
-            Submit
+            Update
           </Button>
           {/* <StyleDisplay>View your Refreshr here: {url}</StyleDisplay> */}
         </FormGroup>
