@@ -8,7 +8,6 @@ import {
   Paper,
   Input
 } from '@material-ui/core';
-import styled from 'styled-components';
 
 const axios = require('axios');
 
@@ -92,7 +91,6 @@ const styles = theme => ({
 });
 
 function Refreshr(props) {
-  const { setUrl, url } = props;
   const [reviewText, setReviewText] = useState('');
   const [refreshrName, addRefreshrName] = useState('');
   const [questionTextOne, setQuestionTextOne] = useState('');
