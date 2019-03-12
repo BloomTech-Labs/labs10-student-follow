@@ -1,8 +1,31 @@
 # [Refreshr App Backend](https://refreshr.herokuapp.com) (Lambda School Labs 10)
 
-![Refreshr Logo](./client/logo.png "Refresh your mind")
+![Refreshr Logo](./client/src/logo.png "Refresh your mind")
 
-## Base URL: https://refreshr.herokuapp.com/
+- [App Client Home](https://refreshr-app.netlify.com)
+- [Backend Base URL](https://refreshr.herokuapp.com/)
+
+---
+
+## Additional Documentation
+
+- For more info about the app, please visit [Frontend Documentation](https://github.com/Lambda-School-Labs/labs10-student-follow/blob/master/client/README.md).
+
+---
+
+## Contributors
+
+- **Chaya Otikor** | [Github](https://github.com/cotikor)
+
+- **Justin Lowry** | [Github](https://github.com/dividedsky) | [LinkedIn](https://www.linkedin.com/in/justin-lowry-792960180/)
+
+- **Nick O'Ferrall** | [Github](https://github.com/nickoferrall) | [LinkedIn](https://www.linkedin.com/in/nickoferrall/)
+
+- **Sawyer Zincone** | [Github](https://github.com/szincone) | [LinkedIn](https://www.linkedin.com/in/szincone/)
+
+- **Timothy Hoang** | [Github](https://github.com/timh1203) | [LinkedIn](https://www.linkedin.com/in/timothyhoang/)
+
+---
 
 ## Endpoints
 ### Teachers
@@ -111,21 +134,3 @@
 * POST /billing/charge
   * Gives us your money.
 
----
-## Contributions/Issues/Bugs
-
-## Additional Documentation
-
-- For the frontend documentation, please visit [Frontend Documentation]().
-
-## Contributors
-
-- **Chaya Otikor** | [Github](https://github.com/cotikor)
-
-- **Justin Lowry** | [Github](https://github.com/dividedsky)
-
-- **Nick O'Ferrall** | [Github](https://github.com/nickoferrall) | [LinkedIn](https://www.linkedin.com/in/nickoferrall/)
-
-- **Sawyer Zincone** | [Github](https://github.com/szincone) | [LinkedIn](https://www.linkedin.com/in/szincone/)
-
-- **Timothy Hoang** | [Github](https://github.com/timh1203) | [LinkedIn](https://www.linkedin.com/in/timothyhoang/)
