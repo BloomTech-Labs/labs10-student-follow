@@ -274,6 +274,7 @@ function ListForm(props) {
     const filteredArr = props.recipientData.filter(
       r => r.email !== targetEmail
     );
+    handleStudentRemoveSnackBool();
     setRecipientData(filteredArr);
   };
 
@@ -308,6 +309,15 @@ function ListForm(props) {
       return;
     }
     setStudentSnackBool(!studentSnackBool);
+  };
+
+  const [studentRemoveSnackBool, setStudentRemoveSnackBool] = useState(false);
+  const handleStudentRemoveSnackBool = (event, reason) => {
+    if (reason === 'clickaway') {
+      // clickaway is if they fire the snackbar before it's gone
+      return;
+    }
+    setStudentRemoveSnackBool(!studentRemoveSnackBool);
   };
   // end snackbar
 
@@ -380,6 +390,30 @@ function ListForm(props) {
             aria-label="Close"
             color="inherit"
             onClick={handleStudentSnackBool}
+          >
+            <Close />
+          </IconButton>
+        ]}
+      />
+
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left'
+        }}
+        open={studentRemoveSnackBool}
+        autoHideDuration={4000}
+        onClose={handleStudentRemoveSnackBool}
+        ContentProps={{
+          'aria-describedby': 'message-id'
+        }}
+        message={<span id="message-id">Student Removed!</span>}
+        action={[
+          <IconButton
+            key="close"
+            aria-label="Close"
+            color="inherit"
+            onClick={handleStudentRemoveSnackBool}
           >
             <Close />
           </IconButton>
