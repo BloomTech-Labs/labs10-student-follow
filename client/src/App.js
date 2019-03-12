@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 import { Route, withRouter } from 'react-router-dom';
 
@@ -43,15 +43,20 @@ const styles = theme => ({
     }
   }
 });
+//Nick: 107121249233689789684
+//Justin: 111419810728121424056
+//Chaya:  117894219650456694049
+//Tim: 118406831139005715496
 
 const App = props => {
   const { classes } = props;
   const token = localStorage.getItem('accessToken');
   const user_id = localStorage.getItem('user_id');
+  //console.log(user_id)
 
   /* STATE */
-  const [message, setMessage] = useState('');
-  const [url, setUrl] = useState('');
+
+  const [message, setMessage] = useState('')
   const [userRefreshrs, setRefreshrs] = useState([]);
   const [questions, setQuestions] = useState([]);
   const [userClasses, setClasses] = useState([]);
@@ -88,25 +93,26 @@ const App = props => {
       headers: { Authorization: `Bearer ${token}` },
       data: refreshr
     })
+    .then(res => {
+    //console.log(res.data.newRefreshrID)
+      axios({
+      method: 'post',
+              //Development
+      url: `http://localhost:9000/teachers/${user_id}/refreshrs`,
+      //Production
+      //url: 'http://refreshr.herokuapp.com/questions'
+      headers: { Authorization: `Bearer ${token}` },
+      data: {refreshr_id: res.data.newRefreshrID}
+      })
       .then(res => {
-        console.log('Res from 116', res.data.newRefreshrID);
-        axios({
-          method: 'post',
-          //Development
-          url: `http://localhost:9000/teachers/${user_id}/refreshrs`,
-          //Production
-          // url: 'http://refreshr.herokuapp.com/questions',
-          headers: { Authorization: `Bearer ${token}` },
-          data: { refreshr_id: res.data.newRefreshrID }
-        }).then(res => {
-          console.log('Res from send ref', res);
-          setMessage(res.data.message);
-        });
+       // console.log(res.data.message)
+        setMessage(res.data.message)
       })
       .catch(err => {
         console.log(err);
       });
-  };
+  })
+};
 
   //add questions
   const addQuestions = question => {
@@ -140,11 +146,12 @@ const App = props => {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => {
-        console.log(res);
+        //console.log('CLASSES:', res);
         setClasses(res.data.classes);
       })
       .catch(err => console.log(err));
   };
+
 
   /* ROUTES */
   return (
@@ -168,6 +175,7 @@ const App = props => {
             path="/dashboard"
             render={props => (
               <Dashboard
+                token={token}
                 getClasses={getClasses}
                 userClasses={userClasses}
                 getRefreshrs={getRefreshrs}

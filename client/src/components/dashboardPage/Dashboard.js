@@ -1,300 +1,172 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import {
-  CardContent,
   Typography,
   Card,
-  Icon,
-  Button,
   Grid,
-  withStyles
+  withStyles,
+  Paper
 } from '@material-ui/core';
-import axios from 'axios';
+//import axios from 'axios';
 
 const styles = theme => ({
-  wrapper: {
-    display: 'flex',
-    flexFlow: 'column nowrap',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    marginTop: '60px'
+  container: {
+    [theme.breakpoints.up('md')]: {
+      width: '80vw',
+      display: 'flex',
+      flexFlow: 'row nowrap',
+      justifyContent: 'space-around'
+    }
   },
-  containers: {
+  sectionWrapper: {
+    border: `1px solid ${theme.palette.secondary.main}`,
     display: 'flex',
     flexFlow: 'column nowrap',
-    background: 'white',
-    justifyContent: 'space-around',
+    justifyContent: 'flex-start',
     alignItems: 'center',
-    width: '200px',
-    height: '100px',
-    margin: '0 5%',
-    border: '1px solid red'
+    paddingTop: theme.spacing.unit * 4,
+    paddingBottom: theme.spacing.unit * 8,
+    marginTop: theme.spacing.unit * 8,
+    marginBottom: theme.spacing.unit * 4,
+    color: theme.palette.primary.contrastText,
+    background: theme.palette.primary.dark,
+    [theme.breakpoints.only('sm')]: {
+      width: '60vw'
+    },
+    [theme.breakpoints.only('xs')]: {
+      width: '90vw'
+    },
+    [theme.breakpoints.up('md')]: {
+      marginLeft: '2.5%',
+      marginRight: '2.5%',
+      padding: '2.5%',
+      width: 500
+    }
   },
   classContainer: {
+    boxSizing: 'border-box',
     display: 'flex',
     flexFlow: 'row wrap',
     justifyContent: 'space-evenly',
-    ...theme.mixins.gutters(),
     alignItems: 'center',
-    paddingBottom: theme.spacing.unit * 2,
+    width: '100%',
+    padding: '1%',
     [theme.breakpoints.down('sm')]: {
-      flexDirection: 'column',
-      alignItems: 'center',
-      width: '18rem'
+      width: '90%',
+      padding: 5
     }
-  },
-  lists: {
-    fontSize: '1rem'
   },
   links: {
     color: 'inherit',
     textDecoration: 'none'
   },
-  classTitle: {
-    background: '#9D69A3',
-    color: '#FFFFFF',
-    paddingLeft: '10px'
-  },
-  refreshrTitle: {
-    background: '#488286',
-    color: '#FFFFFF',
-    paddingLeft: '10px'
-  },
   cardSectionLabels: {
-    // marginLeft: '2rem',
+
+    margin: 0,
+    padding: 0
+  },
+  cardTitle: {
+    color: theme.palette.secondary.contrastText,
+    textAlign: 'center',
+    fontSize: '1rem'
+  },
+  card: {
+    display: 'flex',
+    flexFlow: 'column nowrap',
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: '5% 0',
+    background: theme.palette.secondary.main,
+    width: 125,
+    height: 125,
+    color: theme.palette.secondary.contrastText,
     [theme.breakpoints.down('sm')]: {
-      margin: '0'
+      margin: '10% 0'
+    },
+    '&:hover': {
+      background: theme.palette.secondary.dark
     }
   },
-  classCard: {
-    display: 'flex',
-    flexDirection: 'column',
-    margin: '1rem',
-    background: 'white',
-    width: '200px'
-  },
-  refreshrNewCard: {
-    display: 'flex',
-    flexDirection: 'column',
-    margin: '1rem',
-    background: 'white',
-    width: '200px',
-    height: '130px'
-  },
-  buttonDiv: {
-    justifyContent: 'space-around'
-  },
-  classData: {
-    paddingLeft: '10px'
-  },
-  icon: {
-    fontSize: '70px',
-    margin: '2rem auto'
-  },
-  refreshrIcon: {
-    fontSize: '70px',
-    margin: '1rem auto'
-  },
-  hrStyle: {
-    margin: '1rem auto',
-    width: '80%'
-  }
 });
-
-const token = localStorage.getItem('accessToken');
-const teacherId = localStorage.getItem('user_id');
 
 const Dashboard = props => {
   // const name = localStorage.getItem('name'); // commented out until decide what to do w/ name
-  const [teacherRefreshrs, setTeacherRefreshrs] = useState([]);
+
+  const {
+    userClasses,
+    classes,
+    userRefreshrs,
+    getClasses,
+    getRefreshrs
+    // getStats,
+    // token
+  } = props;
 
   useEffect(() => {
-    // console.log(`Bearer ${token}`);
-    props.getClasses();
-    props.getRefreshrs();
-    console.log('Dashboard refreshr:', props.getRefreshrs());
-    getTeacherById();
+    getClasses();
+    getRefreshrs();
   }, []);
 
-  async function getTeacherById() {
-    // You can await here
-    try {
-      const response = await axios.get(
-        `http://localhost:9000/teachers/${teacherId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
-      );
-      // console.log('Response from teacher refreshrs ===', response);
-      setTeacherRefreshrs(response);
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  const { userClasses, classes, userRefreshrs } = props;
-  // console.log('Refreshr from Dash ===', userRefreshrs);
-  // console.log('teacher refreshr => ', teacherRefreshrs.data);
-  const testClasses = [
-    {
-      classname: 'FSW438',
-      numOfStudents: 84,
-      participationRate: 76,
-      refreshrsEmailed: 67,
-      class_id: 1
-    },
-    {
-      classname: 'Android 74',
-      numOfStudents: 84,
-      participationRate: 78,
-      refreshrsEmailed: 36,
-      class_id: 2
-    },
-    {
-      classname: 'Android 74',
-      numOfStudents: 84,
-      participationRate: 78,
-      refreshrsEmailed: 36,
-      class_id: 3
-    },
-    {
-      classname: 'Android 74',
-      numOfStudents: 84,
-      participationRate: 78,
-      refreshrsEmailed: 36,
-      class_id: 4
-    }
-  ];
   return (
-    <Grid className={classes.wrapper}>
-      {console.log('PROPS', userClasses, userRefreshrs)}
-      {console.log(
-        'userRefreshrs ==>',
-        userRefreshrs.map(data => data.typeform_url)
-      )}
-      <Typography
-        variant="h6"
-        color="secondary"
-        style={{ textAlign: 'center' }}
-      >
-        Dashboard
-      </Typography>
-
-      <Typography variant="h8" color="secondary" align={'center'}>
-        View the Classes and Refreshrs that you've created.
-      </Typography>
-
-      <hr className={props.classes.hrStyle} />
-
-      {/* cant figure out what to do w/ the username right now */}
-      {/* <Typography component="h2" color="secondary">
-        Welcome {name}, 
-      </Typography> */}
-      {/* end username */}
-      <Typography
-        component="h2"
-        color="secondary"
-        className={classes.cardSectionLabels}
-      >
-        Classes:
-      </Typography>
-
-      <Grid className={classes.classContainer}>
-        {testClasses.map(c => (
-          <Card key={c.class_id} className={classes.classCard}>
-            <Typography component="h4" className={classes.classTitle}>
-              {c.classname.length > 10
-                ? c.classname.substring(0, 10) + '...'
-                : c.classname}
-            </Typography>
-            <CardContent className={classes.classData}>
-              {/* Need analytics for these, stretch goals? */}
-
-              <Typography component="p" className={classes.lists}>
-                Students: {c.numOfStudents}
-              </Typography>
-              <Typography component="p" className={classes.lists}>
-                Participation: {c.participationRate}
-              </Typography>
-              <Typography component="p" className={classes.lists}>
-                Refreshrs Sent: {c.refreshrsEmailed}
-              </Typography>
-            </CardContent>
-            <Button color="primary" className={classes.lists}>
+    <div className={classes.container}>
+      <Paper className={classes.sectionWrapper} elevation={24} >
+        <Typography
+          variant="h6"
+          color="secondary"
+          className={classes.cardSectionLabels}
+        >
+          Current Classes
+        </Typography>
+        <Grid className={classes.classContainer}>
+          {userClasses.map(c => {
+            return (
+              //console.log(stats),
               <Link
-                to={`/classes/edit/${c.class_id}`}
-                className={classes.links}
+                key={c.class_id}
+                to={`classes/edit/${c.class_id}`}
+                style={{ textDecoration: 'none' }}
               >
-                Edit
+                <Card className={classes.card}>
+                  <Typography className={classes.cardTitle}>
+                    {c.classname}
+                  </Typography>
+                </Card>
               </Link>
-            </Button>
-          </Card>
-        ))}
-        <Card className={classes.classCard}>
-          <Typography component="h4" className={classes.classTitle}>
-            New Class
-          </Typography>
-          <Icon className={classes.icon} color="primary">
-            <Link to="/classes/create" className={classes.links}>
-              add_circle
-            </Link>
-          </Icon>
-        </Card>
-      </Grid>
-      <hr className={props.classes.hrStyle} />
-      <Typography
-        component="h2"
-        color="secondary"
-        className={classes.cardSectionLabels}
-      >
-        Refreshrs:
-      </Typography>
-      <Grid className={classes.classContainer}>
-        {console.log('USER REF *_*', userRefreshrs)}
-        {userRefreshrs.map(r => (
-          <Card className={classes.classCard}>
-            {/* {console.log('R ===', r)} */}
-            <a
-              target="_blank"
-              href={r.typeform_url}
-              rel="noopener noreferrer"
-              className={classes.links}
-            >
-              <Typography component="h4" className={classes.refreshrTitle}>
-                {/* {r.refreshrName.length > 10
-                  ? r.refreshrName.substring(0, 10) + '...'
-                  : r.refreshrName} */}
-              </Typography>
-              <CardContent className={classes.classData}>
-                <Typography component="p" className={classes.lists}>
-                  Classes Assigned: {r.classesAssigned}
-                </Typography>
-              </CardContent>
-            </a>
-            <Button color="primary" className={classes.lists}>
+
+            );
+          })}
+        </Grid>
+      </Paper>
+      <Paper className={classes.sectionWrapper} elevation={24}>
+        <Typography
+          variant="h6"
+          color="secondary"
+          className={classes.cardSectionLabels}
+        >
+          Current Refreshrs
+        </Typography>
+        <Grid className={classes.classContainer}>
+          {userRefreshrs.map(r => {
+            //console.log(r)
+            //let participationRate = 0
+            return (
               <Link
-                to={`/refreshrs/edit/${r.refreshr_id}`}
-                className={classes.links}
+                key={r.refreshr_id}
+                to={`refreshrs/edit/${r.refreshr_id}`}
+                style={{ textDecoration: 'none' }}
               >
-                Edit
+                <Card className={classes.card}>
+                  {/* {console.log('R ===', r)} */}
+                  <Typography className={classes.cardTitle}>
+                    {r.name}
+                  </Typography>
+                </Card>
               </Link>
-            </Button>
-          </Card>
-        ))}
-        <Card className={classes.refreshrNewCard}>
-          <Typography component="h4" className={classes.refreshrTitle}>
-            New Refreshr
-          </Typography>
-          <Icon className={classes.refreshrIcon} color="primary">
-            <Link to="/refreshrs/create" className={classes.links}>
-              add_circle
-            </Link>
-          </Icon>
-        </Card>
-      </Grid>
-    </Grid>
+            );
+          })}
+        </Grid>
+      </Paper>
+    </div>
   );
 };
 export default withRouter(withStyles(styles)(Dashboard));
