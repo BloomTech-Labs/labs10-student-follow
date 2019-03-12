@@ -207,6 +207,7 @@ function ListForm(props) {
         setRecipientData(results.data);
       }
     });
+    handleCsvSnackBool();
   };
 
   const [recipient, setRecipient] = useState({
@@ -246,7 +247,7 @@ function ListForm(props) {
       ...props.listData,
       ccBool: !props.listData.ccBool
     });
-    handleSnackbar();
+    handleCcSnackbar();
     if (!recipientData.some(r => r.email === teacherInfo.email)) {
       props.setRecipientData(recipientData.concat(teacherInfo));
     } else {
@@ -280,12 +281,22 @@ function ListForm(props) {
     props.listData.ccBool === true
       ? 'Email added to classroom list.'
       : 'Email removed from classroom list.';
-  const handleSnackbar = (event, reason) => {
+
+  const handleCcSnackbar = (event, reason) => {
     if (reason === 'clickaway') {
       // clickaway is if they fire the snackbar before it's gone
       return;
     }
     setCcSnackBool(!ccSnackBool);
+  };
+
+  const [csvSnackBool, setCsvSnackBool] = useState(false);
+  const handleCsvSnackBool = (event, reason) => {
+    if (reason === 'clickaway') {
+      // clickaway is if they fire the snackbar before it's gone
+      return;
+    }
+    setCsvSnackBool(!csvSnackBool);
   };
   // end snackbar
 
@@ -299,7 +310,7 @@ function ListForm(props) {
         }}
         open={ccSnackBool}
         autoHideDuration={4000}
-        onClose={handleSnackbar}
+        onClose={handleCcSnackbar}
         ContentProps={{
           'aria-describedby': 'message-id'
         }}
@@ -309,12 +320,37 @@ function ListForm(props) {
             key="close"
             aria-label="Close"
             color="inherit"
-            onClick={handleSnackbar}
+            onClick={handleCcSnackbar}
           >
             <Close />
           </IconButton>
         ]}
       />
+
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left'
+        }}
+        open={csvSnackBool}
+        autoHideDuration={4000}
+        onClose={handleCsvSnackBool}
+        ContentProps={{
+          'aria-describedby': 'message-id'
+        }}
+        message={<span id="message-id">CSV Uploaded!</span>}
+        action={[
+          <IconButton
+            key="close"
+            aria-label="Close"
+            color="inherit"
+            onClick={handleCsvSnackBool}
+          >
+            <Close />
+          </IconButton>
+        ]}
+      />
+      {/* end snackbars */}
       <Typography
         variant="h6"
         color="secondary"
