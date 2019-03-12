@@ -47,6 +47,7 @@ const styles = theme => ({
 //Justin: 111419810728121424056
 //Chaya:  117894219650456694049
 //Tim: 118406831139005715496
+//Sawyer: 117948376948362801545 
 
 const App = props => {
   const { classes } = props;
@@ -60,6 +61,7 @@ const App = props => {
   const [userRefreshrs, setRefreshrs] = useState([]);
   const [questions, setQuestions] = useState([]);
   const [userClasses, setClasses] = useState([]);
+  const [refreshrID, setRefreshrID] = useState('')
   // const [students, setStudents] = useState([]);
   // const [teachers, setTeachers] = useState([]);
 
@@ -93,6 +95,7 @@ const App = props => {
     })
     .then(res => {
     //console.log(res.data.newRefreshrID)
+      setRefreshrID(res.data.newRefreshrID)
       axios({
       method: 'post',
       //Development
@@ -125,9 +128,21 @@ const App = props => {
       data: question
     })
       .then(res => {
-        console.log(res);
+        axios({
+          method: 'post',
+          //Development
+          //url: `http://localhost:9000/teachers/${user_id}/refreshrs`,
+          //Production
+          url: `https://refreshr.herokuapp.com/refreshrs/${refreshrID}/questions`,
+          headers: { Authorization: `Bearer ${token}` },
+          data: {question_id: res.data.newQuestionID},
         //console.log('RES from add questions ===', res);
-        setQuestions([]);
+      })
+      .then(res => {
+        // console.log(res.data.message)
+        setQuestions([])
+        setMessage(res.data.message)
+       })
         //console.log(questions)
       })
       .catch(err => {
