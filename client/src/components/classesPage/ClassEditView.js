@@ -102,7 +102,7 @@ const styles = theme => ({
   inputs: {
     marginBottom: theme.spacing.unit,
     padding: '.75%',
-    paddingLeft: 70,
+    paddingLeft: '3%',
     background: theme.palette.secondary.main,
     color: theme.palette.primary.main,
     fontSize: '1em',
@@ -162,6 +162,8 @@ function ClassEditView(props) {
   const [activeRefreshr, setActiveRefreshr] = useState(null);
   const [isEditingClass, setIsEditingClass] = useState(false);
   const [isEditingStudents, setIsEditingStudents] = useState(false);
+  const [editingStudent, setEditingStudent] = useState(null);
+  const [activeStudent, setActiveStudent] = useState(null);
 
   // useEffect(() => {
   //   console.log('selectedStudents:', selectedStudents);
@@ -173,11 +175,11 @@ function ClassEditView(props) {
     fetchTeacherRefreshrs();
   }, []);
 
-  /*
   useEffect(() => {
     console.log('students:', students);
   }, [students]);
 
+  /*
   useEffect(() => {
     console.log('refreshrs:', refreshrs);
   }, [refreshrs]);
@@ -371,10 +373,6 @@ function ClassEditView(props) {
     email: ''
   });
 
-  useEffect(() => {
-    console.log('NEW STUDENT', newStudent);
-  }, [newStudent]);
-
   const handleChange = e => {
     setNewStudent({
       ...newStudent,
@@ -382,7 +380,61 @@ function ClassEditView(props) {
     });
   };
 
+  useEffect(() => {
+    console.log(activeStudent);
+  }, [activeStudent]);
+
+  const toggleEditStudent = student => {
+    // const [student] = students.filter(s => s.student_id === studentId);
+    // console.log(student);
+    // student.isEditing = !student.isEditing;
+    console.log(student);
+    console.log(student === activeStudent);
+    if (student === activeStudent) {
+      delete student.isActiveStudent;
+      setActiveStudent(null);
+    } else {
+      if (activeStudent) delete activeStudent.isActiveStudent;
+      student.isActiveStudent = true;
+      setActiveStudent(student);
+    }
+  };
+
+  function updateStudent(e, student) {
+    console.log(e.target.name);
+    setActiveStudent({
+      ...activeStudent,
+      isActiveStudent: true,
+      [e.target.name]: e.target.value
+    });
+    console.log(activeStudent);
+  }
+
+  async function submitUpdatedStudent(e) {
+    e.preventDefault();
+    delete activeStudent.isActiveStudent;
+
+    // update student in DB
+    const res = await ax.put(`/students/${activeStudent.student_id}`, {
+      first_name: activeStudent.first_name,
+      last_name: activeStudent.last_name,
+      email: activeStudent.email,
+      sg_recipient_id: activeStudent.student_id
+    });
+    console.log(res);
+
+    // remove student from students, add to active student
+    const updatedStudents = students.filter(
+      s => s.student_id !== activeStudent.student_id
+    );
+    setStudents([...updatedStudents, activeStudent]);
+    setActiveStudent(null);
+    console.log(activeStudent);
+    console.log(students);
+  }
+
   async function addStudent(e) {
+    e.stopPropagation();
     e.preventDefault();
     if (newStudent.first_name && newStudent.last_name && newStudent.email) {
       // add student to sendgrid recipients, get id back
@@ -496,6 +548,11 @@ function ClassEditView(props) {
         selectedStudents={selectedStudents}
         setSelectedStudents={setSelectedStudents}
         dropStudents={dropStudents}
+        toggleEditStudent={toggleEditStudent}
+        setActiveStudent={setActiveStudent}
+        activeStudent={activeStudent}
+        updateStudent={updateStudent}
+        submitUpdatedStudent={submitUpdatedStudent}
       />
 
       <hr className={classes.hrStyle} />

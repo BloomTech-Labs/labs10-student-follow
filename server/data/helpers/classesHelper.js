@@ -84,7 +84,9 @@ module.exports = {
         students: students.map(s => {
           return {
             student_id: s.student_id,
-            name: `${s.first_name} ${s.last_name}`,
+            first_name: s.first_name,
+            last_name: s.last_name,
+            // name: `${s.first_name} ${s.last_name}`,
             email: s.email
           };
         }),
