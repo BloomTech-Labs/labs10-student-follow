@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 
 import { Typography, Card, Grid, withStyles, Paper } from '@material-ui/core';
-//import axios from 'axios';
 
 const styles = theme => ({
   container: {
@@ -140,7 +139,6 @@ const Dashboard = props => {
           <Grid className={classes.classContainer}>
             {userClasses.map(c => {
               return (
-                //console.log(stats),
                 <Link
                   key={c.class_id}
                   to={`classes/edit/${c.class_id}`}
@@ -166,8 +164,6 @@ const Dashboard = props => {
           </Typography>
           <Grid className={classes.classContainer}>
             {userRefreshrs.map(r => {
-              //console.log(r)
-              //let participationRate = 0
               return (
                 <Link
                   key={r.refreshr_id}
