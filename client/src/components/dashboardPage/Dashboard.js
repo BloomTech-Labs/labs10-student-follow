@@ -124,7 +124,7 @@ const Dashboard = props => {
           Current Classes
         </Typography>
         <Grid className={classes.classContainer}>
-          {userClasses.map(c => {
+          {userClasses && userClasses.map(c => {
             return (
               //console.log(stats),
               <Link
@@ -151,7 +151,7 @@ const Dashboard = props => {
           Current Refreshrs
         </Typography>
         <Grid className={classes.classContainer}>
-          {userRefreshrs.map(r => {
+          {userRefreshrs && userRefreshrs.map(r => {
             //console.log(r)
             //let participationRate = 0
             return (
