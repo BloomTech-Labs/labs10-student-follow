@@ -1,69 +1,70 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import {
+  CardContent,
   Typography,
   Card,
+  Icon,
+  Button,
   Grid,
-  withStyles,
-  Paper
+  withStyles
 } from '@material-ui/core';
-//import axios from 'axios';
+import axios from 'axios';
 
 const styles = theme => ({
-  container: {
-    [theme.breakpoints.up('md')]: {
-      width: '80vw',
-      display: 'flex',
-      flexFlow: 'row nowrap',
-      justifyContent: 'space-around'
-    }
-  },
-  sectionWrapper: {
-    border: `1px solid ${theme.palette.secondary.main}`,
+  wrapper: {
     display: 'flex',
     flexFlow: 'column nowrap',
-    justifyContent: 'flex-start',
+    justifyContent: 'space-around',
     alignItems: 'center',
-    paddingTop: theme.spacing.unit * 4,
-    paddingBottom: theme.spacing.unit * 8,
-    marginTop: theme.spacing.unit * 8,
-    marginBottom: theme.spacing.unit * 4,
-    color: theme.palette.primary.contrastText,
-    background: theme.palette.primary.dark,
-    [theme.breakpoints.only('sm')]: {
-      width: '60vw'
-    },
-    [theme.breakpoints.only('xs')]: {
-      width: '90vw'
-    },
-    [theme.breakpoints.up('md')]: {
-      marginLeft: '2.5%',
-      marginRight: '2.5%',
-      padding: '2.5%',
-      width: 500
-    }
+    marginTop: '60px'
+  },
+  containers: {
+    display: 'flex',
+    flexFlow: 'column nowrap',
+    background: 'white',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    width: '200px',
+    height: '100px',
+    margin: '0 5%',
+    border: '1px solid red'
   },
   classContainer: {
-    boxSizing: 'border-box',
     display: 'flex',
     flexFlow: 'row wrap',
     justifyContent: 'space-evenly',
+    ...theme.mixins.gutters(),
     alignItems: 'center',
-    width: '100%',
-    padding: '1%',
+    paddingBottom: theme.spacing.unit * 2,
     [theme.breakpoints.down('sm')]: {
-      width: '90%',
-      padding: 5
+      flexDirection: 'column',
+      alignItems: 'center',
+      width: '18rem'
     }
+  },
+  lists: {
+    fontSize: '1rem'
   },
   links: {
     color: 'inherit',
     textDecoration: 'none'
   },
+  classTitle: {
+    background: '#9D69A3',
+    color: '#FFFFFF',
+    paddingLeft: '10px'
+  },
+  refreshrTitle: {
+    background: '#488286',
+    color: '#FFFFFF',
+    paddingLeft: '10px'
+  },
   cardSectionLabels: {
-
-    margin: 0,
-    padding: 0
+    // marginLeft: '2rem',
+    [theme.breakpoints.down('sm')]: {
+      margin: '0'
+    }
   },
   classCard: {
     display: 'flex',
@@ -74,23 +75,32 @@ const styles = theme => ({
     textDecoration: 'none',
     color: theme.palette.secondary.contrastText
   },
-  card: {
+  refreshrNewCard: {
     display: 'flex',
-    flexFlow: 'column nowrap',
-    justifyContent: 'center',
-    alignItems: 'center',
-    margin: '5% 0',
-    background: theme.palette.secondary.main,
-    width: 125,
-    height: 125,
-    color: theme.palette.secondary.contrastText,
-    [theme.breakpoints.down('sm')]: {
-      margin: '10% 0'
-    },
-    '&:hover': {
-      background: theme.palette.secondary.dark
-    }
+    flexDirection: 'column',
+    margin: '1rem',
+    background: 'white',
+    width: '200px',
+    height: '130px'
   },
+  buttonDiv: {
+    justifyContent: 'space-around'
+  },
+  classData: {
+    paddingLeft: '10px'
+  },
+  icon: {
+    fontSize: '70px',
+    margin: '2rem auto'
+  },
+  refreshrIcon: {
+    fontSize: '70px',
+    margin: '1rem auto'
+  },
+  hrStyle: {
+    margin: '1rem auto',
+    width: '80%'
+  }
 });
 
 const Dashboard = props => {

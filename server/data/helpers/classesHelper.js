@@ -13,7 +13,7 @@ module.exports = {
     const selectedClass = await db('classes')
       .where('sg_list_id', id)
       .first();
- 
+
     const teacher = await db('teachers')
       .select(
         'teachers.user_id as t_id',

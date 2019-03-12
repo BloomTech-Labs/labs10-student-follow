@@ -6,12 +6,9 @@ import {
   withStyles,
   Paper,
   Input,
-  Fab,
-  Snackbar,
-  IconButton,
-  Button
+  Fab
 } from '@material-ui/core';
-import { Send, Close } from '@material-ui/icons';
+import Send from '@material-ui/icons/Send';
 
 const axios = require('axios');
 
@@ -131,22 +128,11 @@ function Refreshr(props) {
     questionTextTwo,
     answers: { a1Text, a2Text, a3Text, a4Text }
   });
+  console.log('Props from ref', props);
 
   const headers = {
     Authorization: `Bearer ${process.env.REACT_APP_TYPEFORM}`
   };
-
-  // start snackbars
-  const [openBool, setOpenBool] = useState(false);
-  const handleSnackbar = (event, reason) => {
-    if (reason === 'clickaway') {
-      // clickaway is if they click the 'x' to close the pop-up
-      return;
-    }
-    setOpenBool(!openBool);
-  };
-  // end snackbar
-
   /* We should use this later on other pages
     that way we can give the user an indication that an action was successful
   */
@@ -227,36 +213,12 @@ function Refreshr(props) {
     } catch (error) {
       console.log(error);
     }
-    handleSnackbar();
     //setSubmitted(true);
   };
 
   return (
     <Paper className={classes.container} elevation={24}>
       <Grid className={classes.wrapper}>
-        <Snackbar
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'left'
-          }}
-          open={openBool}
-          autoHideDuration={4000}
-          onClose={handleSnackbar}
-          ContentProps={{
-            'aria-describedby': 'message-id'
-          }}
-          message={<span id="message-id">Refreshr Created!</span>}
-          action={[
-            <IconButton
-              key="close"
-              aria-label="Close"
-              color="inherit"
-              onClick={handleSnackbar}
-            >
-              <Close />
-            </IconButton>
-          ]}
-        />
         <FormGroup
           onChange={() =>
             setQuestionObject({

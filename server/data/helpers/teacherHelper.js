@@ -28,8 +28,7 @@ module.exports = {
         'tcr.refreshr_id'
       )
       .join('teachers', 'teachers.user_id', 'tcr.teacher_id')
-      .where('teachers.user_id', id)
-      .whereNull('tcr.sg_campaign_id')
+      .where('teachers.user_id', id);
 
     return Promise.all([teacher, classes, refreshrs]).then(response => {
       let [teacher, classes] = response;

@@ -33,8 +33,7 @@ const styles = theme => ({
     display: 'block',
     '&:hover': {
       textDecoration: 'none',
-      color: theme.palette.secondary.dark,
-      cursor: 'pointer'
+      color: theme.palette.secondary.dark
     }
   }
 });
