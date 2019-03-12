@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 import { Route, withRouter } from 'react-router-dom';
 
@@ -13,7 +13,7 @@ import {
   Navbar,
   Navcrumbs,
   RefreshrListView,
-  Dashboard
+  Dashboard,
   //ClassesPage,
   CampaignForm,
   ClassCreateView,
@@ -56,8 +56,6 @@ const App = props => {
 
   /* STATE */
   const [message, setMessage] = useState('');
-  const [url, setUrl] = useState('');
-  const [message, setMessage] = useState('')
   const [userRefreshrs, setRefreshrs] = useState([]);
   const [questions, setQuestions] = useState([]);
   const [userClasses, setClasses] = useState([]);
@@ -71,11 +69,7 @@ const App = props => {
   const getRefreshrs = () => {
     axios({
       method: 'get',
-      url: `http://localhost:9000/teachers/${user_id}/refreshrs`,
-      // url: `http://localhost:9000/refreshrs`,
-      //url: `http://localhost:9000/teachers/114/refreshrs`,
-
-      //url: `https://refreshr.herokuapp.com/teachers/${user_id}/refreshrs`,
+      url: `https://refreshr.herokuapp.com/teachers/${user_id}/refreshrs`,
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => {
@@ -88,23 +82,24 @@ const App = props => {
     axios({
       method: 'post',
       //Development
-      url: 'http://localhost:9000/refreshrs',
+      url: 'https://refreshr.herokuapp.com/refreshrs',
       //Production
       //url: 'http://refreshr.herokuapp.com/questions'
       headers: { Authorization: `Bearer ${token}` },
       data: refreshr
     })
-      .then(res => {
-        console.log('Res from 116', res.data.newRefreshrID);
-        axios({
-          method: 'post',
-          //Development
-          url: `http://localhost:9000/teachers/${user_id}/refreshrs`,
-          //Production
-          // url: 'http://refreshr.herokuapp.com/questions',
-          headers: { Authorization: `Bearer ${token}` },
-          data: { refreshr_id: res.data.newRefreshrID }
-        }).then(res => {
+    .then(res => {
+    //console.log(res.data.newRefreshrID)
+      axios({
+      method: 'post',
+              //Development
+      url: `https://refreshr.herokuapp.com/teachers/${user_id}/refreshrs`,
+      //Production
+      //url: 'http://refreshr.herokuapp.com/questions'
+      headers: { Authorization: `Bearer ${token}` },
+      data: {refreshr_id: res.data.newRefreshrID}
+      })
+     .then(res => {
           console.log('Res from send ref', res);
           setMessage(res.data.message);
         });
@@ -120,7 +115,7 @@ const App = props => {
     axios({
       method: 'post',
       //Development
-      url: 'http://localhost:9000/questions',
+      url: 'https://refreshr.herokuapp.com/questions',
       //Production
       //url: 'http://refreshr.herokuapp.com/questions'
       headers: { Authorization: `Bearer ${token}` },
@@ -141,8 +136,7 @@ const App = props => {
   const getClasses = () => {
     axios({
       method: 'get',
-      url: `http://localhost:9000/teachers/${user_id}/classes`,
-      //url: `https://refreshr.herokuapp.com/teachers/${user_id}/classes`,
+      url: `https://refreshr.herokuapp.com/teachers/${user_id}/classes`,
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => {

@@ -136,7 +136,7 @@ function ClassEditView(props) {
   const token = localStorage.getItem('accessToken');
   const userID = localStorage.getItem('user_id');
   const ax = axios.create({
-    baseURL: 'http://localhost:9000', // development
+    baseURL: 'https://refreshr.herokuapp.com', // development
     headers: {
       authorization: `Bearer ${token}`
     }

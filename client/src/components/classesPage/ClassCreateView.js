@@ -92,7 +92,7 @@ function ClassCreateView(props) {
 
   const ax = axios.create({
     // baseURL: 'https://refreshr.herokuapp.com' // production
-    baseURL: 'http://localhost:9000',
+    baseURL: 'https://refreshr.herokuapp.com',
     headers: {
       authorization: `Bearer ${token}` // development
     }

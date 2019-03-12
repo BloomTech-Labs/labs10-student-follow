@@ -182,18 +182,6 @@ const Dashboard = props => {
                   Classes Assigned: {r.classesAssigned}
                 </Typography>
               </CardContent>
-<<<<<<< HEAD
-=======
-            </a>
-            <Button color="primary" className={classes.lists}>
-              <Link
-                to={`/refreshrs/edit/${r.refreshr_id}`}
-                className={classes.links}
-              >
-                Edit
-              </Link>
-            </Button>
->>>>>>> 096783bb3894b78b6ce46a54adaf355bb2f2a336
           </Card>
           </Link>
         ))}
