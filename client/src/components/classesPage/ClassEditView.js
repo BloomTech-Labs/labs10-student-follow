@@ -136,11 +136,11 @@ function ClassEditView(props) {
   const token = localStorage.getItem('accessToken');
   const userID = localStorage.getItem('user_id');
   const ax = axios.create({
-    baseURL: 'http://localhost:9000', // development
+    //baseURL: 'http://localhost:9000', // development
     headers: {
       authorization: `Bearer ${token}`
-    }
-    // baseURL: 'https://refreshr.herokuapp.com' // production
+    },
+    baseURL: 'https://refreshr.herokuapp.com' // production
   });
   const [students, setStudents] = useState([]);
   const [selectedStudents, setSelectedStudents] = useState([]);

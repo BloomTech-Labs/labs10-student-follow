@@ -61,7 +61,7 @@ const TakeMoney = props => {
   const [open, setOpen] = useState(false);
 
   const onToken = async token => {
-    const url = 'http://localhost:9000/billing/charge';
+    const url = 'https://refreshr.herokuapp.com/billing/charge';
     try {
       await axios.post(url, {
         token: token,
