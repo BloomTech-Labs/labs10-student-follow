@@ -9,11 +9,11 @@ const options = {
   },
   auth: {
     //PRODUCTION
-    // audience: 'https://refreshr.herokuapp.com',
-    // redirectUrl: 'https://refreshr-app.netlify.com/dashboard',
+    audience: 'https://refreshr.herokuapp.com',
+    redirectUrl: 'https://refreshr-app.netlify.com/dashboard',
     //DEVELOPMENT
-    audience: 'http://localhost:9000',
-    redirectUrl: 'http://localhost:3000/dashboard',
+    // audience: 'http://localhost:9000',
+    // redirectUrl: 'http://localhost:3000/dashboard',
     redirect: true,
     usernameStyle: 'email',
     responseType: 'token id_token'
