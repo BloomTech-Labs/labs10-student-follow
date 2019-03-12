@@ -47,7 +47,7 @@ const styles = theme => ({
 //Justin: 111419810728121424056
 //Chaya:  117894219650456694049
 //Tim: 118406831139005715496
-//Sawyer: 117948376948362801545 
+//Sawyer: 117948376948362801545
 
 const App = props => {
   const { classes } = props;
@@ -57,11 +57,9 @@ const App = props => {
 
   /* STATE */
 
-  const [message, setMessage] = useState('')
   const [userRefreshrs, setRefreshrs] = useState([]);
-  const [questions, setQuestions] = useState([]);
   const [userClasses, setClasses] = useState([]);
-  const [refreshrID, setRefreshrID] = useState('')
+
   // const [students, setStudents] = useState([]);
   // const [teachers, setTeachers] = useState([]);
 
@@ -76,15 +74,28 @@ const App = props => {
 
       //url: `https://refreshr.herokuapp.com/teachers/${user_id}/refreshrs`,
       headers: { Authorization: `Bearer ${token}` }
-      })
+    })
       .then(res => {
         setRefreshrs(res.data.refreshrs);
       })
       .catch(err => console.log(err));
   };
 
-  const sendRefreshrToDB = refreshr => {
-    axios({
+  const sendRefreshrToDB = async (refreshr, questions) => {
+    console.log('Initial Question Obj', questions);
+    const questionArray = [
+      {
+        question: questions.questionTextOne,
+        answer_1: questions.answers.a1Text,
+        answer_2: questions.answers.a2Text,
+        answer_3: questions.answers.a3Text,
+        answer_4: questions.answers.a4Text
+      },
+      {
+        question: questions.questionTextTwo
+      }
+    ];
+   await axios({
       method: 'post',
       //Development
       url: 'http://localhost:9000/refreshrs',
@@ -93,61 +104,58 @@ const App = props => {
       headers: { Authorization: `Bearer ${token}` },
       data: refreshr
     })
-    .then(res => {
-    //console.log(res.data.newRefreshrID)
-      setRefreshrID(res.data.newRefreshrID)
+    .then((res) => {
+      localStorage.setItem('refreshrID', res.data.newRefreshrID)
       axios({
-      method: 'post',
-      //Development
-      url: `http://localhost:9000/teachers/${user_id}/refreshrs`,
-      //Production
-      //url: `https://refreshr.herokuapp.com/teachers/${user_id}/refreshrs`,
-      headers: { Authorization: `Bearer ${token}` },
-      data: {refreshr_id: res.data.newRefreshrID}
+        method: 'post',
+        //Development
+        url: `http://localhost:9000/teachers/${user_id}/refreshrs`,
+        //Production
+        //url: `https://refreshr.herokuapp.com/teachers/${user_id}/refreshrs`,
+        headers: { Authorization: `Bearer ${token}` },
+        data: { refreshr_id: res.data.newRefreshrID }
       })
-      .then(res => {
-       // console.log(res.data.message)
-        setMessage(res.data.message)
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  })
-};
-
-  //add questions
-  const addQuestions = question => {
-    //console.log('Question from addQuestions ===', question);
-    axios({
-      method: 'post',
-      //Development
-      url: 'http://localhost:9000/questions',
-      //Production
-      //url: 'https://refreshr.herokuapp.com/questions',
-      headers: { Authorization: `Bearer ${token}` },
-      data: question
+        .then(res => {
+          console.log('T_R ID', res.data.message);
+          //setMessage(res.data.message)
+        })
     })
-      .then(res => {
+    .catch(err => {
+      console.log(err);
+    }); 
+      
+    for (let i = 0; i < questionArray.length; i++) {
+      const refreshrID =localStorage.getItem('refreshrID')
         axios({
           method: 'post',
           //Development
-          url: `http://localhost:9000/refreshrs/${refreshrID}/questions`,
+          url: 'http://localhost:9000/questions',
           //Production
-          //url: `https://refreshr.herokuapp.com/refreshrs/${refreshrID}/questions`,
+          //url: 'https://refreshr.herokuapp.com/questions',
           headers: { Authorization: `Bearer ${token}` },
-          data: {question_id: res.data.newQuestionID},
-        //console.log('RES from add questions ===', res);
-      })
-      .then(res => {
-        // console.log(res.data.message)
-        setQuestions([])
-        setMessage(res.data.message)
-       })
-        //console.log(questions)
-      })
-      .catch(err => {
-        console.log(err);
-      });
+          data: questionArray[i]
+        })
+          .then(res => {
+            console.log('Q ID', res)
+            console.log('REF ID', refreshrID)
+            axios({
+              method: 'post',
+              //Development
+              url: `http://localhost:9000/refreshrs/${refreshrID}/questions`,
+              //Production
+              //url: `https://refreshr.herokuapp.com/refreshrs/${refreshrID}/questions`,
+              headers: { Authorization: `Bearer ${token}` },
+              data: { question_id: res.data.newQuestionID }
+              //console.log('RES from add questions ===', res);
+            })
+            .then(res => {
+              console.log('Q_R', res.data.results[0])
+            })
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      }
   };
 
   //all classes for user
@@ -164,7 +172,6 @@ const App = props => {
       })
       .catch(err => console.log(err));
   };
-
 
   /* ROUTES */
   return (
@@ -214,7 +221,6 @@ const App = props => {
                 userClasses={userClasses}
                 getRefreshrs={getRefreshrs}
                 userRefreshrs={userRefreshrs}
-                questions={questions}
               />
             )}
           />
@@ -233,12 +239,7 @@ const App = props => {
           <Route
             exact
             path="/refreshrs/create"
-            render={props => (
-              <Refreshr
-                addQuestions={addQuestions}
-                sendRefreshrToDB={sendRefreshrToDB}
-              />
-            )}
+            render={props => <Refreshr sendRefreshrToDB={sendRefreshrToDB} />}
           />
           <Route path="/campaign" render={props => <CampaignForm />} />{' '}
           {/* for testing */}
