@@ -137,11 +137,14 @@ function ClassEditView(props) {
   const token = localStorage.getItem('accessToken');
   const userID = localStorage.getItem('user_id');
   const ax = axios.create({
-    //baseURL: 'http://localhost:9000', // development
+    //DEVELOPMENT
+    baseURL: 'http://localhost:9000', 
+    //PRODUCTION
+    //baseURL: 'https://refreshr.herokuapp.com'
+
     headers: {
       authorization: `Bearer ${token}`
     },
-    baseURL: 'https://refreshr.herokuapp.com' // production
   });
   // sendgrix axios instance
   const sgAx = axios.create({

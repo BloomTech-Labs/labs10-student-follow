@@ -44,7 +44,11 @@ const styles = theme => ({
 });
 
 const ax = axios.create({
-  baseURL: 'https://refreshr.herokuapp.com'
+  // PRODUCTION
+  //baseURL: 'https://refreshr.herokuapp.com'
+  // DEVELOPMENT
+  baseURL: 'http://localhost:9000'
+
 });
 
 const RefreshrListView = props => {

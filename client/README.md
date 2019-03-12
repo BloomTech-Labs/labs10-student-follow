@@ -1,8 +1,9 @@
-# [Refreshr App](https://refreshr-app.netlify.com) (Lambda School Labs 10)
+# [Refreshr Ap Frontend](https://refreshr-app.netlify.com) (Lambda School Labs 10)
 
 ![Refreshr Logo](./src/logo.png "Refresh your mind")
 
-- [App Home](https://refreshr-app.netlify.com)
+- [App Client Home](https://refreshr-app.netlify.com)
+- [Backend Base URL](https://refreshr.herokuapp.com/)
 
 ---
 

@@ -139,8 +139,10 @@ function CampaignForm(props) {
   const token = localStorage.getItem('accessToken');
 
   const ax = axios.create({
-    baseURL: 'https://refreshr.herokuapp.com',
-   // baseURL: 'http://localhost:9000',
+    //PRODUCTION
+    //baseURL: 'https://refreshr.herokuapp.com',
+    //DEVELOPMENT
+    baseURL: 'http://localhost:9000',
     headers: {
       authorization: `Bearer ${token}`
     }
