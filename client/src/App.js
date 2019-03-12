@@ -57,7 +57,7 @@ const App = props => {
 
   /* STATE */
 
-  const [message, setMessage] = useState('')
+  const [message, setMessage] = useState('');
   const [userRefreshrs, setRefreshrs] = useState([]);
   const [questions, setQuestions] = useState([]);
   const [userClasses, setClasses] = useState([]);
@@ -97,23 +97,23 @@ const App = props => {
     //console.log(res.data.newRefreshrID)
       setRefreshrID(res.data.newRefreshrID)
       axios({
-      method: 'post',
-      //Development
-      //url: `http://localhost:9000/teachers/${user_id}/refreshrs`,
-      //Production
-      url: `https://refreshr.herokuapp.com/teachers/${user_id}/refreshrs`,
-      headers: { Authorization: `Bearer ${token}` },
-      data: {refreshr_id: res.data.newRefreshrID}
+        method: 'post',
+        //Development
+        //url: `http://localhost:9000/teachers/${user_id}/refreshrs`,
+        //Production
+        url: `https://refreshr.herokuapp.com/teachers/${user_id}/refreshrs`,
+        headers: { Authorization: `Bearer ${token}` },
+        data: { refreshr_id: res.data.newRefreshrID }
       })
-      .then(res => {
-       // console.log(res.data.message)
-        setMessage(res.data.message)
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  })
-};
+        .then(res => {
+          // console.log(res.data.message)
+          setMessage(res.data.message);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    });
+  };
 
   //add questions
   const addQuestions = question => {
@@ -164,7 +164,6 @@ const App = props => {
       })
       .catch(err => console.log(err));
   };
-
 
   /* ROUTES */
   return (
