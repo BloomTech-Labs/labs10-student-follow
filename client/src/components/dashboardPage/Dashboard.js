@@ -1,6 +1,13 @@
 import React, { useEffect } from 'react';
 import { withRouter, Link } from 'react-router-dom';
-import { Typography, Card, Grid, withStyles, Paper } from '@material-ui/core';
+
+import {
+  Typography,
+  Card,
+  Grid,
+  withStyles,
+  Paper
+} from '@material-ui/core';
 //import axios from 'axios';
 
 const styles = theme => ({
@@ -88,7 +95,7 @@ const styles = theme => ({
     '&:hover': {
       background: theme.palette.secondary.dark
     }
-  }
+  },
 });
 
 const Dashboard = props => {
@@ -108,7 +115,7 @@ const Dashboard = props => {
 
   return (
     <div className={classes.container}>
-      <Paper className={classes.sectionWrapper} elevation={24}>
+      <Paper className={classes.sectionWrapper} elevation={24} >
         <Typography
           variant="h6"
           color="secondary"
