@@ -1,23 +1,25 @@
 import React, { useState } from 'react';
-import { withStyles } from '@material-ui/core/styles';
 import {
   Paper,
   FormGroup,
   Fab,
+  Checkbox,
   Input,
+  FormControlLabel,
   Button,
   IconButton,
-  Snackbar
+  Snackbar,
+  withStyles,
+  Typography
 } from '@material-ui/core';
-import Checkbox from '@material-ui/core/Checkbox';
-import CloudUpload from '@material-ui/icons/CloudUpload';
-import GroupAdd from '@material-ui/icons/GroupAdd';
-import ArrowForward from '@material-ui/icons/ArrowForward';
-import RemoveCircleOutline from '@material-ui/icons/RemoveCircleOutline';
-import Attachment from '@material-ui/icons/Attachment';
-import { Close } from '@material-ui/icons';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Typography from '@material-ui/core/Typography';
+import {
+  Attachment,
+  Close,
+  CloudUpload,
+  GroupAdd,
+  ArrowForward,
+  RemoveCircleOutline
+} from '@material-ui/icons';
 import BigPapa from 'papaparse';
 
 const styles = theme => ({
