@@ -76,7 +76,7 @@ const App = props => {
 
       //url: `https://refreshr.herokuapp.com/teachers/${user_id}/refreshrs`,
       headers: { Authorization: `Bearer ${token}` }
-    })
+      })
       .then(res => {
         setRefreshrs(res.data.refreshrs);
       })
