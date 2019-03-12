@@ -95,7 +95,17 @@ router.get('/:id/classes', jwtCheck, async (req, res, next) => {
   const { id } = req.params;
   try {
     const results = await db.getTeacherDetails(id);
-    res.status(responseStatus.success).json({ classes: results.classes });
+    const classes = results.classes;
+    const uniqueClasses = [];
+    const uniqueIds = [];
+    // filter out unique classes, otherwise we'll get three of each
+    for (let c of classes) {
+      if (!uniqueIds.includes(c.class_id)) {
+        uniqueIds.push(c.class_id);
+        uniqueClasses.push(c);
+      }
+    }
+    res.status(responseStatus.success).json({ classes: uniqueClasses });
   } catch (err) {
     if (TypeError) {
       console.log(err);
