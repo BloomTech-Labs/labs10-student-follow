@@ -107,7 +107,8 @@ const App = props => {
       .catch(err => {
         console.log(err);
       });
-  };
+  })
+};
 
   //add questions
   const addQuestions = question => {
@@ -146,6 +147,7 @@ const App = props => {
       .catch(err => console.log(err));
   };
 
+
   /* ROUTES */
   return (
     //console.log('APP:', props.theme),
@@ -168,6 +170,7 @@ const App = props => {
             path="/dashboard"
             render={props => (
               <Dashboard
+                token={token}
                 getClasses={getClasses}
                 userClasses={userClasses}
                 getRefreshrs={getRefreshrs}

@@ -13,6 +13,7 @@ import { Link as RouterLink, withRouter } from 'react-router-dom';
 import { breadcrumbNameMap } from '../navigation/Navcrumbs';
 import Logo from '../../logo.png';
 import Button from '@material-ui/core/Button';
+import { Typography } from '@material-ui/core';
 
 /*-------- STYLES --------*/
 const styles = theme => ({
@@ -51,6 +52,14 @@ const styles = theme => ({
       borderColor: theme.palette.primary.main
     }
   },
+  pricingLink: {
+    color: theme.palette.secondary.contrastText,
+    fontSize: '1rem',
+    fontWeight: 'bold',
+    '&:hover': {
+      cursor: 'pointer'
+    }
+  },
 
   drawerPaper: {
     width: 200
@@ -77,11 +86,22 @@ const styles = theme => ({
     color: theme.palette.primary.contrastText
   },
   logo: {
-    width: '64px',
-    height: '64px',
+    width: '50px',
+    height: '50px',
     '&:hover': {
       cursor: 'pointer'
     }
+  },
+  homeLink: {
+    display: 'flex',
+    flexFlow: ' column nowrap',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  dashboardFont: {
+    fontSize: '.5rem',
+    fontWeight: 'bold',
+    color: theme.palette.primary.dark
   }
 });
 
@@ -108,8 +128,9 @@ const Navbar = props => {
     const { to, open, ...other } = props;
     const primary = breadcrumbNameMap[to];
     return (
-      <RouterLink to={to}>
+      <RouterLink to={to} className={classes.homeLink} style={{textDecoration: 'none'}}>
         <img src={Logo} alt="refreshr logo" {...other} primary={primary} />
+        <Typography variant='caption' className={classes.dashboardFont}>Home</Typography>
       </RouterLink>
     );
   };
@@ -162,6 +183,7 @@ const Navbar = props => {
               {location.pathname !== '/' ? 'Logout' : 'Login'}
             </Button>
             <HomeLink className={classes.logo} to="/dashboard" />
+            
             <IconButton
               color="inherit"
               aria-label="Open Nav"
@@ -216,6 +238,9 @@ const Navbar = props => {
             >
               {location.pathname !== '/' ? 'Logout' : 'Login/Signup'}
             </Button>
+            <Typography  onClick={e => { e.preventDefault(); props.history.push("/pricing")}} className={classes.pricingLink}>
+            Pricing
+            </Typography>
           </Toolbar>
         </AppBar>
       </div>
