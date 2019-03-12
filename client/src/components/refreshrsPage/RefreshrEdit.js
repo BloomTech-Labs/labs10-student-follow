@@ -111,7 +111,6 @@ function Refreshr(props) {
   const [refreshrName, setRefreshrName] = useState('');
   const [questionTextOne, setQuestionTextOne] = useState('');
   const [questionTextTwo, setQuestionTextTwo] = useState('');
-  const [multiChoiceAnswers, setMultiChoiceAnswers] = useState([]);
   // const [submitted, setSubmitted] = useState(false);
   // const [typeformWelcome, setTypefromWelcome] = useState([]);
   const [typeformQ1Props, setTypeformQ1Props] = useState([]);
@@ -159,9 +158,7 @@ function Refreshr(props) {
       .catch(err => console.log(err));
   }, []);
 
-  const answers = multiChoiceAnswers;
   console.log('Multi + => ', a1Text);
-  // console.log('multiChoiceAnswers => ', answers[0]);
   return (
     <Paper className={props.classes.container} elevation={24}>
       <Grid className={props.classes.wrapper}>
@@ -228,7 +225,7 @@ function Refreshr(props) {
               required
               multiline
               rows="4"
-              value={reviewText}
+              value={reviewText.description}
               // value={typeformQ1Props.description}
               className={props.classes.inputQuestion}
             />
