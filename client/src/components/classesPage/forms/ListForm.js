@@ -192,6 +192,8 @@ function ListForm(props) {
 
     props.setRecipientData(recipientData.concat(new_recipient));
 
+    handleStudentSnackBool();
+
     setRecipient({
       email: '',
       first_name: '',
@@ -298,6 +300,15 @@ function ListForm(props) {
     }
     setCsvSnackBool(!csvSnackBool);
   };
+
+  const [studentSnackBool, setStudentSnackBool] = useState(false);
+  const handleStudentSnackBool = (event, reason) => {
+    if (reason === 'clickaway') {
+      // clickaway is if they fire the snackbar before it's gone
+      return;
+    }
+    setStudentSnackBool(!studentSnackBool);
+  };
   // end snackbar
 
   return (
@@ -350,6 +361,31 @@ function ListForm(props) {
           </IconButton>
         ]}
       />
+
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left'
+        }}
+        open={studentSnackBool}
+        autoHideDuration={4000}
+        onClose={handleStudentSnackBool}
+        ContentProps={{
+          'aria-describedby': 'message-id'
+        }}
+        message={<span id="message-id">Student Added!</span>}
+        action={[
+          <IconButton
+            key="close"
+            aria-label="Close"
+            color="inherit"
+            onClick={handleStudentSnackBool}
+          >
+            <Close />
+          </IconButton>
+        ]}
+      />
+
       {/* end snackbars */}
       <Typography
         variant="h6"
