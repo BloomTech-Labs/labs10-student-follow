@@ -7,9 +7,12 @@ import {
   Checkbox,
   Button,
   FormGroup,
-  Fab
+  Fab,
+  ExpansionPanel,
+  ExpansionPanelSummary,
+  TextField
 } from '@material-ui/core';
-import { GroupAdd } from '@material-ui/icons';
+import { GroupAdd, ExpandMore, Create } from '@material-ui/icons';
 
 const styles = theme => ({
   studentList: {
@@ -47,12 +50,23 @@ const styles = theme => ({
     background: theme.palette.secondary.main,
     width: 40,
     height: 40
+  },
+  hiddenButton: {
+    display: 'none'
+  },
+  expansionPanel: {
+    marginTop: theme.spacing.unit * 3,
+    borderRadius: '5px',
+    border: `1px solid ${theme.palette.secondary.main}`
+  },
+  editName: {
+    display: 'flex',
+    flexDirection: 'column'
   }
 });
 
 function students(props) {
   const { classes } = props;
-  const [addedStudents, setAddedStudents] = useState([]);
 
   function selectStudent(e) {
     const studentId = e.target.value;
@@ -65,53 +79,95 @@ function students(props) {
     props.setSelectedStudents(updatedStudents);
   }
 
+  function editStudent(id) {
+    console.log(id);
+    const [student] = props.students.filter(s => s.student_id === id);
+    student.isEditing = true;
+    console.log(student);
+  }
+  // <Checkbox
+  //   color="secondary"
+  //   value={`${s.student_id}`}
+  //   checked={props.selectedStudents.includes(s.student_id)}
+  //   onClick={e => selectStudent(e)}
+  // />
+
+  function handleChange(e, student) {
+    console.log(e.target.value);
+    console.log(student);
+    console.log(e.target.name);
+    student[e.target.name] = e.target.value;
+  }
+
   return (
     <>
       <Typography variant="h6" className={classes.title} gutterBottom>
         Current Students
       </Typography>
       <Card className={classes.studentList}>
-        {props.students.map((s, i) => (
-          <Grid key={i}>
-            <span>{`${s.name}`}</span>
-            <Checkbox
-              color="secondary"
-              value={`${s.student_id}`}
-              checked={props.selectedStudents.includes(s.student_id)}
-              onClick={e => selectStudent(e)}
-            />
-          </Grid>
-        ))}
-        {addedStudents.map((s, i) => (
-          <Grid key={i}>
-            <span style={{ fontWeight: 'bold' }}>{`${s.first_name} ${
-              s.last_name
-            }`}</span>
-            <Checkbox
-              color="primary"
-              value={`${s.student_id}`}
-              checked={props.selectedStudents.includes(s.student_id)}
-              onClick={e => selectStudent(e)}
-            />
+        {props.students.map(s => (
+          <Grid key={s.student_id}>
+            <span>{`${s.first_name} ${s.last_name} `}</span>
+            <Create onClick={e => props.toggleEditStudent(s)} />
+            {s.isActiveStudent && (
+              <form
+                className={classes.editName}
+                onSubmit={e => props.submitUpdatedStudent(e)}
+              >
+                {props.makeInput(
+                  'email',
+                  'Email',
+                  props.activeStudent.email,
+                  e => {
+                    props.updateStudent(e, s);
+                  }
+                )}
+                {props.makeInput(
+                  'first_name',
+                  'First Name',
+                  props.activeStudent.first_name,
+                  e => {
+                    props.updateStudent(e, s);
+                  }
+                )}
+                {props.makeInput(
+                  'last_name',
+                  'Last Name',
+                  props.activeStudent.last_name,
+                  e => {
+                    props.updateStudent(e, s);
+                  }
+                )}
+                <button className={classes.hiddenButton} />
+              </form>
+            )}
           </Grid>
         ))}
       </Card>
-      <FormGroup className={classes.settingsBox}>
-        <Typography variant="body1" gutterBottom>
-          Add a Student
-        </Typography>
-        {props.makeInput('email', 'Email')}
-        {props.makeInput('first_name', 'First Name')}
-        {props.makeInput('last_name', 'Last Name')}
-        <Fab
-          elevation={20}
-          aria-label="Add"
-          className={classes.btn}
-          onClick={e => props.addStudent(e)}
+      <ExpansionPanel className={classes.expansionPanel}>
+        <ExpansionPanelSummary expandIcon={<ExpandMore />}>
+          <Typography variant="body1" gutterBottom>
+            Add a Student
+          </Typography>
+        </ExpansionPanelSummary>
+        <form
+          className={classes.settingsBox}
+          onSubmit={e => props.addStudent(e)}
         >
-          <GroupAdd />
-        </Fab>
-      </FormGroup>
+          {props.makeInput('email', 'Email', undefined, undefined, 'email')}
+          {props.makeInput('first_name', 'First Name')}
+          {props.makeInput('last_name', 'Last Name')}
+          <Fab
+            elevation={20}
+            aria-label="Add"
+            className={classes.btn}
+            onClick={e => props.addStudent(e)}
+          >
+            <button type="submit" className={classes.hiddenButton} />
+            <GroupAdd />
+          </Fab>
+        </form>
+      </ExpansionPanel>
       <Grid className={classes.buttonBox}>
         {props.selectedStudents.length ? (
           <Button variant="outlined" onClick={props.dropStudents}>

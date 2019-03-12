@@ -226,23 +226,21 @@ sg_campaign_id
 router.post('/:id/campaigns', jwtCheck, async (req, res, next) => {
   const { id } = req.params;
   const { body } = req;
-  db.cleanUpCampaigns(body.teacher_id, body.refreshr_id).then(deletedCount => {
-  db.addCampaign(id, body)
-   .then(results => {
-    res.status(responseStatus.postCreated).json({
-      message: `Campaign with id ${
-        body.sg_campaign_id
-      } added to class with id ${id} `,
-      results,
-      deletedCount
+  db.cleanUpCampaigns(body.teacher_id, body.refreshr_id)
+    .then(deletedCount => {
+      db.addCampaign(id, body).then(results => {
+        res.status(responseStatus.postCreated).json({
+          message: `Campaign with id ${
+            body.sg_campaign_id
+          } added to class with id ${id} `,
+          results,
+          deletedCount
+        });
+      });
+    })
+    .catch(err => {
+      next(err);
     });
-   })
-  }).catch(err => {
-    next(err)
-  })
-   
-   
- 
 });
 
 //Removes a campaign from a class

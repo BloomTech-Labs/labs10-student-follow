@@ -37,7 +37,7 @@ const styles = theme => ({
       width: '90vw'
     },
     width: 600
-  },  
+  },
   cardList: {
     display: 'flex',
     justifyContent: 'center'
@@ -150,10 +150,6 @@ function CampaignForm(props) {
   it in the parent component and then pass down props to the children components */
   const getRefreshrs = async () => {
     try {
-      /* this should fetch the class's refreshrs from /teachers/${userID}/refeshrs,
-        but the endpoint is not live yet so I'm using this for testing */
-      // const res = await axios.get('https://refreshr.herokuapp.com/refreshrs');
-      // setRefreshrs(res.data[0]);
       const uid = localStorage.getItem('user_id');
       const res = await ax.get(
         // `/teachers/275/refreshrs`
@@ -221,7 +217,7 @@ function CampaignForm(props) {
 
   const alterTime = e => {
     e.preventDefault();
-    setActiveRefreshr({ ...activeRefreshr, date: e.target.value });
+    const date = e.target.value;
 
     const schedule0 = moment(`${e.target.value}T00:00:00`).format(
       'ddd, MMMM Do, YYYY ha'
@@ -251,8 +247,8 @@ function CampaignForm(props) {
       { send_at: twoWeeksUnix },
       { send_at: twoMonthsUnix }
     ];
-    setActiveRefreshr({...activeRefreshr, timeTriData})
-
+    setActiveRefreshr({ ...activeRefreshr, timeTriData, date });
+    console.log(activeRefreshr);
 
     setSchedule({
       ...schedule,

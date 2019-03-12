@@ -4,8 +4,12 @@ module.exports = {
   /* CALLS TO CLASSES DB */
   getAll: async () => {
     const allClasses = await db('classes')
-    .select('classes.name', 'classes.sg_list_id', 'tcr.sg_campaign_id')
-    .join('teachers_classes_refreshrs as tcr', 'classes.sg_list_id', "tcr.class_id" )
+      .select('classes.name', 'classes.sg_list_id', 'tcr.sg_campaign_id')
+      .join(
+        'teachers_classes_refreshrs as tcr',
+        'classes.sg_list_id',
+        'tcr.class_id'
+      );
     return allClasses;
   },
 
@@ -39,7 +43,13 @@ module.exports = {
       .where('classes.sg_list_id', id);
 
     const refreshrs = await db('refreshrs')
-      .select('refreshrs.name as r_name', 'refreshrs.typeform_id', 'refreshrs.typeform_url')
+      .select(
+        'refreshrs.name as r_name',
+        'refreshrs.typeform_id',
+        'refreshrs.typeform_url',
+        'tcr.sg_campaign_id',
+        'tcr.date'
+      )
       .join(
         'teachers_classes_refreshrs as tcr',
         'refreshrs.typeform_id',
@@ -49,47 +59,55 @@ module.exports = {
       .where('classes.sg_list_id', id);
 
     const campaigns = await db('teachers_classes_refreshrs as tcr')
-    .select('tcr.sg_campaign_id', 'tcr.date')
-    .join('classes', 'tcr.class_id', 'classes.sg_list_id')
-    .where('classes.sg_list_id', id)
+      .select('tcr.sg_campaign_id', 'tcr.date')
+      .join('classes', 'tcr.class_id', 'classes.sg_list_id')
+      .where('classes.sg_list_id', id);
 
-    return Promise.all([selectedClass, teacher, students, refreshrs, campaigns]).then(
-      response => {
-        let [selectedClass, teacher, students, refreshrs, campaigns] = response;
-        let result = {
-          sg_list_id: selectedClass.sg_list_id,
-          name: selectedClass.name,
-          teachers: teacher.map(t => {
-            return {
-              teacher_id: t.t_id,
-              name: `${t.t_first} ${t.t_last}`,
-              email: t.t_email
-            };
-          }),
-          students: students.map(s => {
-            return {
-              student_id: s.student_id,
-              name: `${s.first_name} ${s.last_name}`,
-              email: s.email
-            };
-          }),
-          refreshrs: refreshrs.map(r => {
-            return {
-              refreshr_id: r.typeform_id,
-              name: r.r_name,
-              typeform_url: r.typeform_url,
-            };
-          }),
-          campaigns: campaigns.map(c => {
-            return {
-              campaign_id: c.sg_campaign_id,
-              created_date: c.date
-            }
-          })
-        };
-        return result;
-      }
-    );
+    return Promise.all([
+      selectedClass,
+      teacher,
+      students,
+      refreshrs,
+      campaigns
+    ]).then(response => {
+      let [selectedClass, teacher, students, refreshrs, campaigns] = response;
+      let result = {
+        sg_list_id: selectedClass.sg_list_id,
+        name: selectedClass.name,
+        teachers: teacher.map(t => {
+          return {
+            teacher_id: t.t_id,
+            name: `${t.t_first} ${t.t_last}`,
+            email: t.t_email
+          };
+        }),
+        students: students.map(s => {
+          return {
+            student_id: s.student_id,
+            first_name: s.first_name,
+            last_name: s.last_name,
+            // name: `${s.first_name} ${s.last_name}`,
+            email: s.email
+          };
+        }),
+        refreshrs: refreshrs.map(r => {
+          return {
+            refreshr_id: r.typeform_id,
+            name: r.r_name,
+            typeform_url: r.typeform_url,
+            sg_campaign_id: r.sg_campaign_id,
+            date: r.date
+          };
+        }),
+        campaigns: campaigns.map(c => {
+          return {
+            campaign_id: c.sg_campaign_id,
+            created_date: c.date
+          };
+        })
+      };
+      return result;
+    });
   },
 
   addClass: async classInfo => {
@@ -117,8 +135,8 @@ module.exports = {
 
   addStudent: async (class_id, student_id) => {
     const result = await db('students_classes')
-    .returning(['class_id', 'student_id'])
-    .insert({ class_id, student_id })
+      .returning(['class_id', 'student_id'])
+      .insert({ class_id, student_id });
     return result;
   },
 
@@ -140,11 +158,11 @@ module.exports = {
       });
     return result;
   },
- 
+
   removeRefreshr: (class_id, refreshr_id) => {
     return db('teachers_classes_refreshrs')
-    .where({class_id, refreshr_id})
-    .delete()
+      .where({ class_id, refreshr_id })
+      .delete();
   },
 
   //CAMPAIGNS
@@ -158,19 +176,16 @@ module.exports = {
     return result;
   },
 
-  cleanUpCampaigns: async(teacher_id, refreshr_id) => {
+  cleanUpCampaigns: async (teacher_id, refreshr_id) => {
     const result = await db('teachers_classes_refreshrs')
-    .where({teacher_id, refreshr_id})
-    .whereNull("sg_campaign_id")
-    .delete()
-
+      .where({ teacher_id, refreshr_id })
+      .whereNull('sg_campaign_id')
+      .delete();
   },
-
 
   removeCampaign: (class_id, sg_campaign_id) => {
     return db('teachers_classes_refreshrs')
-    .where({class_id, sg_campaign_id})
-    .delete()
-  },
-
+      .where({ class_id, sg_campaign_id })
+      .delete();
+  }
 };
