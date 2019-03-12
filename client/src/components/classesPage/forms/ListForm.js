@@ -296,7 +296,6 @@ function ListForm(props) {
   const [csvSnackBool, setCsvSnackBool] = useState(false);
   const handleCsvSnackBool = (event, reason) => {
     if (reason === 'clickaway') {
-      // clickaway is if they fire the snackbar before it's gone
       return;
     }
     setCsvSnackBool(!csvSnackBool);
@@ -305,7 +304,6 @@ function ListForm(props) {
   const [studentSnackBool, setStudentSnackBool] = useState(false);
   const handleStudentSnackBool = (event, reason) => {
     if (reason === 'clickaway') {
-      // clickaway is if they fire the snackbar before it's gone
       return;
     }
     setStudentSnackBool(!studentSnackBool);
@@ -314,7 +312,6 @@ function ListForm(props) {
   const [studentRemoveSnackBool, setStudentRemoveSnackBool] = useState(false);
   const handleStudentRemoveSnackBool = (event, reason) => {
     if (reason === 'clickaway') {
-      // clickaway is if they fire the snackbar before it's gone
       return;
     }
     setStudentRemoveSnackBool(!studentRemoveSnackBool);
@@ -419,8 +416,8 @@ function ListForm(props) {
           </IconButton>
         ]}
       />
-
       {/* end snackbars */}
+
       <Typography
         variant="h6"
         color="secondary"
