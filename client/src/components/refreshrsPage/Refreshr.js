@@ -124,6 +124,9 @@ function Refreshr(props) {
   const [a2Text, setA2Text] = useState('');
   const [a3Text, setA3Text] = useState('');
   const [a4Text, setA4Text] = useState('');
+  const [mcQuestion, setMcQuestion] = useState([])
+  const [saQuestion, setSaQuestion] = useState([])
+
   const [questionObject, setQuestionObject] = useState({
     reviewText,
     refreshrName,
@@ -258,15 +261,25 @@ function Refreshr(props) {
           ]}
         />
         <FormGroup
-          onChange={() =>
+          onChange={() => {
             setQuestionObject({
               reviewText,
               refreshrName,
               questionTextOne,
               questionTextTwo,
               answers: { a1Text, a2Text, a3Text, a4Text }
+            });
+            setMcQuestion({
+              question: questionTextOne,
+              answer_1: a1Text,
+              answer_2: a2Text,
+              answer_3: a3Text,
+              answer_4: a4Text
+            });
+            setSaQuestion({
+              question: questionTextTwo
             })
-          }
+          }}
         >
           <Typography variant="h6" color="secondary" align={'center'}>
             Add Refreshr
@@ -411,7 +424,8 @@ function Refreshr(props) {
             >
               <Send
                 onClick={e => {
-                  addQuestions(questionObject);
+                  addQuestions(mcQuestion);
+                  addQuestions(saQuestion)
                   createForm(e);
                 }}
               />
