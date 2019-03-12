@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import moment from 'moment';
 import {
   Grid,
   Checkbox,
@@ -101,7 +102,7 @@ const styles = theme => ({
   inputs: {
     marginBottom: theme.spacing.unit,
     padding: '.75%',
-    paddingLeft: 70,
+    paddingLeft: '3%',
     background: theme.palette.secondary.main,
     color: theme.palette.primary.main,
     fontSize: '1em',
@@ -136,27 +137,12 @@ function ClassEditView(props) {
   const token = localStorage.getItem('accessToken');
   const userID = localStorage.getItem('user_id');
   const ax = axios.create({
-    baseURL: 'http://localhost:9000', // development
+    //baseURL: 'http://localhost:9000', // development
     headers: {
       authorization: `Bearer ${token}`
-    }
-    // baseURL: 'https://refreshr.herokuapp.com' // production
+    },
+    baseURL: 'https://refreshr.herokuapp.com' // production
   });
-  const [students, setStudents] = useState([]);
-  const [selectedStudents, setSelectedStudents] = useState([]);
-  const [refreshrs, setRefreshrs] = useState([]);
-  const [teacherRefs, setTeacherRefs] = useState([]);
-  const [classData, setClassData] = useState({
-    name: '',
-    sg_list_id: ''
-  });
-  const [activeRefreshr, setActiveRefreshr] = useState(null);
-  const [isEditingClass, setIsEditingClass] = useState(false);
-
-  useEffect(() => {
-    console.log('selectedStudents:', selectedStudents);
-  }, [selectedStudents]);
-
   // sendgrix axios instance
   const sgAx = axios.create({
     baseURL: 'https://api.sendgrid.com/v3',
@@ -164,26 +150,44 @@ function ClassEditView(props) {
       authorization: `Bearer ${process.env.REACT_APP_SENDGRID_API_KEY}`
     }
   });
+  const [students, setStudents] = useState([]);
+  const [selectedStudents, setSelectedStudents] = useState([]);
+  const [refreshrs, setRefreshrs] = useState([]);
+  const [displayRefreshrs, setDisplayRefreshrs] = useState([]); // to filter multiple campaigns
+  const [teacherRefs, setTeacherRefs] = useState([]);
+  const [classData, setClassData] = useState({
+    name: '',
+    sg_list_id: ''
+  });
+  const [activeRefreshr, setActiveRefreshr] = useState(null);
+  const [isEditingClass, setIsEditingClass] = useState(false);
+  const [isEditingStudents, setIsEditingStudents] = useState(false);
+  const [editingStudent, setEditingStudent] = useState(null);
+  const [activeStudent, setActiveStudent] = useState(null);
+
+  // useEffect(() => {
+  //   console.log('selectedStudents:', selectedStudents);
+  // }, [selectedStudents]);
+
   // get class details on mount
   useEffect(() => {
     fetchClass();
     fetchTeacherRefreshrs();
   }, []);
 
-  /*
   useEffect(() => {
     console.log('students:', students);
   }, [students]);
 
+  /*
   useEffect(() => {
     console.log('refreshrs:', refreshrs);
   }, [refreshrs]);
 
+*/
   useEffect(() => {
     console.log('teacherRefs:', teacherRefs);
   }, [teacherRefs]);
-
-*/
 
   async function fetchClass() {
     const res = await ax.get(`/classes/${classId}`);
@@ -197,25 +201,55 @@ function ClassEditView(props) {
   }
 
   useEffect(() => {
+    // filter out unique refreshrs
+    let uniqueRefreshrIds = [];
+    let uniqueRefreshrs = [];
+    refreshrs.map(r => {
+      if (!uniqueRefreshrIds.includes(r.refreshr_id)) {
+        uniqueRefreshrIds.push(r.refreshr_id);
+        uniqueRefreshrs.push(r);
+      }
+    });
+    setDisplayRefreshrs(uniqueRefreshrs);
+    console.log(displayRefreshrs);
+  }, [refreshrs]);
+
+  useEffect(() => {
     console.log('classData:', classData);
   }, [classData]);
 
-  // async function fetchStudents() {
-  //   const res = await ax.get(`/classes/${classId}/students`);
-  //   setStudents(res.data);
-  // }
+  useEffect(() => {
+    console.log('refreshrs:', refreshrs);
+  }, [refreshrs]);
 
-  // async function fetchRefreshrs() {
-  //   const res = await ax.get(`/classes/${classId}/refreshrs`);
-  //   setRefreshrs(res.data);
-  // }
+  useEffect(() => {
+    console.log('displayRefreshrs:', displayRefreshrs);
+  }, [displayRefreshrs]);
 
   async function fetchTeacherRefreshrs(id) {
     const res = await ax.get(`/teachers/${userID}/refreshrs`);
     console.log('RES:', res);
-    const unassignedRefreshrs = res.data.refreshrs.filter(
-      r => !refreshrs.includes(r)
-    ); // filter out refreshrs assigned to class
+    console.log(refreshrs);
+
+    const classRefreshrIds = refreshrs.map(r => r.refreshr_id);
+    console.log(classRefreshrIds);
+    const unassignedRefreshrIds = res.data.refreshrs.filter(
+      r => !classRefreshrIds.includes(r.refreshr_id)
+    );
+    const unassignedRefreshrs = res.data.refreshrs.filter(r =>
+      unassignedRefreshrIds.includes(r.refreshr_id)
+    );
+    // const uniqueRefreshrs = [];
+    // const uniqueRefreshrIds = [];
+    // filter out duplicate refreshrs
+    // unassignedRefreshrs.map(r => {
+    //   if (!uniqueRefreshrIds.includes(r.refreshr_id)) {
+    //     uniqueRefreshrIds.push(r.refreshr_id);
+    //     uniqueRefreshrs.push(r);
+    //   }
+    // });
+    console.log(unassignedRefreshrs);
+
     setTeacherRefs(unassignedRefreshrs);
   }
 
@@ -223,11 +257,28 @@ function ClassEditView(props) {
     // date has been selected, send off to sendgrid and add to db
     console.log(activeRefreshr);
     // will need to refactor this later with moment?
-    const send_at = {
-      send_at: Date.parse(activeRefreshr.date) / 1000
-    };
-    console.log('send at:', send_at);
-    console.log(typeof send_at.send_at);
+    // const send_at = {
+    //   send_at: Date.parse(activeRefreshr.date) / 1000
+    // };
+    // console.log('send at:', send_at);
+    // console.log(typeof send_at.send_at);
+
+    // set 3 refreshr times
+    const twoDaysUnix = moment(`${activeRefreshr.date}T00:00:00`)
+      .add(2, 'day')
+      .unix();
+    const twoWeeksUnix = moment(`${activeRefreshr.date}T00:00:00`)
+      .add(2, 'weeks')
+      .unix();
+    const twoMonthsUnix = moment(`${activeRefreshr.date}T00:00:00`)
+      .add(2, 'month')
+      .unix();
+
+    activeRefreshr.timeTriData = [
+      { send_at: twoDaysUnix },
+      { send_at: twoWeeksUnix },
+      { send_at: twoMonthsUnix }
+    ];
 
     // create sendgrid campaign
     const body = {
@@ -242,36 +293,43 @@ function ClassEditView(props) {
       suppression_group_id: 9332 // permanent (Unsubscribe ID)
     };
     // console.log('body:', body);
-    let res = await sgAx.post('/campaigns', body);
-    console.log(res);
-    const sg_campaign_id = res.data.id;
-    console.log('sgid:', sg_campaign_id);
 
-    // attach sendgrid campaign id to active refreshr
+    // create three campaigns
+    for (let i = 0; i < 3; i++) {
+      let res = await sgAx.post('/campaigns', body);
+      console.log(res);
+      const sg_campaign_id = res.data.id;
+      console.log('sgid:', sg_campaign_id);
 
-    const refreshr = {
-      ...activeRefreshr,
-      refreshr_id: activeRefreshr.id,
-      sg_campaign_id
-    };
+      // attach sendgrid campaign id to active refreshr
+      // const refreshr = {
+      //   ...activeRefreshr,
+      //   refreshr_id: activeRefreshr.id,
+      //   sg_campaign_id
+      // };
+      activeRefreshr.sg_campaign_id = sg_campaign_id;
 
-    // add refreshr to TCR table
-    res = await ax.post(`/classes/${classData.id}/refreshrs`, {
-      refreshr: refreshr,
-      teacher_id: userID
-    });
+      // add refreshr to TCR table
+      res = await ax.post(`/classes/${classData.id}/campaigns`, {
+        refreshr_id: activeRefreshr.refreshr_id,
+        teacher_id: userID,
+        date: activeRefreshr.date,
+        sg_campaign_id
+      });
 
-    console.log(res);
-
-    // schedule campaign
-    res = await sgAx.post(`/campaigns/${sg_campaign_id}/schedules`, {
-      send_at: 1554206400
-    });
-    console.log(res);
+      console.log(res);
+      // schedule campaign
+      res = await sgAx.post(
+        `/campaigns/${sg_campaign_id}/schedules`,
+        activeRefreshr.timeTriData[i]
+      );
+      console.log(res);
+    }
 
     // add refreshr to class refreshrs, remove from active refreshr
-    setRefreshrs(refreshrs.concat(activeRefreshr));
+    // setRefreshrs(refreshrs.concat(activeRefreshr));
     setActiveRefreshr(null);
+    fetchClass(); // need to update class data here
     console.log(refreshrs);
   }
 
@@ -288,11 +346,25 @@ function ClassEditView(props) {
     setActiveRefreshr(active);
   }
 
-  function removeRefreshr(id) {
-    // TODO: needs to be updated to kill sendgrid campaign, drop from TCR table
-    const removedRefreshr = refreshrs.filter(r => r.id === id);
-    setTeacherRefs([...teacherRefs, ...removedRefreshr]);
+  async function removeRefreshr(id) {
+    const removedRefreshrs = refreshrs.filter(r => r.id === id);
+    console.log(removedRefreshrs);
+
+    // cancel sendgrid campaigns
+    for (let refreshr of removedRefreshrs) {
+      let res = await sgAx.delete(`/campaigns/${refreshr.sg_campaign_id}`);
+      console.log(res);
+
+      // drop from TCR table
+      res = await ax.delete(
+        `/classes/${classData.id}/campaigns/${refreshr.sg_campaign_id}`
+      );
+      console.log(res);
+    }
+
+    // add refreshr to teacher refs, remove from class refreshr list
     setRefreshrs(refreshrs.filter(r => r.id !== id));
+    setTeacherRefs([...teacherRefs, removedRefreshrs[0]]);
   }
 
   const [newStudent, setNewStudent] = useState({
@@ -301,10 +373,6 @@ function ClassEditView(props) {
     email: ''
   });
 
-  useEffect(() => {
-    console.log('NEW STUDENT', newStudent);
-  }, [newStudent]);
-
   const handleChange = e => {
     setNewStudent({
       ...newStudent,
@@ -312,40 +380,96 @@ function ClassEditView(props) {
     });
   };
 
-  async function addStudent(e) {
+  useEffect(() => {
+    console.log(activeStudent);
+  }, [activeStudent]);
+
+  const toggleEditStudent = student => {
+    // const [student] = students.filter(s => s.student_id === studentId);
+    // console.log(student);
+    // student.isEditing = !student.isEditing;
+    console.log(student);
+    console.log(student === activeStudent);
+    if (student === activeStudent) {
+      delete student.isActiveStudent;
+      setActiveStudent(null);
+    } else {
+      if (activeStudent) delete activeStudent.isActiveStudent;
+      student.isActiveStudent = true;
+      setActiveStudent(student);
+    }
+  };
+
+  function updateStudent(e, student) {
+    console.log(e.target.name);
+    setActiveStudent({
+      ...activeStudent,
+      isActiveStudent: true,
+      [e.target.name]: e.target.value
+    });
+    console.log(activeStudent);
+  }
+
+  async function submitUpdatedStudent(e) {
     e.preventDefault();
-    // add student to sendgrid recipients, get id back
-    const sgStudent = [newStudent];
-    let res = await addRecipient(sgStudent);
-    console.log('recipient:', res.data.persisted_recipients);
+    delete activeStudent.isActiveStudent;
 
-    // attach id to newStudent
-    newStudent.sg_recipient_id = res.data.persisted_recipients[0];
-
-    // add student to students
-    res = await ax.post('/students', newStudent);
-
-    // add student/class to students_classes
-    const classId = classData.id;
-    console.log('classID:', classId);
-    res = await ax.post(`/classes/${classId}/students`, {
-      student_id: newStudent.sg_recipient_id
+    // update student in DB
+    const res = await ax.put(`/students/${activeStudent.student_id}`, {
+      first_name: activeStudent.first_name,
+      last_name: activeStudent.last_name,
+      email: activeStudent.email,
+      sg_recipient_id: activeStudent.student_id
     });
     console.log(res);
 
-    // add student to class's sendgrid contact list
-    res = await addContact(classData.id, newStudent.sg_recipient_id);
-    console.log(res);
+    // remove student from students, add to active student
+    const updatedStudents = students.filter(
+      s => s.student_id !== activeStudent.student_id
+    );
+    setStudents([...updatedStudents, activeStudent]);
+    setActiveStudent(null);
+    console.log(activeStudent);
+    console.log(students);
+  }
 
-    // clear new student input
-    setNewStudent({
-      first_name: '',
-      last_name: '',
-      email: ''
-    });
+  async function addStudent(e) {
+    e.stopPropagation();
+    e.preventDefault();
+    if (newStudent.first_name && newStudent.last_name && newStudent.email) {
+      // add student to sendgrid recipients, get id back
+      const sgStudent = [newStudent];
+      let res = await addRecipient(sgStudent);
+      console.log('recipient:', res.data.persisted_recipients);
 
-    // get updated data from the server...better way to do this?
-    fetchClass();
+      // attach id to newStudent
+      newStudent.sg_recipient_id = res.data.persisted_recipients[0];
+
+      // add student to students
+      res = await ax.post('/students', newStudent);
+
+      // add student/class to students_classes
+      const classId = classData.id;
+      console.log('classID:', classId);
+      res = await ax.post(`/classes/${classId}/students`, {
+        student_id: newStudent.sg_recipient_id
+      });
+      console.log(res);
+
+      // add student to class's sendgrid contact list
+      res = await addContact(classData.id, newStudent.sg_recipient_id);
+      console.log(res);
+
+      // clear new student input
+      setNewStudent({
+        first_name: '',
+        last_name: '',
+        email: ''
+      });
+
+      // get updated data from the server...better way to do this?
+      fetchClass();
+    }
   }
 
   async function changeClassName(e) {
@@ -388,7 +512,8 @@ function ClassEditView(props) {
     name,
     label,
     value = newStudent[name],
-    onChange = handleChange
+    onChange = handleChange,
+    type = 'text'
   ) => {
     return (
       <Input
@@ -398,6 +523,7 @@ function ClassEditView(props) {
         onChange={onChange}
         name={name}
         value={value}
+        type={type}
       />
     );
   };
@@ -411,6 +537,8 @@ function ClassEditView(props) {
         classData={classData}
         isEditingClass={isEditingClass}
         setIsEditingClass={setIsEditingClass}
+        isEditingStudents={isEditingStudents}
+        setIsEditingStudents={isEditingStudents}
       />
       <hr className={classes.hrStyle} />
       <Students
@@ -420,11 +548,16 @@ function ClassEditView(props) {
         selectedStudents={selectedStudents}
         setSelectedStudents={setSelectedStudents}
         dropStudents={dropStudents}
+        toggleEditStudent={toggleEditStudent}
+        setActiveStudent={setActiveStudent}
+        activeStudent={activeStudent}
+        updateStudent={updateStudent}
+        submitUpdatedStudent={submitUpdatedStudent}
       />
 
       <hr className={classes.hrStyle} />
       <Refreshrs
-        refreshrs={refreshrs}
+        refreshrs={displayRefreshrs}
         removeRefreshr={removeRefreshr}
         activeRefreshr={activeRefreshr}
         setActiveRefreshr={setActiveRefreshr}

@@ -9,13 +9,12 @@ const options = {
   },
   auth: {
     //PRODUCTION
-    //audience: 'https://refreshr.herokuapp.com',
-    //redirect: true,
-    // reddirectUri: 'https://refreshr-app.netlify.com/loading',
+    audience: 'https://refreshr.herokuapp.com',
+    redirectUrl: 'https://refreshr-app.netlify.com/dashboard',
     //DEVELOPMENT
-    audience: 'http://localhost:9000',
+    //audience: 'http://localhost:9000',
+    //redirectUrl: 'http://localhost:3000/dashboard',
     redirect: true,
-    redirectUrl: 'http://localhost:3000/dashboard',
     usernameStyle: 'email',
     responseType: 'token id_token', 
   },
@@ -56,21 +55,21 @@ lock.on('authenticated', authResult => {
     localStorage.setItem('profile', JSON.stringify(profile));
     localStorage.setItem('name', `${profile.name}`);
     localStorage.setItem('email', profile.email)
-    localStorage.setItem('user_id', profile['http://localhost:9000/uid']);
+    localStorage.setItem('user_id', profile['https://refreshr.herokuapp.com/uid']);
 
     const body = {
       first_name: profile.given_name,
       last_name: profile.family_name,
       email: profile.email,
-      user_id: profile['http://localhost:9000/uid'],
-      role: profile['http://localhost:9000/roles'][0]
+      user_id: profile['https://refreshr.herokuapp.com/uid'],
+      role: profile['https://refreshr.herokuapp.com/roles'][0]
     };
     //console.log(body)
     //This captures users and adds them to the teacher table upon login, if they already exist
     //200 OK will be sent and the unique constraint will be shown in the console.
     axios({
       method: 'post',
-      url: 'http://localhost:9000/teachers',
+      url: 'https://refreshr.herokuapp.com/teachers',
       headers: { Authorization: `Bearer ${authResult.accessToken}` },
       data: body
     })

@@ -91,8 +91,8 @@ function ClassCreateView(props) {
   const token = localStorage.getItem('accessToken');
 
   const ax = axios.create({
-    // baseURL: 'https://refreshr.herokuapp.com' // production
-    baseURL: 'http://localhost:9000',
+    baseURL: 'https://refreshr.herokuapp.com', // production
+    //baseURL: 'http://localhost:9000',
     headers: {
       authorization: `Bearer ${token}` // development
     }
@@ -156,41 +156,35 @@ function ClassCreateView(props) {
         }
       }
 
-      // create campaign 1, 2, 3
-      // console.log(newRefreshr);
-      // console.log(timeTriData);
+      // assign the class list to the refreshr
       newRefreshr.list_ids = [list];
 
       // create three campaigns with the refreshr
-      const campaign_ids = [];
+      const teacher_id = localStorage.getItem('user_id');
       for (let i = 0; i < 3; i++) {
         const refreshrRes = await sgAx.post('/campaigns', newRefreshr);
         console.log(refreshrRes);
-        campaign_ids.push(refreshrRes.data.id);
-      }
-      console.log(campaign_ids);
 
-      // attach the campaign id and post to tcr table
-      const teacher_id = localStorage.getItem('user_id');
-      const tcrRefreshr = {
-        teacher_id,
-        refreshr_id: refreshr.refreshr_id,
-        date: refreshr.date,
-        sg_campaign_id: list
-      };
-      const tcrRes = await ax.post(`/classes/${list}/campaigns`, tcrRefreshr);
-      console.log(tcrRes);
+        const campaign_id = refreshrRes.data.id;
+        console.log('campaign id:', campaign_id);
 
-      console.log('tcrRefreshr:', tcrRefreshr);
+        // attach campaign id to the refreshr and post to tcr table
+        const tcrRefreshr = {
+          teacher_id,
+          refreshr_id: refreshr.refreshr_id,
+          date: refreshr.date,
+          sg_campaign_id: campaign_id
+        };
+        const tcrRes = await ax.post(`/classes/${list}/campaigns`, tcrRefreshr);
+        console.log(tcrRes);
 
-      // schedule the three campaigns
-      for (let i = 0; i < 3; i++) {
-        // const time = {
-        //   send_at: timeTriData[i]
-        // };
-        // console.log(time);
+        // console.log('tcrRefreshr:', tcrRefreshr);
+        // console.log(refreshr.timeTriData[i]);
+        // console.log('refreshr', refreshr);
+
+        // schedule the three campaigns
         const res = await sgAx.post(
-          `/campaigns/${campaign_ids[i]}/schedules`,
+          `/campaigns/${campaign_id}/schedules`,
           refreshr.timeTriData[i]
         );
         console.log(res);
@@ -229,7 +223,6 @@ function ClassCreateView(props) {
           console.log(`112`);
           console.log(newRefreshr);
           return addRefreshr(newRefreshr);
-          
         }
       })
 
