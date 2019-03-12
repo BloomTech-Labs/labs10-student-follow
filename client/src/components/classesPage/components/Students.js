@@ -12,7 +12,13 @@ import {
   ExpansionPanelSummary,
   TextField
 } from '@material-ui/core';
-import { GroupAdd, ExpandMore, Create } from '@material-ui/icons';
+import {
+  GroupAdd,
+  ExpandMore,
+  Create,
+  Backspace,
+  RemoveCircleOutline
+} from '@material-ui/icons';
 
 const styles = theme => ({
   studentList: {
@@ -108,7 +114,14 @@ function students(props) {
         {props.students.map(s => (
           <Grid key={s.student_id}>
             <span>{`${s.first_name} ${s.last_name} `}</span>
-            <Create onClick={e => props.toggleEditStudent(s)} />
+            {s.isActiveStudent ? (
+              <Backspace onClick={e => props.toggleEditStudent(s)} />
+            ) : (
+              <Create onClick={e => props.toggleEditStudent(s)} />
+            )}
+            <RemoveCircleOutline
+              onClick={() => props.dropStudent(s.student_id)}
+            />
             {s.isActiveStudent && (
               <form
                 className={classes.editName}
