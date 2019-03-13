@@ -56,7 +56,7 @@ const App = props => {
   //console.log(user_id)
 
   /* STATE */
-
+  const [open, toggleOpen] = useState(false)
   const [userRefreshrs, setRefreshrs] = useState([]);
   const [userClasses, setClasses] = useState([]);
 
@@ -80,6 +80,8 @@ const App = props => {
       })
       .catch(err => console.log(err));
   };
+
+  
 
   const sendRefreshrToDB = async (refreshr, questions) => {
     console.log('Initial Question Obj', questions);
@@ -173,6 +175,11 @@ const App = props => {
       .catch(err => console.log(err));
   };
 
+  //PRICING MODAL
+  const toggleModal = () => {
+    toggleOpen(!open)
+  }
+
   /* ROUTES */
   return (
     //console.log('APP:', props.theme),
@@ -186,10 +193,10 @@ const App = props => {
         className={classes.container}
       >
         <Grid item>
-          <Navbar theme={props.theme} lock={props.lock} />
+          <Navbar theme={props.theme} lock={props.lock} toggleModal={toggleModal} />
           <Navcrumbs location={props.location} history={props.history} />
         </Grid>
-        <Route exact path="/" render={props => <LandingPage {...props} />} />
+        <Route exact path="/" render={props => <LandingPage {...props} toggleModal={toggleModal} open={open} />} />
         <Grid item className={classes.routes}>
           <Route
             path="/dashboard"

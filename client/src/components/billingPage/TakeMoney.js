@@ -25,7 +25,11 @@ const styles = theme => ({
     marginBottom: '5%',
     '&:hover': {
       background: theme.palette.secondary.dark
-    }
+    },
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '.75rem',
+      padding: '5%'
+    },
   },
   modalTitle: {
     background: theme.palette.secondary.main,

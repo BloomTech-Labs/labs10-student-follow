@@ -20,12 +20,12 @@ const styles = theme => ({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginTop: 64,
-    width: '100%',
+    width: '100%'
   },
   header: {
-    color: theme.palette.primary.contrastText,
+    color: theme.palette.primary.contrastText
   },
-  cardDiv:{
+  cardDiv: {
     display: 'flex',
     width: '100%',
     flexFlow: 'column nowrap',
@@ -33,8 +33,7 @@ const styles = theme => ({
     justifyContent: 'space-between',
     [theme.breakpoints.up('md')]: {
       flexFlow: 'row nowrap',
-      alignItems: 'stretch',
-
+      alignItems: 'stretch'
     }
   },
   card: {
@@ -48,18 +47,18 @@ const styles = theme => ({
     [theme.breakpoints.up('md')]: {
       margin: '0 1%',
       width: '100%',
-      justifyContent:'space-between'
-
+      justifyContent: 'space-between'
     },
     [theme.breakpoints.only('xs')]: {
-      width: '100%',
-    },
+      width: '100%'
+    }
   },
   cardHeader: {
     width: '100%',
     backgroundColor: theme.palette.secondary.main,
     border: `1px solid ${theme.palette.secondary.main}`,
-    textAlign: 'center'
+    textAlign: 'center',
+    
   },
   content: {
     display: 'flex',
@@ -76,11 +75,15 @@ const styles = theme => ({
     padding: '0 50'
   },
   priceText: {
-    color: theme.palette.primary.contrastText,
+    color: theme.palette.primary.contrastText
   },
   cardText: {
     color: theme.palette.primary.contrastText,
     fontSize: '1rem',
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '.75rem'
+    },
+
     textAlign: 'center'
   },
   cardActions: {
@@ -88,8 +91,11 @@ const styles = theme => ({
     bottom: 0
   },
   tooltip: {
-     background: 'none',
-     color: theme.palette.primary.contrastText,
+    background: 'none',
+    color: theme.palette.primary.contrastText
+  },
+  title: {
+    fontSize: '.5rem'
   }
 });
 
@@ -140,56 +146,70 @@ const Pricing = props => {
   return (
     <>
       <Grid container spacing={40} className={classes.container}>
-          <Typography
-            className={classes.header}
-            variant="h3"
-            align="center"
-            gutterBottom
-          >
-            Pricing
-          </Typography>
-          <Grid
-              item
-              className={classes.cardDiv}
-            >
+        <Typography
+          className={classes.header}
+          variant="h4"
+          align="center"
+          gutterBottom
+        >
+          Pricing
+        </Typography>
+        <Grid item className={classes.cardDiv}>
           {tiers.map(tier => (
             // Enterprise card is full width at sm breakpoint
-          
-              <Card
-              key={tier.title}
-              className={classes.card}>
-                <CardHeader
-                  title={tier.title}
-                  action={tier.title === 'Premium' ? <Tooltip title='Popular' classes={{tooltip:classes.tooltip}} placement='top'><StarIcon /></Tooltip> : null}
-                  className={classes.cardHeader}
-                />
-                <CardContent className={classes.content}>
-                  <div className={classes.pricingDiv}>
-                    <Typography variant="h4" className={classes.priceText}>
-                      ${tier.price} 
-                    </Typography>
-                    <Typography variant="body2" className={classes.priceText}> /mo </Typography>
-                  </div>  
-                  {tier.description.map(line => (
-                    <Typography variant="subtitle2" className={classes.cardText} align='center' key={line}>
-                      {line}
-                    </Typography>
-                  ))}
-                </CardContent>
-                <CardActions className={classes.cardActions}>
-                  <StripeProvider apiKey="pk_test_6uEhds8mHz26DG95ZvUwTURp">
-                    <Elements>
-                      <TakeMoney
-                        variant={tier.buttonVariant}
-                        subType={tiers.value}
-                      />
-                    </Elements>
-                  </StripeProvider>
-                  `
-                </CardActions>
-              </Card>
+
+            <Card key={tier.title} className={classes.card}>
+              <CardHeader
+                title={tier.title}
+                className={classes.cardHeader}
+                action={
+                  tier.title === 'Premium' ? (
+                    <Tooltip
+                      title="Popular"
+                      classes={{ tooltip: classes.tooltip }}
+                      placement="top"
+                    >
+                      <StarIcon />
+                    </Tooltip>
+                  ) : null
+                }
+                
+              />
+              <CardContent className={classes.content}>
+                <div className={classes.pricingDiv}>
+                  <Typography variant="h5" className={classes.priceText}>
+                    ${tier.price}
+                  </Typography>
+                  <Typography variant="body2" className={classes.priceText}>
+                    {' '}
+                    /mo{' '}
+                  </Typography>
+                </div>
+                {tier.description.map(line => (
+                  <Typography
+                    variant="subtitle2"
+                    className={classes.cardText}
+                    align="center"
+                    key={line}
+                  >
+                    {line}
+                  </Typography>
+                ))}
+              </CardContent>
+              <CardActions className={classes.cardActions}>
+                <StripeProvider apiKey="pk_test_6uEhds8mHz26DG95ZvUwTURp">
+                  <Elements>
+                    <TakeMoney
+                      variant={tier.buttonVariant}
+                      subType={tiers.value}
+                    />
+                  </Elements>
+                </StripeProvider>
+                `
+              </CardActions>
+            </Card>
           ))}
-          </Grid>
+        </Grid>
       </Grid>
     </>
   );
