@@ -78,7 +78,6 @@ const styles = theme => ({
   },
   form1: {
     display: 'flex',
-    wrap: 'wrap-reverse',
     flexDirection: 'column',
     flexFlow: 'column nowrap',
     justifyContent: 'space-evenly',
@@ -92,7 +91,6 @@ const styles = theme => ({
     width: '100%',
     alignItems: 'center',
     alignContent: 'center',
-    direction: 'row',
     cursor: 'pointer'
   },
   hrStyle: {
