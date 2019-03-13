@@ -138,13 +138,13 @@ function ClassEditView(props) {
   const userID = localStorage.getItem('user_id');
   const ax = axios.create({
     //DEVELOPMENT
-    baseURL: 'http://localhost:9000', 
+    baseURL: 'http://localhost:9000',
     //PRODUCTION
     //baseURL: 'https://refreshr.herokuapp.com'
 
     headers: {
       authorization: `Bearer ${token}`
-    },
+    }
   });
   // sendgrix axios instance
   const sgAx = axios.create({
@@ -403,7 +403,7 @@ function ClassEditView(props) {
     }
   };
 
-  function updateStudent(e, student) {
+  async function updateStudent(e, student) {
     console.log(e.target.name);
     setActiveStudent({
       ...activeStudent,
@@ -415,10 +415,22 @@ function ClassEditView(props) {
 
   async function submitUpdatedStudent(e) {
     e.preventDefault();
+    console.log(activeStudent);
+
+    // update student with sendgrid
+    let res = await sgAx.patch('/contactdb/recipients', [
+      {
+        email: activeStudent.email,
+        first_name: activeStudent.first_name,
+        last_name: activeStudent.last_name
+      }
+    ]);
+    console.log(res);
+
     delete activeStudent.isActiveStudent;
 
     // update student in DB
-    const res = await ax.put(`/students/${activeStudent.student_id}`, {
+    res = await ax.put(`/students/${activeStudent.student_id}`, {
       first_name: activeStudent.first_name,
       last_name: activeStudent.last_name,
       email: activeStudent.email,
@@ -497,14 +509,13 @@ function ClassEditView(props) {
     console.log(classData);
   }, [classData]);
 
-  async function dropStudents() {
-    for (let student of selectedStudents) {
-      const res = await ax.delete(`/classes/${classId}/students/${student}`);
-      console.log('dropped:', res);
+  async function dropStudent(studentId) {
+    const res = await ax.delete(`/classes/${classId}/students/${studentId}`);
+    console.log('dropped:', res);
 
-      // drop student from sg list
-      deleteContact(classId, student);
-    }
+    // drop student from sg list
+    const deleteRes = await deleteContact(classId, studentId);
+    console.log(deleteRes);
     fetchClass(); // better way to do this than calling this again here?
 
     // reset selected students
@@ -550,7 +561,7 @@ function ClassEditView(props) {
         students={students}
         selectedStudents={selectedStudents}
         setSelectedStudents={setSelectedStudents}
-        dropStudents={dropStudents}
+        dropStudent={dropStudent}
         toggleEditStudent={toggleEditStudent}
         setActiveStudent={setActiveStudent}
         activeStudent={activeStudent}
