@@ -131,6 +131,7 @@ function Refreshr(props) {
   const [refreshrNameEdit, setRefreshrNameEdit] = useState(false);
   const [reviewEdit, setReviewEdit] = useState(false);
   const [multiChoiceEdit, setMultiChoiceEdit] = useState(false);
+  const [q2Edit, setQ2Edit] = useState(false);
   const [questionObject, setQuestionObject] = useState({
     reviewText,
     refreshrName,
@@ -478,6 +479,11 @@ function Refreshr(props) {
             className={props.classes.form1}
             onSubmit={props.handleSubmit}
           >
+            <Typography
+              className={q2Edit ? props.classes.hidden : props.classes.editText}
+            >
+              {questionTextTwo}
+            </Typography>
             <Input
               disableUnderline
               name="classnameInput"
@@ -486,8 +492,18 @@ function Refreshr(props) {
               multiline
               rows="4"
               value={questionTextTwo}
-              className={props.classes.inputQuestion}
+              // className={props.classes.inputQuestion}
+              className={
+                q2Edit ? props.classes.inputQuestion : props.classes.hidden
+              }
             />
+            <FormGroup
+              onClick={() => setQ2Edit(!q2Edit)}
+              className={props.classes.edit}
+            >
+              <i className="fas fa-pen" />
+              <h4 className={props.classes.editText}>Edit</h4>
+            </FormGroup>
           </FormGroup>
 
           <hr className={props.classes.hrStyle} />
