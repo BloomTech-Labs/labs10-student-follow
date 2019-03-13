@@ -345,7 +345,7 @@ function CampaignForm(props) {
             <Typography variant="subtitle2">{refreshr.name}</Typography>
           </Card>
         ))}
-        <Link to="/refreshrs/create">
+        <Link to="/refreshrs/create" style={{ textDecoration: 'none' }}>
           <Card className={`${classes.card} ${classes.iconCard}`}>
             <Icon color="action" style={{ fontSize: 60 }}>
               add_circle
