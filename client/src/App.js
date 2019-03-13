@@ -120,26 +120,6 @@ const App = props => {
         data: { refreshr_id: res.data.newRefreshrID }
       })
         .then(res => {
-          // console.log(res.data.message)
-//           setMessage(res.data.message);
-//         })
-//         .catch(err => {
-//           console.log(err);
-//         });
-//     });
-//   };
-
-//   //add questions
-//   const addQuestions = question => {
-//     //console.log('Question from addQuestions ===', question);
-//     axios({
-//       method: 'post',
-//       //Development
-//       url: 'http://localhost:9000/questions',
-//       //Production
-//       //url: 'https://refreshr.herokuapp.com/questions',
-//       headers: { Authorization: `Bearer ${token}` },
-//       data: question
           console.log('T_R ID', res.data.message);
           //setMessage(res.data.message)
         })
@@ -157,18 +137,6 @@ const App = props => {
           //Production
           //url: 'https://refreshr.herokuapp.com/questions',
           headers: { Authorization: `Bearer ${token}` },
-//           data: { question_id: res.data.newQuestionID }
-//           //console.log('RES from add questions ===', res);
-//         }).then(res => {
-//           // console.log(res.data.message)
-//           setQuestions([]);
-//           setMessage(res.data.message);
-//         });
-//         //console.log(questions)
-//       })
-//       .catch(err => {
-//         console.log(err);
-//       });
           data: questionArray[i]
         })
           .then(res => {
