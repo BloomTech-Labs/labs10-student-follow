@@ -158,6 +158,7 @@ function ClassEditView(props) {
   const [refreshrs, setRefreshrs] = useState([]);
   const [displayRefreshrs, setDisplayRefreshrs] = useState([]); // to filter multiple campaigns
   const [teacherRefs, setTeacherRefs] = useState([]);
+  const [allTeacherRefs, setAllTeacherRefs] = useState([]);
   const [classData, setClassData] = useState({
     name: '',
     sg_list_id: ''
@@ -218,30 +219,39 @@ function ClassEditView(props) {
   }, [refreshrs]);
 
   useEffect(() => {
-    console.log('classData:', classData);
-  }, [classData]);
-
-  useEffect(() => {
-    console.log('refreshrs:', refreshrs);
-  }, [refreshrs]);
-
-  useEffect(() => {
-    console.log('displayRefreshrs:', displayRefreshrs);
-  }, [displayRefreshrs]);
-
-  async function fetchTeacherRefreshrs(id) {
-    const res = await ax.get(`/teachers/${userID}/refreshrs`);
-    console.log('RES:', res);
-    console.log(refreshrs);
-
-    const classRefreshrIds = refreshrs.map(r => r.refreshr_id);
-    console.log(classRefreshrIds);
-    const unassignedRefreshrIds = res.data.refreshrs.filter(
-      r => !classRefreshrIds.includes(r.refreshr_id)
+    const classIds = refreshrs.map(r => r.refreshr_id);
+    console.log('class ids', classIds);
+    const teacherIds = allTeacherRefs.map(r => r.refreshr_id);
+    console.log('teacher ids', teacherIds);
+    const unassignedRefreshrIds = teacherIds.filter(
+      id => !classIds.includes(id)
     );
-    const unassignedRefreshrs = res.data.refreshrs.filter(r =>
+    console.log('unassigned:', unassignedRefreshrIds);
+    const unassignedRefreshrs = allTeacherRefs.filter(r =>
       unassignedRefreshrIds.includes(r.refreshr_id)
     );
+    console.log(unassignedRefreshrs);
+    setTeacherRefs(unassignedRefreshrs);
+  }, [refreshrs, allTeacherRefs]);
+
+  async function fetchTeacherRefreshrs() {
+    const res = await ax.get(`/teachers/${userID}/refreshrs`);
+    // console.log('RES:', res);
+    setAllTeacherRefs(res.data.refreshrs);
+    // const unassignedRefreshrs = res.data.refreshrs.filter(r =>
+    //   refreshrs.includes(r)
+    // );
+    // console.log(unassignedRefreshrs);
+
+    // const classRefreshrIds = refreshrs.map(r => r.refreshr_id);
+    // console.log(classRefreshrIds);
+    // const unassignedRefreshrIds = res.data.refreshrs.filter(
+    //   r => !classRefreshrIds.includes(r.refreshr_id)
+    // );
+    // console.log('ids:', unassignedRefreshrIds);
+    // const unassignedRefreshrs = res.data.refreshrs.filter(r =>
+    //   unassignedRefreshrIds.includes(r.refreshr_id)
+    // );
     // const uniqueRefreshrs = [];
     // const uniqueRefreshrIds = [];
     // filter out duplicate refreshrs
@@ -251,9 +261,9 @@ function ClassEditView(props) {
     //     uniqueRefreshrs.push(r);
     //   }
     // });
-    console.log(unassignedRefreshrs);
+    // console.log(unassignedRefreshrs);
 
-    setTeacherRefs(unassignedRefreshrs);
+    // setTeacherRefs(unassignedRefreshrs);
   }
 
   async function addRefreshr(id) {
@@ -505,9 +515,9 @@ function ClassEditView(props) {
     });
   }
 
-  useEffect(() => {
-    console.log(classData);
-  }, [classData]);
+  // useEffect(() => {
+  //   console.log(classData);
+  // }, [classData]);
 
   async function dropStudent(studentId) {
     const res = await ax.delete(`/classes/${classId}/students/${studentId}`);

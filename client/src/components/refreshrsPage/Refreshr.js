@@ -8,7 +8,7 @@ import {
   Input,
   Fab,
   Snackbar,
-  IconButton,
+  IconButton
 } from '@material-ui/core';
 import { Send, Close } from '@material-ui/icons';
 
@@ -156,7 +156,7 @@ function Refreshr(props) {
   const createForm = async event => {
     event.preventDefault();
     const data = {
-      title: 'Refreshr',
+      title: refreshrName,
       variables: {
         score: 0
       },
@@ -216,7 +216,7 @@ function Refreshr(props) {
           headers
         })
         .then(res => {
-          localStorage.removeItem('refreshrID')
+          localStorage.removeItem('refreshrID');
           const newRefreshr = {
             name: res.data.title,
             review_text: res.data.fields[1].properties.description,
