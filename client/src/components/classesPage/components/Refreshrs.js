@@ -163,6 +163,9 @@ const styles = theme => ({
   },
   subhead: {
     color: theme.palette.primary.contrastText
+  },
+  listIcon: {
+    color: theme.palette.primary.contrastText
   }
 });
 
@@ -291,7 +294,7 @@ function Refreshrs(props) {
             onClick={() => props.setModalIsOpen(!props.modalIsOpen)}
           >
             <ListItemIcon>
-              <AddCircleOutline />
+              <AddCircleOutline className={classes.listIcon} />
             </ListItemIcon>
             <ListItemText>Add new refreshr to class</ListItemText>
           </ListItem>
