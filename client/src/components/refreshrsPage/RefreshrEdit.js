@@ -48,18 +48,6 @@ const styles = theme => ({
     width: '75%',
     borderRadius: 5
   },
-  editText: {
-    marginBottom: theme.spacing.unit,
-    padding: '.75%',
-    paddingLeft: 14,
-    // background: theme.palette.secondary.main,
-    background: 'yellow',
-    color: theme.palette.primary.main,
-    fontSize: '1em',
-    width: '75%',
-    borderRadius: 5,
-    border: '2px solid yellow'
-  },
   inputQuestion: {
     marginBottom: theme.spacing.unit,
     padding: '5%',
@@ -112,7 +100,7 @@ const styles = theme => ({
     margin: '1rem auto',
     width: '100%'
   },
-  editText: {
+  editIcon: {
     margin: '0%',
     paddingLeft: '1%'
   }
@@ -310,13 +298,13 @@ function Refreshr(props) {
               className={props.classes.edit}
             >
               <i className="fas fa-pen" />
-              <h4 className={props.classes.editText}>Edit</h4>
+              <h4 className={props.classes.editIcon}>Edit</h4>
             </FormGroup>
           </FormGroup>
 
           <hr className={props.classes.hrStyle} />
 
-          <h4 className={props.classes.subheaders}>Add Review Text</h4>
+          <h4 className={props.classes.subheaders}>Your Review Text</h4>
 
           <FormGroup
             className={props.classes.form1}
@@ -346,13 +334,13 @@ function Refreshr(props) {
               className={props.classes.edit}
             >
               <i className="fas fa-pen" />
-              <h4 className={props.classes.editText}>Edit</h4>
+              <h4 className={props.classes.editIcon}>Edit</h4>
             </FormGroup>
           </FormGroup>
 
           <hr className={props.classes.hrStyle} />
 
-          <h4 className={props.classes.subheaders}>Create Questions</h4>
+          <h4 className={props.classes.subheaders}>Your Questions</h4>
 
           <Typography
             variant="body1"
@@ -462,7 +450,7 @@ function Refreshr(props) {
             className={props.classes.edit}
           >
             <i className="fas fa-pen" />
-            <h4 className={props.classes.editText}>Edit</h4>
+            <h4 className={props.classes.editIcon}>Edit</h4>
           </FormGroup>
 
           <hr className={props.classes.hrStyle} />
@@ -502,7 +490,7 @@ function Refreshr(props) {
               className={props.classes.edit}
             >
               <i className="fas fa-pen" />
-              <h4 className={props.classes.editText}>Edit</h4>
+              <h4 className={props.classes.editIcon}>Edit</h4>
             </FormGroup>
           </FormGroup>
 
