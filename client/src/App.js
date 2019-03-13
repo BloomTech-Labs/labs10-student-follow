@@ -212,6 +212,8 @@ const App = props => {
                 getRefreshrs={getRefreshrs}
                 userRefreshrs={userRefreshrs}
                 questions={questions}
+                addQuestions={addQuestions}
+                sendRefreshrToDB={sendRefreshrToDB}
               />
             )}
           />

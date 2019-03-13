@@ -111,13 +111,6 @@ function Refreshr(props) {
   const [refreshrName, setRefreshrName] = useState('');
   const [questionTextOne, setQuestionTextOne] = useState('');
   const [questionTextTwo, setQuestionTextTwo] = useState('');
-  // const [submitted, setSubmitted] = useState(false);
-  // const [typeformWelcome, setTypefromWelcome] = useState([]);
-  const [typeformQ1Props, setTypeformQ1Props] = useState([]);
-  const [typeformAnswers, setTypeformAnswers] = useState([]);
-  const [typeformQ1, setTypeformQ1] = useState([]);
-  const [typeformQ2, setTypeformQ2] = useState([]);
-
   const [a1Text, setA1Text] = useState('');
   const [a2Text, setA2Text] = useState('');
   const [a3Text, setA3Text] = useState('');
@@ -131,9 +124,9 @@ function Refreshr(props) {
   });
   const typeformId = window.location.pathname.slice(-6);
 
-  // const StyleDisplay = styled.a`
-  //   ${{ display: submitted ? 'block' : 'none' }}
-  // `;
+  const headers = {
+    Authorization: `Bearer ${process.env.REACT_APP_TYPEFORM}`
+  };
 
   useEffect(() => {
     axios({
@@ -146,20 +139,107 @@ function Refreshr(props) {
           answer => answer.label
         );
         console.log('FROM USE EFFECT', res);
-        setRefreshrName(res.data.welcome_screens[0]);
+        setRefreshrName(res.data.welcome_screens[0].title);
         setReviewText(res.data.fields[1].properties);
         setA1Text(answers[0]);
         setA2Text(answers[1]);
         setA3Text(answers[2]);
         setA4Text(answers[3]);
-        // setTypeformQ1(res.data.fields[1]);
         setQuestionTextOne(res.data.fields[1]);
         setQuestionTextTwo(res.data.fields[2]);
       })
       .catch(err => console.log(err));
   }, []);
 
-  console.log('questionTextOne + => ', questionTextOne);
+  const editForm = async event => {
+    event.preventDefault();
+    console.log('IN update!');
+    const data = {
+      title: 'Refreshr',
+      variables: {
+        score: 0
+      },
+      welcome_screens: [
+        {
+          title: refreshrName
+        }
+      ],
+      fields: [
+        {
+          title: 'Please enter your email address.',
+          type: 'email',
+          validations: {
+            required: true
+          }
+        },
+        {
+          ref: 'question_1',
+          title: 'Code q1 title',
+          // questionObject.questionTextOne.title,
+          type: 'multiple_choice',
+          properties: {
+            description: 'Code q1 description',
+            // questionObject.reviewText.description,
+            randomize: true,
+            choices: [
+              {
+                ref: 'correct',
+                label: 'code answer'
+                // questionObject.answers.a1Text
+              },
+              {
+                ref: 'incorrect_1',
+                label: 'code answer'
+                // questionObject.answers.a2Text
+              },
+              {
+                ref: 'incorrect_2',
+                label: 'code answer'
+                // questionObject.answers.a3Text
+              },
+              {
+                ref: 'incorrect_3',
+                label: 'code answer'
+                // questionObject.answers.a4Text
+              }
+            ]
+          }
+        },
+        {
+          ref: 'question_2',
+          title: 'code title',
+          // questionObject.questionTextOne.questionTextTwo,
+          type: 'short_text',
+          properties: {
+            description: 'Code desc'
+            // questionObject.reviewText.description
+          }
+        }
+      ]
+    };
+    try {
+      await axios
+        .put(`https://api.typeform.com/forms/${typeformId}`, data, {
+          headers
+        })
+        .then(res => {
+          const newRefreshr = {
+            name: res.data.title,
+            review_text: res.data.fields[1].properties.description,
+            typeform_id: res.data.id,
+            typeform_url: res.data._links.display
+          };
+          props.sendRefreshrToDB(newRefreshr);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+    // handleSnackbar();
+    //setSubmitted(true);
+  };
+  // }
+
+  console.log('refreshrName + => ', refreshrName);
   return (
     <Paper className={props.classes.container} elevation={24}>
       <Grid className={props.classes.wrapper}>
@@ -202,7 +282,7 @@ function Refreshr(props) {
               name="classnameInput"
               required
               type="text"
-              value={refreshrName.title}
+              value={refreshrName}
               className={props.classes.inputName}
             />
             <FormGroup className={props.classes.edit}>
@@ -326,7 +406,8 @@ function Refreshr(props) {
             variant="contained"
             color="primary"
             onClick={e => {
-              props.addQuestions(questionObject);
+              // props.addQuestions(questionObject);
+              editForm(e);
             }}
           >
             Update
