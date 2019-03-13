@@ -158,6 +158,57 @@ const App = props => {
     }
   };
 
+  const updateRefreshrDB = async (refreshr, id, questions) => {
+    const questionIDs = [
+      questions.questionTextOne.id,
+      questions.questionTextTwo.id
+    ];
+    const questionArray = [
+      {
+        question: questions.questionTextOne.text,
+        answer_1: questions.answers.a1Text,
+        answer_2: questions.answers.a2Text,
+        answer_3: questions.answers.a3Text,
+        answer_4: questions.answers.a4Text
+      },
+      {
+        question: questions.questionTextTwo.text
+      }
+    ];
+    await axios({
+      method: 'put',
+      //Development
+      url: `http://localhost:9000/refreshrs/${id}`,
+      //Production
+      //url: `https://refreshr.herokuapp.com/refreshrs/${id}`,
+      headers: { Authorization: `Bearer ${token}` },
+      data: refreshr
+    })
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+    for (let i = 0; i < questionArray.length; i++) {
+      axios({
+        method: 'put',
+        //Development
+        url: `http://localhost:9000/questions/${questionIDs[i]}`,
+        //Production
+        //url: 'https://refreshr.herokuapp.com/questions',
+        headers: { Authorization: `Bearer ${token}` },
+        data: questionArray[i]
+      })
+        .then(res => {
+          console.log(res);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
+  };
+
   //all classes for user
   const getClasses = () => {
     axios({
@@ -229,14 +280,16 @@ const App = props => {
             )}
           />
           <Route
-            path="/refreshrs/edit"
+            path="/refreshrs/edit/:id"
             render={props => (
               <RefreshrEdit
+                token={token}
                 getClasses={getClasses}
                 userClasses={userClasses}
                 getRefreshrs={getRefreshrs}
                 userRefreshrs={userRefreshrs}
-                sendRefreshrToDB={sendRefreshrToDB}
+                updateRefreshrDB={updateRefreshrDB}
+                match={props.match}
               />
             )}
           />
