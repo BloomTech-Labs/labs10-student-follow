@@ -1,14 +1,25 @@
 import React, { useState } from 'react';
-import { withStyles } from '@material-ui/core/styles';
-import { Paper, FormGroup, Fab, Input, Button } from '@material-ui/core';
-import Checkbox from '@material-ui/core/Checkbox';
-import CloudUpload from '@material-ui/icons/CloudUpload';
-import GroupAdd from '@material-ui/icons/GroupAdd';
-import ArrowForward from '@material-ui/icons/ArrowForward';
-import RemoveCircleOutline from '@material-ui/icons/RemoveCircleOutline';
-import Attachment from '@material-ui/icons/Attachment';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Typography from '@material-ui/core/Typography';
+import {
+  Paper,
+  FormGroup,
+  Fab,
+  Checkbox,
+  Input,
+  FormControlLabel,
+  Button,
+  IconButton,
+  Snackbar,
+  withStyles,
+  Typography
+} from '@material-ui/core';
+import {
+  Attachment,
+  Close,
+  CloudUpload,
+  GroupAdd,
+  ArrowForward,
+  RemoveCircleOutline
+} from '@material-ui/icons';
 import BigPapa from 'papaparse';
 
 const styles = theme => ({
@@ -181,6 +192,8 @@ function ListForm(props) {
 
     props.setRecipientData(recipientData.concat(new_recipient));
 
+    handleStudentSnackBool();
+
     setRecipient({
       email: '',
       first_name: '',
@@ -196,6 +209,7 @@ function ListForm(props) {
         setRecipientData(results.data);
       }
     });
+    handleCsvSnackBool();
   };
 
   const [recipient, setRecipient] = useState({
@@ -235,6 +249,7 @@ function ListForm(props) {
       ...props.listData,
       ccBool: !props.listData.ccBool
     });
+    handleCcSnackbar();
     if (!recipientData.some(r => r.email === teacherInfo.email)) {
       props.setRecipientData(recipientData.concat(teacherInfo));
     } else {
@@ -259,11 +274,150 @@ function ListForm(props) {
     const filteredArr = props.recipientData.filter(
       r => r.email !== targetEmail
     );
+    handleStudentRemoveSnackBool();
     setRecipientData(filteredArr);
   };
 
+  // start snackbars
+  const [ccSnackBool, setCcSnackBool] = useState(false);
+  const ccSnackText =
+    props.listData.ccBool === true
+      ? 'Email added to classroom list.'
+      : 'Email removed from classroom list.';
+
+  const handleCcSnackbar = (event, reason) => {
+    if (reason === 'clickaway') {
+      // clickaway is if they fire the snackbar before it's gone
+      return;
+    }
+    setCcSnackBool(!ccSnackBool);
+  };
+
+  const [csvSnackBool, setCsvSnackBool] = useState(false);
+  const handleCsvSnackBool = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setCsvSnackBool(!csvSnackBool);
+  };
+
+  const [studentSnackBool, setStudentSnackBool] = useState(false);
+  const handleStudentSnackBool = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setStudentSnackBool(!studentSnackBool);
+  };
+
+  const [studentRemoveSnackBool, setStudentRemoveSnackBool] = useState(false);
+  const handleStudentRemoveSnackBool = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setStudentRemoveSnackBool(!studentRemoveSnackBool);
+  };
+  // end snackbar
+
   return (
     <Paper className={classes.container} elevation={24}>
+      {/* start snackbars */}
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left'
+        }}
+        open={ccSnackBool}
+        autoHideDuration={4000}
+        onClose={handleCcSnackbar}
+        ContentProps={{
+          'aria-describedby': 'message-id'
+        }}
+        message={<span id="message-id">{ccSnackText}</span>}
+        action={[
+          <IconButton
+            key="close"
+            aria-label="Close"
+            color="inherit"
+            onClick={handleCcSnackbar}
+          >
+            <Close />
+          </IconButton>
+        ]}
+      />
+
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left'
+        }}
+        open={csvSnackBool}
+        autoHideDuration={4000}
+        onClose={handleCsvSnackBool}
+        ContentProps={{
+          'aria-describedby': 'message-id'
+        }}
+        message={<span id="message-id">CSV Uploaded!</span>}
+        action={[
+          <IconButton
+            key="close"
+            aria-label="Close"
+            color="inherit"
+            onClick={handleCsvSnackBool}
+          >
+            <Close />
+          </IconButton>
+        ]}
+      />
+
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left'
+        }}
+        open={studentSnackBool}
+        autoHideDuration={4000}
+        onClose={handleStudentSnackBool}
+        ContentProps={{
+          'aria-describedby': 'message-id'
+        }}
+        message={<span id="message-id">Student Added!</span>}
+        action={[
+          <IconButton
+            key="close"
+            aria-label="Close"
+            color="inherit"
+            onClick={handleStudentSnackBool}
+          >
+            <Close />
+          </IconButton>
+        ]}
+      />
+
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left'
+        }}
+        open={studentRemoveSnackBool}
+        autoHideDuration={4000}
+        onClose={handleStudentRemoveSnackBool}
+        ContentProps={{
+          'aria-describedby': 'message-id'
+        }}
+        message={<span id="message-id">Student Removed!</span>}
+        action={[
+          <IconButton
+            key="close"
+            aria-label="Close"
+            color="inherit"
+            onClick={handleStudentRemoveSnackBool}
+          >
+            <Close />
+          </IconButton>
+        ]}
+      />
+      {/* end snackbars */}
+
       <Typography
         variant="h6"
         color="secondary"

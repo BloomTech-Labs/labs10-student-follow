@@ -8,8 +8,7 @@ import {
   Input,
   Fab,
   Snackbar,
-  IconButton,
-  Button
+  IconButton
 } from '@material-ui/core';
 import { Send, Close } from '@material-ui/icons';
 
@@ -113,7 +112,7 @@ const styles = theme => ({
 });
 
 function Refreshr(props) {
-  const { sendRefreshrToDB, classes, addQuestions } = props;
+  const { sendRefreshrToDB, classes } = props;
   const [reviewText, setReviewText] = useState('');
   const [refreshrName, addRefreshrName] = useState('');
   const [questionTextOne, setQuestionTextOne] = useState('');
@@ -124,8 +123,6 @@ function Refreshr(props) {
   const [a2Text, setA2Text] = useState('');
   const [a3Text, setA3Text] = useState('');
   const [a4Text, setA4Text] = useState('');
-  const [mcQuestion, setMcQuestion] = useState([])
-  const [saQuestion, setSaQuestion] = useState([])
 
   const [questionObject, setQuestionObject] = useState({
     reviewText,
@@ -159,7 +156,7 @@ function Refreshr(props) {
   const createForm = async event => {
     event.preventDefault();
     const data = {
-      title: 'Refreshr',
+      title: refreshrName,
       variables: {
         score: 0
       },
@@ -219,13 +216,14 @@ function Refreshr(props) {
           headers
         })
         .then(res => {
+          localStorage.removeItem('refreshrID');
           const newRefreshr = {
             name: res.data.title,
             review_text: res.data.fields[1].properties.description,
             typeform_id: res.data.id,
             typeform_url: res.data._links.display
           };
-          sendRefreshrToDB(newRefreshr);
+          sendRefreshrToDB(newRefreshr, questionObject);
         });
     } catch (error) {
       console.log(error);
@@ -269,23 +267,13 @@ function Refreshr(props) {
               questionTextTwo,
               answers: { a1Text, a2Text, a3Text, a4Text }
             });
-            setMcQuestion({
-              question: questionTextOne,
-              answer_1: a1Text,
-              answer_2: a2Text,
-              answer_3: a3Text,
-              answer_4: a4Text
-            });
-            setSaQuestion({
-              question: questionTextTwo
-            })
           }}
         >
           <Typography variant="h6" color="secondary" align={'center'}>
             Add Refreshr
           </Typography>
 
-          <Typography variant="h8" color="secondary" align={'center'}>
+          <Typography color="secondary" align={'center'}>
             Create the Refreshr quiz that you will send to your students.
           </Typography>
 
@@ -424,8 +412,6 @@ function Refreshr(props) {
             >
               <Send
                 onClick={e => {
-                  addQuestions(mcQuestion);
-                  addQuestions(saQuestion)
                   createForm(e);
                 }}
               />

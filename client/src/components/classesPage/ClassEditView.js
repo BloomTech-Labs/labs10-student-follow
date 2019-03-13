@@ -138,13 +138,13 @@ function ClassEditView(props) {
   const userID = localStorage.getItem('user_id');
   const ax = axios.create({
     //DEVELOPMENT
-    baseURL: 'http://localhost:9000', 
+    baseURL: 'http://localhost:9000',
     //PRODUCTION
     //baseURL: 'https://refreshr.herokuapp.com'
 
     headers: {
       authorization: `Bearer ${token}`
-    },
+    }
   });
   // sendgrix axios instance
   const sgAx = axios.create({
@@ -158,11 +158,13 @@ function ClassEditView(props) {
   const [refreshrs, setRefreshrs] = useState([]);
   const [displayRefreshrs, setDisplayRefreshrs] = useState([]); // to filter multiple campaigns
   const [teacherRefs, setTeacherRefs] = useState([]);
+  const [allTeacherRefs, setAllTeacherRefs] = useState([]);
   const [classData, setClassData] = useState({
     name: '',
     sg_list_id: ''
   });
   const [activeRefreshr, setActiveRefreshr] = useState(null);
+  const [addedRefreshr, setAddedRefreshr] = useState(null);
   const [isEditingClass, setIsEditingClass] = useState(false);
   const [isEditingStudents, setIsEditingStudents] = useState(false);
   const [editingStudent, setEditingStudent] = useState(null);
@@ -175,7 +177,6 @@ function ClassEditView(props) {
   // get class details on mount
   useEffect(() => {
     fetchClass();
-    fetchTeacherRefreshrs();
   }, []);
 
   useEffect(() => {
@@ -201,6 +202,7 @@ function ClassEditView(props) {
       id: res.data.specifiedClass.sg_list_id,
       name: res.data.specifiedClass.name
     });
+    fetchTeacherRefreshrs();
   }
 
   useEffect(() => {
@@ -218,30 +220,39 @@ function ClassEditView(props) {
   }, [refreshrs]);
 
   useEffect(() => {
-    console.log('classData:', classData);
-  }, [classData]);
-
-  useEffect(() => {
-    console.log('refreshrs:', refreshrs);
-  }, [refreshrs]);
-
-  useEffect(() => {
-    console.log('displayRefreshrs:', displayRefreshrs);
-  }, [displayRefreshrs]);
-
-  async function fetchTeacherRefreshrs(id) {
-    const res = await ax.get(`/teachers/${userID}/refreshrs`);
-    console.log('RES:', res);
-    console.log(refreshrs);
-
-    const classRefreshrIds = refreshrs.map(r => r.refreshr_id);
-    console.log(classRefreshrIds);
-    const unassignedRefreshrIds = res.data.refreshrs.filter(
-      r => !classRefreshrIds.includes(r.refreshr_id)
+    const classIds = refreshrs.map(r => r.refreshr_id);
+    console.log('class ids', classIds);
+    const teacherIds = allTeacherRefs.map(r => r.refreshr_id);
+    console.log('teacher ids', teacherIds);
+    const unassignedRefreshrIds = teacherIds.filter(
+      id => !classIds.includes(id)
     );
-    const unassignedRefreshrs = res.data.refreshrs.filter(r =>
+    console.log('unassigned:', unassignedRefreshrIds);
+    const unassignedRefreshrs = allTeacherRefs.filter(r =>
       unassignedRefreshrIds.includes(r.refreshr_id)
     );
+    console.log(unassignedRefreshrs);
+    setTeacherRefs(unassignedRefreshrs);
+  }, [refreshrs, allTeacherRefs]);
+
+  async function fetchTeacherRefreshrs() {
+    const res = await ax.get(`/teachers/${userID}/refreshrs`);
+    // console.log('RES:', res);
+    setAllTeacherRefs(res.data.refreshrs);
+    // const unassignedRefreshrs = res.data.refreshrs.filter(r =>
+    //   refreshrs.includes(r)
+    // );
+    // console.log(unassignedRefreshrs);
+
+    // const classRefreshrIds = refreshrs.map(r => r.refreshr_id);
+    // console.log(classRefreshrIds);
+    // const unassignedRefreshrIds = res.data.refreshrs.filter(
+    //   r => !classRefreshrIds.includes(r.refreshr_id)
+    // );
+    // console.log('ids:', unassignedRefreshrIds);
+    // const unassignedRefreshrs = res.data.refreshrs.filter(r =>
+    //   unassignedRefreshrIds.includes(r.refreshr_id)
+    // );
     // const uniqueRefreshrs = [];
     // const uniqueRefreshrIds = [];
     // filter out duplicate refreshrs
@@ -251,14 +262,14 @@ function ClassEditView(props) {
     //     uniqueRefreshrs.push(r);
     //   }
     // });
-    console.log(unassignedRefreshrs);
+    // console.log(unassignedRefreshrs);
 
-    setTeacherRefs(unassignedRefreshrs);
+    // setTeacherRefs(unassignedRefreshrs);
   }
 
   async function addRefreshr(id) {
     // date has been selected, send off to sendgrid and add to db
-    console.log(activeRefreshr);
+    console.log(addedRefreshr);
     // will need to refactor this later with moment?
     // const send_at = {
     //   send_at: Date.parse(activeRefreshr.date) / 1000
@@ -267,17 +278,17 @@ function ClassEditView(props) {
     // console.log(typeof send_at.send_at);
 
     // set 3 refreshr times
-    const twoDaysUnix = moment(`${activeRefreshr.date}T00:00:00`)
+    const twoDaysUnix = moment(`${addedRefreshr.date}T00:00:00`)
       .add(2, 'day')
       .unix();
-    const twoWeeksUnix = moment(`${activeRefreshr.date}T00:00:00`)
+    const twoWeeksUnix = moment(`${addedRefreshr.date}T00:00:00`)
       .add(2, 'weeks')
       .unix();
-    const twoMonthsUnix = moment(`${activeRefreshr.date}T00:00:00`)
+    const twoMonthsUnix = moment(`${addedRefreshr.date}T00:00:00`)
       .add(2, 'month')
       .unix();
 
-    activeRefreshr.timeTriData = [
+    addedRefreshr.timeTriData = [
       { send_at: twoDaysUnix },
       { send_at: twoWeeksUnix },
       { send_at: twoMonthsUnix }
@@ -286,11 +297,11 @@ function ClassEditView(props) {
     // create sendgrid campaign
     const body = {
       sender_id: 428251, // maybe we should move this to an env variable?
-      title: activeRefreshr.name,
+      title: addedRefreshr.name,
       subject: `Your Refreshr for ${classData.name} is here!`,
       plain_content: 'this is plain content [unsubscribe]',
       html_content: `<html> <head> <title></title> </head> <body> <p>Take your refreshr at this link: ${
-        activeRefreshr.typeform_url
+        addedRefreshr.typeform_url
       } [unsubscribe] </p> </body> </html>`,
       list_ids: [Number(classData.id)],
       suppression_group_id: 9332 // permanent (Unsubscribe ID)
@@ -310,13 +321,13 @@ function ClassEditView(props) {
       //   refreshr_id: activeRefreshr.id,
       //   sg_campaign_id
       // };
-      activeRefreshr.sg_campaign_id = sg_campaign_id;
+      addedRefreshr.sg_campaign_id = sg_campaign_id;
 
       // add refreshr to TCR table
       res = await ax.post(`/classes/${classData.id}/campaigns`, {
-        refreshr_id: activeRefreshr.refreshr_id,
+        refreshr_id: addedRefreshr.refreshr_id,
         teacher_id: userID,
-        date: activeRefreshr.date,
+        date: addedRefreshr.date,
         sg_campaign_id
       });
 
@@ -324,33 +335,36 @@ function ClassEditView(props) {
       // schedule campaign
       res = await sgAx.post(
         `/campaigns/${sg_campaign_id}/schedules`,
-        activeRefreshr.timeTriData[i]
+        addedRefreshr.timeTriData[i]
       );
       console.log(res);
     }
 
     // add refreshr to class refreshrs, remove from active refreshr
-    // setRefreshrs(refreshrs.concat(activeRefreshr));
-    setActiveRefreshr(null);
+    // setRefreshrs(refreshrs.concat(addedRefreshr));
+    setAddedRefreshr(null);
     fetchClass(); // need to update class data here
     console.log(refreshrs);
   }
 
   useEffect(() => {
-    console.log(activeRefreshr);
-  }, [activeRefreshr]);
+    console.log(addedRefreshr);
+  }, [addedRefreshr]);
 
-  function selectRefreshr(id) {
+  function selectNewRefreshr(id) {
     // remove refreshr from teacher refreshr list
-    setTeacherRefs(teacherRefs.filter(r => r.id !== id));
     console.log(id);
-    const [active] = teacherRefs.filter(r => r.id === id);
+
+    setTeacherRefs(teacherRefs.filter(r => r.refreshr_id !== id));
+    console.log(id);
+    const [active] = teacherRefs.filter(r => r.refreshr_id === id);
     console.log(active);
-    setActiveRefreshr(active);
+    setAddedRefreshr(active);
   }
 
   async function removeRefreshr(id) {
-    const removedRefreshrs = refreshrs.filter(r => r.id === id);
+    console.log(addedRefreshr);
+    const removedRefreshrs = refreshrs.filter(r => r.refreshr_id === id);
     console.log(removedRefreshrs);
 
     // cancel sendgrid campaigns
@@ -365,9 +379,8 @@ function ClassEditView(props) {
       console.log(res);
     }
 
-    // add refreshr to teacher refs, remove from class refreshr list
-    setRefreshrs(refreshrs.filter(r => r.id !== id));
-    setTeacherRefs([...teacherRefs, removedRefreshrs[0]]);
+    // fetch updated class info
+    fetchClass();
   }
 
   const [newStudent, setNewStudent] = useState({
@@ -403,7 +416,7 @@ function ClassEditView(props) {
     }
   };
 
-  function updateStudent(e, student) {
+  async function updateStudent(e, student) {
     console.log(e.target.name);
     setActiveStudent({
       ...activeStudent,
@@ -415,10 +428,22 @@ function ClassEditView(props) {
 
   async function submitUpdatedStudent(e) {
     e.preventDefault();
+    console.log(activeStudent);
+
+    // update student with sendgrid
+    let res = await sgAx.patch('/contactdb/recipients', [
+      {
+        email: activeStudent.email,
+        first_name: activeStudent.first_name,
+        last_name: activeStudent.last_name
+      }
+    ]);
+    console.log(res);
+
     delete activeStudent.isActiveStudent;
 
     // update student in DB
-    const res = await ax.put(`/students/${activeStudent.student_id}`, {
+    res = await ax.put(`/students/${activeStudent.student_id}`, {
       first_name: activeStudent.first_name,
       last_name: activeStudent.last_name,
       email: activeStudent.email,
@@ -493,22 +518,74 @@ function ClassEditView(props) {
     });
   }
 
-  useEffect(() => {
-    console.log(classData);
-  }, [classData]);
+  // useEffect(() => {
+  //   console.log(classData);
+  // }, [classData]);
 
-  async function dropStudents() {
-    for (let student of selectedStudents) {
-      const res = await ax.delete(`/classes/${classId}/students/${student}`);
-      console.log('dropped:', res);
+  async function dropStudent(studentId) {
+    const res = await ax.delete(`/classes/${classId}/students/${studentId}`);
+    console.log('dropped:', res);
 
-      // drop student from sg list
-      deleteContact(classId, student);
-    }
+    // drop student from sg list
+    const deleteRes = await deleteContact(classId, studentId);
+    console.log(deleteRes);
     fetchClass(); // better way to do this than calling this again here?
 
     // reset selected students
     setSelectedStudents([]);
+  }
+
+  async function selectRefreshr(id) {
+    console.log(id);
+    const [selectedRefreshr] = refreshrs.filter(r => r.refreshr_id === id);
+    setActiveRefreshr(selectedRefreshr);
+    console.log(activeRefreshr);
+    console.log(activeRefreshr === selectedRefreshr);
+  }
+
+  async function changeDate(e) {
+    console.log(activeRefreshr.date);
+    console.log(e.target.value);
+    activeRefreshr.date = e.target.value; // think we need to do this on submit?
+  }
+
+  async function submitNewDate(e) {
+    e.preventDefault();
+    console.log(e);
+    // set 3 refreshr times
+    const twoDaysUnix = moment(`${activeRefreshr.date}T00:00:00`)
+      .add(2, 'day')
+      .unix();
+    const twoWeeksUnix = moment(`${activeRefreshr.date}T00:00:00`)
+      .add(2, 'weeks')
+      .unix();
+    const twoMonthsUnix = moment(`${activeRefreshr.date}T00:00:00`)
+      .add(2, 'month')
+      .unix();
+
+    const timeTriData = [
+      { send_at: twoDaysUnix },
+      { send_at: twoWeeksUnix },
+      { send_at: twoMonthsUnix }
+    ];
+
+    // get three campaigns
+    let campaigns = refreshrs.filter(
+      r => r.refreshr_id === activeRefreshr.refreshr_id
+    );
+
+    console.log(campaigns);
+    campaigns = campaigns.map(c => c.sg_campaign_id);
+    console.log(campaigns);
+
+    // update campaigns
+    for (let i = 0; i < 3; i++) {
+      const res = await sgAx.patch(
+        `/campaigns/${campaigns[i]}/schedules`,
+        timeTriData[i]
+      );
+      console.log(res);
+    }
   }
 
   const makeInput = (
@@ -550,7 +627,7 @@ function ClassEditView(props) {
         students={students}
         selectedStudents={selectedStudents}
         setSelectedStudents={setSelectedStudents}
-        dropStudents={dropStudents}
+        dropStudent={dropStudent}
         toggleEditStudent={toggleEditStudent}
         setActiveStudent={setActiveStudent}
         activeStudent={activeStudent}
@@ -562,11 +639,17 @@ function ClassEditView(props) {
       <Refreshrs
         refreshrs={displayRefreshrs}
         removeRefreshr={removeRefreshr}
-        activeRefreshr={activeRefreshr}
-        setActiveRefreshr={setActiveRefreshr}
+        addedRefreshr={addedRefreshr}
+        setAddedRefreshr={setAddedRefreshr}
         addRefreshr={addRefreshr}
         selectRefreshr={selectRefreshr}
         teacherRefs={teacherRefs}
+        selectRefreshr={selectRefreshr}
+        selectNewRefreshr={selectNewRefreshr}
+        activeRefreshr={activeRefreshr}
+        changeDate={changeDate}
+        submitNewDate={submitNewDate}
+        makeInput={makeInput}
       />
     </Paper>
   );

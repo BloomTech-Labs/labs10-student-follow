@@ -24,6 +24,7 @@ const styles = {
 
 const RefreshrDialog = props => {
   const { classes } = props;
+  // console.log(props);
 
   return (
     <div>
@@ -31,11 +32,11 @@ const RefreshrDialog = props => {
         <DialogTitle>Select a refreshr</DialogTitle>
         <div>
           <List>
-            {props.refreshrs.map((r, i) => (
+            {props.refreshrs.map(r => (
               <ListItem
                 button
-                onClick={() => props.selectRefreshr(r.id)}
-                key={i}
+                onClick={() => props.selectNewRefreshr(r.refreshr_id)}
+                key={r.refreshr_id}
               >
                 <ListItemText primary={r.name} />
               </ListItem>
