@@ -130,6 +130,7 @@ function Refreshr(props) {
   const [a4Text, setA4Text] = useState('');
   const [refreshrNameEdit, setRefreshrNameEdit] = useState(false);
   const [reviewEdit, setReviewEdit] = useState(false);
+  const [multiChoiceEdit, setMultiChoiceEdit] = useState(false);
   const [questionObject, setQuestionObject] = useState({
     reviewText,
     refreshrName,
@@ -339,14 +340,12 @@ function Refreshr(props) {
                 reviewEdit ? props.classes.inputQuestion : props.classes.hidden
               }
             />
-            <FormGroup className={props.classes.edit}>
+            <FormGroup
+              onClick={() => setReviewEdit(!reviewEdit)}
+              className={props.classes.edit}
+            >
               <i className="fas fa-pen" />
-              <h4
-                onClick={() => setReviewEdit(!reviewEdit)}
-                className={props.classes.editText}
-              >
-                Edit
-              </h4>
+              <h4 className={props.classes.editText}>Edit</h4>
             </FormGroup>
           </FormGroup>
 
@@ -365,6 +364,13 @@ function Refreshr(props) {
             className={props.classes.form1}
             onSubmit={props.handleSubmit}
           >
+            <Typography
+              className={
+                multiChoiceEdit ? props.classes.hidden : props.classes.editText
+              }
+            >
+              {questionTextOne}
+            </Typography>
             <Input
               disableUnderline
               onChange={e => setQuestionTextOne(e.target.value)}
@@ -373,11 +379,32 @@ function Refreshr(props) {
               multiline
               rows="4"
               value={questionTextOne}
-              className={props.classes.inputQuestion}
+              className={
+                multiChoiceEdit
+                  ? props.classes.inputQuestion
+                  : props.classes.hidden
+              }
             />
+            {/* <FormGroup
+              onClick={() => setMultiChoiceEdit(!multiChoiceEdit)}
+              className={props.classes.edit}
+            >
+              <i className="fas fa-pen" />
+              <h4 className={props.classes.editText}>Edit</h4>
+            </FormGroup> */}
           </FormGroup>
 
-          <FormGroup>
+          <FormGroup onClick={() => setMultiChoiceEdit(!multiChoiceEdit)}>
+            <Typography
+              className={
+                multiChoiceEdit ? props.classes.hidden : props.classes.editText
+              }
+            >
+              <Typography>{a1Text}</Typography>
+              <Typography>{a2Text}</Typography>
+              <Typography>{a3Text}</Typography>
+              <Typography>{a4Text}</Typography>
+            </Typography>
             <form className={props.classes.multipleChoice}>
               <Input
                 disableUnderline
@@ -385,7 +412,11 @@ function Refreshr(props) {
                 name="classnameInput"
                 required
                 value={a1Text}
-                className={props.classes.inputMultipleChoice}
+                className={
+                  multiChoiceEdit
+                    ? props.classes.inputMultipleChoice
+                    : props.classes.hidden
+                }
               />
               <Input
                 disableUnderline
@@ -393,7 +424,11 @@ function Refreshr(props) {
                 onChange={e => setA2Text(e.target.value)}
                 required
                 value={a2Text}
-                className={props.classes.inputMultipleChoice}
+                className={
+                  multiChoiceEdit
+                    ? props.classes.inputMultipleChoice
+                    : props.classes.hidden
+                }
               />
               <Input
                 disableUnderline
@@ -401,7 +436,11 @@ function Refreshr(props) {
                 name="classnameInput"
                 required
                 value={a3Text}
-                className={props.classes.inputMultipleChoice}
+                className={
+                  multiChoiceEdit
+                    ? props.classes.inputMultipleChoice
+                    : props.classes.hidden
+                }
               />
               <Input
                 disableUnderline
@@ -409,9 +448,20 @@ function Refreshr(props) {
                 name="classnameInput"
                 required
                 value={a4Text}
-                className={props.classes.inputMultipleChoice}
+                className={
+                  multiChoiceEdit
+                    ? props.classes.inputMultipleChoice
+                    : props.classes.hidden
+                }
               />
             </form>
+          </FormGroup>
+          <FormGroup
+            onClick={() => setMultiChoiceEdit(!multiChoiceEdit)}
+            className={props.classes.edit}
+          >
+            <i className="fas fa-pen" />
+            <h4 className={props.classes.editText}>Edit</h4>
           </FormGroup>
 
           <hr className={props.classes.hrStyle} />
