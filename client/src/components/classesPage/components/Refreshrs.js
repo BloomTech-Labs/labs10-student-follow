@@ -10,12 +10,18 @@ import {
   List,
   ListItem,
   ListItemIcon,
-  Divider
+  Divider,
+  Fab
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import DeleteIcon from '@material-ui/icons/Delete';
 import RefreshrDialog from './RefreshrListDialog';
-import { Create, Backspace, RemoveCircleOutline } from '@material-ui/icons/';
+import {
+  Create,
+  Backspace,
+  RemoveCircleOutline,
+  Update
+} from '@material-ui/icons/';
 import moment from 'moment';
 import RefreshrIcon from './LogoSmall.svg';
 
@@ -41,22 +47,42 @@ const styles = theme => ({
     fontSize: '1rem',
     minWidth: 375,
     minHeight: 225,
+    justifyContent: 'center',
     [theme.breakpoints.only('xs')]: {
       width: '100%'
     }
   },
   refreshrContent: {
     // color: theme.palette.primary.dark,
-    fontSize: '1.0rem'
+    // color: `${theme.palette.primary.contrastText}`,
+    fontSize: '1.0rem',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center'
+  },
+  refreshrTitle: {
+    color: `${theme.palette.primary.contrastText}`
+  },
+  refreshrList: {
+    border: `1px solid ${theme.palette.secondary.main}`,
+    color: `${theme.palette.primary.contrastText}`,
+    margin: theme.spacing.unit,
+    display: 'flex',
+    flexFlow: 'column nowrap',
+    borderRadius: '5px',
+    backgroundColor: theme.palette.primary.main
   },
 
   refreshrIcon: {
     alignSelf: 'flex-end',
     margin: '5%',
-    color: theme.palette.primary.dark,
+    // color: theme.palette.primary.dark,
     '&:hover': {
       cursor: 'pointer'
     }
+  },
+  datePicker: {
+    color: theme.palette.primary.contrastText
   },
   addedRefreshr: {
     height: 200,
@@ -111,6 +137,22 @@ const styles = theme => ({
     '&:hover': {
       background: theme.palette.secondary.dark
     }
+  },
+  button: {
+    marginRight: theme.spacing.unit * 2,
+    marginTop: theme.spacing.unit * 2,
+    color: theme.palette.primary.main,
+    background: theme.palette.secondary.main,
+    width: 40,
+    height: 40
+  },
+  listItem: {
+    '&:hover': {
+      backgroundColor: '#363c42'
+    },
+    '&:focus': {
+      backgroundColor: '#363c42'
+    }
   }
 });
 
@@ -134,23 +176,36 @@ function Refreshrs(props) {
           {props.activeRefreshr ? (
             <Card className={classes.refreshrCard} raised>
               <CardContent className={classes.refreshrContent}>
-                <Typography variant="subtitle2">
+                <Typography
+                  variant="subtitle2"
+                  className={classes.refreshrTitle}
+                >
                   {props.activeRefreshr.name}
                 </Typography>
               </CardContent>
               <CardContent className={classes.refreshrContent}>
-                <form onSubmit={e => props.submitNewDate(e)}>
+                <form
+                  styles={{ display: 'flex', flexFlow: 'column' }}
+                  onSubmit={e => props.submitNewDate(e)}
+                >
                   <TextField
                     variant="outlined"
                     type="date"
+                    InputProps={{ className: classes.datePicker }}
                     defaultValue={moment(props.activeRefreshr.date).format(
                       'YYYY-MM-DD'
                     )}
                     onChange={e => props.changeDate(e)}
                   />
-
-                  <button>submit</button>
                 </form>
+                <Fab
+                  className={classes.button}
+                  onClick={props.submitNewDate}
+                  elevation={20}
+                  aria-label="Update"
+                >
+                  <Update />
+                </Fab>
               </CardContent>
               <RemoveCircleOutline
                 onClick={() =>
@@ -166,7 +221,10 @@ function Refreshrs(props) {
               raised
             >
               <CardContent className={classes.refreshrContent}>
-                <Typography variant="subtitle2">
+                <Typography
+                  variant="subtitle2"
+                  className={classes.refreshrTitle}
+                >
                   {props.addedRefreshr.name}
                 </Typography>
               </CardContent>
@@ -175,6 +233,7 @@ function Refreshrs(props) {
                   onChange={e => setDate(e)}
                   variant="outlined"
                   type="date"
+                  InputProps={{ className: classes.datePicker }}
                   defaultValue={moment().format('YYYY-MM-DD')}
                 />
               </CardContent>
@@ -185,7 +244,10 @@ function Refreshrs(props) {
           ) : (
             <Card className={classes.refreshrCard} raised>
               <CardContent className={classes.refreshrContent}>
-                <Typography variant="subtitle2">
+                <Typography
+                  variant="subtitle2"
+                  className={classes.refreshrTitle}
+                >
                   Select a Refreshr To Edit
                 </Typography>
               </CardContent>
@@ -195,13 +257,15 @@ function Refreshrs(props) {
         <List component="ul" className={classes.refreshrList}>
           {props.refreshrs.map(r => (
             <ListItem
+              className={classes.listItem}
+              button
               key={r.refreshr_id}
               onClick={() => props.selectRefreshr(r.refreshr_id)}
             >
               {r.name}
             </ListItem>
           ))}
-          <ListItem onClick={() => setModalIsOpen(!modalIsOpen)}>
+          <ListItem button onClick={() => setModalIsOpen(!modalIsOpen)}>
             Add new refreshr to class
           </ListItem>
         </List>
