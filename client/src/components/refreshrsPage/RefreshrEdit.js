@@ -107,11 +107,11 @@ const styles = theme => ({
 });
 
 function Refreshr(props) {
-  const {match, updateRefreshrDB, token} = props
+  const { match, updateRefreshrDB, token } = props;
   const [refreshrName, setRefreshrName] = useState('');
   const [reviewText, setReviewText] = useState('');
-  const [questionTextOne, setQuestionTextOne] = useState({text:'', id:''});
-  const [questionTextTwo, setQuestionTextTwo] = useState({text:'', id:''});
+  const [questionTextOne, setQuestionTextOne] = useState({ text: '', id: '' });
+  const [questionTextTwo, setQuestionTextTwo] = useState({ text: '', id: '' });
   const [a1Text, setA1Text] = useState('');
   const [a2Text, setA2Text] = useState('');
   const [a3Text, setA3Text] = useState('');
@@ -131,7 +131,6 @@ function Refreshr(props) {
     Authorization: `Bearer ${process.env.REACT_APP_TYPEFORM}`
   };
 
-
   useEffect(() => {
     axios({
       method: 'get',
@@ -140,7 +139,7 @@ function Refreshr(props) {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => {
-        console.log(res)
+        console.log(res);
         // const answers = res.data.fields[1].properties.choices.map(
         //   answer => answer.label
         console.log('FROM USE EFFECT', res);
@@ -150,9 +149,15 @@ function Refreshr(props) {
         setA2Text(res.data.refreshr.questions[0].question.answer_2);
         setA3Text(res.data.refreshr.questions[0].question.answer_3);
         setA4Text(res.data.refreshr.questions[0].question.answer_4);
-        setQuestionTextOne({text: res.data.refreshr.questions[0].question.question_text, id:res.data.refreshr.questions[0].question_id });
-        setQuestionTextTwo({text: res.data.refreshr.questions[1].question.question_text, id:res.data.refreshr.questions[1].question_id });
-      }) 
+        setQuestionTextOne({
+          text: res.data.refreshr.questions[0].question.question_text,
+          id: res.data.refreshr.questions[0].question_id
+        });
+        setQuestionTextTwo({
+          text: res.data.refreshr.questions[1].question.question_text,
+          id: res.data.refreshr.questions[1].question_id
+        });
+      })
       .catch(err => console.log(err));
   }, []);
 
@@ -220,14 +225,14 @@ function Refreshr(props) {
           headers
         })
         .then(res => {
-          console.log(res.data.id, match.params.id)
+          console.log(res.data.id, match.params.id);
           const updatedRefreshr = {
             name: res.data.title,
             review_text: res.data.fields[1].properties.description,
             typeform_id: res.data.id,
             typeform_url: res.data._links.display
           };
-          console.log(questionObject)
+          console.log(questionObject);
           updateRefreshrDB(updatedRefreshr, typeformId, questionObject);
         });
     } catch (error) {
@@ -354,7 +359,9 @@ function Refreshr(props) {
           >
             <Input
               disableUnderline
-              onChange={e => setQuestionTextOne({...questionTextOne, text: e.target.value})}
+              onChange={e =>
+                setQuestionTextOne({ ...questionTextOne, text: e.target.value })
+              }
               name="classnameInput"
               required
               multiline
@@ -418,7 +425,9 @@ function Refreshr(props) {
             <Input
               disableUnderline
               name="classnameInput"
-              onChange={e => setQuestionTextTwo({...questionTextTwo, text: e.target.value})}
+              onChange={e =>
+                setQuestionTextTwo({ ...questionTextTwo, text: e.target.value })
+              }
               required
               multiline
               rows="4"
