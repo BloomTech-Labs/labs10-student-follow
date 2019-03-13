@@ -164,6 +164,7 @@ function ClassEditView(props) {
     sg_list_id: ''
   });
   const [activeRefreshr, setActiveRefreshr] = useState(null);
+  const [addedRefreshr, setAddedRefreshr] = useState(null);
   const [isEditingClass, setIsEditingClass] = useState(false);
   const [isEditingStudents, setIsEditingStudents] = useState(false);
   const [editingStudent, setEditingStudent] = useState(null);
@@ -268,7 +269,7 @@ function ClassEditView(props) {
 
   async function addRefreshr(id) {
     // date has been selected, send off to sendgrid and add to db
-    console.log(activeRefreshr);
+    console.log(addedRefreshr);
     // will need to refactor this later with moment?
     // const send_at = {
     //   send_at: Date.parse(activeRefreshr.date) / 1000
@@ -277,17 +278,17 @@ function ClassEditView(props) {
     // console.log(typeof send_at.send_at);
 
     // set 3 refreshr times
-    const twoDaysUnix = moment(`${activeRefreshr.date}T00:00:00`)
+    const twoDaysUnix = moment(`${addedRefreshr.date}T00:00:00`)
       .add(2, 'day')
       .unix();
-    const twoWeeksUnix = moment(`${activeRefreshr.date}T00:00:00`)
+    const twoWeeksUnix = moment(`${addedRefreshr.date}T00:00:00`)
       .add(2, 'weeks')
       .unix();
-    const twoMonthsUnix = moment(`${activeRefreshr.date}T00:00:00`)
+    const twoMonthsUnix = moment(`${addedRefreshr.date}T00:00:00`)
       .add(2, 'month')
       .unix();
 
-    activeRefreshr.timeTriData = [
+    addedRefreshr.timeTriData = [
       { send_at: twoDaysUnix },
       { send_at: twoWeeksUnix },
       { send_at: twoMonthsUnix }
@@ -296,11 +297,11 @@ function ClassEditView(props) {
     // create sendgrid campaign
     const body = {
       sender_id: 428251, // maybe we should move this to an env variable?
-      title: activeRefreshr.name,
+      title: addedRefreshr.name,
       subject: `Your Refreshr for ${classData.name} is here!`,
       plain_content: 'this is plain content [unsubscribe]',
       html_content: `<html> <head> <title></title> </head> <body> <p>Take your refreshr at this link: ${
-        activeRefreshr.typeform_url
+        addedRefreshr.typeform_url
       } [unsubscribe] </p> </body> </html>`,
       list_ids: [Number(classData.id)],
       suppression_group_id: 9332 // permanent (Unsubscribe ID)
@@ -320,13 +321,13 @@ function ClassEditView(props) {
       //   refreshr_id: activeRefreshr.id,
       //   sg_campaign_id
       // };
-      activeRefreshr.sg_campaign_id = sg_campaign_id;
+      addedRefreshr.sg_campaign_id = sg_campaign_id;
 
       // add refreshr to TCR table
       res = await ax.post(`/classes/${classData.id}/campaigns`, {
-        refreshr_id: activeRefreshr.refreshr_id,
+        refreshr_id: addedRefreshr.refreshr_id,
         teacher_id: userID,
-        date: activeRefreshr.date,
+        date: addedRefreshr.date,
         sg_campaign_id
       });
 
@@ -334,23 +335,23 @@ function ClassEditView(props) {
       // schedule campaign
       res = await sgAx.post(
         `/campaigns/${sg_campaign_id}/schedules`,
-        activeRefreshr.timeTriData[i]
+        addedRefreshr.timeTriData[i]
       );
       console.log(res);
     }
 
     // add refreshr to class refreshrs, remove from active refreshr
-    // setRefreshrs(refreshrs.concat(activeRefreshr));
-    setActiveRefreshr(null);
+    // setRefreshrs(refreshrs.concat(addedRefreshr));
+    setAddedRefreshr(null);
     fetchClass(); // need to update class data here
     console.log(refreshrs);
   }
 
   useEffect(() => {
-    console.log(activeRefreshr);
-  }, [activeRefreshr]);
+    console.log(addedRefreshr);
+  }, [addedRefreshr]);
 
-  function selectRefreshr(id) {
+  function selectNewRefreshr(id) {
     // remove refreshr from teacher refreshr list
     console.log(id);
 
@@ -358,11 +359,11 @@ function ClassEditView(props) {
     console.log(id);
     const [active] = teacherRefs.filter(r => r.refreshr_id === id);
     console.log(active);
-    setActiveRefreshr(active);
+    setAddedRefreshr(active);
   }
 
   async function removeRefreshr(id) {
-    console.log(activeRefreshr);
+    console.log(addedRefreshr);
     const removedRefreshrs = refreshrs.filter(r => r.refreshr_id === id);
     console.log(removedRefreshrs);
 
@@ -378,9 +379,7 @@ function ClassEditView(props) {
       console.log(res);
     }
 
-    // add refreshr to teacher refs, remove from class refreshr list
-    // setRefreshrs(refreshrs.filter(r => r.id !== id));
-    // setTeacherRefs([...teacherRefs, removedRefreshrs[0]]);
+    // fetch updated class info
     fetchClass();
   }
 
@@ -536,6 +535,59 @@ function ClassEditView(props) {
     setSelectedStudents([]);
   }
 
+  async function selectRefreshr(id) {
+    console.log(id);
+    const [selectedRefreshr] = refreshrs.filter(r => r.refreshr_id === id);
+    setActiveRefreshr(selectedRefreshr);
+    console.log(activeRefreshr);
+    console.log(activeRefreshr === selectedRefreshr);
+  }
+
+  async function changeDate(e) {
+    console.log(activeRefreshr.date);
+    console.log(e.target.value);
+    activeRefreshr.date = e.target.value; // think we need to do this on submit?
+  }
+
+  async function submitNewDate(e) {
+    e.preventDefault();
+    console.log(e);
+    // set 3 refreshr times
+    const twoDaysUnix = moment(`${activeRefreshr.date}T00:00:00`)
+      .add(2, 'day')
+      .unix();
+    const twoWeeksUnix = moment(`${activeRefreshr.date}T00:00:00`)
+      .add(2, 'weeks')
+      .unix();
+    const twoMonthsUnix = moment(`${activeRefreshr.date}T00:00:00`)
+      .add(2, 'month')
+      .unix();
+
+    const timeTriData = [
+      { send_at: twoDaysUnix },
+      { send_at: twoWeeksUnix },
+      { send_at: twoMonthsUnix }
+    ];
+
+    // get three campaigns
+    let campaigns = refreshrs.filter(
+      r => r.refreshr_id === activeRefreshr.refreshr_id
+    );
+
+    console.log(campaigns);
+    campaigns = campaigns.map(c => c.sg_campaign_id);
+    console.log(campaigns);
+
+    // update campaigns
+    for (let i = 0; i < 3; i++) {
+      const res = await sgAx.patch(
+        `/campaigns/${campaigns[i]}/schedules`,
+        timeTriData[i]
+      );
+      console.log(res);
+    }
+  }
+
   const makeInput = (
     name,
     label,
@@ -587,11 +639,17 @@ function ClassEditView(props) {
       <Refreshrs
         refreshrs={displayRefreshrs}
         removeRefreshr={removeRefreshr}
-        activeRefreshr={activeRefreshr}
-        setActiveRefreshr={setActiveRefreshr}
+        addedRefreshr={addedRefreshr}
+        setAddedRefreshr={setAddedRefreshr}
         addRefreshr={addRefreshr}
         selectRefreshr={selectRefreshr}
         teacherRefs={teacherRefs}
+        selectRefreshr={selectRefreshr}
+        selectNewRefreshr={selectNewRefreshr}
+        activeRefreshr={activeRefreshr}
+        changeDate={changeDate}
+        submitNewDate={submitNewDate}
+        makeInput={makeInput}
       />
     </Paper>
   );

@@ -11,6 +11,8 @@ import {
 import { withStyles } from '@material-ui/core/styles';
 import DeleteIcon from '@material-ui/icons/Delete';
 import RefreshrDialog from './RefreshrListDialog';
+import { Create, Backspace } from '@material-ui/icons/';
+import moment from 'moment';
 
 const styles = theme => ({
   refreshrList: {
@@ -29,6 +31,7 @@ const styles = theme => ({
     display: 'flex',
     flexFlow: 'column nowrap',
     alignItems: 'center',
+    width: '50%',
     [theme.breakpoints.only('xs')]: {
       width: '100%'
     }
@@ -46,11 +49,24 @@ const styles = theme => ({
       cursor: 'pointer'
     }
   },
-  activeRefreshr: {
+  addedRefreshr: {
     height: 200,
-    border: '1px solid red',
+    border: `4px solid theme.palette.secondary`,
     margin: theme.spacing.unit * 3,
     position: 'relative'
+  },
+  activeRefreshr: {
+    transform: 'scale(1.2)',
+    border: `4px solid blue`,
+    background: theme.palette.secondary.main,
+    margin: theme.spacing.unit,
+    display: 'flex',
+    flexFlow: 'column nowrap',
+    alignItems: 'center',
+    width: '50%',
+    [theme.breakpoints.only('xs')]: {
+      width: '100%'
+    }
   },
   newRefCard: {
     display: 'flex',
@@ -94,7 +110,7 @@ function Refreshrs(props) {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   function setDate(e) {
     console.log(e.target.value);
-    props.setActiveRefreshr({ ...props.activeRefreshr, date: e.target.value });
+    props.setAddedRefreshr({ ...props.addedRefreshr, date: e.target.value });
   }
   function closeModal() {
     setModalIsOpen(false);
@@ -107,12 +123,42 @@ function Refreshrs(props) {
         </Typography>
         <Grid className={classes.refreshrList}>
           {props.refreshrs.map(r => (
-            <Card className={classes.refreshrCard} key={r.refreshr_id} raised>
+            <Card
+              className={
+                r === props.activeRefreshr
+                  ? classes.activeRefreshr
+                  : classes.refreshrCard
+              }
+              key={r.refreshr_id}
+              onClick={() => props.selectRefreshr(r.refreshr_id)}
+              raised
+            >
               <CardContent className={classes.refreshrContent}>
-                {r.name}
+                <Typography variant="subtitle2">{r.name}</Typography>
               </CardContent>
               <CardContent className={classes.refreshrContent}>
-                {r.date}
+                {r === props.activeRefreshr ? (
+                  <form onSubmit={e => props.submitNewDate(e)}>
+                    {props.makeInput(
+                      'date',
+                      'Date',
+                      // Date(r.date),
+                      undefined,
+                      e => {
+                        props.changeDate(e);
+                      },
+                      'date'
+                    )}
+                    <button>submit</button>
+                  </form>
+                ) : (
+                  <>
+                    <Typography variant="body1">Taught On:</Typography>
+                    <Typography variant="body1">
+                      {moment(r.date).format('MM/DD/YY')}
+                    </Typography>
+                  </>
+                )}
               </CardContent>
               <DeleteIcon
                 onClick={() => props.removeRefreshr(r.refreshr_id)}
@@ -120,19 +166,19 @@ function Refreshrs(props) {
               />
             </Card>
           ))}
-          {props.activeRefreshr && (
+          {props.addedRefreshr && (
             <Card
-              className={classes.activeRefreshr}
-              key={props.activeRefreshr.refreshr_id}
+              className={classes.addedRefreshr}
+              key={props.addedRefreshr.refreshr_id}
               raised
             >
-              <CardContent>{props.activeRefreshr.name}</CardContent>
+              <CardContent>{props.addedRefreshr.name}</CardContent>
               <TextField
                 onChange={e => setDate(e)}
                 variant="outlined"
                 type="date"
               />
-              {props.activeRefreshr.date && (
+              {props.addedRefreshr.date && (
                 <Button onClick={props.addRefreshr}>Submit</Button>
               )}
             </Card>
@@ -141,7 +187,7 @@ function Refreshrs(props) {
             refreshrs={props.teacherRefs}
             open={modalIsOpen}
             handleClose={closeModal}
-            selectRefreshr={props.selectRefreshr}
+            selectNewRefreshr={props.selectNewRefreshr}
           />
           <Card className={classes.refreshrCard} raised>
             <CardContent className={classes.newRefCard}>
