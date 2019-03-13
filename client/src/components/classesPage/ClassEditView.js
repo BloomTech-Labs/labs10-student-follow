@@ -544,6 +544,7 @@ function ClassEditView(props) {
   }
 
   async function changeDate(e) {
+    console.log(activeRefreshr);
     console.log(activeRefreshr.date);
     console.log(e.target.value);
     activeRefreshr.date = e.target.value; // think we need to do this on submit?

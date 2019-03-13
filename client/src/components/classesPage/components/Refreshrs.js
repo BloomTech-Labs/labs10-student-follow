@@ -6,39 +6,47 @@ import {
   CardContent,
   Button,
   TextField,
-  Icon
+  Icon,
+  List,
+  ListItem,
+  ListItemIcon,
+  Divider
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import DeleteIcon from '@material-ui/icons/Delete';
 import RefreshrDialog from './RefreshrListDialog';
-import { Create, Backspace } from '@material-ui/icons/';
+import { Create, Backspace, RemoveCircleOutline } from '@material-ui/icons/';
 import moment from 'moment';
+import RefreshrIcon from './LogoSmall.svg';
 
 const styles = theme => ({
-  refreshrList: {
+  refreshrCardWrapper: {
     display: 'flex',
     padding: theme.spacing.unit,
     [theme.breakpoints.only('xs')]: {
       flexFlow: 'column nowrap',
       justifyContent: 'space-between',
       alignItems: 'center'
-    }
+    },
+    justifyContent: 'center'
   },
   refreshrCard: {
-    border: '1px solid white',
-    background: theme.palette.secondary.main,
+    border: `1px solid ${theme.palette.secondary.main}`,
+    color: `${theme.palette.primary.contrastText}`,
     margin: theme.spacing.unit,
     display: 'flex',
     flexFlow: 'column nowrap',
     alignItems: 'center',
-    width: '50%',
+    // width: '50%',
     fontSize: '1rem',
+    // minWidth: 375,
+    // minHeight: 225,
     [theme.breakpoints.only('xs')]: {
       width: '100%'
     }
   },
   refreshrContent: {
-    color: theme.palette.primary.dark,
+    // color: theme.palette.primary.dark,
     fontSize: '1.0rem'
   },
 
@@ -122,14 +130,101 @@ function Refreshrs(props) {
         <Typography variant="h6" className={classes.title} gutterBottom>
           Refreshrs
         </Typography>
-        {props.activeRefreshr && (
-          <Grid>
-            <Card className={classes.activeRefreshr} raised>
-              <CardContent>{props.activeRefreshr.name}</CardContent>
+        <Grid className={classes.refreshrCardWrapper}>
+          {props.activeRefreshr ? (
+            <Card className={classes.refreshrCard} raised>
+              <CardContent className={classes.refreshrContent}>
+                <Typography variant="subtitle2">
+                  {props.activeRefreshr.name}
+                </Typography>
+              </CardContent>
+              <CardContent className={classes.refreshrContent}>
+                <form onSubmit={e => props.submitNewDate(e)}>
+                  <TextField
+                    variant="outlined"
+                    type="date"
+                    defaultValue={moment(props.activeRefreshr.date).format(
+                      'YYYY-MM-DD'
+                    )}
+                    onChange={e => props.changeDate(e)}
+                  />
+
+                  <button>submit</button>
+                </form>
+              </CardContent>
+              <RemoveCircleOutline
+                onClick={() =>
+                  props.removeRefreshr(props.activeRefreshr.refreshr_id)
+                }
+                className={classes.refreshrIcon}
+              />
             </Card>
-          </Grid>
-        )}
+          ) : (
+            <Card className={classes.refreshrCard} raised>
+              <CardContent className={classes.refreshrContent}>
+                <Typography variant="subtitle2">
+                  Select a Refreshr To Edit
+                </Typography>
+              </CardContent>
+            </Card>
+          )}
+        </Grid>
+        <List component="ul" className={classes.refreshrList}>
+          {props.refreshrs.map(r => (
+            <ListItem
+              key={r.refreshr_id}
+              onClick={() => props.selectRefreshr(r.refreshr_id)}
+            >
+              {r.name}
+            </ListItem>
+          ))}
+          <ListItem onClick={() => setModalIsOpen(!modalIsOpen)}>
+            Add new refreshr to class
+          </ListItem>
+        </List>
         <Grid className={classes.refreshrList}>
+          {props.addedRefreshr && (
+            <Card
+              className={classes.addedRefreshr}
+              key={props.addedRefreshr.refreshr_id}
+              raised
+            >
+              <CardContent>{props.addedRefreshr.name}</CardContent>
+              <TextField
+                onChange={e => setDate(e)}
+                variant="outlined"
+                type="date"
+              />
+              {props.addedRefreshr.date && (
+                <Button onClick={props.addRefreshr}>Submit</Button>
+              )}
+            </Card>
+          )}
+          <RefreshrDialog
+            refreshrs={props.teacherRefs}
+            open={modalIsOpen}
+            handleClose={closeModal}
+            selectNewRefreshr={props.selectNewRefreshr}
+          />
+        </Grid>
+      </Grid>
+      <Button variant="outlined" className={classes.saveButton}>
+        Save Changes
+      </Button>
+    </>
+  );
+}
+
+/*
+                  {props.makeInput(
+                    'date',
+                    'Date',
+                    String(Date(props.activeRefreshr.date)),
+                    e => {
+                      props.changeDate(e);
+                    },
+                    'date'
+                  )}
           {props.refreshrs.map(r => (
             <Card
               className={
@@ -174,29 +269,6 @@ function Refreshrs(props) {
               />
             </Card>
           ))}
-          {props.addedRefreshr && (
-            <Card
-              className={classes.addedRefreshr}
-              key={props.addedRefreshr.refreshr_id}
-              raised
-            >
-              <CardContent>{props.addedRefreshr.name}</CardContent>
-              <TextField
-                onChange={e => setDate(e)}
-                variant="outlined"
-                type="date"
-              />
-              {props.addedRefreshr.date && (
-                <Button onClick={props.addRefreshr}>Submit</Button>
-              )}
-            </Card>
-          )}
-          <RefreshrDialog
-            refreshrs={props.teacherRefs}
-            open={modalIsOpen}
-            handleClose={closeModal}
-            selectNewRefreshr={props.selectNewRefreshr}
-          />
           <Card className={classes.refreshrCard} raised>
             <CardContent className={classes.newRefCard}>
               <Typography variant="h4" className={classes.newTitle}>
@@ -212,13 +284,8 @@ function Refreshrs(props) {
               </Icon>
             </CardContent>
           </Card>
-        </Grid>
-      </Grid>
-      <Button variant="outlined" className={classes.saveButton}>
-        Save Changes
-      </Button>
-    </>
-  );
-}
+
+
+*/
 
 export default withStyles(styles, { withTheme: true })(Refreshrs);
