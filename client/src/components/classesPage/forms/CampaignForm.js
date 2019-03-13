@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import {
   Grid,
   Paper,
@@ -7,13 +8,11 @@ import {
   Typography,
   Icon,
   Button,
-  Fab
+  Fab,
+  withStyles
 } from '@material-ui/core/';
-import { withStyles } from '@material-ui/core/styles';
-import { Link } from 'react-router-dom';
+import { ArrowBack, Send } from '@material-ui/icons';
 import axios from 'axios';
-import ArrowBack from '@material-ui/icons/ArrowBack';
-import Send from '@material-ui/icons/Send';
 import moment from 'moment';
 
 const styles = theme => ({
