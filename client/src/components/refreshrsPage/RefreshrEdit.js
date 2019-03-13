@@ -6,8 +6,11 @@ import {
   withStyles,
   Button,
   Paper,
-  Input
+  Input,
+  Snackbar,
+  IconButton
 } from '@material-ui/core';
+import { Close } from '@material-ui/icons';
 
 const axios = require('axios');
 
@@ -122,6 +125,8 @@ function Refreshr(props) {
   });
   const typeformId = window.location.pathname.slice(-6);
 
+  const [updateSnackBool, setUpdateSnackBool] = useState(false);
+
   const headers = {
     Authorization: `Bearer ${process.env.REACT_APP_TYPEFORM}`
   };
@@ -224,15 +229,42 @@ function Refreshr(props) {
     } catch (error) {
       console.log(error);
     }
-    // handleSnackbar();
-    //setSubmitted(true);
   };
   // }
 
-  console.log('reviewText + => ', reviewText);
+  const handleUpdateSnackBool = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setUpdateSnackBool(!updateSnackBool);
+  };
+
   return (
     <Paper className={props.classes.container} elevation={24}>
       <Grid className={props.classes.wrapper}>
+        <Snackbar
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left'
+          }}
+          open={updateSnackBool}
+          autoHideDuration={4000}
+          onClose={handleUpdateSnackBool}
+          ContentProps={{
+            'aria-describedby': 'message-id'
+          }}
+          message={<span id="message-id">Refreshr Updated!</span>}
+          action={[
+            <IconButton
+              key="close"
+              aria-label="Close"
+              color="inherit"
+              onClick={handleUpdateSnackBool}
+            >
+              <Close />
+            </IconButton>
+          ]}
+        />
         <FormGroup
           onChange={() =>
             setQuestionObject({
@@ -396,8 +428,9 @@ function Refreshr(props) {
             variant="contained"
             color="primary"
             onClick={e => {
-              // props.addQuestions(questionObject);
+              props.addQuestions(questionObject);
               editForm(e);
+              handleUpdateSnackBool();
             }}
           >
             Update
