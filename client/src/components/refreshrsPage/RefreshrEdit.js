@@ -129,6 +129,7 @@ function Refreshr(props) {
   const [a3Text, setA3Text] = useState('');
   const [a4Text, setA4Text] = useState('');
   const [refreshrNameEdit, setRefreshrNameEdit] = useState(false);
+  const [reviewEdit, setReviewEdit] = useState(false);
   const [questionObject, setQuestionObject] = useState({
     reviewText,
     refreshrName,
@@ -301,16 +302,13 @@ function Refreshr(props) {
                   ? props.classes.inputName
                   : props.classes.hidden
               }
-              // className={}
             />
-            <FormGroup className={props.classes.edit}>
+            <FormGroup
+              onClick={() => setRefreshrNameEdit(!refreshrNameEdit)}
+              className={props.classes.edit}
+            >
               <i className="fas fa-pen" />
-              <h4
-                onClick={() => setRefreshrNameEdit(!refreshrNameEdit)}
-                className={props.classes.editText}
-              >
-                Edit
-              </h4>
+              <h4 className={props.classes.editText}>Edit</h4>
             </FormGroup>
           </FormGroup>
 
@@ -322,6 +320,13 @@ function Refreshr(props) {
             className={props.classes.form1}
             onSubmit={props.handleSubmit}
           >
+            <Typography
+              className={
+                reviewEdit ? props.classes.hidden : props.classes.editText
+              }
+            >
+              {reviewText}
+            </Typography>
             <Input
               disableUnderline
               onChange={e => setReviewText(e.target.value)}
@@ -330,8 +335,19 @@ function Refreshr(props) {
               multiline
               rows="4"
               value={reviewText}
-              className={props.classes.inputQuestion}
+              className={
+                reviewEdit ? props.classes.inputQuestion : props.classes.hidden
+              }
             />
+            <FormGroup className={props.classes.edit}>
+              <i className="fas fa-pen" />
+              <h4
+                onClick={() => setReviewEdit(!reviewEdit)}
+                className={props.classes.editText}
+              >
+                Edit
+              </h4>
+            </FormGroup>
           </FormGroup>
 
           <hr className={props.classes.hrStyle} />
