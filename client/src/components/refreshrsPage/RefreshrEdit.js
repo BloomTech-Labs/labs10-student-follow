@@ -6,8 +6,11 @@ import {
   withStyles,
   Button,
   Paper,
-  Input
+  Input,
+  Snackbar,
+  IconButton
 } from '@material-ui/core';
+import { Close } from '@material-ui/icons';
 
 const axios = require('axios');
 
@@ -108,11 +111,11 @@ const styles = theme => ({
 });
 
 function Refreshr(props) {
-  const { setUrl, url } = props;
+  const { match, updateRefreshrDB, token } = props;
   const [refreshrName, setRefreshrName] = useState('');
   const [reviewText, setReviewText] = useState('');
-  const [questionTextOne, setQuestionTextOne] = useState('');
-  const [questionTextTwo, setQuestionTextTwo] = useState('');
+  const [questionTextOne, setQuestionTextOne] = useState({ text: '', id: '' });
+  const [questionTextTwo, setQuestionTextTwo] = useState({ text: '', id: '' });
   const [a1Text, setA1Text] = useState('');
   const [a2Text, setA2Text] = useState('');
   const [a3Text, setA3Text] = useState('');
@@ -128,7 +131,9 @@ function Refreshr(props) {
     questionTextTwo,
     answers: { a1Text, a2Text, a3Text, a4Text }
   });
-  const typeformId = window.location.pathname.slice(-6);
+  const typeformId = match.params.id;
+
+  const [updateSnackBool, setUpdateSnackBool] = useState(false);
 
   const headers = {
     Authorization: `Bearer ${process.env.REACT_APP_TYPEFORM}`
@@ -137,22 +142,29 @@ function Refreshr(props) {
   useEffect(() => {
     axios({
       method: 'get',
-      url: `https://api.typeform.com/forms/${typeformId}`,
-      headers: { Authorization: `Bearer ${process.env.REACT_APP_TYPEFORM}` }
+      //DEVELOPMENT
+      url: `http://localhost:9000/refreshrs/${typeformId}`,
+      headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => {
-        const answers = res.data.fields[1].properties.choices.map(
-          answer => answer.label
-        );
+        // console.log('res from useEffect', res);
+        // const answers = res.data.fields[1].properties.choices.map(
+        //   answer => answer.label
         console.log('FROM USE EFFECT', res);
-        setRefreshrName(res.data.welcome_screens[0].title);
-        setReviewText(res.data.fields[1].properties.description);
-        setA1Text(answers[0]);
-        setA2Text(answers[1]);
-        setA3Text(answers[2]);
-        setA4Text(answers[3]);
-        setQuestionTextOne(res.data.fields[1].title);
-        setQuestionTextTwo(res.data.fields[2].title);
+        setRefreshrName(res.data.refreshr.name);
+        setReviewText(res.data.refreshr.review_text);
+        setA1Text(res.data.refreshr.questions[0].question.answer_1);
+        setA2Text(res.data.refreshr.questions[0].question.answer_2);
+        setA3Text(res.data.refreshr.questions[0].question.answer_3);
+        setA4Text(res.data.refreshr.questions[0].question.answer_4);
+        setQuestionTextOne({
+          text: res.data.refreshr.questions[0].question.question_text,
+          id: res.data.refreshr.questions[0].question_id
+        });
+        setQuestionTextTwo({
+          text: res.data.refreshr.questions[1].question.question_text,
+          id: res.data.refreshr.questions[1].question_id
+        });
       })
       .catch(err => console.log(err));
   }, []);
@@ -180,7 +192,7 @@ function Refreshr(props) {
         },
         {
           ref: 'question_1',
-          title: questionTextOne,
+          title: questionTextOne.text,
           type: 'multiple_choice',
           properties: {
             description: reviewText,
@@ -207,7 +219,7 @@ function Refreshr(props) {
         },
         {
           ref: 'question_2',
-          title: questionTextTwo,
+          title: questionTextTwo.text,
           type: 'short_text',
           properties: {
             description: reviewText
@@ -221,26 +233,57 @@ function Refreshr(props) {
           headers
         })
         .then(res => {
-          const newRefreshr = {
+          console.log(res.data.id, match.params.id);
+          const updatedRefreshr = {
             name: res.data.title,
             review_text: res.data.fields[1].properties.description,
             typeform_id: res.data.id,
             typeform_url: res.data._links.display
           };
-          props.sendRefreshrToDB(newRefreshr);
+          console.log(questionObject);
+          updateRefreshrDB(updatedRefreshr, typeformId, questionObject);
         });
     } catch (error) {
       console.log(error);
     }
-    // handleSnackbar();
-    //setSubmitted(true);
   };
   // }
 
-  console.log('reviewText + => ', reviewText);
+  const handleUpdateSnackBool = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setUpdateSnackBool(!updateSnackBool);
+  };
+
+  console.log('questionTextOne =>', questionTextOne);
+
   return (
     <Paper className={props.classes.container} elevation={24}>
       <Grid className={props.classes.wrapper}>
+        <Snackbar
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left'
+          }}
+          open={updateSnackBool}
+          autoHideDuration={4000}
+          onClose={handleUpdateSnackBool}
+          ContentProps={{
+            'aria-describedby': 'message-id'
+          }}
+          message={<span id="message-id">Refreshr Updated!</span>}
+          action={[
+            <IconButton
+              key="close"
+              aria-label="Close"
+              color="inherit"
+              onClick={handleUpdateSnackBool}
+            >
+              <Close />
+            </IconButton>
+          ]}
+        />
         <FormGroup
           onChange={() =>
             setQuestionObject({
@@ -359,16 +402,18 @@ function Refreshr(props) {
                 multiChoiceEdit ? props.classes.hidden : props.classes.editText
               }
             >
-              {questionTextOne}
+              {questionTextOne.text}
             </Typography>
             <Input
               disableUnderline
-              onChange={e => setQuestionTextOne(e.target.value)}
+              onChange={e =>
+                setQuestionTextOne({ ...questionTextOne, text: e.target.value })
+              }
               name="classnameInput"
               required
               multiline
               rows="4"
-              value={questionTextOne}
+              value={questionTextOne.text}
               className={
                 multiChoiceEdit
                   ? props.classes.inputQuestion
@@ -520,16 +565,18 @@ function Refreshr(props) {
             <Typography
               className={q2Edit ? props.classes.hidden : props.classes.editText}
             >
-              {questionTextTwo}
+              {questionTextTwo.text}
             </Typography>
             <Input
               disableUnderline
               name="classnameInput"
-              onChange={e => setQuestionTextTwo(e.target.value)}
+              onChange={e =>
+                setQuestionTextTwo({ ...questionTextTwo, text: e.target.value })
+              }
               required
               multiline
               rows="4"
-              value={questionTextTwo}
+              value={questionTextTwo.text}
               // className={props.classes.inputQuestion}
               className={
                 q2Edit ? props.classes.inputQuestion : props.classes.hidden
@@ -549,8 +596,8 @@ function Refreshr(props) {
             variant="contained"
             color="primary"
             onClick={e => {
-              // props.addQuestions(questionObject);
               editForm(e);
+              handleUpdateSnackBool();
             }}
           >
             Update
