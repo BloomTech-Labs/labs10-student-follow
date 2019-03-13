@@ -123,7 +123,10 @@ function students(props) {
       </Typography>
       <Card className={classes.studentList}>
         {props.students.map(s => (
-          <Grid key={s.student_id} className={classes.studentName}>
+          <Grid
+            key={s.student_id}
+            className={s.isActiveStudent ? null : classes.studentName}
+          >
             <span>{`${s.first_name} ${s.last_name} `}</span>
             <Grid className={classes.studentIcons}>
               {s.isActiveStudent ? (

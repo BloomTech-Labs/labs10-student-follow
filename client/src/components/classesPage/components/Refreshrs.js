@@ -122,6 +122,13 @@ function Refreshrs(props) {
         <Typography variant="h6" className={classes.title} gutterBottom>
           Refreshrs
         </Typography>
+        {props.activeRefreshr && (
+          <Grid>
+            <Card className={classes.activeRefreshr} raised>
+              <CardContent>{props.activeRefreshr.name}</CardContent>
+            </Card>
+          </Grid>
+        )}
         <Grid className={classes.refreshrList}>
           {props.refreshrs.map(r => (
             <Card
