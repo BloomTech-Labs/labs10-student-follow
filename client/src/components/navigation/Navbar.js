@@ -44,20 +44,15 @@ const styles = theme => ({
     justifyContent: 'space-between'
   },
   btn: {
-    background: theme.palette.primary.main,
-    color: theme.palette.secondary.main,
-    '&:hover': {
-      background: theme.palette.secondary.main,
-      color: theme.palette.primary.main,
-      borderColor: theme.palette.primary.main
-    }
-  },
-  pricingLink: {
     color: theme.palette.secondary.contrastText,
+    background: theme.palette.secondary.main,
     fontSize: '1rem',
     fontWeight: 'bold',
     '&:hover': {
-      cursor: 'pointer'
+      cursor: 'pointer',
+      color: theme.palette.primary.contrastText ,
+      background: theme.palette.primary.dark,
+
     }
   },
 
@@ -106,7 +101,7 @@ const styles = theme => ({
 });
 
 const Navbar = props => {
-  const { classes, location } = props;
+  const { classes, location, toggleModal } = props;
 
   /*-------- NAV BUTTONS --------*/
   const ListItemLink = props => {
@@ -128,9 +123,15 @@ const Navbar = props => {
     const { to, open, ...other } = props;
     const primary = breadcrumbNameMap[to];
     return (
-      <RouterLink to={to} className={classes.homeLink} style={{textDecoration: 'none'}}>
+      <RouterLink
+        to={to}
+        className={classes.homeLink}
+        style={{ textDecoration: 'none' }}
+      >
         <img src={Logo} alt="refreshr logo" {...other} primary={primary} />
-        <Typography variant='caption' className={classes.dashboardFont}>Home</Typography>
+        <Typography variant="caption" className={classes.dashboardFont}>
+          Home
+        </Typography>
       </RouterLink>
     );
   };
@@ -183,10 +184,10 @@ const Navbar = props => {
                 handleLogIn();
               }}
             >
-              {location.pathname !== '/' ? 'Logout' : 'Login'}
+              Logout
             </Button>
             <HomeLink className={classes.logo} to="/dashboard" />
-            
+
             <IconButton
               color="inherit"
               aria-label="Open Nav"
@@ -229,7 +230,7 @@ const Navbar = props => {
   } else {
     return (
       <div className={classes.container}>
-        <AppBar position="fixed" className={classes.appBar}>
+        <AppBar position="fixed" className={classes.appBar} >
           <Toolbar className={classes.toolbar}>
             <Button
               variant="outlined"
@@ -239,11 +240,18 @@ const Navbar = props => {
                 handleLogIn();
               }}
             >
-              {location.pathname !== '/' ? 'Logout' : 'Login/Signup'}
+              Login/Signup
             </Button>
-            <Typography  onClick={e => { e.preventDefault(); props.history.push("/pricing")}} className={classes.pricingLink}>
-            Pricing
-            </Typography>
+            <Button
+              variant="outlined"
+              onClick={e => {
+                e.preventDefault();
+                toggleModal()
+              }}
+              className={classes.btn}
+            >
+              Pricing
+            </Button>
           </Toolbar>
         </AppBar>
       </div>

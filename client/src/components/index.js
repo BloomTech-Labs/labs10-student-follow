@@ -10,6 +10,7 @@ import RefreshrsPage from './refreshrsPage/RefreshrsPage';
 
 /* BILLING */
 import TakeMoney from './billingPage/TakeMoney';
+import PricingModal from './billingPage/PricingModal'
 
 /* CLASSES */
 import ClassCreateView from './classesPage/ClassCreateView';
@@ -46,5 +47,6 @@ export {
   Refreshr,
   RefreshrEdit,
   ClassOperations,
-  Dashboard
+  Dashboard,
+  PricingModal
 };
