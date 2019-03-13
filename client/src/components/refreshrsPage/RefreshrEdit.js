@@ -152,13 +152,14 @@ function Refreshr(props) {
         setA2Text(answers[1]);
         setA3Text(answers[2]);
         setA4Text(answers[3]);
-        setTypeformQ1(res.data.fields[1]);
-        setTypeformQ2(res.data.fields[2]);
+        // setTypeformQ1(res.data.fields[1]);
+        setQuestionTextOne(res.data.fields[1]);
+        setQuestionTextTwo(res.data.fields[2]);
       })
       .catch(err => console.log(err));
   }, []);
 
-  console.log('Multi + => ', a1Text);
+  console.log('questionTextOne + => ', questionTextOne);
   return (
     <Paper className={props.classes.container} elevation={24}>
       <Grid className={props.classes.wrapper}>
@@ -226,7 +227,6 @@ function Refreshr(props) {
               multiline
               rows="4"
               value={reviewText.description}
-              // value={typeformQ1Props.description}
               className={props.classes.inputQuestion}
             />
           </FormGroup>
@@ -253,7 +253,7 @@ function Refreshr(props) {
               required
               multiline
               rows="4"
-              value={typeformQ1.title}
+              value={questionTextOne.title}
               className={props.classes.inputQuestion}
             />
           </FormGroup>
@@ -316,7 +316,7 @@ function Refreshr(props) {
               required
               multiline
               rows="4"
-              value={typeformQ2.title}
+              value={questionTextTwo.title}
               className={props.classes.inputQuestion}
             />
           </FormGroup>
