@@ -428,8 +428,8 @@ function Refreshr(props) {
             variant="contained"
             color="primary"
             onClick={e => {
-              // props.addQuestions(questionObject);
-              // editForm(e);
+              props.addQuestions(questionObject);
+              editForm(e);
               handleUpdateSnackBool();
             }}
           >
