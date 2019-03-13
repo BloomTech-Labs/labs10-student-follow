@@ -90,11 +90,12 @@ const styles = theme => ({
   edit: {
     display: 'flex',
     wrap: 'nowrap',
-    marginTop: '2%',
+    margin: '15px 0px',
     width: '100%',
     alignItems: 'center',
     alignContent: 'center',
-    cursor: 'pointer'
+    cursor: 'pointer',
+    height: '10px'
   },
   hrStyle: {
     margin: '1rem auto',
@@ -383,17 +384,66 @@ function Refreshr(props) {
             </FormGroup> */}
           </FormGroup>
 
-          <FormGroup onClick={() => setMultiChoiceEdit(!multiChoiceEdit)}>
+          <FormGroup
+          // className={
+          //   multiChoiceEdit
+          //     ? props.classes.hidden
+          //     : props.classes.inputMultipleChoice
+          // }
+          >
+            {/* <FormGroup
+              className={
+                multiChoiceEdit
+                  ? props.classes.hidden
+                  : props.classes.inputMultipleChoice
+              }
+            > */}
+            {/* </FormGroup> */}
             <Typography
+              style={{
+                textAlign: 'center',
+                width: '100%'
+              }}
               className={
                 multiChoiceEdit ? props.classes.hidden : props.classes.editText
               }
             >
-              <Typography>{a1Text}</Typography>
-              <Typography>{a2Text}</Typography>
-              <Typography>{a3Text}</Typography>
-              <Typography>{a4Text}</Typography>
+              {a1Text}
             </Typography>
+            <Typography
+              style={{
+                textAlign: 'center',
+                width: '100%'
+              }}
+              className={
+                multiChoiceEdit ? props.classes.hidden : props.classes.editText
+              }
+            >
+              {a2Text}
+            </Typography>
+            <Typography
+              style={{
+                textAlign: 'center',
+                width: '100%'
+              }}
+              className={
+                multiChoiceEdit ? props.classes.hidden : props.classes.editText
+              }
+            >
+              {a3Text}
+            </Typography>
+            <Typography
+              style={{
+                textAlign: 'center',
+                width: '100%'
+              }}
+              className={
+                multiChoiceEdit ? props.classes.hidden : props.classes.editText
+              }
+            >
+              {a4Text}
+            </Typography>
+            {/* </FormGroup> */}
             <form className={props.classes.multipleChoice}>
               <Input
                 disableUnderline
