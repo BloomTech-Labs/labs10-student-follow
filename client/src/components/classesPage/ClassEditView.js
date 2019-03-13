@@ -359,6 +359,7 @@ function ClassEditView(props) {
     console.log(id);
     const [active] = teacherRefs.filter(r => r.refreshr_id === id);
     console.log(active);
+    setActiveRefreshr(null);
     setAddedRefreshr(active);
   }
 

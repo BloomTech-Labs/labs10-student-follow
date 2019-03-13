@@ -39,8 +39,8 @@ const styles = theme => ({
     alignItems: 'center',
     // width: '50%',
     fontSize: '1rem',
-    // minWidth: 375,
-    // minHeight: 225,
+    minWidth: 375,
+    minHeight: 225,
     [theme.breakpoints.only('xs')]: {
       width: '100%'
     }
@@ -159,6 +159,29 @@ function Refreshrs(props) {
                 className={classes.refreshrIcon}
               />
             </Card>
+          ) : props.addedRefreshr ? (
+            <Card
+              className={classes.refreshrCard}
+              // key={props.addedRefreshr.refreshr_id}
+              raised
+            >
+              <CardContent className={classes.refreshrContent}>
+                <Typography variant="subtitle2">
+                  {props.addedRefreshr.name}
+                </Typography>
+              </CardContent>
+              <CardContent className={classes.refreshrContent}>
+                <TextField
+                  onChange={e => setDate(e)}
+                  variant="outlined"
+                  type="date"
+                  defaultValue={moment().format('YYYY-MM-DD')}
+                />
+              </CardContent>
+              {props.addedRefreshr.date && (
+                <Button onClick={props.addRefreshr}>Submit</Button>
+              )}
+            </Card>
           ) : (
             <Card className={classes.refreshrCard} raised>
               <CardContent className={classes.refreshrContent}>
@@ -182,31 +205,12 @@ function Refreshrs(props) {
             Add new refreshr to class
           </ListItem>
         </List>
-        <Grid className={classes.refreshrList}>
-          {props.addedRefreshr && (
-            <Card
-              className={classes.addedRefreshr}
-              key={props.addedRefreshr.refreshr_id}
-              raised
-            >
-              <CardContent>{props.addedRefreshr.name}</CardContent>
-              <TextField
-                onChange={e => setDate(e)}
-                variant="outlined"
-                type="date"
-              />
-              {props.addedRefreshr.date && (
-                <Button onClick={props.addRefreshr}>Submit</Button>
-              )}
-            </Card>
-          )}
-          <RefreshrDialog
-            refreshrs={props.teacherRefs}
-            open={modalIsOpen}
-            handleClose={closeModal}
-            selectNewRefreshr={props.selectNewRefreshr}
-          />
-        </Grid>
+        <RefreshrDialog
+          refreshrs={props.teacherRefs}
+          open={modalIsOpen}
+          handleClose={closeModal}
+          selectNewRefreshr={props.selectNewRefreshr}
+        />
       </Grid>
       <Button variant="outlined" className={classes.saveButton}>
         Save Changes
@@ -284,6 +288,24 @@ function Refreshrs(props) {
               </Icon>
             </CardContent>
           </Card>
+        <Grid className={classes.refreshrList}>
+          {props.addedRefreshr && (
+            <Card
+              className={classes.refreshrCard}
+              key={props.addedRefreshr.refreshr_id}
+              raised
+            >
+              <CardContent>{props.addedRefreshr.name}</CardContent>
+              <TextField
+                onChange={e => setDate(e)}
+                variant="outlined"
+                type="date"
+              />
+              {props.addedRefreshr.date && (
+                <Button onClick={props.addRefreshr}>Submit</Button>
+              )}
+            </Card>
+          )}
 
 
 */

@@ -102,12 +102,6 @@ function students(props) {
     student.isEditing = true;
     console.log(student);
   }
-  // <Checkbox
-  //   color="secondary"
-  //   value={`${s.student_id}`}
-  //   checked={props.selectedStudents.includes(s.student_id)}
-  //   onClick={e => selectStudent(e)}
-  // />
 
   function handleChange(e, student) {
     console.log(e.target.value);
