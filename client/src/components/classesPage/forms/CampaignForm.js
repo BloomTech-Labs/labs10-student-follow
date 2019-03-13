@@ -9,9 +9,11 @@ import {
   Icon,
   Button,
   Fab,
+  IconButton,
+  Snackbar,
   withStyles
 } from '@material-ui/core/';
-import { ArrowBack, Send } from '@material-ui/icons';
+import { ArrowBack, Close, Send } from '@material-ui/icons';
 import axios from 'axios';
 import moment from 'moment';
 
@@ -214,6 +216,7 @@ function CampaignForm(props) {
   const handleSubmit = e => {
     e.preventDefault();
     props.sendAllToSendgrid(scheduledRefreshrs);
+    handleScheduleRefreshSnack();
   };
 
   const alterTime = e => {
@@ -262,8 +265,46 @@ function CampaignForm(props) {
     props.setTimeTriData([...timeTriData]);
   };
 
+  const [scheduleRefreshSnack, setScheduleRefreshSnack] = useState(false);
+  const handleScheduleRefreshSnack = (event, reason) => {
+    if (reason === 'clickaway') {
+      // clickaway is if they fire the snackbar before it's gone
+      return;
+    }
+    setScheduleRefreshSnack(!scheduleRefreshSnack);
+  };
+
   return (
     <Paper className={classes.container} elevation={24}>
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left'
+        }}
+        open={scheduleRefreshSnack}
+        autoHideDuration={4000}
+        onClose={handleScheduleRefreshSnack}
+        ContentProps={{
+          'aria-describedby': 'message-id'
+        }}
+        message={
+          <span id="message-id">
+            {refreshrs.length > 1
+              ? 'Refreshrs Scheduled!'
+              : 'Refreshr Scheduled!'}
+          </span>
+        }
+        action={[
+          <IconButton
+            key="close"
+            aria-label="Close"
+            color="inherit"
+            onClick={handleScheduleRefreshSnack}
+          >
+            <Close />
+          </IconButton>
+        ]}
+      />
       <Typography
         variant="h6"
         color="secondary"
