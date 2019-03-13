@@ -87,35 +87,43 @@ const styles = theme => ({
     alignItems: 'center',
     padding: theme.spacing.unit * 2
   },
+  hidden: {
+    display: 'none'
+  },
   edit: {
     display: 'flex',
     wrap: 'nowrap',
-    marginTop: '2%',
+    margin: '15px 0px',
     width: '100%',
     alignItems: 'center',
     alignContent: 'center',
-    cursor: 'pointer'
+    cursor: 'pointer',
+    height: '10px'
   },
   hrStyle: {
     margin: '1rem auto',
     width: '100%'
   },
-  editText: {
+  editIcon: {
     margin: '0%',
     paddingLeft: '1%'
   }
 });
 
 function Refreshr(props) {
-  const {match, updateRefreshrDB, token} = props
+  const { match, updateRefreshrDB, token } = props;
   const [refreshrName, setRefreshrName] = useState('');
   const [reviewText, setReviewText] = useState('');
-  const [questionTextOne, setQuestionTextOne] = useState({text:'', id:''});
-  const [questionTextTwo, setQuestionTextTwo] = useState({text:'', id:''});
+  const [questionTextOne, setQuestionTextOne] = useState({ text: '', id: '' });
+  const [questionTextTwo, setQuestionTextTwo] = useState({ text: '', id: '' });
   const [a1Text, setA1Text] = useState('');
   const [a2Text, setA2Text] = useState('');
   const [a3Text, setA3Text] = useState('');
   const [a4Text, setA4Text] = useState('');
+  const [refreshrNameEdit, setRefreshrNameEdit] = useState(false);
+  const [reviewEdit, setReviewEdit] = useState(false);
+  const [multiChoiceEdit, setMultiChoiceEdit] = useState(false);
+  const [q2Edit, setQ2Edit] = useState(false);
   const [questionObject, setQuestionObject] = useState({
     reviewText,
     refreshrName,
@@ -131,7 +139,6 @@ function Refreshr(props) {
     Authorization: `Bearer ${process.env.REACT_APP_TYPEFORM}`
   };
 
-
   useEffect(() => {
     axios({
       method: 'get',
@@ -140,7 +147,7 @@ function Refreshr(props) {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => {
-        console.log(res)
+        // console.log('res from useEffect', res);
         // const answers = res.data.fields[1].properties.choices.map(
         //   answer => answer.label
         console.log('FROM USE EFFECT', res);
@@ -150,9 +157,15 @@ function Refreshr(props) {
         setA2Text(res.data.refreshr.questions[0].question.answer_2);
         setA3Text(res.data.refreshr.questions[0].question.answer_3);
         setA4Text(res.data.refreshr.questions[0].question.answer_4);
-        setQuestionTextOne({text: res.data.refreshr.questions[0].question.question_text, id:res.data.refreshr.questions[0].question_id });
-        setQuestionTextTwo({text: res.data.refreshr.questions[1].question.question_text, id:res.data.refreshr.questions[1].question_id });
-      }) 
+        setQuestionTextOne({
+          text: res.data.refreshr.questions[0].question.question_text,
+          id: res.data.refreshr.questions[0].question_id
+        });
+        setQuestionTextTwo({
+          text: res.data.refreshr.questions[1].question.question_text,
+          id: res.data.refreshr.questions[1].question_id
+        });
+      })
       .catch(err => console.log(err));
   }, []);
 
@@ -220,14 +233,14 @@ function Refreshr(props) {
           headers
         })
         .then(res => {
-          console.log(res.data.id, match.params.id)
+          console.log(res.data.id, match.params.id);
           const updatedRefreshr = {
             name: res.data.title,
             review_text: res.data.fields[1].properties.description,
             typeform_id: res.data.id,
             typeform_url: res.data._links.display
           };
-          console.log(questionObject)
+          console.log(questionObject);
           updateRefreshrDB(updatedRefreshr, typeformId, questionObject);
         });
     } catch (error) {
@@ -242,6 +255,8 @@ function Refreshr(props) {
     }
     setUpdateSnackBool(!updateSnackBool);
   };
+
+  console.log('questionTextOne =>', questionTextOne);
 
   return (
     <Paper className={props.classes.container} elevation={24}>
@@ -302,6 +317,13 @@ function Refreshr(props) {
             className={props.classes.form1}
             onSubmit={props.handleSubmit}
           >
+            <Typography
+              className={
+                refreshrNameEdit ? props.classes.hidden : props.classes.editText
+              }
+            >
+              {refreshrName}
+            </Typography>
             <Input
               disableUnderline
               onChange={e => setRefreshrName(e.target.value)}
@@ -309,22 +331,36 @@ function Refreshr(props) {
               required
               type="text"
               value={refreshrName}
-              className={props.classes.inputName}
+              className={
+                refreshrNameEdit
+                  ? props.classes.inputName
+                  : props.classes.hidden
+              }
             />
-            <FormGroup className={props.classes.edit}>
+            <FormGroup
+              onClick={() => setRefreshrNameEdit(!refreshrNameEdit)}
+              className={props.classes.edit}
+            >
               <i className="fas fa-pen" />
-              <h4 className={props.classes.editText}>Edit</h4>
+              <h4 className={props.classes.editIcon}>Edit</h4>
             </FormGroup>
           </FormGroup>
 
           <hr className={props.classes.hrStyle} />
 
-          <h4 className={props.classes.subheaders}>Add Review Text</h4>
+          <h4 className={props.classes.subheaders}>Your Review Text</h4>
 
           <FormGroup
             className={props.classes.form1}
             onSubmit={props.handleSubmit}
           >
+            <Typography
+              className={
+                reviewEdit ? props.classes.hidden : props.classes.editText
+              }
+            >
+              {reviewText}
+            </Typography>
             <Input
               disableUnderline
               onChange={e => setReviewText(e.target.value)}
@@ -333,13 +369,22 @@ function Refreshr(props) {
               multiline
               rows="4"
               value={reviewText}
-              className={props.classes.inputQuestion}
+              className={
+                reviewEdit ? props.classes.inputQuestion : props.classes.hidden
+              }
             />
+            <FormGroup
+              onClick={() => setReviewEdit(!reviewEdit)}
+              className={props.classes.edit}
+            >
+              <i className="fas fa-pen" />
+              <h4 className={props.classes.editIcon}>Edit</h4>
+            </FormGroup>
           </FormGroup>
 
           <hr className={props.classes.hrStyle} />
 
-          <h4 className={props.classes.subheaders}>Create Questions</h4>
+          <h4 className={props.classes.subheaders}>Your Questions</h4>
 
           <Typography
             variant="body1"
@@ -352,19 +397,98 @@ function Refreshr(props) {
             className={props.classes.form1}
             onSubmit={props.handleSubmit}
           >
+            <Typography
+              className={
+                multiChoiceEdit ? props.classes.hidden : props.classes.editText
+              }
+            >
+              {questionTextOne.text}
+            </Typography>
             <Input
               disableUnderline
-              onChange={e => setQuestionTextOne({...questionTextOne, text: e.target.value})}
+              onChange={e =>
+                setQuestionTextOne({ ...questionTextOne, text: e.target.value })
+              }
               name="classnameInput"
               required
               multiline
               rows="4"
               value={questionTextOne.text}
-              className={props.classes.inputQuestion}
+              className={
+                multiChoiceEdit
+                  ? props.classes.inputQuestion
+                  : props.classes.hidden
+              }
             />
+            {/* <FormGroup
+              onClick={() => setMultiChoiceEdit(!multiChoiceEdit)}
+              className={props.classes.edit}
+            >
+              <i className="fas fa-pen" />
+              <h4 className={props.classes.editText}>Edit</h4>
+            </FormGroup> */}
           </FormGroup>
 
-          <FormGroup>
+          <FormGroup
+          // className={
+          //   multiChoiceEdit
+          //     ? props.classes.hidden
+          //     : props.classes.inputMultipleChoice
+          // }
+          >
+            {/* <FormGroup
+              className={
+                multiChoiceEdit
+                  ? props.classes.hidden
+                  : props.classes.inputMultipleChoice
+              }
+            > */}
+            {/* </FormGroup> */}
+            <Typography
+              style={{
+                textAlign: 'center',
+                width: '100%'
+              }}
+              className={
+                multiChoiceEdit ? props.classes.hidden : props.classes.editText
+              }
+            >
+              {a1Text}
+            </Typography>
+            <Typography
+              style={{
+                textAlign: 'center',
+                width: '100%'
+              }}
+              className={
+                multiChoiceEdit ? props.classes.hidden : props.classes.editText
+              }
+            >
+              {a2Text}
+            </Typography>
+            <Typography
+              style={{
+                textAlign: 'center',
+                width: '100%'
+              }}
+              className={
+                multiChoiceEdit ? props.classes.hidden : props.classes.editText
+              }
+            >
+              {a3Text}
+            </Typography>
+            <Typography
+              style={{
+                textAlign: 'center',
+                width: '100%'
+              }}
+              className={
+                multiChoiceEdit ? props.classes.hidden : props.classes.editText
+              }
+            >
+              {a4Text}
+            </Typography>
+            {/* </FormGroup> */}
             <form className={props.classes.multipleChoice}>
               <Input
                 disableUnderline
@@ -372,7 +496,11 @@ function Refreshr(props) {
                 name="classnameInput"
                 required
                 value={a1Text}
-                className={props.classes.inputMultipleChoice}
+                className={
+                  multiChoiceEdit
+                    ? props.classes.inputMultipleChoice
+                    : props.classes.hidden
+                }
               />
               <Input
                 disableUnderline
@@ -380,7 +508,11 @@ function Refreshr(props) {
                 onChange={e => setA2Text(e.target.value)}
                 required
                 value={a2Text}
-                className={props.classes.inputMultipleChoice}
+                className={
+                  multiChoiceEdit
+                    ? props.classes.inputMultipleChoice
+                    : props.classes.hidden
+                }
               />
               <Input
                 disableUnderline
@@ -388,7 +520,11 @@ function Refreshr(props) {
                 name="classnameInput"
                 required
                 value={a3Text}
-                className={props.classes.inputMultipleChoice}
+                className={
+                  multiChoiceEdit
+                    ? props.classes.inputMultipleChoice
+                    : props.classes.hidden
+                }
               />
               <Input
                 disableUnderline
@@ -396,9 +532,20 @@ function Refreshr(props) {
                 name="classnameInput"
                 required
                 value={a4Text}
-                className={props.classes.inputMultipleChoice}
+                className={
+                  multiChoiceEdit
+                    ? props.classes.inputMultipleChoice
+                    : props.classes.hidden
+                }
               />
             </form>
+          </FormGroup>
+          <FormGroup
+            onClick={() => setMultiChoiceEdit(!multiChoiceEdit)}
+            className={props.classes.edit}
+          >
+            <i className="fas fa-pen" />
+            <h4 className={props.classes.editIcon}>Edit</h4>
           </FormGroup>
 
           <hr className={props.classes.hrStyle} />
@@ -415,16 +562,33 @@ function Refreshr(props) {
             className={props.classes.form1}
             onSubmit={props.handleSubmit}
           >
+            <Typography
+              className={q2Edit ? props.classes.hidden : props.classes.editText}
+            >
+              {questionTextTwo.text}
+            </Typography>
             <Input
               disableUnderline
               name="classnameInput"
-              onChange={e => setQuestionTextTwo({...questionTextTwo, text: e.target.value})}
+              onChange={e =>
+                setQuestionTextTwo({ ...questionTextTwo, text: e.target.value })
+              }
               required
               multiline
               rows="4"
               value={questionTextTwo.text}
-              className={props.classes.inputQuestion}
+              // className={props.classes.inputQuestion}
+              className={
+                q2Edit ? props.classes.inputQuestion : props.classes.hidden
+              }
             />
+            <FormGroup
+              onClick={() => setQ2Edit(!q2Edit)}
+              className={props.classes.edit}
+            >
+              <i className="fas fa-pen" />
+              <h4 className={props.classes.editIcon}>Edit</h4>
+            </FormGroup>
           </FormGroup>
 
           <hr className={props.classes.hrStyle} />
