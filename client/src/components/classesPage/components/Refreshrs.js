@@ -106,8 +106,8 @@ function Refreshrs(props) {
           Refreshrs
         </Typography>
         <Grid className={classes.refreshrList}>
-          {props.refreshrs.map((r, i) => (
-            <Card className={classes.refreshrCard} key={i} raised>
+          {props.refreshrs.map(r => (
+            <Card className={classes.refreshrCard} key={r.refreshr_id} raised>
               <CardContent className={classes.refreshrContent}>
                 {r.name}
               </CardContent>
@@ -115,7 +115,7 @@ function Refreshrs(props) {
                 {r.date}
               </CardContent>
               <DeleteIcon
-                onClick={() => props.removeRefreshr(r.id)}
+                onClick={() => props.removeRefreshr(r.refreshr_id)}
                 className={classes.refreshrIcon}
               />
             </Card>
@@ -123,7 +123,7 @@ function Refreshrs(props) {
           {props.activeRefreshr && (
             <Card
               className={classes.activeRefreshr}
-              key={props.activeRefreshr.id}
+              key={props.activeRefreshr.refreshr_id}
               raised
             >
               <CardContent>{props.activeRefreshr.name}</CardContent>

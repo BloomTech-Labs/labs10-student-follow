@@ -176,7 +176,6 @@ function ClassEditView(props) {
   // get class details on mount
   useEffect(() => {
     fetchClass();
-    fetchTeacherRefreshrs();
   }, []);
 
   useEffect(() => {
@@ -202,6 +201,7 @@ function ClassEditView(props) {
       id: res.data.specifiedClass.sg_list_id,
       name: res.data.specifiedClass.name
     });
+    fetchTeacherRefreshrs();
   }
 
   useEffect(() => {
@@ -352,15 +352,18 @@ function ClassEditView(props) {
 
   function selectRefreshr(id) {
     // remove refreshr from teacher refreshr list
-    setTeacherRefs(teacherRefs.filter(r => r.id !== id));
     console.log(id);
-    const [active] = teacherRefs.filter(r => r.id === id);
+
+    setTeacherRefs(teacherRefs.filter(r => r.refreshr_id !== id));
+    console.log(id);
+    const [active] = teacherRefs.filter(r => r.refreshr_id === id);
     console.log(active);
     setActiveRefreshr(active);
   }
 
   async function removeRefreshr(id) {
-    const removedRefreshrs = refreshrs.filter(r => r.id === id);
+    console.log(activeRefreshr);
+    const removedRefreshrs = refreshrs.filter(r => r.refreshr_id === id);
     console.log(removedRefreshrs);
 
     // cancel sendgrid campaigns
@@ -376,8 +379,9 @@ function ClassEditView(props) {
     }
 
     // add refreshr to teacher refs, remove from class refreshr list
-    setRefreshrs(refreshrs.filter(r => r.id !== id));
-    setTeacherRefs([...teacherRefs, removedRefreshrs[0]]);
+    // setRefreshrs(refreshrs.filter(r => r.id !== id));
+    // setTeacherRefs([...teacherRefs, removedRefreshrs[0]]);
+    fetchClass();
   }
 
   const [newStudent, setNewStudent] = useState({

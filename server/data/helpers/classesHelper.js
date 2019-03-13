@@ -186,6 +186,6 @@ module.exports = {
   removeCampaign: (class_id, sg_campaign_id) => {
     return db('teachers_classes_refreshrs')
       .where({ class_id, sg_campaign_id })
-      .update({ sg_campaign_id: null });
+      .update({ sg_campaign_id: null, class_id: null });
   }
 };
