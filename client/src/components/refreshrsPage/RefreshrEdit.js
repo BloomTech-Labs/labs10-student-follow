@@ -107,8 +107,8 @@ const styles = theme => ({
 
 function Refreshr(props) {
   const { setUrl, url } = props;
-  const [reviewText, setReviewText] = useState('');
   const [refreshrName, setRefreshrName] = useState('');
+  const [reviewText, setReviewText] = useState('');
   const [questionTextOne, setQuestionTextOne] = useState('');
   const [questionTextTwo, setQuestionTextTwo] = useState('');
   const [a1Text, setA1Text] = useState('');
@@ -140,13 +140,13 @@ function Refreshr(props) {
         );
         console.log('FROM USE EFFECT', res);
         setRefreshrName(res.data.welcome_screens[0].title);
-        setReviewText(res.data.fields[1].properties);
+        setReviewText(res.data.fields[1].properties.description);
         setA1Text(answers[0]);
         setA2Text(answers[1]);
         setA3Text(answers[2]);
         setA4Text(answers[3]);
-        setQuestionTextOne(res.data.fields[1]);
-        setQuestionTextTwo(res.data.fields[2]);
+        setQuestionTextOne(res.data.fields[1].title);
+        setQuestionTextTwo(res.data.fields[2].title);
       })
       .catch(err => console.log(err));
   }, []);
@@ -174,45 +174,37 @@ function Refreshr(props) {
         },
         {
           ref: 'question_1',
-          title: 'Code q1 title',
-          // questionObject.questionTextOne.title,
+          title: questionTextOne,
           type: 'multiple_choice',
           properties: {
-            description: 'Code q1 description',
-            // questionObject.reviewText.description,
+            description: reviewText,
             randomize: true,
             choices: [
               {
                 ref: 'correct',
-                label: 'code answer'
-                // questionObject.answers.a1Text
+                label: a1Text
               },
               {
                 ref: 'incorrect_1',
-                label: 'code answer'
-                // questionObject.answers.a2Text
+                label: a2Text
               },
               {
                 ref: 'incorrect_2',
-                label: 'code answer'
-                // questionObject.answers.a3Text
+                label: a3Text
               },
               {
                 ref: 'incorrect_3',
-                label: 'code answer'
-                // questionObject.answers.a4Text
+                label: a4Text
               }
             ]
           }
         },
         {
           ref: 'question_2',
-          title: 'code title',
-          // questionObject.questionTextOne.questionTextTwo,
+          title: questionTextTwo,
           type: 'short_text',
           properties: {
-            description: 'Code desc'
-            // questionObject.reviewText.description
+            description: reviewText
           }
         }
       ]
@@ -239,7 +231,7 @@ function Refreshr(props) {
   };
   // }
 
-  console.log('refreshrName + => ', refreshrName);
+  console.log('reviewText + => ', reviewText);
   return (
     <Paper className={props.classes.container} elevation={24}>
       <Grid className={props.classes.wrapper}>
@@ -306,7 +298,7 @@ function Refreshr(props) {
               required
               multiline
               rows="4"
-              value={reviewText.description}
+              value={reviewText}
               className={props.classes.inputQuestion}
             />
           </FormGroup>
@@ -333,7 +325,7 @@ function Refreshr(props) {
               required
               multiline
               rows="4"
-              value={questionTextOne.title}
+              value={questionTextOne}
               className={props.classes.inputQuestion}
             />
           </FormGroup>
@@ -396,7 +388,7 @@ function Refreshr(props) {
               required
               multiline
               rows="4"
-              value={questionTextTwo.title}
+              value={questionTextTwo}
               className={props.classes.inputQuestion}
             />
           </FormGroup>
