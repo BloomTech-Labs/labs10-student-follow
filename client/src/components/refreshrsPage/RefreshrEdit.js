@@ -127,6 +127,8 @@ function Refreshr(props) {
 
   const [updateSnackBool, setUpdateSnackBool] = useState(false);
 
+  const [updateSnackBool, setUpdateSnackBool] = useState(false);
+
   const headers = {
     Authorization: `Bearer ${process.env.REACT_APP_TYPEFORM}`
   };
