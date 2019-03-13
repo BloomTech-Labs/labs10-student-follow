@@ -32,13 +32,14 @@ const styles = theme => ({
     flexFlow: 'column nowrap',
     alignItems: 'center',
     width: '50%',
+    fontSize: '1rem',
     [theme.breakpoints.only('xs')]: {
       width: '100%'
     }
   },
   refreshrContent: {
     color: theme.palette.primary.dark,
-    fontSize: '1.2rem'
+    fontSize: '1.0rem'
   },
 
   refreshrIcon: {
