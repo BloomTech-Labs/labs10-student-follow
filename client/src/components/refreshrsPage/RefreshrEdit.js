@@ -84,24 +84,31 @@ const styles = theme => ({
     alignItems: 'center',
     padding: theme.spacing.unit * 2
   },
+  edit: {
+    display: 'flex',
+    wrap: 'nowrap',
+    marginTop: '2%',
+    width: '100%',
+    alignItems: 'center',
+    alignContent: 'center',
+    cursor: 'pointer'
+  },
   hrStyle: {
     margin: '1rem auto',
     width: '100%'
+  },
+  editText: {
+    margin: '0%',
+    paddingLeft: '1%'
   }
 });
 
 function Refreshr(props) {
+  const { setUrl, url } = props;
+  const [refreshrName, setRefreshrName] = useState('');
   const [reviewText, setReviewText] = useState('');
-  const [refreshrName, addRefreshrName] = useState('');
   const [questionTextOne, setQuestionTextOne] = useState('');
   const [questionTextTwo, setQuestionTextTwo] = useState('');
-  // const [submitted, setSubmitted] = useState(false);
-  const [typeformWelcome, setTypefromWelcome] = useState([]);
-  const [typeformQ1Props, setTypeformQ1Props] = useState([]);
-  const [typeformAnswers, setTypeformAnswers] = useState([]);
-  const [typeformQ1, setTypeformQ1] = useState([]);
-  const [typeformQ2, setTypeformQ2] = useState([]);
-
   const [a1Text, setA1Text] = useState('');
   const [a2Text, setA2Text] = useState('');
   const [a3Text, setA3Text] = useState('');
@@ -115,9 +122,9 @@ function Refreshr(props) {
   });
   const typeformId = window.location.pathname.slice(-6);
 
-  // const StyleDisplay = styled.a`
-  //   ${{ display: submitted ? 'block' : 'none' }}
-  // `;
+  const headers = {
+    Authorization: `Bearer ${process.env.REACT_APP_TYPEFORM}`
+  };
 
   useEffect(() => {
     axios({
@@ -126,20 +133,103 @@ function Refreshr(props) {
       headers: { Authorization: `Bearer ${process.env.REACT_APP_TYPEFORM}` }
     })
       .then(res => {
+        const answers = res.data.fields[1].properties.choices.map(
+          answer => answer.label
+        );
         console.log('FROM USE EFFECT', res);
-        setTypefromWelcome(res.data.welcome_screens[0]);
-        setTypeformQ1Props(res.data.fields[1].properties);
-        setTypeformAnswers(res.data.fields[1].properties.choices);
-        setTypeformQ1(res.data.fields[1]);
-        setTypeformQ2(res.data.fields[2]);
+        setRefreshrName(res.data.welcome_screens[0].title);
+        setReviewText(res.data.fields[1].properties.description);
+        setA1Text(answers[0]);
+        setA2Text(answers[1]);
+        setA3Text(answers[2]);
+        setA4Text(answers[3]);
+        setQuestionTextOne(res.data.fields[1].title);
+        setQuestionTextTwo(res.data.fields[2].title);
       })
       .catch(err => console.log(err));
   }, []);
 
-  const answers = typeformAnswers.map(answer => answer.label);
+  const editForm = async event => {
+    event.preventDefault();
+    console.log('IN update!');
+    const data = {
+      title: 'Refreshr',
+      variables: {
+        score: 0
+      },
+      welcome_screens: [
+        {
+          title: refreshrName
+        }
+      ],
+      fields: [
+        {
+          title: 'Please enter your email address.',
+          type: 'email',
+          validations: {
+            required: true
+          }
+        },
+        {
+          ref: 'question_1',
+          title: questionTextOne,
+          type: 'multiple_choice',
+          properties: {
+            description: reviewText,
+            randomize: true,
+            choices: [
+              {
+                ref: 'correct',
+                label: a1Text
+              },
+              {
+                ref: 'incorrect_1',
+                label: a2Text
+              },
+              {
+                ref: 'incorrect_2',
+                label: a3Text
+              },
+              {
+                ref: 'incorrect_3',
+                label: a4Text
+              }
+            ]
+          }
+        },
+        {
+          ref: 'question_2',
+          title: questionTextTwo,
+          type: 'short_text',
+          properties: {
+            description: reviewText
+          }
+        }
+      ]
+    };
+    try {
+      await axios
+        .put(`https://api.typeform.com/forms/${typeformId}`, data, {
+          headers
+        })
+        .then(res => {
+          const newRefreshr = {
+            name: res.data.title,
+            review_text: res.data.fields[1].properties.description,
+            typeform_id: res.data.id,
+            typeform_url: res.data._links.display
+          };
+          props.sendRefreshrToDB(newRefreshr);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+    // handleSnackbar();
+    //setSubmitted(true);
+  };
+  // }
 
-  console.log('typeformText =>', typeformQ2);
-
+  console.log('reviewText + => ', reviewText);
   return (
     <Paper className={props.classes.container} elevation={24}>
       <Grid className={props.classes.wrapper}>
@@ -178,13 +268,17 @@ function Refreshr(props) {
           >
             <Input
               disableUnderline
-              onChange={e => addRefreshrName(e.target.value)}
+              onChange={e => setRefreshrName(e.target.value)}
               name="classnameInput"
               required
               type="text"
-              value={typeformWelcome.title}
+              value={refreshrName}
               className={props.classes.inputName}
             />
+            <FormGroup className={props.classes.edit}>
+              <i className="fas fa-pen" />
+              <h4 className={props.classes.editText}>Edit</h4>
+            </FormGroup>
           </FormGroup>
 
           <hr className={props.classes.hrStyle} />
@@ -202,7 +296,7 @@ function Refreshr(props) {
               required
               multiline
               rows="4"
-              value={typeformQ1Props.description}
+              value={reviewText}
               className={props.classes.inputQuestion}
             />
           </FormGroup>
@@ -229,7 +323,7 @@ function Refreshr(props) {
               required
               multiline
               rows="4"
-              value={typeformQ1.title}
+              value={questionTextOne}
               className={props.classes.inputQuestion}
             />
           </FormGroup>
@@ -241,7 +335,7 @@ function Refreshr(props) {
                 onChange={e => setA1Text(e.target.value)}
                 name="classnameInput"
                 required
-                value={answers[0]}
+                value={a1Text}
                 className={props.classes.inputMultipleChoice}
               />
               <Input
@@ -249,7 +343,7 @@ function Refreshr(props) {
                 name="classnameInput"
                 onChange={e => setA2Text(e.target.value)}
                 required
-                value={answers[1]}
+                value={a2Text}
                 className={props.classes.inputMultipleChoice}
               />
               <Input
@@ -257,7 +351,7 @@ function Refreshr(props) {
                 onChange={e => setA3Text(e.target.value)}
                 name="classnameInput"
                 required
-                value={answers[2]}
+                value={a3Text}
                 className={props.classes.inputMultipleChoice}
               />
               <Input
@@ -265,7 +359,7 @@ function Refreshr(props) {
                 onChange={e => setA4Text(e.target.value)}
                 name="classnameInput"
                 required
-                value={answers[3]}
+                value={a4Text}
                 className={props.classes.inputMultipleChoice}
               />
             </form>
@@ -292,7 +386,7 @@ function Refreshr(props) {
               required
               multiline
               rows="4"
-              value={typeformQ2.title}
+              value={questionTextTwo}
               className={props.classes.inputQuestion}
             />
           </FormGroup>
@@ -302,10 +396,11 @@ function Refreshr(props) {
             variant="contained"
             color="primary"
             onClick={e => {
-              props.addQuestions(questionObject);
+              // props.addQuestions(questionObject);
+              editForm(e);
             }}
           >
-            Submit
+            Update
           </Button>
           {/* <StyleDisplay>View your Refreshr here: {url}</StyleDisplay> */}
         </FormGroup>

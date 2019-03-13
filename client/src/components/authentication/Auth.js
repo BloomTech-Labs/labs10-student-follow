@@ -5,7 +5,7 @@ const clientID = 'jNDq5B6iAnIRcrpM07Omh05uyppZ89px';
 const domain = 'team-refreshr.auth0.com';
 const options = {
   languageDictionary: {
-    title: ""
+    title: ''
   },
   auth: {
     //PRODUCTION
@@ -16,9 +16,9 @@ const options = {
     redirectUrl: 'http://localhost:3000/dashboard',
     redirect: true,
     usernameStyle: 'email',
-    responseType: 'token id_token', 
+    responseType: 'token id_token'
   },
- 
+
   socialButtonStyle: 'small',
   theme: {
     primaryColor: '#0b2742',
@@ -54,7 +54,7 @@ lock.on('authenticated', authResult => {
     localStorage.setItem('accessToken', authResult.accessToken);
     localStorage.setItem('profile', JSON.stringify(profile));
     localStorage.setItem('name', `${profile.name}`);
-    localStorage.setItem('email', profile.email)
+    localStorage.setItem('email', profile.email);
     // PRODUCTION
     //localStorage.setItem('user_id', profile['https://refreshr.herokuapp.com/uid']);
     // DEVELOPMENT
@@ -70,7 +70,6 @@ lock.on('authenticated', authResult => {
       //DEVELOPMENT
       user_id: profile['http://localhost:9000/uid'],
       role: profile['http://localhost:9000/roles'][0]
-
     };
     //console.log(body)
     //This captures users and adds them to the teacher table upon login, if they already exist

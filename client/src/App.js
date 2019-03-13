@@ -56,10 +56,12 @@ const App = props => {
   //console.log(user_id)
 
   /* STATE */
+
+  const [message, setMessage] = useState('');
   const [open, toggleOpen] = useState(false)
   const [userRefreshrs, setRefreshrs] = useState([]);
   const [userClasses, setClasses] = useState([]);
-
+  const [refreshrID, setRefreshrID] = useState('');
   // const [students, setStudents] = useState([]);
   // const [teachers, setTeachers] = useState([]);
 
@@ -228,6 +230,9 @@ const App = props => {
                 userClasses={userClasses}
                 getRefreshrs={getRefreshrs}
                 userRefreshrs={userRefreshrs}
+                questions={questions}
+                addQuestions={addQuestions}
+                sendRefreshrToDB={sendRefreshrToDB}
               />
             )}
           />
