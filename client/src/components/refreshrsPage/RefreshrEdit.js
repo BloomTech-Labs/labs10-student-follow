@@ -48,6 +48,18 @@ const styles = theme => ({
     width: '75%',
     borderRadius: 5
   },
+  editText: {
+    marginBottom: theme.spacing.unit,
+    padding: '.75%',
+    paddingLeft: 14,
+    // background: theme.palette.secondary.main,
+    background: 'yellow',
+    color: theme.palette.primary.main,
+    fontSize: '1em',
+    width: '75%',
+    borderRadius: 5,
+    border: '2px solid yellow'
+  },
   inputQuestion: {
     marginBottom: theme.spacing.unit,
     padding: '5%',
@@ -84,6 +96,9 @@ const styles = theme => ({
     alignItems: 'center',
     padding: theme.spacing.unit * 2
   },
+  hidden: {
+    display: 'none'
+  },
   edit: {
     display: 'flex',
     wrap: 'nowrap',
@@ -113,6 +128,7 @@ function Refreshr(props) {
   const [a2Text, setA2Text] = useState('');
   const [a3Text, setA3Text] = useState('');
   const [a4Text, setA4Text] = useState('');
+  const [refreshrNameEdit, setRefreshrNameEdit] = useState(false);
   const [questionObject, setQuestionObject] = useState({
     reviewText,
     refreshrName,
@@ -266,6 +282,13 @@ function Refreshr(props) {
             className={props.classes.form1}
             onSubmit={props.handleSubmit}
           >
+            <Typography
+              className={
+                refreshrNameEdit ? props.classes.hidden : props.classes.editText
+              }
+            >
+              {refreshrName}
+            </Typography>
             <Input
               disableUnderline
               onChange={e => setRefreshrName(e.target.value)}
@@ -273,11 +296,21 @@ function Refreshr(props) {
               required
               type="text"
               value={refreshrName}
-              className={props.classes.inputName}
+              className={
+                refreshrNameEdit
+                  ? props.classes.inputName
+                  : props.classes.hidden
+              }
+              // className={}
             />
             <FormGroup className={props.classes.edit}>
               <i className="fas fa-pen" />
-              <h4 className={props.classes.editText}>Edit</h4>
+              <h4
+                onClick={() => setRefreshrNameEdit(!refreshrNameEdit)}
+                className={props.classes.editText}
+              >
+                Edit
+              </h4>
             </FormGroup>
           </FormGroup>
 
