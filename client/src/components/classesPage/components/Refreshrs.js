@@ -10,6 +10,8 @@ import {
   List,
   ListItem,
   ListItemIcon,
+  ListItemText,
+  ListSubheader,
   Divider,
   Fab
 } from '@material-ui/core';
@@ -20,10 +22,11 @@ import {
   Create,
   Backspace,
   RemoveCircleOutline,
-  Update
+  Update,
+  AddCircleOutline
 } from '@material-ui/icons/';
 import moment from 'moment';
-import RefreshrIcon from './LogoSmall.svg';
+import logo from './LogoSmall.png';
 
 const styles = theme => ({
   refreshrCardWrapper: {
@@ -153,18 +156,24 @@ const styles = theme => ({
     '&:focus': {
       backgroundColor: '#363c42'
     }
+  },
+  logo: {
+    width: 25,
+    height: 25
+  },
+  subhead: {
+    color: theme.palette.primary.contrastText
   }
 });
 
 function Refreshrs(props) {
   const { classes } = props;
-  const [modalIsOpen, setModalIsOpen] = useState(false);
   function setDate(e) {
     console.log(e.target.value);
     props.setAddedRefreshr({ ...props.addedRefreshr, date: e.target.value });
   }
   function closeModal() {
-    setModalIsOpen(false);
+    props.setModalIsOpen(false);
   }
   return (
     <>
@@ -254,7 +263,15 @@ function Refreshrs(props) {
             </Card>
           )}
         </Grid>
-        <List component="ul" className={classes.refreshrList}>
+        <List
+          component="ul"
+          className={classes.refreshrList}
+          subheader={
+            <ListSubheader className={classes.subhead} component="div">
+              {props.className} Refreshrs
+            </ListSubheader>
+          }
+        >
           {props.refreshrs.map(r => (
             <ListItem
               className={classes.listItem}
@@ -262,23 +279,30 @@ function Refreshrs(props) {
               key={r.refreshr_id}
               onClick={() => props.selectRefreshr(r.refreshr_id)}
             >
-              {r.name}
+              <ListItemIcon>
+                <img src={logo} className={classes.logo} />
+              </ListItemIcon>
+
+              <ListItemText>{r.name}</ListItemText>
             </ListItem>
           ))}
-          <ListItem button onClick={() => setModalIsOpen(!modalIsOpen)}>
-            Add new refreshr to class
+          <ListItem
+            button
+            onClick={() => props.setModalIsOpen(!props.modalIsOpen)}
+          >
+            <ListItemIcon>
+              <AddCircleOutline />
+            </ListItemIcon>
+            <ListItemText>Add new refreshr to class</ListItemText>
           </ListItem>
         </List>
         <RefreshrDialog
           refreshrs={props.teacherRefs}
-          open={modalIsOpen}
+          open={props.modalIsOpen}
           handleClose={closeModal}
           selectNewRefreshr={props.selectNewRefreshr}
         />
       </Grid>
-      <Button variant="outlined" className={classes.saveButton}>
-        Save Changes
-      </Button>
     </>
   );
 }
