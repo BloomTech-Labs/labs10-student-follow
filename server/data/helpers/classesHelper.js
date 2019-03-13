@@ -17,7 +17,7 @@ module.exports = {
     const selectedClass = await db('classes')
       .where('sg_list_id', id)
       .first();
- 
+
     const teacher = await db('teachers')
       .select(
         'teachers.user_id as t_id',
@@ -186,6 +186,6 @@ module.exports = {
   removeCampaign: (class_id, sg_campaign_id) => {
     return db('teachers_classes_refreshrs')
       .where({ class_id, sg_campaign_id })
-      .delete();
+      .update({ sg_campaign_id: null, class_id: null });
   }
 };
