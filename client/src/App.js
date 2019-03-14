@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { Route, withRouter } from 'react-router-dom';
 
@@ -50,18 +50,20 @@ const styles = theme => ({
 
 const App = props => {
   const { classes } = props;
-  const token = localStorage.getItem('accessToken');
-  const user_id = localStorage.getItem('user_id');
-  //console.log(user_id)
 
   /* STATE */
-
+  const [token, setToken] = useState('')
+  const [user_id, setID] = useState('')
   const [open, toggleOpen] = useState(false);
   const [userRefreshrs, setRefreshrs] = useState([]);
   const [userClasses, setClasses] = useState([]);
 
   /* METHODS */
 
+  useEffect(() => {
+    setToken(localStorage.getItem('accessToken'))
+    setID(localStorage.getItem('user_id'))
+  })
   //all refreshrs for user
 
   const getRefreshrs = () => {

@@ -49,10 +49,8 @@ lock.on('authenticated', authResult => {
       alert(error);
       return;
     }
-    //console.log(authResult);
 
     localStorage.setItem('accessToken', authResult.accessToken);
-    localStorage.setItem('profile', JSON.stringify(profile));
     localStorage.setItem('name', `${profile.given_name}`);
     localStorage.setItem('email', profile.email);
     // PRODUCTION
@@ -71,7 +69,6 @@ lock.on('authenticated', authResult => {
       user_id: profile['http://localhost:9000/uid'],
       role: profile['http://localhost:9000/roles'][0]
     };
-    //console.log(body)
     //This captures users and adds them to the teacher table upon login, if they already exist
     //200 OK will be sent and the unique constraint will be shown in the console.
     axios({
