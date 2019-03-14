@@ -6,7 +6,7 @@ import { withStyles } from '@material-ui/core/styles';
 import NoSsr from '@material-ui/core/NoSsr';
 import Breadcrumbs from '@material-ui/lab/Breadcrumbs';
 import MemoryRouter from 'react-router/MemoryRouter';
-import { Typography } from '@material-ui/core';
+import Typography from '@material-ui/core/Typography';
 
 export const breadcrumbNameMap = {
   '/classes': 'Classes',
@@ -39,44 +39,47 @@ const styles = theme => ({
   }
 });
 
-
-const Navcrumbs = (props) => {
+const Navcrumbs = props => {
   const { classes, location, history } = props;
-  const paths = location.pathname.split('/').filter(path => path)
+  const paths = location.pathname.split('/').filter(path => path);
 
   // Use NoSsr to avoid SEO issues with the documentation website.
   return (
     <NoSsr>
       <MemoryRouter initialEntries={['/dashboard']} initialIndex={0}>
         <div className={classes.container}>
-                <Breadcrumbs
-                  arial-label="Breadcrumb"
-                  separator={
-                    <NavigateNextIcon fontSize="small" color="secondary" />
-                  }
+          <Breadcrumbs
+            arial-label="Breadcrumb"
+            separator={<NavigateNextIcon fontSize="small" color="secondary" />}
+          >
+            <Typography
+              className={classes.navRoutes}
+              onClick={e => {
+                e.preventDefault();
+                history.push('/dashboard');
+              }}
+              style={{
+                display: `${location.pathname === '/' ? 'none' : 'flex'}`
+              }}
+            >
+              Dashboard
+            </Typography>
+            {paths.map((value, index) => {
+              const to = `/${paths.slice(0, index + 1).join('/')}`;
+              return (
+                <Typography
+                  key={to}
+                  className={classes.navRoutes}
+                  onClick={e => {
+                    e.preventDefault();
+                    history.push(to);
+                  }}
                 >
-                  <Typography
-                    className={classes.navRoutes} 
-                    onClick={(e) => {e.preventDefault(); history.push('/dashboard')}}                 
-                    style={{
-                      display: `${location.pathname === '/' ? 'none' : 'flex'}`
-                    }}
-                  >
-                    Dashboard
-                  </Typography>
-                  {paths.map((value, index) => {
-                    const to = `/${paths.slice(0, index + 1).join('/')}`;
-                    return (
-                      <Typography
-                        key={to}
-                        className={classes.navRoutes}
-                        onClick={(e) => {e.preventDefault(); history.push(to)}}
-                      >
-                        {breadcrumbNameMap[to]}
-                      </Typography>
-                    );
-                  })}
-                </Breadcrumbs>
+                  {breadcrumbNameMap[to]}
+                </Typography>
+              );
+            })}
+          </Breadcrumbs>
         </div>
       </MemoryRouter>
     </NoSsr>

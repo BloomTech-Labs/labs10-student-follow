@@ -1,25 +1,21 @@
 import React, { useState } from 'react';
-import {
-  Paper,
-  FormGroup,
-  Fab,
-  Checkbox,
-  Input,
-  FormControlLabel,
-  Button,
-  IconButton,
-  Snackbar,
-  withStyles,
-  Typography
-} from '@material-ui/core';
-import {
-  Attachment,
-  Close,
-  CloudUpload,
-  GroupAdd,
-  ArrowForward,
-  RemoveCircleOutline
-} from '@material-ui/icons';
+import Paper from '@material-ui/core/Paper';
+import FormGroup from '@material-ui/core/FormGroup';
+import Fab from '@material-ui/core/Fab';
+import Checkbox from '@material-ui/core/Checkbox';
+import Input from '@material-ui/core/Input';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import Snackbar from '@material-ui/core/Snackbar';
+import { withStyles } from '@material-ui/styles';
+import Typography from '@material-ui/core/Typography';
+import Attachment from '@material-ui/icons/Attachment';
+import Close from '@material-ui/icons/Close';
+import CloudUpload from '@material-ui/icons/CloudUpload';
+import GroupAdd from '@material-ui/icons/GroupAdd';
+import ArrowForward from '@material-ui/icons/ArrowForward';
+import RemoveCircleOutline from '@material-ui/icons/RemoveCircleOutline';
 import BigPapa from 'papaparse';
 
 const styles = theme => ({
@@ -177,7 +173,6 @@ const styles = theme => ({
 });
 
 function ListForm(props) {
-
   // DESTRUCTURES
   const { classes, file, setFile, recipientData, setRecipientData } = props;
 
@@ -211,7 +206,7 @@ function ListForm(props) {
   const importCSV = () => {
     BigPapa.parse(file.content, {
       header: true,
-      complete: function (results, file) {
+      complete: function(results, file) {
         console.log('Parsing complete:', results, file);
         setRecipientData(results.data);
       }
@@ -588,8 +583,8 @@ function ListForm(props) {
           </div>
         ))
       ) : (
-          <p>You need to add new recipients.</p>
-        )}
+        <p>You need to add new recipients.</p>
+      )}
 
       <hr className={classes.hrStyle} />
 
