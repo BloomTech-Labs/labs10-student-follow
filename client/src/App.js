@@ -57,13 +57,9 @@ const App = props => {
 
   /* STATE */
 
-  const [message, setMessage] = useState('');
   const [open, toggleOpen] = useState(false);
   const [userRefreshrs, setRefreshrs] = useState([]);
   const [userClasses, setClasses] = useState([]);
-  const [refreshrID, setRefreshrID] = useState('');
-  // const [students, setStudents] = useState([]);
-  // const [teachers, setTeachers] = useState([]);
 
   /* METHODS */
 
@@ -231,6 +227,7 @@ const App = props => {
 
   /* ROUTES */
   return (
+    //props.lock.checkSession(),
     //console.log('APP:', props.theme),
     <>
       <Grid
@@ -260,13 +257,7 @@ const App = props => {
           <Route
             path="/dashboard"
             render={props => (
-              <Dashboard
-                token={token}
-                getClasses={getClasses}
-                userClasses={userClasses}
-                getRefreshrs={getRefreshrs}
-                userRefreshrs={userRefreshrs}
-              />
+              <Dashboard id={user_id} token={token} history={props.history}/>
             )}
           />
           <Route
@@ -275,7 +266,7 @@ const App = props => {
             render={props => (
               <RefreshrListView
                 getRefreshrs={getRefreshrs}
-                refreshrs={userRefreshrs}
+                userRefreshrs={userRefreshrs}
               />
             )}
           />
@@ -294,7 +285,17 @@ const App = props => {
             )}
           />
           <Route path="/billing" render={props => <BillingPage />} />
-          <Route exact path="/classes" render={props => <ClassListView />} />
+          <Route
+            exact
+            path="/classes"
+            render={props => (
+              <ClassListView
+                token={token}
+                getClasses={getClasses}
+                userClasses={userClasses}
+              />
+            )}
+          />
           <Route
             exact
             path="/classes/edit/:id"

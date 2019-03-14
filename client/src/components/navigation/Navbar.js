@@ -67,18 +67,24 @@ const styles = theme => ({
     [theme.breakpoints.up('sm')]: {
       borderLeft: '1px solid #FFFFFF'
     },
+    marginTop: 64,
     background: theme.palette.primary.dark,
     color: theme.palette.primary.contrastText,
     height: '100vh',
     display: 'flex',
     flexFlow: 'column nowrap',
     justifyContent: 'space-around',
-    alignItems: 'stretch',
+    alignItems: 'center',
     textAlign: 'center'
   },
   navRoutes: {
     textAlign: 'center',
-    color: theme.palette.primary.contrastText
+    color: theme.palette.primary.contrastText,
+    fontSize: '1rem',
+    '&:hover':{
+      color: theme.palette.secondary.dark,
+
+    }
   },
   logo: {
     width: '50px',
@@ -144,6 +150,8 @@ const Navbar = props => {
 
   const drawer = (
     <List component="nav" className={classes.list}>
+      <ListItemLink to="/classes" className={classes.navRoutes} />
+      <ListItemLink to="/refreshrs" className={classes.navRoutes} />
       <ListItemLink to="/classes/create" className={classes.navRoutes} />
       <ListItemLink to="/refreshrs/create" className={classes.navRoutes} />
       <ListItemLink to="/billing" className={classes.navRoutes} />
