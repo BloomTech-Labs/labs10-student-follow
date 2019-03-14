@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { withRouter, Link } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -99,7 +99,6 @@ const Dashboard = props => {
 
   //STATS
   const userCampaigns = (id, token) => {
-    console.log(id);
     axios({
       method: 'get',
       url: `http://localhost:9000/campaigns/user/${id}`,
@@ -108,7 +107,6 @@ const Dashboard = props => {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => {
-        //console.log(res);
         setCampaigns(res.data.campaigns);
       })
       .catch(err => console.log(err));
@@ -120,23 +118,21 @@ const Dashboard = props => {
   const rows = [];
 
   campaigns.forEach(c => {
-    console.log(c);
     const current = new Date();
-    if( current === moment(c.date).subtract(30, 'days')){
-        const date = moment(c.date).format('Do/MMM/YYYY')
-        rows.push( createData(c.sg_campaign_id, c.classname, c.typeform_url, date))
+    if (c.date <= moment(current).add(30, 'days') && c.date >= current) {
+      const date = moment(c.date).format('Do/MMM/YYYY');
+      rows.push(
+        createData(c.sg_campaign_id, c.classname, c.typeform_url, date)
+      );
     }
-    
   });
 
   useEffect(() => {
-    //console.log(user_id)
     setName(localStorage.getItem('name'));
     userCampaigns(id, token);
   }, []);
 
   return (
-    //console.log(rows),
     <>
       <Typography className={classes.header} variant="h5">
         Welcome, {name}
@@ -146,7 +142,9 @@ const Dashboard = props => {
         <Table className={classes.table}>
           <TableHead className={classes.tableHead}>
             <TableRow className={classes.tableRow}>
-              <TableCell style={{border: 'none'}}>Upcoming Refreshrs</TableCell>
+              <TableCell style={{ border: 'none' }}>
+                Upcoming Refreshrs
+              </TableCell>
             </TableRow>
             <TableRow className={classes.tableRow}>
               <TableCell className={classes.tableCell} align="center">
@@ -162,41 +160,37 @@ const Dashboard = props => {
           </TableHead>
           <TableBody className={classes.tableBody}>
             {rows.length > 0 ? (
-              rows.map(
-                (row, index) => (
-                  //console.log(row),
-                  (
-                    <TableRow key={index} className={classes.tableRow}>
-                      <TableCell className={classes.tableCell} align="center">
-                        {row.date}
-                      </TableCell>
-                      <TableCell
-                        className={classes.aLink}
-                        align="center"
-                        onClick={e => {
-                          e.preventDefault();
-                          history.push(`/classes/edit/${row.classID}`);
-                        }}
-                      >
-                        {row.classname}
-                      </TableCell>
-                      <TableCell className={classes.tableCell} align="center">
-                        <a
-                          className={classes.aLink}
-                          href={`https://` + row.preview}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          preview
-                        </a>
-                      </TableCell>
-                    </TableRow>
-                  )
-                )
-              )
+              rows.map((row, index) => (
+                //console.log(row),
+                <TableRow key={index} className={classes.tableRow}>
+                  <TableCell className={classes.tableCell} align="center">
+                    {row.date}
+                  </TableCell>
+                  <TableCell
+                    className={classes.aLink}
+                    align="center"
+                    onClick={e => {
+                      e.preventDefault();
+                      history.push(`/classes/edit/${row.classID}`);
+                    }}
+                  >
+                    {row.classname}
+                  </TableCell>
+                  <TableCell className={classes.tableCell} align="center">
+                    <a
+                      className={classes.aLink}
+                      href={`https://` + row.preview}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      preview
+                    </a>
+                  </TableCell>
+                </TableRow>
+              ))
             ) : (
               <TableRow className={classes.tableRow}>
-                <TableCell style={{border: 'none'}}>
+                <TableCell style={{ border: 'none' }}>
                   <Typography variant={'caption'} className={classes.bodyText}>
                     No Refreshrs Within 30 Days
                   </Typography>

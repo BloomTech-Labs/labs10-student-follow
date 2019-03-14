@@ -100,17 +100,5 @@ lock.on('authorization_error', error => {
   });
 });
 
-lock.checkSession({
-    //PRODUCTION
-    // audience: 'https://refreshr.herokuapp.com',
-    // redirectUrl: 'https://refreshr-app.netlify.com/dashboard',
-    //DEVELOPMENT
-    audience: 'http://localhost:9000',
-    redirectUrl: 'http://localhost:3000/dashboard',
-    responseType: 'token id_token'
-  },
- (err, authResult) => {
-  console.log(err, authResult)
-})
 
 export default lock;
