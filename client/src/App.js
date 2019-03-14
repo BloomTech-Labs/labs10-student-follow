@@ -57,12 +57,14 @@ const App = props => {
   const [open, toggleOpen] = useState(false);
   const [userRefreshrs, setRefreshrs] = useState([]);
   const [userClasses, setClasses] = useState([]);
+  const [name, setName] = useState('');
 
   /* METHODS */
 
   useEffect(() => {
     setToken(localStorage.getItem('accessToken'))
     setID(localStorage.getItem('user_id'))
+    setName(localStorage.getItem('name'));
   })
   //all refreshrs for user
 
@@ -258,7 +260,7 @@ const App = props => {
           <Route
             path="/dashboard"
             render={props => (
-              <Dashboard id={user_id} token={token} history={props.history}/>
+              <Dashboard id={user_id} token={token} history={props.history} name={name}/>
             )}
           />
           <Route

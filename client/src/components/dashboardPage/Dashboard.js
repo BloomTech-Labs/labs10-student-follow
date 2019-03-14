@@ -93,9 +93,9 @@ const styles = theme => ({
 });
 
 const Dashboard = props => {
-  const { classes, id, token, history } = props;
+  const { classes, id, token, history, name } = props;
   const [campaigns, setCampaigns] = useState([]);
-  const [name, setName] = useState('');
+ 
 
   //STATS
   const userCampaigns = (id, token) => {
@@ -129,7 +129,6 @@ const Dashboard = props => {
     });
 
   useEffect(() => {
-    setName(localStorage.getItem('name'));
     userCampaigns(id, token);
     setRows();
   }, []);
