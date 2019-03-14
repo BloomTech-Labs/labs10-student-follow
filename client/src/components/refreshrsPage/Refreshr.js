@@ -72,12 +72,12 @@ const styles = theme => ({
     borderRadius: 5
   },
   multipleChoice: {
-    margin: '3% 1%',
-    padding: '2% 10%',
+    // margin: '3% 1%',
+    // padding: '2% 10%',
     color: theme.palette.primary.main,
     fontSize: '1em',
     borderRadius: 5,
-    width: '100%'
+    width: '83%'
   },
   form1: {
     display: 'flex',
@@ -328,7 +328,7 @@ function Refreshr(props) {
             />
           </FormGroup>
 
-          <FormGroup>
+          <FormGroup className={classes.form1}>
             <form className={classes.multipleChoice}>
               <Input
                 disableUnderline
