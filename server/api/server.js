@@ -6,7 +6,8 @@ const server = express();
 
 configureMiddleware(server);
 
-const authRoutes = require('../routes/authRoutes')
+const authRoutes = require('../routes/authRoutes');
+const campaignRoutes = require('../routes/campaignRoutes');
 const teachersRoutes = require('../routes/teachersRoutes');
 const studentsRoutes = require('../routes/studentsRoutes');
 const classesRoutes = require('../routes/classesRoutes');
@@ -17,6 +18,7 @@ const refreshrsRoutes = require('../routes/refreshrsRoutes');
 server.use(jwtCheck)
 server.use('/auth', authRoutes)
 server.use('/classes', classesRoutes);
+server.use('/campaigns', campaignRoutes);
 server.use('/teachers', teachersRoutes);
 server.use('/students', studentsRoutes);
 server.use('/questions', questionsRoutes);
