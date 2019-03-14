@@ -96,7 +96,6 @@ const Dashboard = props => {
   const { classes, id, token, history } = props;
   const [campaigns, setCampaigns] = useState([]);
   const [name, setName] = useState('');
-  const [loading, setLoading] = useState();
 
   //STATS
   const userCampaigns = (id, token) => {
@@ -133,7 +132,7 @@ const Dashboard = props => {
     setName(localStorage.getItem('name'));
     userCampaigns(id, token);
     setRows();
-  }, [id]);
+  }, []);
 
   return (
     <>
