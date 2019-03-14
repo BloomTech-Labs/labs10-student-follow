@@ -11,9 +11,15 @@ import {
   Fab,
   IconButton,
   Snackbar,
-  withStyles
+  withStyles,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  ListSubheader
 } from '@material-ui/core/';
 import { ArrowBack, Close, Send } from '@material-ui/icons';
+import logo from '../components/LogoSmall.png';
 import axios from 'axios';
 import moment from 'moment';
 
@@ -106,10 +112,49 @@ const styles = theme => ({
   },
   scheduleDiv: {
     margin: '1rem 0',
-    display: 'none' // temporary because i can't see the button
+    fontSize: '1.1rem'
+    // display: 'none' // temporary because i can't see the button
+  },
+  dateInput: {
+    color: theme.palette.secondary.main
   },
   scheduleText: {
-    marginLeft: '1rem'
+    marginTop: 10,
+    marginLeft: '1rem',
+    fontSize: '1.1rem'
+  },
+  listContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    [theme.breakpoints.down('sm')]: {
+      flexDirection: 'column'
+    }
+  },
+  refreshrList: {
+    border: `1px solid ${theme.palette.secondary.main}`,
+    backgroundColor: theme.palette.primary.main,
+    marginTop: 10,
+    marginRight: 5,
+    marginLeft: 5,
+    minWidth: 240
+  },
+  listItem: {
+    '&:hover': {
+      backgroundColor: '#363c42'
+    },
+    '&:focus': {
+      backgroundColor: '#363c42'
+    }
+  },
+  listItemText: {
+    fontSize: '1rem'
+  },
+  subhead: {
+    color: theme.palette.secondary.main
+  },
+  logo: {
+    width: 25,
+    height: 25
   }
 });
 
@@ -136,7 +181,6 @@ function CampaignForm(props) {
     getRefreshrs();
   }, []);
 
-  const userID = localStorage.getItem('user_id');
   const token = localStorage.getItem('accessToken');
 
   const ax = axios.create({
@@ -155,11 +199,9 @@ function CampaignForm(props) {
     try {
       const uid = localStorage.getItem('user_id');
       const res = await ax.get(
-        // `/teachers/275/refreshrs`
         `/teachers/${uid}/refreshrs`
         // 'https://refreshr.herokuapp.com/teachers/${userID}/refeshrs'
       );
-      console.log(res.data);
       setRefreshrs(res.data.refreshrs);
     } catch (err) {
       console.log(err);
@@ -197,6 +239,9 @@ function CampaignForm(props) {
       refreshr_id: activeRefreshr.refreshr_id
     });
     setScheduledRefreshrs([...scheduledRefreshrs, activeRefreshr]);
+    setRefreshrs(
+      refreshrs.filter(r => r.refreshr_id !== activeRefreshr.refreshr_id)
+    );
     setActiveRefreshr(null);
   };
 
@@ -319,37 +364,44 @@ function CampaignForm(props) {
         <Card className={classes.activeCard}>
           <h1>{activeRefreshr.name}</h1>
           <TextField
+            InputProps={{ className: classes.dateInput }}
             variant="outlined"
             type="date"
             defaultValue={today}
             onChange={e => alterTime(e)}
           />
-          <div className={classes.scheduleDiv}>
-            <Typography variant={'body2'} color="secondary">
-              Input: {schedule.schedule0 || ''}
-            </Typography>
-            <Typography
-              className={classes.scheduleText}
-              variant={'body2'}
-              color="secondary"
-            >
-              +2 days: {schedule.schedule1 || ''}
-            </Typography>
-            <Typography
-              className={classes.scheduleText}
-              variant={'body2'}
-              color="secondary"
-            >
-              +2 weeks: {schedule.schedule2 || ''}
-            </Typography>
-            <Typography
-              className={classes.scheduleText}
-              variant={'body2'}
-              color="secondary"
-            >
-              +2 months: {schedule.schedule3 || ''}
-            </Typography>
-          </div>
+          {schedule.schedule0 && (
+            <div className={classes.scheduleDiv}>
+              <Typography
+                className={classes.scheduleText}
+                variant="subtitle2"
+                color="secondary"
+              >
+                Input: {schedule.schedule0 || ''}
+              </Typography>
+              <Typography
+                className={classes.scheduleText}
+                variant={'body2'}
+                color="secondary"
+              >
+                +2 days: {schedule.schedule1 || ''}
+              </Typography>
+              <Typography
+                className={classes.scheduleText}
+                variant={'body2'}
+                color="secondary"
+              >
+                +2 weeks: {schedule.schedule2 || ''}
+              </Typography>
+              <Typography
+                className={classes.scheduleText}
+                variant={'body2'}
+                color="secondary"
+              >
+                +2 months: {schedule.schedule3 || ''}
+              </Typography>
+            </div>
+          )}
           <Button
             variant="outlined"
             color="secondary"
@@ -374,25 +426,54 @@ function CampaignForm(props) {
         Your Refreshrs
       </Typography>
 
-      <Grid className={classes.cardList}>
-        {refreshrs.map(refreshr => (
-          <Card
-            onClick={() => handleClick(refreshr.refreshr_id)}
-            className={classes.card}
-            key={refreshr.refreshr_id}
-            id={refreshr.refreshr_id}
-            raised
-          >
-            <Typography variant="subtitle2">{refreshr.name}</Typography>
-          </Card>
-        ))}
-        <Link to="/refreshrs/create" style={{ textDecoration: 'none' }}>
-          <Card className={`${classes.card} ${classes.iconCard}`}>
-            <Icon color="action" style={{ fontSize: 60 }}>
-              add_circle
-            </Icon>
-          </Card>
-        </Link>
+      <Grid className={classes.listContainer}>
+        <List
+          className={classes.refreshrList}
+          subheader={
+            <ListSubheader className={classes.subhead} component="div">
+              Your Refreshrs
+            </ListSubheader>
+          }
+        >
+          {refreshrs.map(r => (
+            <ListItem
+              className={classes.listItem}
+              button
+              key={r.refreshr_id}
+              onClick={() => handleClick(r.refreshr_id)}
+            >
+              <ListItemText
+                classes={{ primary: classes.listItemText }}
+                primary={r.name}
+              />
+            </ListItem>
+          ))}
+        </List>
+        <List
+          className={classes.refreshrList}
+          subheader={
+            <ListSubheader className={classes.subhead} component="div">
+              Scheduled Refreshrs
+            </ListSubheader>
+          }
+        >
+          {scheduledRefreshrs.map(r => (
+            <ListItem
+              className={classes.listItem}
+              button
+              key={r.refreshr_id}
+              onClick={() => handleClick(r.refreshr_id)}
+            >
+              <ListItemIcon>
+                <img src={logo} alt="Refreshr icon" className={classes.logo} />
+              </ListItemIcon>
+              <ListItemText
+                classes={{ primary: classes.listItemText }}
+                primary={r.name}
+              />
+            </ListItem>
+          ))}
+        </List>
       </Grid>
 
       <hr className={classes.hrStyle} />
