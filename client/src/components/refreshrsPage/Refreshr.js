@@ -117,7 +117,6 @@ function Refreshr(props) {
   const [refreshrName, addRefreshrName] = useState('');
   const [questionTextOne, setQuestionTextOne] = useState('');
   const [questionTextTwo, setQuestionTextTwo] = useState('');
-  //const [submitted, setSubmitted] = useState(false);
 
   const [a1Text, setA1Text] = useState('');
   const [a2Text, setA2Text] = useState('');
@@ -145,14 +144,7 @@ function Refreshr(props) {
     }
     setOpenBool(!openBool);
   };
-  // end snackbar
 
-  /* We should use this later on other pages
-    that way we can give the user an indication that an action was successful
-  */
-  //   const StyleDisplay = styled.a`
-  //   ${{ display: submitted ? 'block' : 'none' }}
-  // `;
   const createForm = async event => {
     event.preventDefault();
     const data = {
@@ -226,7 +218,6 @@ function Refreshr(props) {
       console.log(error);
     }
     handleSnackbar();
-    //setSubmitted(true);
   };
 
   return (
@@ -413,7 +404,6 @@ function Refreshr(props) {
                 }}
               />
             </Fab>
-            {/* <StyleDisplay>View your Refreshr here: {url}</StyleDisplay> */}
           </div>
         </FormGroup>
       </Grid>

@@ -34,7 +34,6 @@ const styles = theme => ({
 });
 
 function ClassCreateView(props) {
-
   // HOOKS
   const [file, setFile] = useState({ filename: 'No File Chosen', content: {} });
 
@@ -165,10 +164,7 @@ function ClassCreateView(props) {
             date: refreshr.date,
             sg_campaign_id: campaign_id
           };
-          await ax.post(
-            `/classes/${list}/campaigns`,
-            tcrRefreshr
-          );
+          await ax.post(`/classes/${list}/campaigns`, tcrRefreshr);
 
           // schedule the three campaigns
           await sgAx.post(
