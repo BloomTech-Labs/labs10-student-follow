@@ -4,7 +4,6 @@ import Navbar from './navigation/Navbar';
 
 /* PAGES */
 import BillingPage from './billingPage/BillingPage';
-import ClassesPage from './classesPage/ClassesPage';
 import LandingPage from './landingPage/LandingPage';
 import RefreshrsPage from './refreshrsPage/RefreshrsPage';
 
@@ -33,7 +32,6 @@ export {
   Navcrumbs,
   Navbar,
   BillingPage,
-  ClassesPage,
   LandingPage,
   RefreshrsPage,
   TakeMoney,
