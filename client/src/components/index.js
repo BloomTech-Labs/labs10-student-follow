@@ -4,7 +4,6 @@ import Navbar from './navigation/Navbar';
 
 /* PAGES */
 import BillingPage from './billingPage/BillingPage';
-import ClassesPage from './classesPage/ClassesPage';
 import LandingPage from './landingPage/LandingPage';
 import RefreshrsPage from './refreshrsPage/RefreshrsPage';
 
@@ -26,14 +25,13 @@ import Refreshr from './refreshrsPage/Refreshr';
 import RefreshrEdit from './refreshrsPage/RefreshrEdit';
 
 /* MISC DATA */
-import ClassOperations from './classesPage/ClassOperations';
+import SendgridTestOps from './classesPage/SendgridTestOps';
 import Dashboard from './dashboardPage/Dashboard';
 
 export {
   Navcrumbs,
   Navbar,
   BillingPage,
-  ClassesPage,
   LandingPage,
   RefreshrsPage,
   TakeMoney,
@@ -46,7 +44,7 @@ export {
   RefreshrCard,
   Refreshr,
   RefreshrEdit,
-  ClassOperations,
+  SendgridTestOps,
   Dashboard,
   PricingModal
 };
