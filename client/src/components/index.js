@@ -25,7 +25,7 @@ import Refreshr from './refreshrsPage/Refreshr';
 import RefreshrEdit from './refreshrsPage/RefreshrEdit';
 
 /* MISC DATA */
-import ClassOperations from './classesPage/ClassOperations';
+import SendgridTestOps from './classesPage/SendgridTestOps';
 import Dashboard from './dashboardPage/Dashboard';
 
 export {
@@ -44,7 +44,7 @@ export {
   RefreshrCard,
   Refreshr,
   RefreshrEdit,
-  ClassOperations,
+  SendgridTestOps,
   Dashboard,
   PricingModal
 };
