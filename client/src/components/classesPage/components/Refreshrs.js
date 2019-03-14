@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Grid,
   Typography,
@@ -6,21 +6,16 @@ import {
   CardContent,
   Button,
   TextField,
-  Icon,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
   ListSubheader,
-  Divider,
   Fab
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import DeleteIcon from '@material-ui/icons/Delete';
 import RefreshrDialog from './RefreshrListDialog';
 import {
-  Create,
-  Backspace,
   RemoveCircleOutline,
   Update,
   AddCircleOutline
@@ -56,8 +51,6 @@ const styles = theme => ({
     }
   },
   refreshrContent: {
-    // color: theme.palette.primary.dark,
-    // color: `${theme.palette.primary.contrastText}`,
     fontSize: '1.0rem',
     display: 'flex',
     flexDirection: 'column',
@@ -79,7 +72,6 @@ const styles = theme => ({
   refreshrIcon: {
     alignSelf: 'flex-end',
     margin: '5%',
-    // color: theme.palette.primary.dark,
     '&:hover': {
       cursor: 'pointer'
     }
@@ -87,59 +79,9 @@ const styles = theme => ({
   datePicker: {
     color: theme.palette.primary.contrastText
   },
-  addedRefreshr: {
-    height: 200,
-    border: `4px solid theme.palette.secondary`,
-    margin: theme.spacing.unit * 3,
-    position: 'relative'
-  },
-  activeRefreshr: {
-    transform: 'scale(1.2)',
-    border: `4px solid blue`,
-    background: theme.palette.secondary.main,
-    margin: theme.spacing.unit,
-    display: 'flex',
-    flexFlow: 'column nowrap',
-    alignItems: 'center',
-    width: '50%',
-    [theme.breakpoints.only('xs')]: {
-      width: '100%'
-    }
-  },
-  newRefCard: {
-    display: 'flex',
-    flexFlow: 'column nowrap',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    height: 200
-  },
   title: {
     color: `${theme.palette.primary.contrastText}`,
     textAlign: 'center'
-  },
-  newTitle: {
-    color: `${theme.palette.secondary.contrastText}`,
-    textAlign: 'center',
-    fontSize: '1.6rem'
-  },
-  icon: {
-    alignSelf: 'center',
-    '&:hover': {
-      cursor: 'pointer'
-    }
-  },
-  saveButton: {
-    background: theme.palette.secondary.main,
-    color: theme.palette.primary.dark,
-    padding: '1%',
-    display: 'flex',
-    flexFlow: 'row nowrap',
-    fontSize: '1.2rem',
-    width: '50%',
-    marginTop: '5%',
-    '&:hover': {
-      background: theme.palette.secondary.dark
-    }
   },
   button: {
     marginRight: theme.spacing.unit * 2,
@@ -172,7 +114,6 @@ const styles = theme => ({
 function Refreshrs(props) {
   const { classes } = props;
   function setDate(e) {
-    console.log(e.target.value);
     props.setAddedRefreshr({ ...props.addedRefreshr, date: e.target.value });
   }
   function closeModal() {
@@ -227,11 +168,7 @@ function Refreshrs(props) {
               />
             </Card>
           ) : props.addedRefreshr ? (
-            <Card
-              className={classes.refreshrCard}
-              // key={props.addedRefreshr.refreshr_id}
-              raised
-            >
+            <Card className={classes.refreshrCard} raised>
               <CardContent className={classes.refreshrContent}>
                 <Typography
                   variant="subtitle2"
@@ -283,7 +220,7 @@ function Refreshrs(props) {
               onClick={() => props.selectRefreshr(r.refreshr_id)}
             >
               <ListItemIcon>
-                <img src={logo} className={classes.logo} />
+                <img src={logo} alt="refreshr logo" className={classes.logo} />
               </ListItemIcon>
 
               <ListItemText>{r.name}</ListItemText>
@@ -309,96 +246,5 @@ function Refreshrs(props) {
     </>
   );
 }
-
-/*
-                  {props.makeInput(
-                    'date',
-                    'Date',
-                    String(Date(props.activeRefreshr.date)),
-                    e => {
-                      props.changeDate(e);
-                    },
-                    'date'
-                  )}
-          {props.refreshrs.map(r => (
-            <Card
-              className={
-                r === props.activeRefreshr
-                  ? classes.activeRefreshr
-                  : classes.refreshrCard
-              }
-              key={r.refreshr_id}
-              onClick={() => props.selectRefreshr(r.refreshr_id)}
-              raised
-            >
-              <CardContent className={classes.refreshrContent}>
-                <Typography variant="subtitle2">{r.name}</Typography>
-              </CardContent>
-              <CardContent className={classes.refreshrContent}>
-                {r === props.activeRefreshr ? (
-                  <form onSubmit={e => props.submitNewDate(e)}>
-                    {props.makeInput(
-                      'date',
-                      'Date',
-                      // Date(r.date),
-                      undefined,
-                      e => {
-                        props.changeDate(e);
-                      },
-                      'date'
-                    )}
-                    <button>submit</button>
-                  </form>
-                ) : (
-                  <>
-                    <Typography variant="body1">Taught On:</Typography>
-                    <Typography variant="body1">
-                      {moment(r.date).format('MM/DD/YY')}
-                    </Typography>
-                  </>
-                )}
-              </CardContent>
-              <DeleteIcon
-                onClick={() => props.removeRefreshr(r.refreshr_id)}
-                className={classes.refreshrIcon}
-              />
-            </Card>
-          ))}
-          <Card className={classes.refreshrCard} raised>
-            <CardContent className={classes.newRefCard}>
-              <Typography variant="h4" className={classes.newTitle}>
-                Add a Refreshr
-              </Typography>
-              <Icon
-                className={classes.icon}
-                color="action"
-                style={{ fontSize: 60 }}
-                onClick={() => setModalIsOpen(!modalIsOpen)}
-              >
-                add_circle
-              </Icon>
-            </CardContent>
-          </Card>
-        <Grid className={classes.refreshrList}>
-          {props.addedRefreshr && (
-            <Card
-              className={classes.refreshrCard}
-              key={props.addedRefreshr.refreshr_id}
-              raised
-            >
-              <CardContent>{props.addedRefreshr.name}</CardContent>
-              <TextField
-                onChange={e => setDate(e)}
-                variant="outlined"
-                type="date"
-              />
-              {props.addedRefreshr.date && (
-                <Button onClick={props.addRefreshr}>Submit</Button>
-              )}
-            </Card>
-          )}
-
-
-*/
 
 export default withStyles(styles, { withTheme: true })(Refreshrs);

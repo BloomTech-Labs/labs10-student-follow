@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import {
   Grid,
   Paper,
   TextField,
   Card,
   Typography,
-  Icon,
   Button,
   Fab,
   IconButton,
@@ -113,7 +111,6 @@ const styles = theme => ({
   scheduleDiv: {
     margin: '1rem 0',
     fontSize: '1.1rem'
-    // display: 'none' // temporary because i can't see the button
   },
   refreshrTitle: {
     color: theme.palette.secondary.main
@@ -162,6 +159,11 @@ const styles = theme => ({
 });
 
 function CampaignForm(props) {
+
+  // DESTRUCTURES
+  const { classes } = props;
+
+  // HOOKS
   const [refreshrs, setRefreshrs] = useState([]);
   const [activeRefreshr, setActiveRefreshr] = useState(null);
   const [scheduledRefreshrs, setScheduledRefreshrs] = useState([]);
@@ -175,10 +177,21 @@ function CampaignForm(props) {
     schedule3: null
   });
 
-  const { classes } = props;
+  // FORM NAVIGATION
+  const handlePrev = e => {
+    e.preventDefault();
+    props.setStage({
+      ...props.stage,
+      onListForm: !props.stage.onListForm,
+      onCampaignForm: !props.stage.onCampaignForm
+    });
+  };
+
+  // DATE OPERATIONS
   let today = new Date(); // to set default for date inputs
   today = dateMapper(today);
 
+  // GET REFRESHRS OPERATIONS
   // fetch class refreshrs on mount
   useEffect(() => {
     getRefreshrs();
@@ -211,7 +224,6 @@ function CampaignForm(props) {
     }
   };
 
-  // got to be a cleaner way to do this, but it works for now
   function dateMapper(date) {
     const month =
       date.getMonth() < 9 ? `0${date.getMonth() + 1}` : date.getMonth() + 1;
@@ -220,15 +232,7 @@ function CampaignForm(props) {
     return `${year}-${month}-${day}`;
   }
 
-  const handlePrev = e => {
-    e.preventDefault();
-    props.setStage({
-      ...props.stage,
-      onListForm: !props.stage.onListForm,
-      onCampaignForm: !props.stage.onCampaignForm
-    });
-  };
-
+  // SCHEDULE REFRESHR OPERATIONS
   const scheduleRefreshr = e => {
     console.log(e.target);
     props.setCampaignData({
@@ -237,7 +241,7 @@ function CampaignForm(props) {
       subject: activeRefreshr.name,
       html_content: `<html><head><title></title></head><body><p>${
         activeRefreshr.review_text
-      } [unsubscribe]</p></body></html>`,
+        } [unsubscribe]</p></body></html>`,
       plain_content: `${activeRefreshr.review_text} [unsubscribe]`,
       refreshr_id: activeRefreshr.refreshr_id
     });
@@ -247,10 +251,6 @@ function CampaignForm(props) {
     );
     setActiveRefreshr(null);
   };
-
-  // useEffect(() => {
-  //   console.log(activeRefreshr);
-  // }, [activeRefreshr]);
 
   useEffect(() => {
     console.log(scheduledRefreshrs);
@@ -267,6 +267,7 @@ function CampaignForm(props) {
     handleScheduleRefreshSnack();
   };
 
+  // DATE AND TIME OPERATIONS
   const alterTime = e => {
     e.preventDefault();
     const date = e.target.value;
@@ -416,12 +417,12 @@ function CampaignForm(props) {
           </Button>
         </Card>
       ) : (
-        <Card className={classes.activeCard}>
-          <Typography variant="body1">
-            Select a refreshr below to schedule
+          <Card className={classes.activeCard}>
+            <Typography variant="body1">
+              Select a refreshr below to schedule
           </Typography>
-        </Card>
-      )}
+          </Card>
+        )}
 
       <hr className={classes.hrStyle} />
 

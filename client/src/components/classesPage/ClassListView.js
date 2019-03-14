@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { withRouter, Link } from 'react-router-dom';
-
 import { Typography, Card, Grid, withStyles, Paper } from '@material-ui/core';
 
 const styles = theme => ({
@@ -92,7 +91,7 @@ const styles = theme => ({
 });
 
 const ClasslistView = props => {
-  const { userClasses, classes, getClasses,  } = props;
+  const { userClasses, classes, getClasses, } = props;
 
   useEffect(() => {
     getClasses();

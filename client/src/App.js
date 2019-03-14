@@ -14,7 +14,6 @@ import {
   Navcrumbs,
   RefreshrListView,
   Dashboard,
-  //ClassesPage,
   CampaignForm,
   ClassCreateView,
   ClassEditView,

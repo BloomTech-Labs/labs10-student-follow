@@ -9,7 +9,7 @@ const styles = theme => ({
   }
 });
 
-function ClassOperations(props) {
+function SendgridTestOps(props) {
   // VARIABLES
   const headers = {
     "headers": { "Authorization": `Bearer ${process.env.REACT_APP_SENDGRID_API_KEY}` },
@@ -569,4 +569,4 @@ function ClassOperations(props) {
     </Grid >
   );
 }
-export default withStyles(styles)(ClassOperations);
+export default withStyles(styles)(SendgridTestOps);

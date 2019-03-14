@@ -50,9 +50,8 @@ const styles = theme => ({
     fontWeight: 'bold',
     '&:hover': {
       cursor: 'pointer',
-      color: theme.palette.primary.contrastText ,
-      background: theme.palette.primary.dark,
-
+      color: theme.palette.primary.contrastText,
+      background: theme.palette.primary.dark
     }
   },
 
@@ -81,9 +80,8 @@ const styles = theme => ({
     textAlign: 'center',
     color: theme.palette.primary.contrastText,
     fontSize: '1rem',
-    '&:hover':{
-      color: theme.palette.secondary.dark,
-
+    '&:hover': {
+      color: theme.palette.secondary.dark
     }
   },
   logo: {
@@ -162,7 +160,6 @@ const Navbar = props => {
 
   const handleLogIn = () => {
     if (location.pathname !== '/') {
-      // console.log('logging out')
       localStorage.clear();
       props.lock.logout({
         // PRODUCTION
@@ -172,7 +169,6 @@ const Navbar = props => {
         clientID: 'jNDq5B6iAnIRcrpM07Omh05uyppZ89px'
       });
     } else {
-      // console.log('logging in')
       props.lock.show();
     }
   };
@@ -238,7 +234,7 @@ const Navbar = props => {
   } else {
     return (
       <div className={classes.container}>
-        <AppBar position="fixed" className={classes.appBar} >
+        <AppBar position="fixed" className={classes.appBar}>
           <Toolbar className={classes.toolbar}>
             <Button
               variant="outlined"
@@ -254,7 +250,7 @@ const Navbar = props => {
               variant="outlined"
               onClick={e => {
                 e.preventDefault();
-                toggleModal()
+                toggleModal();
               }}
               className={classes.btn}
             >

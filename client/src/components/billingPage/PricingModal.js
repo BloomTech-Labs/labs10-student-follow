@@ -2,7 +2,6 @@ import React from 'react';
 import Modal from '@material-ui/core/Modal';
 import BillingPage from './BillingPage';
 import { withStyles } from '@material-ui/core/styles';
-import Delete from '@material-ui/icons/DeleteOutlined'
 
 
 const style = theme => ({
