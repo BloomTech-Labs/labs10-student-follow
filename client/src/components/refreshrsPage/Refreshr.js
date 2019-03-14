@@ -203,10 +203,7 @@ function Refreshr(props) {
         {
           ref: 'question_2',
           title: questionObject.questionTextTwo,
-          type: 'short_text',
-          properties: {
-            description: questionObject.reviewText
-          }
+          type: 'short_text'
         }
       ]
     };
