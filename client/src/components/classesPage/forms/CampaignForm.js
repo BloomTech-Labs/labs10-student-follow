@@ -61,7 +61,7 @@ const styles = theme => ({
   activeCard: {
     margin: 10,
     width: '90%',
-    height: 300,
+    minHeight: 300,
     padding: theme.spacing.unit * 3,
     justifyContent: 'space-between',
     display: 'flex',
@@ -114,6 +114,9 @@ const styles = theme => ({
     margin: '1rem 0',
     fontSize: '1.1rem'
     // display: 'none' // temporary because i can't see the button
+  },
+  refreshrTitle: {
+    color: theme.palette.secondary.main
   },
   dateInput: {
     color: theme.palette.secondary.main
@@ -362,7 +365,9 @@ function CampaignForm(props) {
 
       {activeRefreshr ? (
         <Card className={classes.activeCard}>
-          <h1>{activeRefreshr.name}</h1>
+          <Typography variant="h6" className={classes.refreshrTitle}>
+            {activeRefreshr.name}
+          </Typography>
           <TextField
             InputProps={{ className: classes.dateInput }}
             variant="outlined"
@@ -411,8 +416,10 @@ function CampaignForm(props) {
           </Button>
         </Card>
       ) : (
-        <Card className={classes.card}>
-          <h4>select a refreshr to schedule</h4>
+        <Card className={classes.activeCard}>
+          <Typography variant="body1">
+            Select a refreshr below to schedule
+          </Typography>
         </Card>
       )}
 
