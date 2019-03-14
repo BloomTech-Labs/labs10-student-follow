@@ -159,7 +159,6 @@ const styles = theme => ({
 });
 
 function CampaignForm(props) {
-
   // DESTRUCTURES
   const { classes } = props;
 
@@ -234,15 +233,17 @@ function CampaignForm(props) {
 
   // SCHEDULE REFRESHR OPERATIONS
   const scheduleRefreshr = e => {
-    console.log(e.target);
     props.setCampaignData({
       ...props.campaignData,
       title: 'Your Refreshr Is Here!',
       subject: activeRefreshr.name,
-      html_content: `<html><head><title></title></head><body><p>${
-        activeRefreshr.review_text
-        } [unsubscribe]</p></body></html>`,
-      plain_content: `${activeRefreshr.review_text} [unsubscribe]`,
+      html_content: `<html><head><title></title></head><body><p>
+      Take your Refreshr at <a>${
+        activeRefreshr.typeform_url
+      }. [unsubscribe]</p></body></html>`,
+      plain_content: `Take your Refreshr at ${
+        activeRefreshr.typeform_url
+      } [unsubscribe]`,
       refreshr_id: activeRefreshr.refreshr_id
     });
     setScheduledRefreshrs([...scheduledRefreshrs, activeRefreshr]);
@@ -251,10 +252,6 @@ function CampaignForm(props) {
     );
     setActiveRefreshr(null);
   };
-
-  useEffect(() => {
-    console.log(scheduledRefreshrs);
-  }, [scheduledRefreshrs]);
 
   const handleClick = id => {
     const [active] = refreshrs.filter(r => r.refreshr_id === id);
@@ -301,7 +298,6 @@ function CampaignForm(props) {
       { send_at: twoMonthsUnix }
     ];
     setActiveRefreshr({ ...activeRefreshr, timeTriData, date });
-    console.log(activeRefreshr);
 
     setSchedule({
       ...schedule,
@@ -417,12 +413,12 @@ function CampaignForm(props) {
           </Button>
         </Card>
       ) : (
-          <Card className={classes.activeCard}>
-            <Typography variant="body1">
-              Select a refreshr below to schedule
+        <Card className={classes.activeCard}>
+          <Typography variant="body1">
+            Select a refreshr below to schedule
           </Typography>
-          </Card>
-        )}
+        </Card>
+      )}
 
       <hr className={classes.hrStyle} />
 
