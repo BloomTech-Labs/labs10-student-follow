@@ -53,7 +53,7 @@ lock.on('authenticated', authResult => {
 
     localStorage.setItem('accessToken', authResult.accessToken);
     localStorage.setItem('profile', JSON.stringify(profile));
-    localStorage.setItem('name', `${profile.name}`);
+    localStorage.setItem('name', `${profile.given_name}`);
     localStorage.setItem('email', profile.email);
     // PRODUCTION
     //localStorage.setItem('user_id', profile['https://refreshr.herokuapp.com/uid']);
@@ -99,5 +99,18 @@ lock.on('authorization_error', error => {
     }
   });
 });
+
+lock.checkSession({
+    //PRODUCTION
+    // audience: 'https://refreshr.herokuapp.com',
+    // redirectUrl: 'https://refreshr-app.netlify.com/dashboard',
+    //DEVELOPMENT
+    audience: 'http://localhost:9000',
+    redirectUrl: 'http://localhost:3000/dashboard',
+    responseType: 'token id_token'
+  },
+ (err, authResult) => {
+  console.log(err, authResult)
+})
 
 export default lock;
