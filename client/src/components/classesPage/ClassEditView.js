@@ -169,6 +169,7 @@ function ClassEditView(props) {
   const [isEditingStudents, setIsEditingStudents] = useState(false);
   const [editingStudent, setEditingStudent] = useState(null);
   const [activeStudent, setActiveStudent] = useState(null);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
 
   // useEffect(() => {
   //   console.log('selectedStudents:', selectedStudents);
@@ -359,7 +360,9 @@ function ClassEditView(props) {
     console.log(id);
     const [active] = teacherRefs.filter(r => r.refreshr_id === id);
     console.log(active);
+    setActiveRefreshr(null);
     setAddedRefreshr(active);
+    setModalIsOpen(false);
   }
 
   async function removeRefreshr(id) {
@@ -544,13 +547,14 @@ function ClassEditView(props) {
   }
 
   async function changeDate(e) {
+    console.log(activeRefreshr);
     console.log(activeRefreshr.date);
     console.log(e.target.value);
     activeRefreshr.date = e.target.value; // think we need to do this on submit?
   }
 
   async function submitNewDate(e) {
-    e.preventDefault();
+    if (e) e.preventDefault();
     console.log(e);
     // set 3 refreshr times
     const twoDaysUnix = moment(`${activeRefreshr.date}T00:00:00`)
@@ -650,6 +654,9 @@ function ClassEditView(props) {
         changeDate={changeDate}
         submitNewDate={submitNewDate}
         makeInput={makeInput}
+        modalIsOpen={modalIsOpen}
+        setModalIsOpen={setModalIsOpen}
+        className={classData.name}
       />
     </Paper>
   );

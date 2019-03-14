@@ -1,177 +1,213 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { withRouter, Link } from 'react-router-dom';
-
-import {
-  Typography,
-  Card,
-  Grid,
-  withStyles,
-  Paper
-} from '@material-ui/core';
-//import axios from 'axios';
+import axios from 'axios';
+import { withStyles } from '@material-ui/core/styles';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
+import moment from 'moment';
 
 const styles = theme => ({
   container: {
-    [theme.breakpoints.up('md')]: {
-      width: '80vw',
-      display: 'flex',
-      flexFlow: 'row nowrap',
-      justifyContent: 'space-around'
-    }
-  },
-  sectionWrapper: {
     border: `1px solid ${theme.palette.secondary.main}`,
+    ...theme.mixins.gutters(),
     display: 'flex',
     flexFlow: 'column nowrap',
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
     alignItems: 'center',
     paddingTop: theme.spacing.unit * 4,
     paddingBottom: theme.spacing.unit * 8,
-    marginTop: theme.spacing.unit * 8,
+    marginTop: 64,
     marginBottom: theme.spacing.unit * 4,
-    color: theme.palette.primary.contrastText,
-    background: theme.palette.primary.dark,
+    color: theme.palette.secondary.contrastText,
+    background: theme.palette.secondary.main,
     [theme.breakpoints.only('sm')]: {
       width: '60vw'
     },
     [theme.breakpoints.only('xs')]: {
       width: '90vw'
     },
-    [theme.breakpoints.up('md')]: {
-      marginLeft: '2.5%',
-      marginRight: '2.5%',
-      padding: '2.5%',
-      width: 500
-    }
+    maxWidth: 1000
   },
-  classContainer: {
-    boxSizing: 'border-box',
-    display: 'flex',
-    flexFlow: 'row wrap',
-    justifyContent: 'space-evenly',
-    alignItems: 'center',
-    width: '100%',
-    padding: '1%',
-    [theme.breakpoints.down('sm')]: {
-      width: '90%',
-      padding: 5
-    }
+  header: {
+    color: theme.palette.secondary.main,
+    marginTop: theme.spacing.unit * 6,
+    textAlign: 'center'
   },
-  links: {
-    color: 'inherit',
-    textDecoration: 'none'
-  },
-  cardSectionLabels: {
-    margin: 0,
-    padding: 0
-  },
-  classCard: {
-    display: 'flex',
-    flexDirection: 'column',
-    margin: '1rem',
-    background: 'white',
-    width: '200px',
-    textDecoration: 'none',
-    color: theme.palette.secondary.contrastText
-  },
-  cardTitle: {
-    color: theme.palette.secondary.contrastText,
-    textAlign: 'center',
-    fontSize: '1rem'
-  },
-  card: {
+  table: {
+    background: theme.palette.secondary.main,
+    [theme.breakpoints.only('sm')]: {
+      width: '60vw'
+    },
+    [theme.breakpoints.only('xs')]: {
+      width: '90vw'
+    },
+    maxWidth: 1000,
     display: 'flex',
     flexFlow: 'column nowrap',
+    justifyContent: 'space-around',
+    alignItems: 'center'
+  },
+
+  tableHead: {
+    width: '100%',
+    display: 'flex',
+    flexFlow: 'column nowrap',
+    alignItems: 'center'
+  },
+  tableBody: {
+    width: '100%',
+    dislay: 'flex',
+    flexFlow: 'column nowrap',
+    alignItems: 'center'
+  },
+  tableRow: {
+    display: 'flex',
+    flexFlow: 'row nowrap',
+    width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    margin: '5% 0',
-    background: theme.palette.secondary.main,
-    width: 125,
-    height: 125,
-    color: theme.palette.secondary.contrastText,
-    [theme.breakpoints.down('sm')]: {
-      margin: '10% 0'
-    },
-    '&:hover': {
-      background: theme.palette.secondary.dark
-    }
+    fontSize: '1.6rem'
   },
+  tableCell: {
+    fontSize: '1rem',
+    width: '33%',
+    color: theme.palette.primary.dark
+  },
+  bodyText: {
+    textAlign: 'center'
+  },
+  aLink: {
+    textDecoration: 'none',
+    fontSize: '1rem',
+    color: theme.palette.primary.dark,
+    '&:hover': {
+      cursor: 'pointer',
+      color: theme.palette.primary.light
+    }
+  }
 });
 
 const Dashboard = props => {
-  // const name = localStorage.getItem('name'); // commented out until decide what to do w/ name
-  const {
-    userClasses,
-    classes,
-    userRefreshrs,
-    getClasses,
-    getRefreshrs
-  } = props;
+  const { classes, id, token, history } = props;
+  const [campaigns, setCampaigns] = useState([]);
+  const [name, setName] = useState('');
+
+  //STATS
+  const userCampaigns = (id, token) => {
+    console.log(id);
+    axios({
+      method: 'get',
+      url: `http://localhost:9000/campaigns/user/${id}`,
+
+      //url: `https://refreshr.herokuapp.com/campaigns`,
+      headers: { Authorization: `Bearer ${token}` }
+    })
+      .then(res => {
+        //console.log(res);
+        setCampaigns(res.data.campaigns);
+      })
+      .catch(err => console.log(err));
+  };
+  const createData = (id, classname, preview, date, classID) => {
+    return { id, classname, preview, date, classID };
+  };
+
+  const rows = [];
+
+  campaigns.forEach(c => {
+    console.log(c);
+    const current = new Date();
+    if( current === moment(c.date).subtract(30, 'days')){
+        const date = moment(c.date).format('Do/MMM/YYYY')
+        rows.push( createData(c.sg_campaign_id, c.classname, c.typeform_url, date))
+    }
+    
+  });
 
   useEffect(() => {
-    getClasses();
-    getRefreshrs();
+    //console.log(user_id)
+    setName(localStorage.getItem('name'));
+    userCampaigns(id, token);
   }, []);
 
   return (
-    <div className={classes.container}>
-      <Paper className={classes.sectionWrapper} elevation={24} >
-        <Typography
-          variant="h6"
-          color="secondary"
-          className={classes.cardSectionLabels}
-        >
-          Current Classes
-        </Typography>
-        <Grid className={classes.classContainer}>
-          {userClasses && userClasses.map(c => {
-            return (
-              //console.log(stats),
-              <Link
-                key={c.class_id}
-                to={`classes/edit/${c.class_id}`}
-                style={{ textDecoration: 'none' }}
-              >
-                <Card className={classes.card}>
-                  <Typography className={classes.cardTitle}>
-                    {c.classname}
+    //console.log(rows),
+    <>
+      <Typography className={classes.header} variant="h5">
+        Welcome, {name}
+      </Typography>
+
+      <Paper className={classes.container} elevation={24}>
+        <Table className={classes.table}>
+          <TableHead className={classes.tableHead}>
+            <TableRow className={classes.tableRow}>
+              <TableCell style={{border: 'none'}}>Upcoming Refreshrs</TableCell>
+            </TableRow>
+            <TableRow className={classes.tableRow}>
+              <TableCell className={classes.tableCell} align="center">
+                Date
+              </TableCell>
+              <TableCell className={classes.tableCell} align="center">
+                Classname
+              </TableCell>
+              <TableCell className={classes.tableCell} align="center">
+                Refreshr
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody className={classes.tableBody}>
+            {rows.length > 0 ? (
+              rows.map(
+                (row, index) => (
+                  //console.log(row),
+                  (
+                    <TableRow key={index} className={classes.tableRow}>
+                      <TableCell className={classes.tableCell} align="center">
+                        {row.date}
+                      </TableCell>
+                      <TableCell
+                        className={classes.aLink}
+                        align="center"
+                        onClick={e => {
+                          e.preventDefault();
+                          history.push(`/classes/edit/${row.classID}`);
+                        }}
+                      >
+                        {row.classname}
+                      </TableCell>
+                      <TableCell className={classes.tableCell} align="center">
+                        <a
+                          className={classes.aLink}
+                          href={`https://` + row.preview}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          preview
+                        </a>
+                      </TableCell>
+                    </TableRow>
+                  )
+                )
+              )
+            ) : (
+              <TableRow className={classes.tableRow}>
+                <TableCell style={{border: 'none'}}>
+                  <Typography variant={'caption'} className={classes.bodyText}>
+                    No Refreshrs Within 30 Days
                   </Typography>
-                </Card>
-              </Link>
-            );
-          })}
-        </Grid>
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
       </Paper>
-      <Paper className={classes.sectionWrapper} elevation={24}>
-        <Typography
-          variant="h6"
-          color="secondary"
-          className={classes.cardSectionLabels}
-        >
-          Current Refreshrs
-        </Typography>
-        <Grid className={classes.classContainer}>
-          {userRefreshrs && userRefreshrs.map(r => {
-            //console.log(r)
-            //let participationRate = 0
-            return (
-              <Link
-                key={r.refreshr_id}
-                to={`refreshrs/edit/${r.refreshr_id}`}
-                style={{ textDecoration: 'none' }}
-              >
-                <Card className={classes.card}>
-                  {/* {console.log('R ===', r)} */}
-                  <Typography className={classes.cardTitle}>
-                    {r.name}
-                  </Typography>
-                </Card>
-              </Link>
-            );
-          })}
-        </Grid>
-      </Paper>
-    </div>
+    </>
   );
 };
-export default withRouter(withStyles(styles)(Dashboard));
+
+export default withRouter(withStyles(styles, { withTheme: true })(Dashboard));
