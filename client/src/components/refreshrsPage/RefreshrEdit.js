@@ -147,7 +147,6 @@ function Refreshr(props) {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => {
-        console.log('FROM USE EFFECT', res);
         setRefreshrName(res.data.refreshr.name);
         setReviewText(res.data.refreshr.review_text);
         setA1Text(res.data.refreshr.questions[0].question.answer_1);
@@ -229,21 +228,18 @@ function Refreshr(props) {
           headers
         })
         .then(res => {
-          console.log(res.data.id, match.params.id);
           const updatedRefreshr = {
             name: res.data.title,
             review_text: res.data.fields[1].properties.description,
             typeform_id: res.data.id,
             typeform_url: res.data._links.display
           };
-          console.log(questionObject);
           updateRefreshrDB(updatedRefreshr, typeformId, questionObject);
         });
     } catch (error) {
       console.log(error);
     }
   };
-  // }
 
   const handleUpdateSnackBool = (event, reason) => {
     if (reason === 'clickaway') {

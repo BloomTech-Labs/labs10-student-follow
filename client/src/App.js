@@ -187,7 +187,6 @@ const App = props => {
         console.log(err);
       });
     for (let i = 0; i < questionArray.length; i++) {
-      console.log('questionIDs from app put', questionIDs);
       axios({
         method: 'put',
         //Development
