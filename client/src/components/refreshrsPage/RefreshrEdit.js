@@ -91,12 +91,14 @@ const styles = theme => ({
   edit: {
     display: 'flex',
     wrap: 'nowrap',
+    justify: 'flex-start',
     margin: '15px 0px',
     width: '100%',
     alignItems: 'left',
-    alignContent: 'left',
+    alignContent: 'flex-start',
     cursor: 'pointer',
-    height: '10px'
+    height: '10px',
+    textAlign: 'left'
   },
   hrStyle: {
     margin: '1rem auto',
@@ -104,7 +106,9 @@ const styles = theme => ({
   },
   editIcon: {
     margin: '0%',
-    paddingLeft: '1%'
+    paddingLeft: '1%',
+    alignItems: 'left',
+    alignContent: 'left'
   }
 });
 
