@@ -90,11 +90,6 @@ const styles = theme => ({
       color: theme.palette.primary.light
     }
   },
-  loading: {
-    color: theme.palette.primary.contrastText,
-    position: 'absolute',
-    top: '50%'
-  }
 });
 
 const Dashboard = props => {
@@ -107,7 +102,7 @@ const Dashboard = props => {
   const userCampaigns = (id, token) => {
     axios({
       method: 'get',
-      url: `http://localhost:9000/campaigns/user/${193}`,
+      url: `http://localhost:9000/campaigns/user/${id}`,
 
       //url: `https://refreshr.herokuapp.com/campaigns`,
       headers: { Authorization: `Bearer ${token}` }
