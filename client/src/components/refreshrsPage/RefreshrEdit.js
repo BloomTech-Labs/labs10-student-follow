@@ -48,7 +48,7 @@ const styles = theme => ({
     background: theme.palette.secondary.main,
     color: theme.palette.primary.main,
     fontSize: '1em',
-    width: '75%',
+    width: '83%',
     borderRadius: 5
   },
   inputQuestion: {
@@ -58,7 +58,7 @@ const styles = theme => ({
     background: theme.palette.secondary.main,
     color: theme.palette.primary.main,
     fontSize: '1em',
-    width: '75%',
+    width: '83%',
     borderRadius: 5
   },
   inputMultipleChoice: {
@@ -72,12 +72,10 @@ const styles = theme => ({
     borderRadius: 5
   },
   multipleChoice: {
-    margin: '3% 1%',
-    padding: '2% 10%',
     color: theme.palette.primary.main,
     fontSize: '1em',
     borderRadius: 5,
-    width: '100%'
+    width: '83%'
   },
   form1: {
     display: 'flex',
@@ -95,8 +93,8 @@ const styles = theme => ({
     wrap: 'nowrap',
     margin: '15px 0px',
     width: '100%',
-    alignItems: 'center',
-    alignContent: 'center',
+    alignItems: 'left',
+    alignContent: 'left',
     cursor: 'pointer',
     height: '10px'
   },
@@ -298,7 +296,7 @@ function Refreshr(props) {
           <Typography
             variant="body1"
             color="secondary"
-            style={{ textAlign: 'center' }}
+            style={{ textAlign: 'left' }}
           >
             Refreshr Name
           </Typography>
@@ -379,21 +377,21 @@ function Refreshr(props) {
           <Typography
             variant="body1"
             color="secondary"
-            style={{ textAlign: 'center' }}
+            style={{ textAlign: 'left' }}
           >
             Question 1: Multiple Choice Response
+          </Typography>
+          <Typography
+            className={
+              multiChoiceEdit ? props.classes.hidden : props.classes.editText
+            }
+          >
+            {questionTextOne.text}
           </Typography>
           <FormGroup
             className={props.classes.form1}
             onSubmit={props.handleSubmit}
           >
-            <Typography
-              className={
-                multiChoiceEdit ? props.classes.hidden : props.classes.editText
-              }
-            >
-              {questionTextOne.text}
-            </Typography>
             <Input
               disableUnderline
               onChange={e =>
@@ -412,51 +410,52 @@ function Refreshr(props) {
             />
           </FormGroup>
 
-          <FormGroup>
-            <Typography
-              style={{
-                textAlign: 'center',
-                width: '100%'
-              }}
-              className={
-                multiChoiceEdit ? props.classes.hidden : props.classes.editText
-              }
-            >
-              {a1Text}
-            </Typography>
-            <Typography
-              style={{
-                textAlign: 'center',
-                width: '100%'
-              }}
-              className={
-                multiChoiceEdit ? props.classes.hidden : props.classes.editText
-              }
-            >
-              {a2Text}
-            </Typography>
-            <Typography
-              style={{
-                textAlign: 'center',
-                width: '100%'
-              }}
-              className={
-                multiChoiceEdit ? props.classes.hidden : props.classes.editText
-              }
-            >
-              {a3Text}
-            </Typography>
-            <Typography
-              style={{
-                textAlign: 'center',
-                width: '100%'
-              }}
-              className={
-                multiChoiceEdit ? props.classes.hidden : props.classes.editText
-              }
-            >
-              {a4Text}
-            </Typography>
+          {/* <FormGroup className={props.classes.form1}> */}
+          <Typography
+            style={{
+              textAlign: 'left',
+              width: '100%'
+            }}
+            className={
+              multiChoiceEdit ? props.classes.hidden : props.classes.editText
+            }
+          >
+            {a1Text}
+          </Typography>
+          <Typography
+            style={{
+              textAlign: 'left',
+              width: '100%'
+            }}
+            className={
+              multiChoiceEdit ? props.classes.hidden : props.classes.editText
+            }
+          >
+            {a2Text}
+          </Typography>
+          <Typography
+            style={{
+              textAlign: 'left',
+              width: '100%'
+            }}
+            className={
+              multiChoiceEdit ? props.classes.hidden : props.classes.editText
+            }
+          >
+            {a3Text}
+          </Typography>
+          <Typography
+            style={{
+              textAlign: 'left',
+              width: '100%'
+            }}
+            className={
+              multiChoiceEdit ? props.classes.hidden : props.classes.editText
+            }
+          >
+            {a4Text}
+          </Typography>
+          <FormGroup className={props.classes.form1}>
             <form className={props.classes.multipleChoice}>
               <Input
                 disableUnderline
@@ -521,7 +520,7 @@ function Refreshr(props) {
           <Typography
             variant="body1"
             color="secondary"
-            style={{ textAlign: 'center' }}
+            style={{ textAlign: 'left' }}
           >
             Question 2: Text Response
           </Typography>
