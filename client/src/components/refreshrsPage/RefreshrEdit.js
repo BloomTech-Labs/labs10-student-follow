@@ -510,15 +510,15 @@ function Refreshr(props) {
                 }
               />
             </form>
-          </FormGroup>
-          <FormGroup
-            onClick={() => setMultiChoiceEdit(!multiChoiceEdit)}
-            className={props.classes.edit}
-          >
-            <i className="fas fa-pen" />
-            <h4 className={props.classes.editIcon}>Edit</h4>
-          </FormGroup>
 
+            <FormGroup
+              onClick={() => setMultiChoiceEdit(!multiChoiceEdit)}
+              className={props.classes.edit}
+            >
+              <i className="fas fa-pen" />
+              <h4 className={props.classes.editIcon}>Edit</h4>
+            </FormGroup>
+          </FormGroup>
           <hr className={props.classes.hrStyle} />
 
           <Typography
