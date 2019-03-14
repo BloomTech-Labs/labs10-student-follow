@@ -172,8 +172,14 @@ function Refreshr(props) {
   const editForm = async event => {
     event.preventDefault();
     console.log('IN update!');
+    console.log('refreshrName =>', refreshrName);
+    console.log('questionTextOne.text =>', questionTextOne.text);
+    console.log('reviewText =>', reviewText);
+    console.log('a1Text =>', a1Text);
+    console.log('questionTextTwo.text =>', questionTextTwo.text);
+
     const data = {
-      title: 'Refreshr',
+      title: refreshrName,
       variables: {
         score: 0
       },
@@ -256,7 +262,7 @@ function Refreshr(props) {
     setUpdateSnackBool(!updateSnackBool);
   };
 
-  console.log('questionTextOne =>', questionTextOne);
+  console.log('refreshrName pre-render =>', refreshrName);
 
   return (
     <Paper className={props.classes.container} elevation={24}>

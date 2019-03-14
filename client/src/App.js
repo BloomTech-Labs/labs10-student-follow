@@ -187,6 +187,7 @@ const App = props => {
         console.log(err);
       });
     for (let i = 0; i < questionArray.length; i++) {
+      console.log('questionIDs from app put', questionIDs);
       axios({
         method: 'put',
         //Development
@@ -257,7 +258,7 @@ const App = props => {
           <Route
             path="/dashboard"
             render={props => (
-              <Dashboard id={user_id} token={token} history={props.history}/>
+              <Dashboard id={user_id} token={token} history={props.history} />
             )}
           />
           <Route
