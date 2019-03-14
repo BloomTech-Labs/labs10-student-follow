@@ -256,7 +256,7 @@ const App = props => {
           <Route
             path="/dashboard"
             render={props => (
-              <Dashboard id={user_id} token={token} history={props.history}/>
+              <Dashboard id={user_id} token={token} history={props.history} />
             )}
           />
           <Route
