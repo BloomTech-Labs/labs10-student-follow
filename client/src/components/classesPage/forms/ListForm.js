@@ -428,7 +428,7 @@ function ListForm(props) {
         Add Class
       </Typography>
 
-      <Typography variant="h8" color="secondary" align={'center'}>
+      <Typography variant="caption" color="secondary" align={'center'}>
         Create a class by importing your students or manually adding them.
       </Typography>
 
