@@ -1,21 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
-import {
-  Grid,
-  Checkbox,
-  Card,
-  Button,
-  Typography,
-  CardContent,
-  Icon,
-  Paper,
-  TextField,
-  FormGroup,
-  Input,
-  Fab
-} from '@material-ui/core';
-import Update from '@material-ui/icons/Update';
-import GroupAdd from '@material-ui/icons/GroupAdd';
+import { Paper, Input } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { addRecipient, addContact, deleteContact } from './SendgridOps';
 import axios from 'axios';
@@ -167,7 +152,6 @@ function ClassEditView(props) {
   const [addedRefreshr, setAddedRefreshr] = useState(null);
   const [isEditingClass, setIsEditingClass] = useState(false);
   const [isEditingStudents, setIsEditingStudents] = useState(false);
-  const [editingStudent, setEditingStudent] = useState(null);
   const [activeStudent, setActiveStudent] = useState(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
@@ -200,6 +184,7 @@ function ClassEditView(props) {
         uniqueRefreshrIds.push(r.refreshr_id);
         uniqueRefreshrs.push(r);
       }
+      return null;
     });
     setDisplayRefreshrs(uniqueRefreshrs);
   }, [refreshrs]);
@@ -426,7 +411,7 @@ function ClassEditView(props) {
   async function changeClassName(e) {
     try {
       e.preventDefault();
-      const res = await ax.put(`/classes/${classId}`, {
+      await ax.put(`/classes/${classId}`, {
         name: classData.name,
         sg_list_id: classData.id
       });
@@ -501,11 +486,10 @@ function ClassEditView(props) {
       );
 
       campaigns = campaigns.map(c => c.sg_campaign_id);
-      campaigns = campaigns.map(c => c.sg_campaign_id);
 
       // update campaigns
       for (let i = 0; i < 3; i++) {
-        const res = await sgAx.patch(
+        await sgAx.patch(
           `/campaigns/${campaigns[i]}/schedules`,
           timeTriData[i]
         );
@@ -545,7 +529,7 @@ function ClassEditView(props) {
         isEditingClass={isEditingClass}
         setIsEditingClass={setIsEditingClass}
         isEditingStudents={isEditingStudents}
-        setIsEditingStudents={isEditingStudents}
+        setIsEditingStudents={setIsEditingStudents}
       />
       <hr className={classes.hrStyle} />
       <Students
@@ -569,7 +553,6 @@ function ClassEditView(props) {
         addedRefreshr={addedRefreshr}
         setAddedRefreshr={setAddedRefreshr}
         addRefreshr={addRefreshr}
-        selectRefreshr={selectRefreshr}
         teacherRefs={teacherRefs}
         selectRefreshr={selectRefreshr}
         selectNewRefreshr={selectNewRefreshr}
