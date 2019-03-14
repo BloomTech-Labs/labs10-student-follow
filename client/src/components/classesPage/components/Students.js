@@ -1,16 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import {
   Grid,
   Typography,
   Card,
-  Checkbox,
   Button,
-  FormGroup,
   Fab,
   ExpansionPanel,
-  ExpansionPanelSummary,
-  TextField
+  ExpansionPanelSummary
 } from '@material-ui/core';
 import {
   GroupAdd,
@@ -85,28 +82,12 @@ const styles = theme => ({
 function students(props) {
   const { classes } = props;
 
-  function selectStudent(e) {
-    const studentId = e.target.value;
-    let updatedStudents = props.selectedStudents;
-    if (e.target.checked) {
-      updatedStudents = props.selectedStudents.concat(studentId);
-    } else {
-      updatedStudents = props.selectedStudents.filter(s => s !== studentId);
-    }
-    props.setSelectedStudents(updatedStudents);
-  }
-
   function editStudent(id) {
-    console.log(id);
     const [student] = props.students.filter(s => s.student_id === id);
     student.isEditing = true;
-    console.log(student);
   }
 
   function handleChange(e, student) {
-    console.log(e.target.value);
-    console.log(student);
-    console.log(e.target.name);
     student[e.target.name] = e.target.value;
   }
 
@@ -184,9 +165,9 @@ function students(props) {
             elevation={20}
             aria-label="Add"
             className={classes.btn}
+            type="submit"
             onClick={e => props.addStudent(e)}
           >
-            <button type="submit" className={classes.hiddenButton} />
             <GroupAdd />
           </Fab>
         </form>
