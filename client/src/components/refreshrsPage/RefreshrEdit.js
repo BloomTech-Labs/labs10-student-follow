@@ -147,9 +147,6 @@ function Refreshr(props) {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => {
-        // console.log('res from useEffect', res);
-        // const answers = res.data.fields[1].properties.choices.map(
-        //   answer => answer.label
         console.log('FROM USE EFFECT', res);
         setRefreshrName(res.data.refreshr.name);
         setReviewText(res.data.refreshr.review_text);
@@ -171,13 +168,6 @@ function Refreshr(props) {
 
   const editForm = async event => {
     event.preventDefault();
-    console.log('IN update!');
-    console.log('refreshrName =>', refreshrName);
-    console.log('questionTextOne.text =>', questionTextOne.text);
-    console.log('reviewText =>', reviewText);
-    console.log('a1Text =>', a1Text);
-    console.log('questionTextTwo.text =>', questionTextTwo.text);
-
     const data = {
       title: refreshrName,
       variables: {
@@ -261,8 +251,6 @@ function Refreshr(props) {
     }
     setUpdateSnackBool(!updateSnackBool);
   };
-
-  console.log('refreshrName pre-render =>', refreshrName);
 
   return (
     <Paper className={props.classes.container} elevation={24}>
@@ -426,30 +414,9 @@ function Refreshr(props) {
                   : props.classes.hidden
               }
             />
-            {/* <FormGroup
-              onClick={() => setMultiChoiceEdit(!multiChoiceEdit)}
-              className={props.classes.edit}
-            >
-              <i className="fas fa-pen" />
-              <h4 className={props.classes.editText}>Edit</h4>
-            </FormGroup> */}
           </FormGroup>
 
-          <FormGroup
-          // className={
-          //   multiChoiceEdit
-          //     ? props.classes.hidden
-          //     : props.classes.inputMultipleChoice
-          // }
-          >
-            {/* <FormGroup
-              className={
-                multiChoiceEdit
-                  ? props.classes.hidden
-                  : props.classes.inputMultipleChoice
-              }
-            > */}
-            {/* </FormGroup> */}
+          <FormGroup>
             <Typography
               style={{
                 textAlign: 'center',
@@ -494,7 +461,6 @@ function Refreshr(props) {
             >
               {a4Text}
             </Typography>
-            {/* </FormGroup> */}
             <form className={props.classes.multipleChoice}>
               <Input
                 disableUnderline
@@ -583,7 +549,6 @@ function Refreshr(props) {
               multiline
               rows="4"
               value={questionTextTwo.text}
-              // className={props.classes.inputQuestion}
               className={
                 q2Edit ? props.classes.inputQuestion : props.classes.hidden
               }
@@ -608,7 +573,6 @@ function Refreshr(props) {
           >
             Update
           </Button>
-          {/* <StyleDisplay>View your Refreshr here: {url}</StyleDisplay> */}
         </FormGroup>
       </Grid>
     </Paper>
