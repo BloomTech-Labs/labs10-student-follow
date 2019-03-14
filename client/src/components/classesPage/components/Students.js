@@ -26,6 +26,7 @@ const styles = theme => ({
     flexFlow: 'column wrap',
     border: `1px solid ${theme.palette.secondary.main}`,
     flexWrap: 'wrap',
+    width: '45%',
     [theme.breakpoints.only('xs')]: {
       width: '70%'
     },
@@ -68,6 +69,16 @@ const styles = theme => ({
   editName: {
     display: 'flex',
     flexDirection: 'column'
+  },
+  studentName: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    marginBottom: theme.spacing.unit * 2,
+    alignItems: 'center'
+  },
+  studentIcons: {
+    display: 'inline',
+    alignSelf: 'flex-end'
   }
 });
 
@@ -91,12 +102,6 @@ function students(props) {
     student.isEditing = true;
     console.log(student);
   }
-  // <Checkbox
-  //   color="secondary"
-  //   value={`${s.student_id}`}
-  //   checked={props.selectedStudents.includes(s.student_id)}
-  //   onClick={e => selectStudent(e)}
-  // />
 
   function handleChange(e, student) {
     console.log(e.target.value);
@@ -112,16 +117,21 @@ function students(props) {
       </Typography>
       <Card className={classes.studentList}>
         {props.students.map(s => (
-          <Grid key={s.student_id}>
+          <Grid
+            key={s.student_id}
+            className={s.isActiveStudent ? null : classes.studentName}
+          >
             <span>{`${s.first_name} ${s.last_name} `}</span>
-            {s.isActiveStudent ? (
-              <Backspace onClick={e => props.toggleEditStudent(s)} />
-            ) : (
-              <Create onClick={e => props.toggleEditStudent(s)} />
-            )}
-            <RemoveCircleOutline
-              onClick={() => props.dropStudent(s.student_id)}
-            />
+            <Grid className={classes.studentIcons}>
+              {s.isActiveStudent ? (
+                <Backspace onClick={e => props.toggleEditStudent(s)} />
+              ) : (
+                <Create onClick={e => props.toggleEditStudent(s)} />
+              )}
+              <RemoveCircleOutline
+                onClick={() => props.dropStudent(s.student_id)}
+              />
+            </Grid>
             {s.isActiveStudent && (
               <form
                 className={classes.editName}
