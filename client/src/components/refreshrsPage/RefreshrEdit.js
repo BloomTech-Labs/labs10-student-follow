@@ -305,17 +305,17 @@ function Refreshr(props) {
             Refreshr Name
           </Typography>
 
+          <Typography
+            className={
+              refreshrNameEdit ? props.classes.hidden : props.classes.editText
+            }
+          >
+            {refreshrName}
+          </Typography>
           <FormGroup
             className={props.classes.form1}
             onSubmit={props.handleSubmit}
           >
-            <Typography
-              className={
-                refreshrNameEdit ? props.classes.hidden : props.classes.editText
-              }
-            >
-              {refreshrName}
-            </Typography>
             <Input
               disableUnderline
               onChange={e => setRefreshrName(e.target.value)}
@@ -342,17 +342,17 @@ function Refreshr(props) {
 
           <h4 className={props.classes.subheaders}>Your Review Text</h4>
 
+          <Typography
+            className={
+              reviewEdit ? props.classes.hidden : props.classes.editText
+            }
+          >
+            {reviewText}
+          </Typography>
           <FormGroup
             className={props.classes.form1}
             onSubmit={props.handleSubmit}
           >
-            <Typography
-              className={
-                reviewEdit ? props.classes.hidden : props.classes.editText
-              }
-            >
-              {reviewText}
-            </Typography>
             <Input
               disableUnderline
               onChange={e => setReviewText(e.target.value)}
@@ -529,15 +529,15 @@ function Refreshr(props) {
             Question 2: Text Response
           </Typography>
 
+          <Typography
+            className={q2Edit ? props.classes.hidden : props.classes.editText}
+          >
+            {questionTextTwo.text}
+          </Typography>
           <FormGroup
             className={props.classes.form1}
             onSubmit={props.handleSubmit}
           >
-            <Typography
-              className={q2Edit ? props.classes.hidden : props.classes.editText}
-            >
-              {questionTextTwo.text}
-            </Typography>
             <Input
               disableUnderline
               name="classnameInput"
