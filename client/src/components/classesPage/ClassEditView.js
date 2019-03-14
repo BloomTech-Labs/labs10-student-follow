@@ -149,6 +149,7 @@ function ClassEditView(props) {
     sg_list_id: ''
   });
   const [activeRefreshr, setActiveRefreshr] = useState(null);
+  const [activeDate, setActiveDate] = useState(moment().format('YYYY-MM-DD'));
   const [addedRefreshr, setAddedRefreshr] = useState(null);
   const [isEditingClass, setIsEditingClass] = useState(false);
   const [isEditingStudents, setIsEditingStudents] = useState(false);
@@ -446,6 +447,7 @@ function ClassEditView(props) {
   async function selectRefreshr(id) {
     try {
       const [selectedRefreshr] = refreshrs.filter(r => r.refreshr_id === id);
+      setActiveDate(selectedRefreshr.date);
       setActiveRefreshr(selectedRefreshr);
     } catch (err) {
       console.log(err);
@@ -454,7 +456,8 @@ function ClassEditView(props) {
 
   async function changeDate(e) {
     try {
-      activeRefreshr.date = e.target.value; // think we need to do this on submit?
+      console.log(e.target.value);
+      setActiveDate(e.target.value); // think we need to do this on submit?
     } catch (err) {
       console.log(err);
     }
@@ -463,6 +466,7 @@ function ClassEditView(props) {
   async function submitNewDate(e) {
     try {
       if (e) e.preventDefault();
+      activeRefreshr.date = activeDate;
       // set 3 refreshr times
       const twoDaysUnix = moment(`${activeRefreshr.date}T00:00:00`)
         .add(2, 'day')
@@ -563,6 +567,7 @@ function ClassEditView(props) {
         modalIsOpen={modalIsOpen}
         setModalIsOpen={setModalIsOpen}
         className={classData.name}
+        activeDate={activeDate}
       />
     </Paper>
   );

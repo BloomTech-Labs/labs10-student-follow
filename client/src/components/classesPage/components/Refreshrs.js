@@ -145,9 +145,7 @@ function Refreshrs(props) {
                     variant="outlined"
                     type="date"
                     InputProps={{ className: classes.datePicker }}
-                    defaultValue={moment(props.activeRefreshr.date).format(
-                      'YYYY-MM-DD'
-                    )}
+                    value={moment(props.activeDate).format('YYYY-MM-DD')}
                     onChange={e => props.changeDate(e)}
                   />
                 </form>
