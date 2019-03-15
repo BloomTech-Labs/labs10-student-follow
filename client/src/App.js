@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useLayoutEffect } from 'react';
 
 import { Route, withRouter } from 'react-router-dom';
-
 import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
 import axios from 'axios';
@@ -50,18 +49,29 @@ const styles = theme => ({
 
 const App = props => {
   const { classes } = props;
-  const token = localStorage.getItem('accessToken');
-  const user_id = localStorage.getItem('user_id');
-  //console.log(user_id)
 
   /* STATE */
-
+  const [token, setToken] = useState('');
+  const [user_id, setID] = useState('');
   const [open, toggleOpen] = useState(false);
   const [userRefreshrs, setRefreshrs] = useState([]);
   const [userClasses, setClasses] = useState([]);
+  const [name, setName] = useState('');
+  const [loading, setLoading] = useState(true);
 
   /* METHODS */
 
+  useLayoutEffect(() => {
+    setTimeout(() => {
+      setup()
+    }, 5000);
+  });
+  const setup = () => {
+    setToken(localStorage.getItem('accessToken'));
+    setID(localStorage.getItem('user_id'));
+    setName(localStorage.getItem('name'));
+    setLoading(false);
+  };
   //all refreshrs for user
 
   const getRefreshrs = () => {
@@ -226,95 +236,101 @@ const App = props => {
 
   /* ROUTES */
   return (
-    //props.lock.checkSession(),
-    //console.log('APP:', props.theme),
-    <>
-      <Grid
-        container
-        direction="column"
-        spacing={0}
-        justify="space-between"
-        alignItems="center"
-        className={classes.container}
-      >
-        <Grid item>
-          <Navbar
-            theme={props.theme}
-            lock={props.lock}
-            toggleModal={toggleModal}
+    (
+      <>
+        <Grid
+          container
+          direction="column"
+          spacing={0}
+          justify="space-between"
+          alignItems="center"
+          className={classes.container}
+        >
+          <Grid item>
+            <Navbar
+              theme={props.theme}
+              lock={props.lock}
+              toggleModal={toggleModal}
+            />
+            <Navcrumbs location={props.location} history={props.history} />
+          </Grid>
+          <Route
+            exact
+            path="/"
+            render={props => (
+              <LandingPage {...props} toggleModal={toggleModal} open={open} />
+            )}
           />
-          <Navcrumbs location={props.location} history={props.history} />
+          <Grid item className={classes.routes}>
+            <Route
+              path="/dashboard"
+              render={props => (
+                <Dashboard
+                  id={user_id}
+                  token={token}
+                  history={props.history}
+                  name={name}
+                  loading={loading}
+                />
+              )}
+            />
+            <Route
+              exact
+              path="/refreshrs"
+              render={props => (
+                <RefreshrListView
+                  getRefreshrs={getRefreshrs}
+                  userRefreshrs={userRefreshrs}
+                />
+              )}
+            />
+            <Route
+              path="/refreshrs/edit/:id"
+              render={props => (
+                <RefreshrEdit
+                  token={token}
+                  getClasses={getClasses}
+                  userClasses={userClasses}
+                  getRefreshrs={getRefreshrs}
+                  userRefreshrs={userRefreshrs}
+                  updateRefreshrDB={updateRefreshrDB}
+                  match={props.match}
+                />
+              )}
+            />
+            <Route path="/billing" render={props => <BillingPage />} />
+            <Route
+              exact
+              path="/classes"
+              render={props => (
+                <ClassListView
+                  token={token}
+                  getClasses={getClasses}
+                  userClasses={userClasses}
+                />
+              )}
+            />
+            <Route
+              exact
+              path="/classes/edit/:id"
+              render={props => <ClassEditView {...props} />}
+            />
+            <Route
+              exact
+              path="/classes/create"
+              render={props => <ClassCreateView />}
+            />
+            <Route
+              exact
+              path="/refreshrs/create"
+              render={props => <Refreshr sendRefreshrToDB={sendRefreshrToDB} />}
+            />
+            <Route path="/campaign" render={props => <CampaignForm />} />{' '}
+            {/* for testing */}
+          </Grid>
         </Grid>
-        <Route
-          exact
-          path="/"
-          render={props => (
-            <LandingPage {...props} toggleModal={toggleModal} open={open} />
-          )}
-        />
-        <Grid item className={classes.routes}>
-          <Route
-            path="/dashboard"
-            render={props => (
-              <Dashboard id={user_id} token={token} history={props.history} />
-            )}
-          />
-          <Route
-            exact
-            path="/refreshrs"
-            render={props => (
-              <RefreshrListView
-                getRefreshrs={getRefreshrs}
-                userRefreshrs={userRefreshrs}
-              />
-            )}
-          />
-          <Route
-            path="/refreshrs/edit/:id"
-            render={props => (
-              <RefreshrEdit
-                token={token}
-                getClasses={getClasses}
-                userClasses={userClasses}
-                getRefreshrs={getRefreshrs}
-                userRefreshrs={userRefreshrs}
-                updateRefreshrDB={updateRefreshrDB}
-                match={props.match}
-              />
-            )}
-          />
-          <Route path="/billing" render={props => <BillingPage />} />
-          <Route
-            exact
-            path="/classes"
-            render={props => (
-              <ClassListView
-                token={token}
-                getClasses={getClasses}
-                userClasses={userClasses}
-              />
-            )}
-          />
-          <Route
-            exact
-            path="/classes/edit/:id"
-            render={props => <ClassEditView {...props} />}
-          />
-          <Route
-            exact
-            path="/classes/create"
-            render={props => <ClassCreateView />}
-          />
-          <Route
-            exact
-            path="/refreshrs/create"
-            render={props => <Refreshr sendRefreshrToDB={sendRefreshrToDB} />}
-          />
-          <Route path="/campaign" render={props => <CampaignForm />} />{' '}
-          {/* for testing */}
-        </Grid>
-      </Grid>
-    </>
+      </>
+    )
   );
 };
 

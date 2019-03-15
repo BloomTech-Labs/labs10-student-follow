@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { withRouter } from 'react-router-dom';
 import axios from 'axios';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -89,24 +90,29 @@ const styles = theme => ({
       cursor: 'pointer',
       color: theme.palette.primary.light
     }
+  },
+  loading: {
+    color: 'white',
+    position: 'absolute',
+    top: '50%'
   }
 });
 
 const Dashboard = props => {
-  const { classes, id, token, history } = props;
+  const { classes, id, token, history, name, loading } = props;
   const [campaigns, setCampaigns] = useState([]);
-  const [name, setName] = useState('');
 
   //STATS
-  const userCampaigns = (id, token) => {
-    axios({
+  const userCampaigns = async id => {
+    await axios({
       method: 'get',
-      url: `http://localhost:9000/campaigns/user/${id}`,
+      url: `http://localhost:9000/campaigns/user/${388}`,
 
       //url: `https://refreshr.herokuapp.com/campaigns`,
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => {
+        console.log(res);
         setCampaigns(res.data.campaigns);
       })
       .catch(err => console.log(err));
@@ -117,89 +123,103 @@ const Dashboard = props => {
 
   const rows = [];
 
-  campaigns.forEach(c => {
-    const current = new Date();
-    if (c.date <= moment(current).add(30, 'days') && c.date >= current) {
-      const date = moment(c.date).format('Do/MMM/YYYY');
-      rows.push(
-        createData(c.sg_campaign_id, c.classname, c.typeform_url, date)
-      );
-    }
-  });
+  const setRows = () =>
+    campaigns.map(c => {
+      const current = new Date();
+      if (c.date <= moment(current).add(30, 'days')) {
+        const date = moment(c.date).format('Do/MMM/YYYY');
+        rows.push(
+          createData(c.sg_campaign_id, c.classname, c.typeform_url, date)
+        );
+      }
+    });
 
   useEffect(() => {
-    setName(localStorage.getItem('name'));
-    userCampaigns(id, token);
-  }, []);
+    if (!loading) {
+      userCampaigns(id);
+      setRows();
+    }
+  }, [loading]);
 
   return (
     <>
-      <Typography className={classes.header} variant="h5">
-        Welcome, {name}
-      </Typography>
+      {!loading ? (
+        <>
+          <Typography className={classes.header} variant="h5">
+            Welcome, {name}
+          </Typography>
 
-      <Paper className={classes.container} elevation={24}>
-        <Table className={classes.table}>
-          <TableHead className={classes.tableHead}>
-            <TableRow className={classes.tableRow}>
-              <TableCell style={{ border: 'none' }}>
-                Upcoming Refreshrs
-              </TableCell>
-            </TableRow>
-            <TableRow className={classes.tableRow}>
-              <TableCell className={classes.tableCell} align="center">
-                Date
-              </TableCell>
-              <TableCell className={classes.tableCell} align="center">
-                Classname
-              </TableCell>
-              <TableCell className={classes.tableCell} align="center">
-                Refreshr
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody className={classes.tableBody}>
-            {rows.length > 0 ? (
-              rows.map((row, index) => (
-                //console.log(row),
-                <TableRow key={index} className={classes.tableRow}>
-                  <TableCell className={classes.tableCell} align="center">
-                    {row.date}
-                  </TableCell>
-                  <TableCell
-                    className={classes.aLink}
-                    align="center"
-                    onClick={e => {
-                      e.preventDefault();
-                      history.push(`/classes/edit/${row.classID}`);
-                    }}
-                  >
-                    {row.classname}
-                  </TableCell>
-                  <TableCell className={classes.tableCell} align="center">
-                    <a
-                      className={classes.aLink}
-                      href={`https://` + row.preview}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      preview
-                    </a>
+          <Paper className={classes.container} elevation={24}>
+            <Table className={classes.table}>
+              <TableHead className={classes.tableHead}>
+                <TableRow className={classes.tableRow}>
+                  <TableCell style={{ border: 'none' }}>
+                    Upcoming Refreshrs
                   </TableCell>
                 </TableRow>
-              ))
-            ) : (
-              <TableRow className={classes.tableRow}>
-                <TableCell style={{ border: 'none' }}>
-                  <Typography variant={'caption'} className={classes.bodyText}>
-                    No Refreshrs Within 30 Days
-                  </Typography>
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </Paper>
+                <TableRow className={classes.tableRow}>
+                  <TableCell className={classes.tableCell} align="center">
+                    Date
+                  </TableCell>
+                  <TableCell className={classes.tableCell} align="center">
+                    Classname
+                  </TableCell>
+                  <TableCell className={classes.tableCell} align="center">
+                    Refreshr
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody className={classes.tableBody}>
+                {rows.length > 0
+                  ? (console.log(rows),
+                    rows.map((row, index) => (
+                      //console.log(row),
+                      <TableRow key={index} className={classes.tableRow}>
+                        <TableCell className={classes.tableCell} align="center">
+                          {row.date}
+                        </TableCell>
+                        <TableCell
+                          className={classes.aLink}
+                          align="center"
+                          onClick={e => {
+                            e.preventDefault();
+                            history.push(`/classes/edit/${row.classID}`);
+                          }}
+                        >
+                          {row.classname}
+                        </TableCell>
+                        <TableCell className={classes.tableCell} align="center">
+                          <a
+                            className={classes.aLink}
+                            href={`https://` + row.preview}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            preview
+                          </a>
+                        </TableCell>
+                      </TableRow>
+                    )))
+                  : (console.log(rows),
+                    (
+                      <TableRow className={classes.tableRow}>
+                        <TableCell style={{ border: 'none' }}>
+                          <Typography
+                            variant={'caption'}
+                            className={classes.bodyText}
+                          >
+                            No Refreshrs Within 30 Days
+                          </Typography>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+              </TableBody>
+            </Table>
+          </Paper>
+        </>
+      ) : (
+        <CircularProgress className={classes.loading} size={80} />
+      )}
     </>
   );
 };
