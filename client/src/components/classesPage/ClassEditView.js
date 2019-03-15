@@ -490,7 +490,7 @@ function ClassEditView(props) {
 
       campaigns = campaigns.map(c => c.sg_campaign_id);
 
-      // update date in db WRONG ENDPOINT DO CAMPAIGNS?
+      // update date in db
       for (let i = 0; i < 3; i++) {
         const res = await ax.put(
           `/classes/${classData.id}/campaigns/${campaigns[i]}`,
