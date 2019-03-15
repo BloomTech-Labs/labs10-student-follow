@@ -250,7 +250,7 @@ const App = props => {
           res.data.uniqueRefreshrs.map(c => {
             const date = moment(c.date);
             if( date > current && date < upperLimit){
-             return setCampaigns([...campaigns,
+             return setCampaigns([
                 createData(c.sg_campaign_id, c.classname, c.typeform_url, date.format('MM/DD/YYYY'))
               ]); 
             } 
