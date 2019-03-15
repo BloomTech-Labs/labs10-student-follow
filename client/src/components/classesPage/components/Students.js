@@ -1,18 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import {
   Grid,
   Typography,
   Card,
-  Checkbox,
   Button,
-  FormGroup,
   Fab,
   ExpansionPanel,
-  ExpansionPanelSummary,
-  TextField
+  ExpansionPanelSummary
 } from '@material-ui/core';
-import { GroupAdd, ExpandMore, Create } from '@material-ui/icons';
+import {
+  GroupAdd,
+  ExpandMore,
+  Create,
+  Backspace,
+  RemoveCircleOutline
+} from '@material-ui/icons';
 
 const styles = theme => ({
   studentList: {
@@ -20,7 +23,8 @@ const styles = theme => ({
     flexFlow: 'column wrap',
     border: `1px solid ${theme.palette.secondary.main}`,
     flexWrap: 'wrap',
-    [theme.breakpoints.only('xs')]: {
+    width: '50%',
+    [theme.breakpoints.down('sm')]: {
       width: '70%'
     },
     maxHeight: theme.spacing.unit * 50,
@@ -57,47 +61,30 @@ const styles = theme => ({
   expansionPanel: {
     marginTop: theme.spacing.unit * 3,
     borderRadius: '5px',
-    border: `1px solid ${theme.palette.secondary.main}`
+    border: `1px solid ${theme.palette.secondary.main}`,
+    width: '50%',
+    [theme.breakpoints.down('sm')]: {
+      width: '70%'
+    }
   },
   editName: {
     display: 'flex',
     flexDirection: 'column'
+  },
+  studentName: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    marginBottom: theme.spacing.unit * 2,
+    alignItems: 'center'
+  },
+  studentIcons: {
+    display: 'inline',
+    alignSelf: 'flex-end'
   }
 });
 
 function students(props) {
   const { classes } = props;
-
-  function selectStudent(e) {
-    const studentId = e.target.value;
-    let updatedStudents = props.selectedStudents;
-    if (e.target.checked) {
-      updatedStudents = props.selectedStudents.concat(studentId);
-    } else {
-      updatedStudents = props.selectedStudents.filter(s => s !== studentId);
-    }
-    props.setSelectedStudents(updatedStudents);
-  }
-
-  function editStudent(id) {
-    console.log(id);
-    const [student] = props.students.filter(s => s.student_id === id);
-    student.isEditing = true;
-    console.log(student);
-  }
-  // <Checkbox
-  //   color="secondary"
-  //   value={`${s.student_id}`}
-  //   checked={props.selectedStudents.includes(s.student_id)}
-  //   onClick={e => selectStudent(e)}
-  // />
-
-  function handleChange(e, student) {
-    console.log(e.target.value);
-    console.log(student);
-    console.log(e.target.name);
-    student[e.target.name] = e.target.value;
-  }
 
   return (
     <>
@@ -106,9 +93,21 @@ function students(props) {
       </Typography>
       <Card className={classes.studentList}>
         {props.students.map(s => (
-          <Grid key={s.student_id}>
+          <Grid
+            key={s.student_id}
+            className={s.isActiveStudent ? null : classes.studentName}
+          >
             <span>{`${s.first_name} ${s.last_name} `}</span>
-            <Create onClick={e => props.toggleEditStudent(s)} />
+            <Grid className={classes.studentIcons}>
+              {s.isActiveStudent ? (
+                <Backspace onClick={e => props.toggleEditStudent(s)} />
+              ) : (
+                <Create onClick={e => props.toggleEditStudent(s)} />
+              )}
+              <RemoveCircleOutline
+                onClick={() => props.dropStudent(s.student_id)}
+              />
+            </Grid>
             {s.isActiveStudent && (
               <form
                 className={classes.editName}
@@ -161,9 +160,9 @@ function students(props) {
             elevation={20}
             aria-label="Add"
             className={classes.btn}
+            type="submit"
             onClick={e => props.addStudent(e)}
           >
-            <button type="submit" className={classes.hiddenButton} />
             <GroupAdd />
           </Fab>
         </form>

@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useLayoutEffect } from 'react';
 
 import { Route, withRouter } from 'react-router-dom';
-
 import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
 import axios from 'axios';
+import moment from 'moment';
 import {
   LandingPage,
   BillingPage,
@@ -14,7 +14,6 @@ import {
   Navcrumbs,
   RefreshrListView,
   Dashboard,
-  //ClassesPage,
   CampaignForm,
   ClassCreateView,
   ClassEditView,
@@ -47,26 +46,37 @@ const styles = theme => ({
 //Justin: 111419810728121424056
 //Chaya:  117894219650456694049
 //Tim: 118406831139005715496
-//Sawyer: 117948376948362801545 
+//Sawyer: 117948376948362801545
 
 const App = props => {
   const { classes } = props;
-  const token = localStorage.getItem('accessToken');
-  const user_id = localStorage.getItem('user_id');
-  //console.log(user_id)
 
   /* STATE */
-
-  const [message, setMessage] = useState('');
+  const [token, setToken] = useState('');
+  const [user_id, setID] = useState('');
+  const [open, toggleOpen] = useState(false);
   const [userRefreshrs, setRefreshrs] = useState([]);
-  const [questions, setQuestions] = useState([]);
   const [userClasses, setClasses] = useState([]);
-  const [refreshrID, setRefreshrID] = useState('')
-  // const [students, setStudents] = useState([]);
-  // const [teachers, setTeachers] = useState([]);
+  const [name, setName] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [campaigns, setCampaigns] = useState([]);
+
+
 
   /* METHODS */
 
+  useLayoutEffect(() => {
+    setTimeout(() => {
+      setup()
+    }, 5000);
+  });
+  const setup = () => {
+    setToken(localStorage.getItem('accessToken'));
+    setID(localStorage.getItem('user_id'));
+    setName(localStorage.getItem('name'));
+    setLoading(false);
+    
+  };
   //all refreshrs for user
 
   const getRefreshrs = () => {
@@ -83,8 +93,21 @@ const App = props => {
       .catch(err => console.log(err));
   };
 
-  const sendRefreshrToDB = refreshr => {
-    axios({
+  const sendRefreshrToDB = async (refreshr, questions) => {
+    console.log('Initial Question Obj', questions);
+    const questionArray = [
+      {
+        question: questions.questionTextOne,
+        answer_1: questions.answers.a1Text,
+        answer_2: questions.answers.a2Text,
+        answer_3: questions.answers.a3Text,
+        answer_4: questions.answers.a4Text
+      },
+      {
+        question: questions.questionTextTwo
+      }
+    ];
+    await axios({
       method: 'post',
       //Development
       //url: 'http://localhost:9000/refreshrs',
@@ -93,61 +116,102 @@ const App = props => {
       headers: { Authorization: `Bearer ${token}` },
       data: refreshr
     })
-    .then(res => {
-    //console.log(res.data.newRefreshrID)
-      setRefreshrID(res.data.newRefreshrID)
-      axios({
-        method: 'post',
-        //Development
-        //url: `http://localhost:9000/teachers/${user_id}/refreshrs`,
-        //Production
-        url: `https://refreshr.herokuapp.com/teachers/${user_id}/refreshrs`,
-        headers: { Authorization: `Bearer ${token}` },
-        data: { refreshr_id: res.data.newRefreshrID }
-      })
-        .then(res => {
-          // console.log(res.data.message)
-          setMessage(res.data.message);
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    });
-  };
-
-  //add questions
-  const addQuestions = question => {
-    //console.log('Question from addQuestions ===', question);
-    axios({
-      method: 'post',
-      //Development
-      //url: 'http://localhost:9000/questions',
-      //Production
-      url: 'https://refreshr.herokuapp.com/questions',
-      headers: { Authorization: `Bearer ${token}` },
-      data: question
-    })
       .then(res => {
+        localStorage.setItem('refreshrID', res.data.newRefreshrID);
         axios({
           method: 'post',
           //Development
           //url: `http://localhost:9000/teachers/${user_id}/refreshrs`,
           //Production
-          url: `https://refreshr.herokuapp.com/refreshrs/${refreshrID}/questions`,
+          url: `https://refreshr.herokuapp.com/teachers/${user_id}/refreshrs`,
           headers: { Authorization: `Bearer ${token}` },
-          data: {question_id: res.data.newQuestionID},
-        //console.log('RES from add questions ===', res);
-      })
-      .then(res => {
-        // console.log(res.data.message)
-        setQuestions([])
-        setMessage(res.data.message)
-       })
-        //console.log(questions)
+          data: { refreshr_id: res.data.newRefreshrID }
+        }).then(res => {
+        });
       })
       .catch(err => {
         console.log(err);
       });
+
+    for (let i = 0; i < questionArray.length; i++) {
+      const refreshrID = localStorage.getItem('refreshrID');
+      axios({
+        method: 'post',
+        //Development
+        //url: 'http://localhost:9000/questions',
+        //Production
+        url: 'https://refreshr.herokuapp.com/questions',
+        headers: { Authorization: `Bearer ${token}` },
+        data: questionArray[i]
+      })
+        .then(res => {
+          axios({
+            method: 'post',
+            //Development
+            //url: `http://localhost:9000/refreshrs/${refreshrID}/questions`,
+            //Production
+            url: `https://refreshr.herokuapp.com/refreshrs/${refreshrID}/questions`,
+            headers: { Authorization: `Bearer ${token}` },
+            data: { question_id: res.data.newQuestionID }
+            //console.log('RES from add questions ===', res);
+          }).then(res => {
+          });
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
+  };
+
+  const updateRefreshrDB = async (refreshr, id, questions) => {
+    const questionIDs = [
+      questions.questionTextOne.id,
+      questions.questionTextTwo.id
+    ];
+    const questionArray = [
+      {
+        question: questions.questionTextOne.text,
+        answer_1: questions.answers.a1Text,
+        answer_2: questions.answers.a2Text,
+        answer_3: questions.answers.a3Text,
+        answer_4: questions.answers.a4Text
+      },
+      {
+        question: questions.questionTextTwo.text
+      }
+    ];
+    await axios({
+      method: 'put',
+      //Development
+      //url: `http://localhost:9000/refreshrs/${id}`,
+      //Production
+      url: `https://refreshr.herokuapp.com/refreshrs/${id}`,
+      headers: { Authorization: `Bearer ${token}` },
+      data: refreshr
+    })
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+    for (let i = 0; i < questionArray.length; i++) {
+      axios({
+        method: 'put',
+        //Development
+        //url: `http://localhost:9000/questions/${questionIDs[i]}`,
+        //Production
+        url: `https://refreshr.herokuapp.com/questions/${questionIDs[i]}`,
+        headers: { Authorization: `Bearer ${token}` },
+        data: questionArray[i]
+      })
+        .then(res => {
+          console.log(res);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
   };
 
   //all classes for user
@@ -165,85 +229,137 @@ const App = props => {
       .catch(err => console.log(err));
   };
 
+  //CAMPAIGNS
+  const userCampaigns = async id => {
+    const createData = (id, classname, preview, date, classID) => {
+      return { id, classname, preview, date, classID };
+    };
+    let current = moment();
+    const upperLimit = moment(current).add(2, 'months')
+    
+    
+    await axios({
+      method: 'get',
+      //url: `http://localhost:9000/campaigns/user/${user_id}`,
+
+      url: `https://refreshr.herokuapp.com/campaigns/user/${user_id}`,
+      headers: { Authorization: `Bearer ${token}` }
+    })
+      .then(res => {
+          res.data.campaigns.map(c => {
+            const date = moment(c.date);
+            if( date > current && date < upperLimit){
+             return setCampaigns([...campaigns,
+                createData(c.sg_campaign_id, c.classname, c.typeform_url, date.format('MM/DD/YYYY'))
+              ]); 
+            } 
+            return null  
+          })
+      })
+      .catch(err => console.log(err));
+    };
+
+  //PRICING MODAL
+  const toggleModal = () => {
+    toggleOpen(!open);
+  };
+
   /* ROUTES */
   return (
-    //console.log('APP:', props.theme),
-    <>
-      <Grid
-        container
-        direction="column"
-        spacing={0}
-        justify="space-between"
-        alignItems="center"
-        className={classes.container}
-      >
-        <Grid item>
-          <Navbar theme={props.theme} lock={props.lock} />
-          <Navcrumbs location={props.location} history={props.history} />
+    (
+      <>
+        <Grid
+          container
+          direction="column"
+          spacing={0}
+          justify="space-between"
+          alignItems="center"
+          className={classes.container}
+        >
+          <Grid item>
+            <Navbar
+              theme={props.theme}
+              lock={props.lock}
+              toggleModal={toggleModal}
+            />
+            <Navcrumbs location={props.location} history={props.history} />
+          </Grid>
+          <Route
+            exact
+            path="/"
+            render={props => (
+              <LandingPage {...props} toggleModal={toggleModal} open={open} />
+            )}
+          />
+          <Grid item className={classes.routes}>
+            <Route
+              path="/dashboard"
+              render={props => (
+                <Dashboard
+                  history={props.history}
+                  name={name}
+                  loading={loading}
+                  rows={campaigns}
+                  userCampaigns={userCampaigns}
+                />
+              )}
+            />
+            <Route
+              exact
+              path="/refreshrs"
+              render={props => (
+                <RefreshrListView
+                  getRefreshrs={getRefreshrs}
+                  userRefreshrs={userRefreshrs}
+                />
+              )}
+            />
+            <Route
+              path="/refreshrs/edit/:id"
+              render={props => (
+                <RefreshrEdit
+                  token={token}
+                  getClasses={getClasses}
+                  userClasses={userClasses}
+                  getRefreshrs={getRefreshrs}
+                  userRefreshrs={userRefreshrs}
+                  updateRefreshrDB={updateRefreshrDB}
+                  match={props.match}
+                />
+              )}
+            />
+            <Route path="/billing" render={props => <BillingPage />} />
+            <Route
+              exact
+              path="/classes"
+              render={props => (
+                <ClassListView
+                  token={token}
+                  getClasses={getClasses}
+                  userClasses={userClasses}
+                />
+              )}
+            />
+            <Route
+              exact
+              path="/classes/edit/:id"
+              render={props => <ClassEditView {...props} />}
+            />
+            <Route
+              exact
+              path="/classes/create"
+              render={props => <ClassCreateView />}
+            />
+            <Route
+              exact
+              path="/refreshrs/create"
+              render={props => <Refreshr sendRefreshrToDB={sendRefreshrToDB} />}
+            />
+            <Route path="/campaign" render={props => <CampaignForm />} />{' '}
+          </Grid>
         </Grid>
-        <Route exact path="/" render={props => <LandingPage {...props} />} />
-        <Grid item className={classes.routes}>
-          <Route
-            path="/dashboard"
-            render={props => (
-              <Dashboard
-                token={token}
-                getClasses={getClasses}
-                userClasses={userClasses}
-                getRefreshrs={getRefreshrs}
-                userRefreshrs={userRefreshrs}
-              />
-            )}
-          />
-          <Route
-            exact
-            path="/refreshrs"
-            render={props => (
-              <RefreshrListView
-                getRefreshrs={getRefreshrs}
-                refreshrs={userRefreshrs}
-              />
-            )}
-          />
-          <Route
-            path="/refreshrs/edit"
-            render={props => (
-              <RefreshrEdit
-                getClasses={getClasses}
-                userClasses={userClasses}
-                getRefreshrs={getRefreshrs}
-                userRefreshrs={userRefreshrs}
-                questions={questions}
-              />
-            )}
-          />
-          <Route path="/billing" render={props => <BillingPage />} />
-          <Route exact path="/classes" render={props => <ClassListView />} />
-          <Route
-            exact
-            path="/classes/edit/:id"
-            render={props => <ClassEditView {...props} />}
-          />
-          <Route
-            exact
-            path="/classes/create"
-            render={props => <ClassCreateView />}
-          />
-          <Route
-            exact
-            path="/refreshrs/create"
-            render={props => (
-              <Refreshr
-                addQuestions={addQuestions}
-                sendRefreshrToDB={sendRefreshrToDB}
-              />
-            )}
-          />
-          <Route path="/campaign" render={props => <CampaignForm />} />{' '}
-          {/* for testing */}
-        </Grid>
-      </Grid>
-    </>
+      </>
+    )
   );
 };
 

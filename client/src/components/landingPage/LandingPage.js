@@ -8,7 +8,7 @@ import Card from '@material-ui/core/Card';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
-
+import {PricingModal} from '../index'
 
 
 const style = (theme) => ({
@@ -60,9 +60,10 @@ const style = (theme) => ({
 });
 
 const LandingPage = props => {
-  const { classes } = props
+  const { classes, open, toggleModal } = props
   return (
     <Grid container spacing={0} alignItems='stretch' className={classes.container}>
+      <PricingModal open={open} toggleModal={toggleModal} />
       <Card className={classes.subcontainer}>
         <CardContent className={classes.text}>
           <Typography variant='h1' gutterBottom className={classes.textH1} >Refreshr</Typography>

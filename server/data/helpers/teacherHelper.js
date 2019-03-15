@@ -28,8 +28,8 @@ module.exports = {
         'tcr.refreshr_id'
       )
       .join('teachers', 'teachers.user_id', 'tcr.teacher_id')
-      .where('teachers.user_id', id)
-      .whereNull('tcr.sg_campaign_id')
+      .where('teachers.user_id', id);
+    // .whereNull('tcr.sg_campaign_id') // this can't be here, or we need to create another route to fetch all teacher refreshrs for the edit and create pages
 
     return Promise.all([teacher, classes, refreshrs]).then(response => {
       let [teacher, classes] = response;
@@ -86,7 +86,6 @@ module.exports = {
       });
     return result;
   },
-
 
   removeRefreshr: (teacher_id, refreshr_id) => {
     return db('teachers_classes_refreshrs')

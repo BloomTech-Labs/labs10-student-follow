@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Typography, FormControl, Fab } from '@material-ui/core';
+import React from 'react';
+import { Typography, Fab } from '@material-ui/core';
 import { Create } from '@material-ui/icons';
 import { withStyles } from '@material-ui/core/styles';
 

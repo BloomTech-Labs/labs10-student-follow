@@ -25,7 +25,11 @@ const styles = theme => ({
     marginBottom: '5%',
     '&:hover': {
       background: theme.palette.secondary.dark
-    }
+    },
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '.75rem',
+      padding: '5%'
+    },
   },
   modalTitle: {
     background: theme.palette.secondary.main,
@@ -61,7 +65,11 @@ const TakeMoney = props => {
   const [open, setOpen] = useState(false);
 
   const onToken = async token => {
+    //PRODUCTION
     const url = 'https://refreshr.herokuapp.com/billing/charge';
+    //DEVELOPMENT
+    //const url = 'http://localhost:9000/billing/charge';
+
     try {
       await axios.post(url, {
         token: token,

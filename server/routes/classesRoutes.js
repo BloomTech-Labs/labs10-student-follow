@@ -216,6 +216,22 @@ router.get('/:id/campaigns', jwtCheck, async (req, res, next) => {
   }
 });
 
+// change the date of three campaigns--this should be updated to set the date for each corresponding campaign
+router.put('/:id/campaigns/:campaignId', jwtCheck, async (req, res, next) => {
+  const { id, campaignId } = req.params;
+  const { date } = req.body;
+  console.log(id, campaignId, date);
+  try {
+    await db.updateCampaign(campaignId, id, date);
+    res
+      .status(responseStatus.success)
+      .json({ message: `campaign ${campaignId} date updated to ${date}` });
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+});
+
 /* assigns a campaign to the class
 Body must include:
 teacher_id,

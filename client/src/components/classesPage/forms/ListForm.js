@@ -1,14 +1,21 @@
 import React, { useState } from 'react';
-import { withStyles } from '@material-ui/core/styles';
-import { Paper, FormGroup, Fab, Input, Button } from '@material-ui/core';
+import Paper from '@material-ui/core/Paper';
+import FormGroup from '@material-ui/core/FormGroup';
+import Fab from '@material-ui/core/Fab';
 import Checkbox from '@material-ui/core/Checkbox';
+import Input from '@material-ui/core/Input';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import Snackbar from '@material-ui/core/Snackbar';
+import { withStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import Attachment from '@material-ui/icons/Attachment';
+import Close from '@material-ui/icons/Close';
 import CloudUpload from '@material-ui/icons/CloudUpload';
 import GroupAdd from '@material-ui/icons/GroupAdd';
 import ArrowForward from '@material-ui/icons/ArrowForward';
 import RemoveCircleOutline from '@material-ui/icons/RemoveCircleOutline';
-import Attachment from '@material-ui/icons/Attachment';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Typography from '@material-ui/core/Typography';
 import BigPapa from 'papaparse';
 
 const styles = theme => ({
@@ -73,7 +80,6 @@ const styles = theme => ({
     width: '100%',
     display: 'flex',
     margin: '2rem 0',
-
     flexFlow: 'column nowrap',
     alignItems: 'center',
     justifyContent: 'space-around'
@@ -167,10 +173,17 @@ const styles = theme => ({
 });
 
 function ListForm(props) {
+  // DESTRUCTURES
   const { classes, file, setFile, recipientData, setRecipientData } = props;
 
-  const handleSubmit = e => {};
+  // HOOKS
+  const [recipient, setRecipient] = useState({
+    email: '',
+    first_name: '',
+    last_name: ''
+  });
 
+  // METHODS
   const handleRecipientSubmit = e => {
     e.preventDefault();
     const new_recipient = {
@@ -180,6 +193,8 @@ function ListForm(props) {
     };
 
     props.setRecipientData(recipientData.concat(new_recipient));
+
+    handleStudentSnackBool();
 
     setRecipient({
       email: '',
@@ -196,13 +211,9 @@ function ListForm(props) {
         setRecipientData(results.data);
       }
     });
-  };
 
-  const [recipient, setRecipient] = useState({
-    email: '',
-    first_name: '',
-    last_name: ''
-  });
+    handleCsvSnackBool();
+  };
 
   const handleClassChange = ({ target: { name, value } }) => {
     props.setListData({
@@ -213,6 +224,7 @@ function ListForm(props) {
 
   const handleRecipientChange = e => {
     e.preventDefault();
+
     setRecipient({
       ...recipient,
       [e.target.name]: e.target.value
@@ -220,7 +232,6 @@ function ListForm(props) {
   };
 
   const handleFile = ({ target: { files } }) => {
-    console.log(files[0]);
     setFile({ content: files[0], filename: files[0].name });
   };
 
@@ -231,16 +242,20 @@ function ListForm(props) {
       first_name: googleProfile.given_name,
       last_name: googleProfile.family_name
     };
+
     props.setListData({
       ...props.listData,
       ccBool: !props.listData.ccBool
     });
+
+    handleCcSnackbar();
     if (!recipientData.some(r => r.email === teacherInfo.email)) {
       props.setRecipientData(recipientData.concat(teacherInfo));
     } else {
       const recipientFiltered = recipientData.filter(
         r => r.email !== teacherInfo.email
       );
+
       props.setRecipientData(recipientFiltered);
     }
   };
@@ -259,11 +274,152 @@ function ListForm(props) {
     const filteredArr = props.recipientData.filter(
       r => r.email !== targetEmail
     );
+
+    handleStudentRemoveSnackBool();
+
     setRecipientData(filteredArr);
+  };
+
+  // SNACKBAR OPERATION
+  const [ccSnackBool, setCcSnackBool] = useState(false);
+  const ccSnackText =
+    props.listData.ccBool === true
+      ? 'Email added to classroom list.'
+      : 'Email removed from classroom list.';
+
+  const handleCcSnackbar = (event, reason) => {
+    if (reason === 'clickaway') {
+      // clickaway is if they fire the snackbar before it's gone
+      return;
+    }
+
+    setCcSnackBool(!ccSnackBool);
+  };
+
+  const [csvSnackBool, setCsvSnackBool] = useState(false);
+  const handleCsvSnackBool = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setCsvSnackBool(!csvSnackBool);
+  };
+
+  const [studentSnackBool, setStudentSnackBool] = useState(false);
+  const handleStudentSnackBool = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setStudentSnackBool(!studentSnackBool);
+  };
+
+  const [studentRemoveSnackBool, setStudentRemoveSnackBool] = useState(false);
+  const handleStudentRemoveSnackBool = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setStudentRemoveSnackBool(!studentRemoveSnackBool);
   };
 
   return (
     <Paper className={classes.container} elevation={24}>
+      {/* Snackbars Section */}
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left'
+        }}
+        open={ccSnackBool}
+        autoHideDuration={4000}
+        onClose={handleCcSnackbar}
+        ContentProps={{
+          'aria-describedby': 'message-id'
+        }}
+        message={<span id="message-id">{ccSnackText}</span>}
+        action={[
+          <IconButton
+            key="close"
+            aria-label="Close"
+            color="inherit"
+            onClick={handleCcSnackbar}
+          >
+            <Close />
+          </IconButton>
+        ]}
+      />
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left'
+        }}
+        open={csvSnackBool}
+        autoHideDuration={4000}
+        onClose={handleCsvSnackBool}
+        ContentProps={{
+          'aria-describedby': 'message-id'
+        }}
+        message={<span id="message-id">CSV Uploaded!</span>}
+        action={[
+          <IconButton
+            key="close"
+            aria-label="Close"
+            color="inherit"
+            onClick={handleCsvSnackBool}
+          >
+            <Close />
+          </IconButton>
+        ]}
+      />
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left'
+        }}
+        open={studentSnackBool}
+        autoHideDuration={4000}
+        onClose={handleStudentSnackBool}
+        ContentProps={{
+          'aria-describedby': 'message-id'
+        }}
+        message={<span id="message-id">Student Added!</span>}
+        action={[
+          <IconButton
+            key="close"
+            aria-label="Close"
+            color="inherit"
+            onClick={handleStudentSnackBool}
+          >
+            <Close />
+          </IconButton>
+        ]}
+      />
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left'
+        }}
+        open={studentRemoveSnackBool}
+        autoHideDuration={4000}
+        onClose={handleStudentRemoveSnackBool}
+        ContentProps={{
+          'aria-describedby': 'message-id'
+        }}
+        message={<span id="message-id">Student Removed!</span>}
+        action={[
+          <IconButton
+            key="close"
+            aria-label="Close"
+            color="inherit"
+            onClick={handleStudentRemoveSnackBool}
+          >
+            <Close />
+          </IconButton>
+        ]}
+      />
+
+      {/* UI Section */}
       <Typography
         variant="h6"
         color="secondary"
@@ -272,12 +428,13 @@ function ListForm(props) {
         Add Class
       </Typography>
 
-      <Typography variant="h8" color="secondary" align={'center'}>
+      <Typography variant="caption" color="secondary" align={'center'}>
         Create a class by importing your students or manually adding them.
       </Typography>
 
       <hr className={classes.hrStyle} />
 
+      {/* UI Section: Class Name */}
       <Typography
         variant="body1"
         color="secondary"
@@ -286,7 +443,7 @@ function ListForm(props) {
         Class Name
       </Typography>
 
-      <FormGroup className={classes.form1} onSubmit={handleSubmit}>
+      <FormGroup className={classes.form1}>
         <Input
           disableUnderline
           onChange={handleClassChange}
@@ -313,6 +470,7 @@ function ListForm(props) {
 
       <hr className={classes.hrStyle} />
 
+      {/* UI Section: CSV File */}
       <Typography
         variant="body1"
         color="secondary"
@@ -355,6 +513,7 @@ function ListForm(props) {
 
       <hr className={classes.hrStyle} />
 
+      {/* UI Section: Manual Recipient Add */}
       <Typography
         variant="body1"
         color="secondary"
@@ -408,6 +567,7 @@ function ListForm(props) {
 
       <hr className={classes.hrStyle} />
 
+      {/* UI Section: Current Recipients List */}
       {recipientData.length > 0 ? (
         recipientData.map((recipient, i) => (
           <div key={i} className={classes.recipientStaging}>

@@ -5,15 +5,20 @@ import {
   TextField,
   Card,
   Typography,
-  Icon,
   Button,
-  Fab
+  Fab,
+  IconButton,
+  Snackbar,
+  withStyles,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  ListSubheader
 } from '@material-ui/core/';
-import { withStyles } from '@material-ui/core/styles';
-import { Link } from 'react-router-dom';
+import { ArrowBack, Close, Send } from '@material-ui/icons';
+import logo from '../components/LogoSmall.png';
 import axios from 'axios';
-import ArrowBack from '@material-ui/icons/ArrowBack';
-import Send from '@material-ui/icons/Send';
 import moment from 'moment';
 
 const styles = theme => ({
@@ -54,11 +59,12 @@ const styles = theme => ({
   activeCard: {
     margin: 10,
     width: '90%',
-    height: 300,
+    minHeight: 300,
     padding: theme.spacing.unit * 3,
     justifyContent: 'space-between',
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    border: `1px solid ${theme.palette.secondary.main}`
   },
   dateField: {
     marginTop: 20
@@ -105,14 +111,69 @@ const styles = theme => ({
   },
   scheduleDiv: {
     margin: '1rem 0',
-    display: 'none' // temporary because i can't see the button
+    fontSize: '1.1rem'
+  },
+  refreshrTitle: {
+    color: theme.palette.secondary.main
+  },
+  dateInput: {
+    color: theme.palette.secondary.main
   },
   scheduleText: {
-    marginLeft: '1rem'
+    marginTop: 10,
+    marginLeft: '1rem',
+    fontSize: '1.1rem'
+  },
+  listContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    [theme.breakpoints.down('sm')]: {
+      flexDirection: 'column'
+    }
+  },
+  refreshrList: {
+    border: `1px solid ${theme.palette.secondary.main}`,
+    backgroundColor: theme.palette.primary.main,
+    marginTop: 10,
+    marginRight: 5,
+    marginLeft: 5,
+    minWidth: 240
+  },
+  listItem: {
+    '&:hover': {
+      backgroundColor: '#363c42'
+    },
+    '&:focus': {
+      backgroundColor: '#363c42'
+    }
+  },
+  listItemText: {
+    fontSize: '1rem'
+  },
+  subhead: {
+    color: theme.palette.secondary.main
+  },
+  logo: {
+    width: 25,
+    height: 25
+  },
+  dualButtonDiv: {
+    display: 'flex',
+    flexFlow: 'row nowrap',
+    justifyContent: 'space-around'
+  },
+  dualButton: {
+    width: '49%',
+    margin: 2.5,
+    fontSize: '1.2rem'
   }
 });
 
 function CampaignForm(props) {
+  // DESTRUCTURES
+  const { classes } = props;
+
+  // HOOKS
   const [refreshrs, setRefreshrs] = useState([]);
   const [activeRefreshr, setActiveRefreshr] = useState(null);
   const [scheduledRefreshrs, setScheduledRefreshrs] = useState([]);
@@ -126,52 +187,7 @@ function CampaignForm(props) {
     schedule3: null
   });
 
-  const { classes } = props;
-  let today = new Date(); // to set default for date inputs
-  today = dateMapper(today);
-
-  // fetch class refreshrs on mount
-  useEffect(() => {
-    getRefreshrs();
-  }, []);
-
-  const userID = localStorage.getItem('user_id');
-  const token = localStorage.getItem('accessToken');
-
-  const ax = axios.create({
-    baseURL: 'https://refreshr.herokuapp.com',
-   // baseURL: 'http://localhost:9000',
-    headers: {
-      authorization: `Bearer ${token}`
-    }
-  });
-
-  /* putting the axios request here for now just to design the page. it may make more sense to make
-  it in the parent component and then pass down props to the children components */
-  const getRefreshrs = async () => {
-    try {
-      const uid = localStorage.getItem('user_id');
-      const res = await ax.get(
-        // `/teachers/275/refreshrs`
-        `/teachers/${uid}/refreshrs`
-        // 'https://refreshr.herokuapp.com/teachers/${userID}/refeshrs'
-      );
-      console.log(res.data);
-      setRefreshrs(res.data.refreshrs);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  // got to be a cleaner way to do this, but it works for now
-  function dateMapper(date) {
-    const month =
-      date.getMonth() < 9 ? `0${date.getMonth() + 1}` : date.getMonth() + 1;
-    const day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
-    const year = date.getFullYear();
-    return `${year}-${month}-${day}`;
-  }
-
+  // FORM NAVIGATION
   const handlePrev = e => {
     e.preventDefault();
     props.setStage({
@@ -181,29 +197,117 @@ function CampaignForm(props) {
     });
   };
 
-  const scheduleRefreshr = e => {
-    console.log(e.target);
+  // DATE OPERATIONS
+  let today = new Date(); // to set default for date inputs
+  today = dateMapper(today);
+
+  // GET REFRESHRS OPERATIONS
+  // fetch class refreshrs on mount
+  useEffect(() => {
+    getRefreshrs();
+  }, []);
+
+  const token = localStorage.getItem('accessToken');
+
+  const ax = axios.create({
+    //PRODUCTION
+    baseURL: 'https://refreshr.herokuapp.com',
+    //DEVELOPMENT
+    //baseURL: 'http://localhost:9000',
+    headers: {
+      authorization: `Bearer ${token}`
+    }
+  });
+
+  const getRefreshrs = async () => {
+    try {
+      const uid = localStorage.getItem('user_id');
+      const res = await ax.get(
+        `/teachers/${uid}/refreshrs`
+        // 'https://refreshr.herokuapp.com/teachers/${userID}/refeshrs'
+      );
+      setRefreshrs(res.data.refreshrs);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  function dateMapper(date) {
+    const month =
+      date.getMonth() < 9 ? `0${date.getMonth() + 1}` : date.getMonth() + 1;
+    const day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
+    const year = date.getFullYear();
+    return `${year}-${month}-${day}`;
+  }
+
+  // SCHEDULE REFRESHR OPERATIONS
+  const scheduleRefreshr = async () => {
     props.setCampaignData({
       ...props.campaignData,
       title: 'Your Refreshr Is Here!',
       subject: activeRefreshr.name,
-      html_content: `<html><head><title></title></head><body><p>${
-        activeRefreshr.review_text
-      } [unsubscribe]</p></body></html>`,
-      plain_content: `${activeRefreshr.review_text} [unsubscribe]`,
+      html_content: `<html><head><title></title></head><body><p>
+      Take your Refreshr <a href=${activeRefreshr.typeform_url}>here</a>.</p>
+      <p></p>
+      <p></p>
+      <p></p>
+      <p></p>
+      <p></p>
+      <p></p>
+      <p></p>
+      <p></p>
+      <p></p>
+      <a href=
+      [unsubscribe]>
+      Unsubscribe</a>
+      </body></html>`,
+      plain_content: `Take your Refreshr ${
+        activeRefreshr.typeform_url
+      } [unsubscribe]
+      `,
       refreshr_id: activeRefreshr.refreshr_id
     });
+
     setScheduledRefreshrs([...scheduledRefreshrs, activeRefreshr]);
+    setRefreshrs(
+      refreshrs.filter(r => r.refreshr_id !== activeRefreshr.refreshr_id)
+    );
     setActiveRefreshr(null);
   };
 
-  // useEffect(() => {
-  //   console.log(activeRefreshr);
-  // }, [activeRefreshr]);
-
-  useEffect(() => {
-    console.log(scheduledRefreshrs);
-  }, [scheduledRefreshrs]);
+  const sendTestRefreshr = async () => {
+    props.setCampaignData({
+      ...props.campaignData,
+      title: 'Your Refreshr Is Here!',
+      subject: activeRefreshr.name,
+      html_content: `<html><head><title></title></head><body><p>
+      Take your Refreshr <a href=${activeRefreshr.typeform_url}>here</a>.</p>
+      <p></p>
+      <p></p>
+      <p></p>
+      <p></p>
+      <p></p>
+      <p></p>
+      <p></p>
+      <p></p>
+      <p></p>
+      <a href=
+      [unsubscribe]>
+      Unsubscribe</a>
+      </body></html>`,
+      plain_content: `Take your Refreshr ${
+        activeRefreshr.typeform_url
+      } [unsubscribe]
+      `,
+      refreshr_id: activeRefreshr.refreshr_id
+    });
+    setScheduledRefreshrs([...scheduledRefreshrs, activeRefreshr]);
+    setRefreshrs(
+      refreshrs.filter(r => r.refreshr_id !== activeRefreshr.refreshr_id)
+    );
+    setActiveRefreshr(null);
+    props.sendTest(activeRefreshr);
+  };
 
   const handleClick = id => {
     const [active] = refreshrs.filter(r => r.refreshr_id === id);
@@ -213,32 +317,34 @@ function CampaignForm(props) {
   const handleSubmit = e => {
     e.preventDefault();
     props.sendAllToSendgrid(scheduledRefreshrs);
+    handleScheduleRefreshSnack();
   };
 
+  // DATE AND TIME OPERATIONS
   const alterTime = e => {
     e.preventDefault();
     const date = e.target.value;
 
-    const schedule0 = moment(`${e.target.value}T00:00:00`).format(
-      'ddd, MMMM Do, YYYY ha'
-    );
-    const schedule1 = moment(`${e.target.value}T00:00:00`)
+    // const date = e.target.value;
+
+    const schedule0 = moment(date).format('ddd, MMMM Do, YYYY ha');
+    const schedule1 = moment(date)
       .add(2, 'day')
       .format('ddd, MMMM Do, YYYY ha');
-    const schedule2 = moment(`${e.target.value}T00:00:00`)
+    const schedule2 = moment(date)
       .add(2, 'weeks')
       .format('ddd, MMMM Do, YYYY ha');
-    const schedule3 = moment(`${e.target.value}T00:00:00`)
+    const schedule3 = moment(date)
       .add(2, 'month')
       .format('ddd, MMMM Do, YYYY ha');
 
-    const twoDaysUnix = moment(`${e.target.value}T00:00:00`)
+    const twoDaysUnix = moment(date)
       .add(2, 'day')
       .unix();
-    const twoWeeksUnix = moment(`${e.target.value}T00:00:00`)
+    const twoWeeksUnix = moment(date)
       .add(2, 'weeks')
       .unix();
-    const twoMonthsUnix = moment(`${e.target.value}T00:00:00`)
+    const twoMonthsUnix = moment(date)
       .add(2, 'month')
       .unix();
 
@@ -247,8 +353,8 @@ function CampaignForm(props) {
       { send_at: twoWeeksUnix },
       { send_at: twoMonthsUnix }
     ];
+
     setActiveRefreshr({ ...activeRefreshr, timeTriData, date });
-    console.log(activeRefreshr);
 
     setSchedule({
       ...schedule,
@@ -261,8 +367,46 @@ function CampaignForm(props) {
     props.setTimeTriData([...timeTriData]);
   };
 
+  const [scheduleRefreshSnack, setScheduleRefreshSnack] = useState(false);
+  const handleScheduleRefreshSnack = (event, reason) => {
+    if (reason === 'clickaway') {
+      // clickaway is if they fire the snackbar before it's gone
+      return;
+    }
+    setScheduleRefreshSnack(!scheduleRefreshSnack);
+  };
+
   return (
     <Paper className={classes.container} elevation={24}>
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left'
+        }}
+        open={scheduleRefreshSnack}
+        autoHideDuration={4000}
+        onClose={handleScheduleRefreshSnack}
+        ContentProps={{
+          'aria-describedby': 'message-id'
+        }}
+        message={
+          <span id="message-id">
+            {refreshrs.length > 1
+              ? 'Refreshrs Scheduled!'
+              : 'Refreshr Scheduled!'}
+          </span>
+        }
+        action={[
+          <IconButton
+            key="close"
+            aria-label="Close"
+            color="inherit"
+            onClick={handleScheduleRefreshSnack}
+          >
+            <Close />
+          </IconButton>
+        ]}
+      />
       <Typography
         variant="h6"
         color="secondary"
@@ -275,50 +419,74 @@ function CampaignForm(props) {
 
       {activeRefreshr ? (
         <Card className={classes.activeCard}>
-          <h1>{activeRefreshr.name}</h1>
+          <Typography variant="h6" className={classes.refreshrTitle}>
+            {activeRefreshr.name}
+          </Typography>
           <TextField
+            InputProps={{ className: classes.dateInput }}
             variant="outlined"
             type="date"
             defaultValue={today}
-            onChange={e => alterTime(e)}
+            onChange={e => {
+              alterTime(e);
+            }}
           />
-          <div className={classes.scheduleDiv}>
-            <Typography variant={'body2'} color="secondary">
-              Input: {schedule.schedule0 || ''}
-            </Typography>
-            <Typography
-              className={classes.scheduleText}
-              variant={'body2'}
+          {schedule.schedule0 && (
+            <div className={classes.scheduleDiv}>
+              <Typography
+                className={classes.scheduleText}
+                variant="subtitle2"
+                color="secondary"
+              >
+                Input: {schedule.schedule0 || ''}
+              </Typography>
+              <Typography
+                className={classes.scheduleText}
+                variant={'body2'}
+                color="secondary"
+              >
+                +2 days: {schedule.schedule1 || ''}
+              </Typography>
+              <Typography
+                className={classes.scheduleText}
+                variant={'body2'}
+                color="secondary"
+              >
+                +2 weeks: {schedule.schedule2 || ''}
+              </Typography>
+              <Typography
+                className={classes.scheduleText}
+                variant={'body2'}
+                color="secondary"
+              >
+                +2 months: {schedule.schedule3 || ''}
+              </Typography>
+            </div>
+          )}
+          <div className={classes.dualButtonDiv}>
+            <Button
+              variant="outlined"
               color="secondary"
+              onClick={scheduleRefreshr}
+              className={classes.dualButton}
             >
-              +2 days: {schedule.schedule1 || ''}
-            </Typography>
-            <Typography
-              className={classes.scheduleText}
-              variant={'body2'}
+              Load Schedule
+            </Button>
+            <Button
+              variant="outlined"
               color="secondary"
+              onClick={sendTestRefreshr}
+              className={classes.dualButton}
             >
-              +2 weeks: {schedule.schedule2 || ''}
-            </Typography>
-            <Typography
-              className={classes.scheduleText}
-              variant={'body2'}
-              color="secondary"
-            >
-              +2 months: {schedule.schedule3 || ''}
-            </Typography>
+              Send Test
+            </Button>
           </div>
-          <Button
-            variant="outlined"
-            color="secondary"
-            onClick={scheduleRefreshr}
-          >
-            Load Schedule
-          </Button>
         </Card>
       ) : (
-        <Card className={classes.card}>
-          <h4>select a refreshr to schedule</h4>
+        <Card className={classes.activeCard}>
+          <Typography variant="body1">
+            Select a refreshr below to schedule
+          </Typography>
         </Card>
       )}
 
@@ -332,25 +500,54 @@ function CampaignForm(props) {
         Your Refreshrs
       </Typography>
 
-      <Grid className={classes.cardList}>
-        {refreshrs.map(refreshr => (
-          <Card
-            onClick={() => handleClick(refreshr.refreshr_id)}
-            className={classes.card}
-            key={refreshr.refreshr_id}
-            id={refreshr.refreshr_id}
-            raised
-          >
-            <Typography variant="subtitle2">{refreshr.name}</Typography>
-          </Card>
-        ))}
-        <Link to="/refreshrs/create">
-          <Card className={`${classes.card} ${classes.iconCard}`}>
-            <Icon color="action" style={{ fontSize: 60 }}>
-              add_circle
-            </Icon>
-          </Card>
-        </Link>
+      <Grid className={classes.listContainer}>
+        <List
+          className={classes.refreshrList}
+          subheader={
+            <ListSubheader className={classes.subhead} component="div">
+              Your Refreshrs
+            </ListSubheader>
+          }
+        >
+          {refreshrs.map(r => (
+            <ListItem
+              className={classes.listItem}
+              button
+              key={r.refreshr_id}
+              onClick={() => handleClick(r.refreshr_id)}
+            >
+              <ListItemText
+                classes={{ primary: classes.listItemText }}
+                primary={r.name}
+              />
+            </ListItem>
+          ))}
+        </List>
+        <List
+          className={classes.refreshrList}
+          subheader={
+            <ListSubheader className={classes.subhead} component="div">
+              Scheduled Refreshrs
+            </ListSubheader>
+          }
+        >
+          {scheduledRefreshrs.map(r => (
+            <ListItem
+              className={classes.listItem}
+              button
+              key={r.refreshr_id}
+              onClick={() => handleClick(r.refreshr_id)}
+            >
+              <ListItemIcon>
+                <img src={logo} alt="Refreshr icon" className={classes.logo} />
+              </ListItemIcon>
+              <ListItemText
+                classes={{ primary: classes.listItemText }}
+                primary={r.name}
+              />
+            </ListItem>
+          ))}
+        </List>
       </Grid>
 
       <hr className={classes.hrStyle} />

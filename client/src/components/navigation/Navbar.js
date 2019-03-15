@@ -44,20 +44,14 @@ const styles = theme => ({
     justifyContent: 'space-between'
   },
   btn: {
-    background: theme.palette.primary.main,
-    color: theme.palette.secondary.main,
-    '&:hover': {
-      background: theme.palette.secondary.main,
-      color: theme.palette.primary.main,
-      borderColor: theme.palette.primary.main
-    }
-  },
-  pricingLink: {
     color: theme.palette.secondary.contrastText,
+    background: theme.palette.secondary.main,
     fontSize: '1rem',
     fontWeight: 'bold',
     '&:hover': {
-      cursor: 'pointer'
+      cursor: 'pointer',
+      color: theme.palette.primary.contrastText,
+      background: theme.palette.primary.dark
     }
   },
 
@@ -72,18 +66,23 @@ const styles = theme => ({
     [theme.breakpoints.up('sm')]: {
       borderLeft: '1px solid #FFFFFF'
     },
+    marginTop: 64,
     background: theme.palette.primary.dark,
     color: theme.palette.primary.contrastText,
     height: '100vh',
     display: 'flex',
     flexFlow: 'column nowrap',
     justifyContent: 'space-around',
-    alignItems: 'stretch',
+    alignItems: 'center',
     textAlign: 'center'
   },
   navRoutes: {
     textAlign: 'center',
-    color: theme.palette.primary.contrastText
+    color: theme.palette.primary.contrastText,
+    fontSize: '1rem',
+    '&:hover': {
+      color: theme.palette.secondary.dark
+    }
   },
   logo: {
     width: '50px',
@@ -106,7 +105,7 @@ const styles = theme => ({
 });
 
 const Navbar = props => {
-  const { classes, location } = props;
+  const { classes, location, toggleModal } = props;
 
   /*-------- NAV BUTTONS --------*/
   const ListItemLink = props => {
@@ -128,9 +127,15 @@ const Navbar = props => {
     const { to, open, ...other } = props;
     const primary = breadcrumbNameMap[to];
     return (
-      <RouterLink to={to} className={classes.homeLink} style={{textDecoration: 'none'}}>
+      <RouterLink
+        to={to}
+        className={classes.homeLink}
+        style={{ textDecoration: 'none' }}
+      >
         <img src={Logo} alt="refreshr logo" {...other} primary={primary} />
-        <Typography variant='caption' className={classes.dashboardFont}>Home</Typography>
+        <Typography variant="caption" className={classes.dashboardFont}>
+          Home
+        </Typography>
       </RouterLink>
     );
   };
@@ -143,6 +148,8 @@ const Navbar = props => {
 
   const drawer = (
     <List component="nav" className={classes.list}>
+      <ListItemLink to="/classes" className={classes.navRoutes} />
+      <ListItemLink to="/refreshrs" className={classes.navRoutes} />
       <ListItemLink to="/classes/create" className={classes.navRoutes} />
       <ListItemLink to="/refreshrs/create" className={classes.navRoutes} />
       <ListItemLink to="/billing" className={classes.navRoutes} />
@@ -153,14 +160,15 @@ const Navbar = props => {
 
   const handleLogIn = () => {
     if (location.pathname !== '/') {
-      // console.log('logging out')
       localStorage.clear();
       props.lock.logout({
+        // PRODUCTION
         returnTo: 'https://refreshr-app.netlify.com',
+        // DEVELOPMENT
+        //returnTo: 'http://localhost:3000',
         clientID: 'jNDq5B6iAnIRcrpM07Omh05uyppZ89px'
       });
     } else {
-      // console.log('logging in')
       props.lock.show();
     }
   };
@@ -180,10 +188,10 @@ const Navbar = props => {
                 handleLogIn();
               }}
             >
-              {location.pathname !== '/' ? 'Logout' : 'Login'}
+              Logout
             </Button>
             <HomeLink className={classes.logo} to="/dashboard" />
-            
+
             <IconButton
               color="inherit"
               aria-label="Open Nav"
@@ -236,11 +244,18 @@ const Navbar = props => {
                 handleLogIn();
               }}
             >
-              {location.pathname !== '/' ? 'Logout' : 'Login/Signup'}
+              Login/Signup
             </Button>
-            <Typography  onClick={e => { e.preventDefault(); props.history.push("/pricing")}} className={classes.pricingLink}>
-            Pricing
-            </Typography>
+            <Button
+              variant="outlined"
+              onClick={e => {
+                e.preventDefault();
+                toggleModal();
+              }}
+              className={classes.btn}
+            >
+              Pricing
+            </Button>
           </Toolbar>
         </AppBar>
       </div>

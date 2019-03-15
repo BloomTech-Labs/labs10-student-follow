@@ -1,5 +1,5 @@
 import Auth0Lock from 'auth0-lock';
-import axios from 'axios';
+// import axios from 'axios';
 
 const clientID = 'jNDq5B6iAnIRcrpM07Omh05uyppZ89px';
 const domain = 'team-refreshr.auth0.com';
@@ -49,37 +49,42 @@ lock.on('authenticated', authResult => {
       alert(error);
       return;
     }
-    //console.log(authResult);
 
     localStorage.setItem('accessToken', authResult.accessToken);
-    localStorage.setItem('profile', JSON.stringify(profile));
-    localStorage.setItem('name', `${profile.name}`);
+    localStorage.setItem('name', `${profile.given_name}`);
     localStorage.setItem('email', profile.email);
-    localStorage.setItem(
-      'user_id',
-      profile['https://refreshr.herokuapp.com/uid']
-    );
+    // PRODUCTION
+    localStorage.setItem('user_id', profile['https://refreshr.herokuapp.com/uid']);
+    // DEVELOPMENT
+    //localStorage.setItem('user_id', profile['http://localhost:9000/uid']);
 
-    const body = {
-      first_name: profile.given_name,
-      last_name: profile.family_name,
-      email: profile.email,
-      user_id: profile['https://refreshr.herokuapp.com/uid'],
-      role: profile['https://refreshr.herokuapp.com/roles'][0]
-    };
-    //console.log(body)
-    //This captures users and adds them to the teacher table upon login, if they already exist
-    //200 OK will be sent and the unique constraint will be shown in the console.
-    axios({
-      method: 'post',
-      url: 'https://refreshr.herokuapp.com/teachers',
-      headers: { Authorization: `Bearer ${authResult.accessToken}` },
-      data: body
-    })
-      .then(res => {
-        console.log(res);
-      })
-      .catch(err => console.log(err));
+    // const body = {
+    //   first_name: profile.given_name,
+    //   last_name: profile.family_name,
+    //   email: profile.email,
+    //   //PRODUCTION
+    //   // user_id: profile['https://refreshr.herokuapp.com/uid'],
+    //   // role: profile['https://refreshr.herokuapp.com/roles'][0]
+    //   //DEVELOPMENT
+    //   user_id: profile['http://localhost:9000/uid'],
+    //   role: profile['http://localhost:9000/roles'][0]
+    // };
+    // //This captures users and adds them to the teacher table upon login, if they already exist
+    // //200 OK will be sent and the unique constraint will be shown in the console.
+    // axios({
+    //   method: 'post',
+    //   //PRODUCTION
+    //   //url: 'https://refreshr.herokuapp.com/teachers',
+    //   //DEVELOPMENT
+    //   url: 'http://localhost:9000/teachers',
+
+    //   headers: { Authorization: `Bearer ${authResult.accessToken}` },
+    //   data: body
+    // })
+    //   .then(res => {
+    //     console.log(res);
+    //   })
+    //   .catch(err => console.log(err));
   });
 });
 
@@ -91,5 +96,6 @@ lock.on('authorization_error', error => {
     }
   });
 });
+
 
 export default lock;

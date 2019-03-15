@@ -6,9 +6,11 @@ import {
   withStyles,
   Button,
   Paper,
-  Input
+  Input,
+  Snackbar,
+  IconButton
 } from '@material-ui/core';
-import styled from 'styled-components';
+import { Close } from '@material-ui/icons';
 
 const axios = require('axios');
 
@@ -46,7 +48,7 @@ const styles = theme => ({
     background: theme.palette.secondary.main,
     color: theme.palette.primary.main,
     fontSize: '1em',
-    width: '75%',
+    width: '83%',
     borderRadius: 5
   },
   inputQuestion: {
@@ -56,7 +58,7 @@ const styles = theme => ({
     background: theme.palette.secondary.main,
     color: theme.palette.primary.main,
     fontSize: '1em',
-    width: '75%',
+    width: '83%',
     borderRadius: 5
   },
   inputMultipleChoice: {
@@ -70,12 +72,10 @@ const styles = theme => ({
     borderRadius: 5
   },
   multipleChoice: {
-    margin: '3% 1%',
-    padding: '2% 10%',
     color: theme.palette.primary.main,
     fontSize: '1em',
     borderRadius: 5,
-    width: '100%'
+    width: '83%'
   },
   form1: {
     display: 'flex',
@@ -85,29 +85,47 @@ const styles = theme => ({
     alignItems: 'center',
     padding: theme.spacing.unit * 2
   },
+  hidden: {
+    display: 'none'
+  },
+  edit: {
+    display: 'flex',
+    wrap: 'nowrap',
+    justify: 'flex-start',
+    margin: '15px 0px',
+    width: '100%',
+    alignItems: 'left',
+    alignContent: 'flex-start',
+    cursor: 'pointer',
+    height: '10px',
+    textAlign: 'left'
+  },
   hrStyle: {
     margin: '1rem auto',
     width: '100%'
+  },
+  editIcon: {
+    margin: '0%',
+    paddingLeft: '1%',
+    alignItems: 'left',
+    alignContent: 'left'
   }
 });
 
 function Refreshr(props) {
-  const { setUrl, url } = props;
+  const { match, updateRefreshrDB, token } = props;
+  const [refreshrName, setRefreshrName] = useState('');
   const [reviewText, setReviewText] = useState('');
-  const [refreshrName, addRefreshrName] = useState('');
-  const [questionTextOne, setQuestionTextOne] = useState('');
-  const [questionTextTwo, setQuestionTextTwo] = useState('');
-  // const [submitted, setSubmitted] = useState(false);
-  const [typeformWelcome, setTypefromWelcome] = useState([]);
-  const [typeformQ1Props, setTypeformQ1Props] = useState([]);
-  const [typeformAnswers, setTypeformAnswers] = useState([]);
-  const [typeformQ1, setTypeformQ1] = useState([]);
-  const [typeformQ2, setTypeformQ2] = useState([]);
-
+  const [questionTextOne, setQuestionTextOne] = useState({ text: '', id: '' });
+  const [questionTextTwo, setQuestionTextTwo] = useState({ text: '', id: '' });
   const [a1Text, setA1Text] = useState('');
   const [a2Text, setA2Text] = useState('');
   const [a3Text, setA3Text] = useState('');
   const [a4Text, setA4Text] = useState('');
+  const [refreshrNameEdit, setRefreshrNameEdit] = useState(false);
+  const [reviewEdit, setReviewEdit] = useState(false);
+  const [multiChoiceEdit, setMultiChoiceEdit] = useState(false);
+  const [q2Edit, setQ2Edit] = useState(false);
   const [questionObject, setQuestionObject] = useState({
     reviewText,
     refreshrName,
@@ -115,36 +133,152 @@ function Refreshr(props) {
     questionTextTwo,
     answers: { a1Text, a2Text, a3Text, a4Text }
   });
-  const typeformId = window.location.pathname.slice(-6);
+  const typeformId = match.params.id;
 
-  // const StyleDisplay = styled.a`
-  //   ${{ display: submitted ? 'block' : 'none' }}
-  // `;
+  const [updateSnackBool, setUpdateSnackBool] = useState(false);
+
+  const headers = {
+    Authorization: `Bearer ${process.env.REACT_APP_TYPEFORM}`
+  };
 
   useEffect(() => {
     axios({
       method: 'get',
-      url: `https://api.typeform.com/forms/${typeformId}`,
-      headers: { Authorization: `Bearer ${process.env.REACT_APP_TYPEFORM}` }
+      //DEVELOPMENT
+      //url: `http://localhost:9000/refreshrs/${typeformId}`,
+      //PRODUCTION
+      url: `https://refreshr.herokuapp.com/refreshrs/${typeformId}`,
+
+      headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => {
-        console.log('FROM USE EFFECT', res);
-        setTypefromWelcome(res.data.welcome_screens[0]);
-        setTypeformQ1Props(res.data.fields[1].properties);
-        setTypeformAnswers(res.data.fields[1].properties.choices);
-        setTypeformQ1(res.data.fields[1]);
-        setTypeformQ2(res.data.fields[2]);
+        setRefreshrName(res.data.refreshr.name);
+        setReviewText(res.data.refreshr.review_text);
+        setA1Text(res.data.refreshr.questions[0].question.answer_1);
+        setA2Text(res.data.refreshr.questions[0].question.answer_2);
+        setA3Text(res.data.refreshr.questions[0].question.answer_3);
+        setA4Text(res.data.refreshr.questions[0].question.answer_4);
+        setQuestionTextOne({
+          text: res.data.refreshr.questions[0].question.question_text,
+          id: res.data.refreshr.questions[0].question_id
+        });
+        setQuestionTextTwo({
+          text: res.data.refreshr.questions[1].question.question_text,
+          id: res.data.refreshr.questions[1].question_id
+        });
       })
       .catch(err => console.log(err));
   }, []);
 
-  const answers = typeformAnswers.map(answer => answer.label);
+  const editForm = async event => {
+    event.preventDefault();
+    const data = {
+      title: refreshrName,
+      variables: {
+        score: 0
+      },
+      welcome_screens: [
+        {
+          title: refreshrName
+        }
+      ],
+      fields: [
+        {
+          title: 'Please enter your email address.',
+          type: 'email',
+          validations: {
+            required: true
+          }
+        },
+        {
+          ref: 'question_1',
+          title: questionTextOne.text,
+          type: 'multiple_choice',
+          properties: {
+            description: reviewText,
+            randomize: true,
+            choices: [
+              {
+                ref: 'correct',
+                label: a1Text
+              },
+              {
+                ref: 'incorrect_1',
+                label: a2Text
+              },
+              {
+                ref: 'incorrect_2',
+                label: a3Text
+              },
+              {
+                ref: 'incorrect_3',
+                label: a4Text
+              }
+            ]
+          }
+        },
+        {
+          ref: 'question_2',
+          title: questionTextTwo.text,
+          type: 'short_text',
+          properties: {
+            description: reviewText
+          }
+        }
+      ]
+    };
+    try {
+      await axios
+        .put(`https://api.typeform.com/forms/${typeformId}`, data, {
+          headers
+        })
+        .then(res => {
+          const updatedRefreshr = {
+            name: res.data.title,
+            review_text: res.data.fields[1].properties.description,
+            typeform_id: res.data.id,
+            typeform_url: res.data._links.display
+          };
+          updateRefreshrDB(updatedRefreshr, typeformId, questionObject);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-  console.log('typeformText =>', typeformQ2);
+  const handleUpdateSnackBool = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setUpdateSnackBool(!updateSnackBool);
+  };
 
   return (
     <Paper className={props.classes.container} elevation={24}>
       <Grid className={props.classes.wrapper}>
+        <Snackbar
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left'
+          }}
+          open={updateSnackBool}
+          autoHideDuration={4000}
+          onClose={handleUpdateSnackBool}
+          ContentProps={{
+            'aria-describedby': 'message-id'
+          }}
+          message={<span id="message-id">Refreshr Updated!</span>}
+          action={[
+            <IconButton
+              key="close"
+              aria-label="Close"
+              color="inherit"
+              onClick={handleUpdateSnackBool}
+            >
+              <Close />
+            </IconButton>
+          ]}
+        />
         <FormGroup
           onChange={() =>
             setQuestionObject({
@@ -169,30 +303,55 @@ function Refreshr(props) {
           <Typography
             variant="body1"
             color="secondary"
-            style={{ textAlign: 'center' }}
+            style={{ textAlign: 'left' }}
           >
             Refreshr Name
           </Typography>
 
+          <Typography
+            className={
+              refreshrNameEdit ? props.classes.hidden : props.classes.editText
+            }
+          >
+            {refreshrName}
+          </Typography>
           <FormGroup
             className={props.classes.form1}
             onSubmit={props.handleSubmit}
           >
             <Input
               disableUnderline
-              onChange={e => addRefreshrName(e.target.value)}
+              onChange={e => setRefreshrName(e.target.value)}
               name="classnameInput"
               required
               type="text"
-              value={typeformWelcome.title}
-              className={props.classes.inputName}
+              value={refreshrName}
+              className={
+                refreshrNameEdit
+                  ? props.classes.inputName
+                  : props.classes.hidden
+              }
             />
+            <FormGroup
+              onClick={() => setRefreshrNameEdit(!refreshrNameEdit)}
+              className={props.classes.edit}
+            >
+              <i className="fas fa-pen" />
+              <h4 className={props.classes.editIcon}>Edit</h4>
+            </FormGroup>
           </FormGroup>
 
           <hr className={props.classes.hrStyle} />
 
-          <h4 className={props.classes.subheaders}>Add Review Text</h4>
+          <h4 className={props.classes.subheaders}>Your Review Text</h4>
 
+          <Typography
+            className={
+              reviewEdit ? props.classes.hidden : props.classes.editText
+            }
+          >
+            {reviewText}
+          </Typography>
           <FormGroup
             className={props.classes.form1}
             onSubmit={props.handleSubmit}
@@ -204,21 +363,37 @@ function Refreshr(props) {
               required
               multiline
               rows="4"
-              value={typeformQ1Props.description}
-              className={props.classes.inputQuestion}
+              value={reviewText}
+              className={
+                reviewEdit ? props.classes.inputQuestion : props.classes.hidden
+              }
             />
+            <FormGroup
+              onClick={() => setReviewEdit(!reviewEdit)}
+              className={props.classes.edit}
+            >
+              <i className="fas fa-pen" />
+              <h4 className={props.classes.editIcon}>Edit</h4>
+            </FormGroup>
           </FormGroup>
 
           <hr className={props.classes.hrStyle} />
 
-          <h4 className={props.classes.subheaders}>Create Questions</h4>
+          <h4 className={props.classes.subheaders}>Your Questions</h4>
 
           <Typography
             variant="body1"
             color="secondary"
-            style={{ textAlign: 'center' }}
+            style={{ textAlign: 'left' }}
           >
             Question 1: Multiple Choice Response
+          </Typography>
+          <Typography
+            className={
+              multiChoiceEdit ? props.classes.hidden : props.classes.editText
+            }
+          >
+            {questionTextOne.text}
           </Typography>
           <FormGroup
             className={props.classes.form1}
@@ -226,63 +401,142 @@ function Refreshr(props) {
           >
             <Input
               disableUnderline
-              onChange={e => setQuestionTextOne(e.target.value)}
+              onChange={e =>
+                setQuestionTextOne({ ...questionTextOne, text: e.target.value })
+              }
               name="classnameInput"
               required
               multiline
               rows="4"
-              value={typeformQ1.title}
-              className={props.classes.inputQuestion}
+              value={questionTextOne.text}
+              className={
+                multiChoiceEdit
+                  ? props.classes.inputQuestion
+                  : props.classes.hidden
+              }
             />
           </FormGroup>
 
-          <FormGroup>
+          {/* <FormGroup className={props.classes.form1}> */}
+          <Typography
+            style={{
+              textAlign: 'left',
+              width: '100%'
+            }}
+            className={
+              multiChoiceEdit ? props.classes.hidden : props.classes.editText
+            }
+          >
+            {a1Text}
+          </Typography>
+          <Typography
+            style={{
+              textAlign: 'left',
+              width: '100%'
+            }}
+            className={
+              multiChoiceEdit ? props.classes.hidden : props.classes.editText
+            }
+          >
+            {a2Text}
+          </Typography>
+          <Typography
+            style={{
+              textAlign: 'left',
+              width: '100%'
+            }}
+            className={
+              multiChoiceEdit ? props.classes.hidden : props.classes.editText
+            }
+          >
+            {a3Text}
+          </Typography>
+          <Typography
+            style={{
+              textAlign: 'left',
+              width: '100%'
+            }}
+            className={
+              multiChoiceEdit ? props.classes.hidden : props.classes.editText
+            }
+          >
+            {a4Text}
+          </Typography>
+          <FormGroup className={props.classes.form1}>
             <form className={props.classes.multipleChoice}>
               <Input
                 disableUnderline
                 onChange={e => setA1Text(e.target.value)}
                 name="classnameInput"
                 required
-                value={answers[0]}
-                className={props.classes.inputMultipleChoice}
+                value={a1Text}
+                className={
+                  multiChoiceEdit
+                    ? props.classes.inputMultipleChoice
+                    : props.classes.hidden
+                }
               />
               <Input
                 disableUnderline
                 name="classnameInput"
                 onChange={e => setA2Text(e.target.value)}
                 required
-                value={answers[1]}
-                className={props.classes.inputMultipleChoice}
+                value={a2Text}
+                className={
+                  multiChoiceEdit
+                    ? props.classes.inputMultipleChoice
+                    : props.classes.hidden
+                }
               />
               <Input
                 disableUnderline
                 onChange={e => setA3Text(e.target.value)}
                 name="classnameInput"
                 required
-                value={answers[2]}
-                className={props.classes.inputMultipleChoice}
+                value={a3Text}
+                className={
+                  multiChoiceEdit
+                    ? props.classes.inputMultipleChoice
+                    : props.classes.hidden
+                }
               />
               <Input
                 disableUnderline
                 onChange={e => setA4Text(e.target.value)}
                 name="classnameInput"
                 required
-                value={answers[3]}
-                className={props.classes.inputMultipleChoice}
+                value={a4Text}
+                className={
+                  multiChoiceEdit
+                    ? props.classes.inputMultipleChoice
+                    : props.classes.hidden
+                }
               />
             </form>
-          </FormGroup>
 
+            <FormGroup
+              onClick={() => setMultiChoiceEdit(!multiChoiceEdit)}
+              className={props.classes.edit}
+            >
+              <i className="fas fa-pen" />
+              <h4 className={props.classes.editIcon}>Edit</h4>
+            </FormGroup>
+          </FormGroup>
           <hr className={props.classes.hrStyle} />
 
           <Typography
             variant="body1"
             color="secondary"
-            style={{ textAlign: 'center' }}
+            style={{ textAlign: 'left' }}
           >
             Question 2: Text Response
           </Typography>
 
+          <Typography
+            className={q2Edit ? props.classes.hidden : props.classes.editText}
+          >
+            {questionTextTwo.text}
+          </Typography>
           <FormGroup
             className={props.classes.form1}
             onSubmit={props.handleSubmit}
@@ -290,13 +544,24 @@ function Refreshr(props) {
             <Input
               disableUnderline
               name="classnameInput"
-              onChange={e => setQuestionTextTwo(e.target.value)}
+              onChange={e =>
+                setQuestionTextTwo({ ...questionTextTwo, text: e.target.value })
+              }
               required
               multiline
               rows="4"
-              value={typeformQ2.title}
-              className={props.classes.inputQuestion}
+              value={questionTextTwo.text}
+              className={
+                q2Edit ? props.classes.inputQuestion : props.classes.hidden
+              }
             />
+            <FormGroup
+              onClick={() => setQ2Edit(!q2Edit)}
+              className={props.classes.edit}
+            >
+              <i className="fas fa-pen" />
+              <h4 className={props.classes.editIcon}>Edit</h4>
+            </FormGroup>
           </FormGroup>
 
           <hr className={props.classes.hrStyle} />
@@ -304,12 +569,12 @@ function Refreshr(props) {
             variant="contained"
             color="primary"
             onClick={e => {
-              props.addQuestions(questionObject);
+              editForm(e);
+              handleUpdateSnackBool();
             }}
           >
-            Submit
+            Update
           </Button>
-          {/* <StyleDisplay>View your Refreshr here: {url}</StyleDisplay> */}
         </FormGroup>
       </Grid>
     </Paper>

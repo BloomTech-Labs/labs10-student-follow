@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Grid,
   Typography,
@@ -6,98 +6,122 @@ import {
   CardContent,
   Button,
   TextField,
-  Icon
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  ListSubheader,
+  Fab
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import DeleteIcon from '@material-ui/icons/Delete';
 import RefreshrDialog from './RefreshrListDialog';
+import {
+  RemoveCircleOutline,
+  Update,
+  AddCircleOutline
+} from '@material-ui/icons/';
+import moment from 'moment';
+import logo from './LogoSmall.png';
 
 const styles = theme => ({
-  refreshrList: {
+  refreshrCardWrapper: {
     display: 'flex',
     padding: theme.spacing.unit,
     [theme.breakpoints.only('xs')]: {
       flexFlow: 'column nowrap',
       justifyContent: 'space-between',
       alignItems: 'center'
-    }
+    },
+    justifyContent: 'center'
   },
   refreshrCard: {
-    border: '1px solid white',
-    background: theme.palette.secondary.main,
+    border: `1px solid ${theme.palette.secondary.main}`,
+    color: `${theme.palette.primary.contrastText}`,
     margin: theme.spacing.unit,
     display: 'flex',
     flexFlow: 'column nowrap',
     alignItems: 'center',
+    fontSize: '1rem',
+    minWidth: 375,
+    minHeight: 225,
+    justifyContent: 'center',
     [theme.breakpoints.only('xs')]: {
       width: '100%'
     }
   },
   refreshrContent: {
-    color: theme.palette.primary.dark,
-    fontSize: '1.2rem'
+    fontSize: '1.0rem',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center'
+  },
+  refreshrTitle: {
+    color: `${theme.palette.primary.contrastText}`
+  },
+  refreshrList: {
+    border: `1px solid ${theme.palette.secondary.main}`,
+    color: `${theme.palette.primary.contrastText}`,
+    margin: theme.spacing.unit,
+    display: 'flex',
+    flexFlow: 'column nowrap',
+    borderRadius: '5px',
+    backgroundColor: theme.palette.primary.main
   },
 
   refreshrIcon: {
     alignSelf: 'flex-end',
     margin: '5%',
-    color: theme.palette.primary.dark,
     '&:hover': {
       cursor: 'pointer'
     }
   },
-  activeRefreshr: {
-    height: 200,
-    border: '1px solid red',
-    margin: theme.spacing.unit * 3,
-    position: 'relative'
-  },
-  newRefCard: {
-    display: 'flex',
-    flexFlow: 'column nowrap',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    height: 200
+  datePicker: {
+    color: theme.palette.primary.contrastText,
+    fontSize: '1.1rem'
   },
   title: {
     color: `${theme.palette.primary.contrastText}`,
     textAlign: 'center'
   },
-  newTitle: {
-    color: `${theme.palette.secondary.contrastText}`,
-    textAlign: 'center',
-    fontSize: '1.6rem'
-  },
-  icon: {
-    alignSelf: 'center',
-    '&:hover': {
-      cursor: 'pointer'
-    }
-  },
-  saveButton: {
+  button: {
+    marginRight: theme.spacing.unit * 2,
+    marginTop: theme.spacing.unit * 2,
+    color: theme.palette.primary.main,
     background: theme.palette.secondary.main,
-    color: theme.palette.primary.dark,
-    padding: '1%',
-    display: 'flex',
-    flexFlow: 'row nowrap',
-    fontSize: '1.2rem',
-    width: '50%',
-    marginTop: '5%',
+    width: 40,
+    height: 40
+  },
+  listItem: {
+    fontSize: '1.1rem',
     '&:hover': {
-      background: theme.palette.secondary.dark
+      backgroundColor: '#363c42'
+    },
+    '&:focus': {
+      backgroundColor: '#363c42'
     }
+  },
+  logo: {
+    width: 25,
+    height: 25
+  },
+  subhead: {
+    color: theme.palette.primary.contrastText
+  },
+  listIcon: {
+    color: theme.palette.primary.contrastText
+  },
+  listItemText: {
+    fontSize: '1.1rem'
   }
 });
 
 function Refreshrs(props) {
   const { classes } = props;
-  const [modalIsOpen, setModalIsOpen] = useState(false);
   function setDate(e) {
-    console.log(e.target.value);
-    props.setActiveRefreshr({ ...props.activeRefreshr, date: e.target.value });
+    props.setAddedRefreshr({ ...props.addedRefreshr, date: e.target.value });
   }
   function closeModal() {
-    setModalIsOpen(false);
+    props.setModalIsOpen(false);
   }
   return (
     <>
@@ -105,64 +129,128 @@ function Refreshrs(props) {
         <Typography variant="h6" className={classes.title} gutterBottom>
           Refreshrs
         </Typography>
-        <Grid className={classes.refreshrList}>
-          {props.refreshrs.map((r, i) => (
-            <Card className={classes.refreshrCard} key={i} raised>
+        <Grid className={classes.refreshrCardWrapper}>
+          {props.activeRefreshr ? (
+            <Card className={classes.refreshrCard} raised>
               <CardContent className={classes.refreshrContent}>
-                {r.name}
+                <Typography
+                  variant="subtitle2"
+                  className={classes.refreshrTitle}
+                >
+                  {props.activeRefreshr.name}
+                </Typography>
               </CardContent>
               <CardContent className={classes.refreshrContent}>
-                {r.date}
+                <form
+                  styles={{ display: 'flex', flexFlow: 'column' }}
+                  onSubmit={e => props.submitNewDate(e)}
+                >
+                  <TextField
+                    variant="outlined"
+                    type="date"
+                    InputProps={{ className: classes.datePicker }}
+                    value={moment(props.activeDate).format('YYYY-MM-DD')}
+                    onChange={e => props.changeDate(e)}
+                  />
+                </form>
+                <Fab
+                  className={classes.button}
+                  onClick={props.submitNewDate}
+                  elevation={20}
+                  aria-label="Update"
+                >
+                  <Update />
+                </Fab>
               </CardContent>
-              <DeleteIcon
-                onClick={() => props.removeRefreshr(r.id)}
+              <RemoveCircleOutline
+                onClick={() =>
+                  props.removeRefreshr(props.activeRefreshr.refreshr_id)
+                }
                 className={classes.refreshrIcon}
               />
             </Card>
-          ))}
-          {props.activeRefreshr && (
-            <Card
-              className={classes.activeRefreshr}
-              key={props.activeRefreshr.id}
-              raised
-            >
-              <CardContent>{props.activeRefreshr.name}</CardContent>
-              <TextField
-                onChange={e => setDate(e)}
-                variant="outlined"
-                type="date"
-              />
-              {props.activeRefreshr.date && (
+          ) : props.addedRefreshr ? (
+            <Card className={classes.refreshrCard} raised>
+              <CardContent className={classes.refreshrContent}>
+                <Typography
+                  variant="subtitle2"
+                  className={classes.refreshrTitle}
+                >
+                  {props.addedRefreshr.name}
+                </Typography>
+              </CardContent>
+              <CardContent className={classes.refreshrContent}>
+                <TextField
+                  onChange={e => setDate(e)}
+                  variant="outlined"
+                  type="date"
+                  InputProps={{ className: classes.datePicker }}
+                  defaultValue={moment().format('YYYY-MM-DD')}
+                />
+              </CardContent>
+              {props.addedRefreshr.date && (
                 <Button onClick={props.addRefreshr}>Submit</Button>
               )}
             </Card>
+          ) : (
+            <Card className={classes.refreshrCard} raised>
+              <CardContent className={classes.refreshrContent}>
+                <Typography
+                  variant="subtitle2"
+                  className={classes.refreshrTitle}
+                >
+                  Select a Refreshr To Edit
+                </Typography>
+              </CardContent>
+            </Card>
           )}
-          <RefreshrDialog
-            refreshrs={props.teacherRefs}
-            open={modalIsOpen}
-            handleClose={closeModal}
-            selectRefreshr={props.selectRefreshr}
-          />
-          <Card className={classes.refreshrCard} raised>
-            <CardContent className={classes.newRefCard}>
-              <Typography variant="h4" className={classes.newTitle}>
-                Add a Refreshr
-              </Typography>
-              <Icon
-                className={classes.icon}
-                color="action"
-                style={{ fontSize: 60 }}
-                onClick={() => setModalIsOpen(!modalIsOpen)}
-              >
-                add_circle
-              </Icon>
-            </CardContent>
-          </Card>
         </Grid>
+        <List
+          component="ul"
+          className={classes.refreshrList}
+          subheader={
+            <ListSubheader className={classes.subhead} component="div">
+              {props.className} Refreshrs
+            </ListSubheader>
+          }
+        >
+          {props.refreshrs.map(r => (
+            <ListItem
+              className={classes.listItem}
+              button
+              key={r.refreshr_id}
+              onClick={() => props.selectRefreshr(r.refreshr_id)}
+            >
+              <ListItemIcon>
+                <img src={logo} alt="refreshr logo" className={classes.logo} />
+              </ListItemIcon>
+
+              <ListItemText
+                classes={{ primary: classes.listItemText }}
+                primary={r.name}
+              />
+            </ListItem>
+          ))}
+          <ListItem
+            button
+            onClick={() => props.setModalIsOpen(!props.modalIsOpen)}
+          >
+            <ListItemIcon>
+              <AddCircleOutline className={classes.listIcon} />
+            </ListItemIcon>
+            <ListItemText
+              classes={{ primary: classes.listItemText }}
+              primary="Add new refreshr to class"
+            />
+          </ListItem>
+        </List>
+        <RefreshrDialog
+          refreshrs={props.teacherRefs}
+          open={props.modalIsOpen}
+          handleClose={closeModal}
+          selectNewRefreshr={props.selectNewRefreshr}
+        />
       </Grid>
-      <Button variant="outlined" className={classes.saveButton}>
-        Save Changes
-      </Button>
     </>
   );
 }
