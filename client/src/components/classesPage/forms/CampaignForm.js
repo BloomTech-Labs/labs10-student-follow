@@ -249,14 +249,6 @@ function CampaignForm(props) {
       html_content: `<html><head><title></title></head><body><p>
       Take your Refreshr <a href=${activeRefreshr.typeform_url}>here</a>.</p>
       <p></p>
-      <p></p>
-      <p></p>
-      <p></p>
-      <p></p>
-      <p></p>
-      <p></p>
-      <p></p>
-      <p></p>
       <a href=
       [unsubscribe]>
       Unsubscribe</a>
@@ -276,37 +268,36 @@ function CampaignForm(props) {
   };
 
   const sendTestRefreshr = async () => {
-    props.setCampaignData({
-      ...props.campaignData,
-      title: 'Your Refreshr Is Here!',
-      subject: activeRefreshr.name,
-      html_content: `<html><head><title></title></head><body><p>
+    try {
+      // props.setCampaignData({
+      // ...props.campaignData,
+      const testRefreshr = {
+        title: 'Your Refreshr Is Here!',
+        subject: activeRefreshr.name,
+        sender_id: 428251, // permanent (Refreshr Team)
+        suppression_group_id: 9332, // permanent (Unsubscribe ID)
+        html_content: `<html><head><title></title></head><body><p>
       Take your Refreshr <a href=${activeRefreshr.typeform_url}>here</a>.</p>
-      <p></p>
-      <p></p>
-      <p></p>
-      <p></p>
-      <p></p>
-      <p></p>
-      <p></p>
-      <p></p>
       <p></p>
       <a href=
       [unsubscribe]>
       Unsubscribe</a>
       </body></html>`,
-      plain_content: `Take your Refreshr ${
-        activeRefreshr.typeform_url
-      } [unsubscribe]
-      `,
-      refreshr_id: activeRefreshr.refreshr_id
-    });
-    setScheduledRefreshrs([...scheduledRefreshrs, activeRefreshr]);
-    setRefreshrs(
-      refreshrs.filter(r => r.refreshr_id !== activeRefreshr.refreshr_id)
-    );
-    setActiveRefreshr(null);
-    props.sendTest(activeRefreshr);
+        plain_content: `Take your Refreshr ${
+          activeRefreshr.typeform_url
+        } [unsubscribe]
+      `
+        // refreshr_id: activeRefreshr.refreshr_id
+      };
+      // });
+      setScheduledRefreshrs([...scheduledRefreshrs, activeRefreshr]);
+      setRefreshrs(
+        refreshrs.filter(r => r.refreshr_id !== activeRefreshr.refreshr_id)
+      );
+      props.sendTest(testRefreshr);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const handleClick = id => {

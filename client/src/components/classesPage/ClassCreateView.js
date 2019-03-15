@@ -108,23 +108,19 @@ function ClassCreateView(props) {
       let body = {
         name: listData.classnameInput
       };
+
       let res = await sgAx.post('/contactdb/lists', body);
       console.log(res);
 
       const list = res.data.id;
-      console.log('list:', list);
+      refreshr.list_ids = [list];
 
       // create sg recipient
       const recipient = localStorage.getItem('email');
-      console.log(recipient);
 
-      console.log(newRefreshr);
-
-      const refreshrRes = await sgAx.post('/campaigns', newRefreshr);
-      console.log(refreshrRes);
+      const refreshrRes = await sgAx.post('/campaigns', refreshr);
 
       const campaign_id = refreshrRes.data.id;
-      console.log(campaign_id);
 
       res = await sgAx.post(`/campaigns/${campaign_id}/schedules/test`, {
         to: recipient
