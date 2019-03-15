@@ -146,7 +146,7 @@ const Dashboard = props => {
                         align="center"
                         onClick={e => {
                           e.preventDefault();
-                          history.push(`/classes/edit/${row.classID}`);
+                          history.push(`/classes/edit/${row.id}`);
                         }}
                       >
                         {row.classname}
