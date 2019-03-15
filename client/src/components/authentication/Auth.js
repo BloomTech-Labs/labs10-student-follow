@@ -1,5 +1,5 @@
 import Auth0Lock from 'auth0-lock';
-import axios from 'axios';
+// import axios from 'axios';
 
 const clientID = 'jNDq5B6iAnIRcrpM07Omh05uyppZ89px';
 const domain = 'team-refreshr.auth0.com';
