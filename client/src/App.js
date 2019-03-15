@@ -246,7 +246,7 @@ const App = props => {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => {
-          res.data.campaigns.map(c => {
+          res.data.uniqueRefreshrs.map(c => {
             const date = moment(c.date);
             if( date > current && date < upperLimit){
              return setCampaigns([...campaigns,
