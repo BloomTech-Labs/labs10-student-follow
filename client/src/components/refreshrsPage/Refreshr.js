@@ -48,7 +48,7 @@ const styles = theme => ({
     background: theme.palette.secondary.main,
     color: theme.palette.primary.main,
     fontSize: '1em',
-    width: '75%',
+    width: '83%',
     borderRadius: 5
   },
   inputQuestion: {
@@ -58,7 +58,7 @@ const styles = theme => ({
     background: theme.palette.secondary.main,
     color: theme.palette.primary.main,
     fontSize: '1em',
-    width: '75%',
+    width: '83%',
     borderRadius: 5
   },
   inputMultipleChoice: {
@@ -72,12 +72,12 @@ const styles = theme => ({
     borderRadius: 5
   },
   multipleChoice: {
-    margin: '3% 1%',
-    padding: '2% 10%',
+    // margin: '3% 1%',
+    // padding: '2% 10%',
     color: theme.palette.primary.main,
     fontSize: '1em',
     borderRadius: 5,
-    width: '100%'
+    width: '83%'
   },
   form1: {
     display: 'flex',
@@ -261,13 +261,13 @@ function Refreshr(props) {
             Add Refreshr
           </Typography>
 
-          <Typography color="secondary" align={'center'}>
+          <Typography color="secondary" align={'left'}>
             Create the Refreshr quiz that you will send to your students.
           </Typography>
 
           <hr className={classes.hrStyle} />
 
-          <Typography variant="body1" color="secondary" align={'center'}>
+          <Typography variant="body1" color="secondary" align={'left'}>
             Refreshr Name
           </Typography>
 
@@ -284,7 +284,7 @@ function Refreshr(props) {
 
           <hr className={classes.hrStyle} />
 
-          <Typography variant={'body1'} color="secondary" align={'center'}>
+          <Typography variant={'body1'} color="secondary" align={'left'}>
             Add Review Text
           </Typography>
 
@@ -306,13 +306,13 @@ function Refreshr(props) {
           <Typography
             variant={'body1'}
             color="secondary"
-            align={'center'}
+            align={'left'}
             gutterBottom
           >
             Create Questions
           </Typography>
 
-          <Typography variant={'caption'} color="secondary" align={'center'}>
+          <Typography variant={'caption'} color="secondary" align={'left'}>
             Multiple Choice Question
           </Typography>
           <FormGroup className={classes.form1} onSubmit={props.handleSubmit}>
@@ -328,7 +328,7 @@ function Refreshr(props) {
             />
           </FormGroup>
 
-          <FormGroup>
+          <FormGroup className={classes.form1}>
             <form className={classes.multipleChoice}>
               <Input
                 disableUnderline
@@ -367,7 +367,7 @@ function Refreshr(props) {
 
           <hr className={classes.hrStyle} />
 
-          <Typography variant={'caption'} color="secondary" align={'center'}>
+          <Typography variant={'caption'} color="secondary" align={'left'}>
             Short Answer Question
           </Typography>
 

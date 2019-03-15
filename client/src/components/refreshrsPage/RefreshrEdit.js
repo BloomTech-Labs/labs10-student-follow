@@ -48,7 +48,7 @@ const styles = theme => ({
     background: theme.palette.secondary.main,
     color: theme.palette.primary.main,
     fontSize: '1em',
-    width: '75%',
+    width: '83%',
     borderRadius: 5
   },
   inputQuestion: {
@@ -58,7 +58,7 @@ const styles = theme => ({
     background: theme.palette.secondary.main,
     color: theme.palette.primary.main,
     fontSize: '1em',
-    width: '75%',
+    width: '83%',
     borderRadius: 5
   },
   inputMultipleChoice: {
@@ -72,12 +72,10 @@ const styles = theme => ({
     borderRadius: 5
   },
   multipleChoice: {
-    margin: '3% 1%',
-    padding: '2% 10%',
     color: theme.palette.primary.main,
     fontSize: '1em',
     borderRadius: 5,
-    width: '100%'
+    width: '83%'
   },
   form1: {
     display: 'flex',
@@ -93,12 +91,14 @@ const styles = theme => ({
   edit: {
     display: 'flex',
     wrap: 'nowrap',
+    justify: 'flex-start',
     margin: '15px 0px',
     width: '100%',
-    alignItems: 'center',
-    alignContent: 'center',
+    alignItems: 'left',
+    alignContent: 'flex-start',
     cursor: 'pointer',
-    height: '10px'
+    height: '10px',
+    textAlign: 'left'
   },
   hrStyle: {
     margin: '1rem auto',
@@ -106,7 +106,9 @@ const styles = theme => ({
   },
   editIcon: {
     margin: '0%',
-    paddingLeft: '1%'
+    paddingLeft: '1%',
+    alignItems: 'left',
+    alignContent: 'left'
   }
 });
 
@@ -298,22 +300,22 @@ function Refreshr(props) {
           <Typography
             variant="body1"
             color="secondary"
-            style={{ textAlign: 'center' }}
+            style={{ textAlign: 'left' }}
           >
             Refreshr Name
           </Typography>
 
+          <Typography
+            className={
+              refreshrNameEdit ? props.classes.hidden : props.classes.editText
+            }
+          >
+            {refreshrName}
+          </Typography>
           <FormGroup
             className={props.classes.form1}
             onSubmit={props.handleSubmit}
           >
-            <Typography
-              className={
-                refreshrNameEdit ? props.classes.hidden : props.classes.editText
-              }
-            >
-              {refreshrName}
-            </Typography>
             <Input
               disableUnderline
               onChange={e => setRefreshrName(e.target.value)}
@@ -340,17 +342,17 @@ function Refreshr(props) {
 
           <h4 className={props.classes.subheaders}>Your Review Text</h4>
 
+          <Typography
+            className={
+              reviewEdit ? props.classes.hidden : props.classes.editText
+            }
+          >
+            {reviewText}
+          </Typography>
           <FormGroup
             className={props.classes.form1}
             onSubmit={props.handleSubmit}
           >
-            <Typography
-              className={
-                reviewEdit ? props.classes.hidden : props.classes.editText
-              }
-            >
-              {reviewText}
-            </Typography>
             <Input
               disableUnderline
               onChange={e => setReviewText(e.target.value)}
@@ -379,21 +381,21 @@ function Refreshr(props) {
           <Typography
             variant="body1"
             color="secondary"
-            style={{ textAlign: 'center' }}
+            style={{ textAlign: 'left' }}
           >
             Question 1: Multiple Choice Response
+          </Typography>
+          <Typography
+            className={
+              multiChoiceEdit ? props.classes.hidden : props.classes.editText
+            }
+          >
+            {questionTextOne.text}
           </Typography>
           <FormGroup
             className={props.classes.form1}
             onSubmit={props.handleSubmit}
           >
-            <Typography
-              className={
-                multiChoiceEdit ? props.classes.hidden : props.classes.editText
-              }
-            >
-              {questionTextOne.text}
-            </Typography>
             <Input
               disableUnderline
               onChange={e =>
@@ -412,51 +414,52 @@ function Refreshr(props) {
             />
           </FormGroup>
 
-          <FormGroup>
-            <Typography
-              style={{
-                textAlign: 'center',
-                width: '100%'
-              }}
-              className={
-                multiChoiceEdit ? props.classes.hidden : props.classes.editText
-              }
-            >
-              {a1Text}
-            </Typography>
-            <Typography
-              style={{
-                textAlign: 'center',
-                width: '100%'
-              }}
-              className={
-                multiChoiceEdit ? props.classes.hidden : props.classes.editText
-              }
-            >
-              {a2Text}
-            </Typography>
-            <Typography
-              style={{
-                textAlign: 'center',
-                width: '100%'
-              }}
-              className={
-                multiChoiceEdit ? props.classes.hidden : props.classes.editText
-              }
-            >
-              {a3Text}
-            </Typography>
-            <Typography
-              style={{
-                textAlign: 'center',
-                width: '100%'
-              }}
-              className={
-                multiChoiceEdit ? props.classes.hidden : props.classes.editText
-              }
-            >
-              {a4Text}
-            </Typography>
+          {/* <FormGroup className={props.classes.form1}> */}
+          <Typography
+            style={{
+              textAlign: 'left',
+              width: '100%'
+            }}
+            className={
+              multiChoiceEdit ? props.classes.hidden : props.classes.editText
+            }
+          >
+            {a1Text}
+          </Typography>
+          <Typography
+            style={{
+              textAlign: 'left',
+              width: '100%'
+            }}
+            className={
+              multiChoiceEdit ? props.classes.hidden : props.classes.editText
+            }
+          >
+            {a2Text}
+          </Typography>
+          <Typography
+            style={{
+              textAlign: 'left',
+              width: '100%'
+            }}
+            className={
+              multiChoiceEdit ? props.classes.hidden : props.classes.editText
+            }
+          >
+            {a3Text}
+          </Typography>
+          <Typography
+            style={{
+              textAlign: 'left',
+              width: '100%'
+            }}
+            className={
+              multiChoiceEdit ? props.classes.hidden : props.classes.editText
+            }
+          >
+            {a4Text}
+          </Typography>
+          <FormGroup className={props.classes.form1}>
             <form className={props.classes.multipleChoice}>
               <Input
                 disableUnderline
@@ -507,34 +510,34 @@ function Refreshr(props) {
                 }
               />
             </form>
-          </FormGroup>
-          <FormGroup
-            onClick={() => setMultiChoiceEdit(!multiChoiceEdit)}
-            className={props.classes.edit}
-          >
-            <i className="fas fa-pen" />
-            <h4 className={props.classes.editIcon}>Edit</h4>
-          </FormGroup>
 
+            <FormGroup
+              onClick={() => setMultiChoiceEdit(!multiChoiceEdit)}
+              className={props.classes.edit}
+            >
+              <i className="fas fa-pen" />
+              <h4 className={props.classes.editIcon}>Edit</h4>
+            </FormGroup>
+          </FormGroup>
           <hr className={props.classes.hrStyle} />
 
           <Typography
             variant="body1"
             color="secondary"
-            style={{ textAlign: 'center' }}
+            style={{ textAlign: 'left' }}
           >
             Question 2: Text Response
           </Typography>
 
+          <Typography
+            className={q2Edit ? props.classes.hidden : props.classes.editText}
+          >
+            {questionTextTwo.text}
+          </Typography>
           <FormGroup
             className={props.classes.form1}
             onSubmit={props.handleSubmit}
           >
-            <Typography
-              className={q2Edit ? props.classes.hidden : props.classes.editText}
-            >
-              {questionTextTwo.text}
-            </Typography>
             <Input
               disableUnderline
               name="classnameInput"
