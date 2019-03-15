@@ -191,7 +191,6 @@ module.exports = {
 
   updateCampaign: (sg_campaign_id, class_id, date) => {
     console.log(date);
-
     return db('teachers_classes_refreshrs')
       .where({ sg_campaign_id, class_id })
       .update({ date: date });
