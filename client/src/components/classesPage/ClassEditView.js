@@ -492,7 +492,7 @@ function ClassEditView(props) {
 
       // update date in db
       for (let i = 0; i < 3; i++) {
-        const res = await ax.put(
+         await ax.put(
           `/classes/${classData.id}/campaigns/${campaigns[i]}`,
           {
             date: activeRefreshr.date

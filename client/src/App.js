@@ -252,11 +252,12 @@ const App = props => {
              return setCampaigns([...campaigns,
                 createData(c.sg_campaign_id, c.classname, c.typeform_url, date.format('MM/DD/YYYY'))
               ]); 
-            }   
+            } 
+            return null  
           })
       })
       .catch(err => console.log(err));
-  };
+    };
 
   //PRICING MODAL
   const toggleModal = () => {
