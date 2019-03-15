@@ -145,7 +145,10 @@ function Refreshr(props) {
     axios({
       method: 'get',
       //DEVELOPMENT
-      url: `http://localhost:9000/refreshrs/${typeformId}`,
+      //url: `http://localhost:9000/refreshrs/${typeformId}`,
+      //PRODUCTION
+      url: `https://refreshr.herokuapp.com/refreshrs/${typeformId}`,
+
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => {

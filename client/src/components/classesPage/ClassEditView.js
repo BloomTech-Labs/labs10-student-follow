@@ -123,9 +123,9 @@ function ClassEditView(props) {
   const userID = localStorage.getItem('user_id');
   const ax = axios.create({
     //DEVELOPMENT
-    baseURL: 'http://localhost:9000',
+    //baseURL: 'http://localhost:9000',
     //PRODUCTION
-    //baseURL: 'https://refreshr.herokuapp.com'
+    baseURL: 'https://refreshr.herokuapp.com',
 
     headers: {
       authorization: `Bearer ${token}`

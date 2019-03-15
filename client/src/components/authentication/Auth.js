@@ -9,11 +9,11 @@ const options = {
   },
   auth: {
     //PRODUCTION
-    // audience: 'https://refreshr.herokuapp.com',
-    // redirectUrl: 'https://refreshr-app.netlify.com/dashboard',
+    audience: 'https://refreshr.herokuapp.com',
+    redirectUrl: 'https://refreshr-app.netlify.com/dashboard',
     //DEVELOPMENT
-    audience: 'http://localhost:9000',
-    redirectUrl: 'http://localhost:3000/dashboard',
+    // audience: 'http://localhost:9000',
+    // redirectUrl: 'http://localhost:3000/dashboard',
     redirect: true,
     usernameStyle: 'email',
     responseType: 'token id_token'
@@ -54,9 +54,9 @@ lock.on('authenticated', authResult => {
     localStorage.setItem('name', `${profile.given_name}`);
     localStorage.setItem('email', profile.email);
     // PRODUCTION
-    //localStorage.setItem('user_id', profile['https://refreshr.herokuapp.com/uid']);
+    localStorage.setItem('user_id', profile['https://refreshr.herokuapp.com/uid']);
     // DEVELOPMENT
-    localStorage.setItem('user_id', profile['http://localhost:9000/uid']);
+    //localStorage.setItem('user_id', profile['http://localhost:9000/uid']);
 
     // const body = {
     //   first_name: profile.given_name,

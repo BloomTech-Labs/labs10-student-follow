@@ -163,9 +163,9 @@ const Navbar = props => {
       localStorage.clear();
       props.lock.logout({
         // PRODUCTION
-        //returnTo: 'https://refreshr-app.netlify.com',
+        returnTo: 'https://refreshr-app.netlify.com',
         // DEVELOPMENT
-        returnTo: 'http://localhost:3000',
+        //returnTo: 'http://localhost:3000',
         clientID: 'jNDq5B6iAnIRcrpM07Omh05uyppZ89px'
       });
     } else {

@@ -82,9 +82,9 @@ const App = props => {
   const getRefreshrs = () => {
     axios({
       method: 'get',
-      url: `http://localhost:9000/teachers/${user_id}/refreshrs`,
+      //url: `http://localhost:9000/teachers/${user_id}/refreshrs`,
 
-      //url: `https://refreshr.herokuapp.com/teachers/${user_id}/refreshrs`,
+      url: `https://refreshr.herokuapp.com/teachers/${user_id}/refreshrs`,
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => {
@@ -110,9 +110,9 @@ const App = props => {
     await axios({
       method: 'post',
       //Development
-      url: 'http://localhost:9000/refreshrs',
+      //url: 'http://localhost:9000/refreshrs',
       //Production
-      //url: 'https://refreshr.herokuapp.com/refreshrs',
+      url: 'https://refreshr.herokuapp.com/refreshrs',
       headers: { Authorization: `Bearer ${token}` },
       data: refreshr
     })
@@ -121,9 +121,9 @@ const App = props => {
         axios({
           method: 'post',
           //Development
-          url: `http://localhost:9000/teachers/${user_id}/refreshrs`,
+          //url: `http://localhost:9000/teachers/${user_id}/refreshrs`,
           //Production
-          //url: `https://refreshr.herokuapp.com/teachers/${user_id}/refreshrs`,
+          url: `https://refreshr.herokuapp.com/teachers/${user_id}/refreshrs`,
           headers: { Authorization: `Bearer ${token}` },
           data: { refreshr_id: res.data.newRefreshrID }
         }).then(res => {
@@ -138,9 +138,9 @@ const App = props => {
       axios({
         method: 'post',
         //Development
-        url: 'http://localhost:9000/questions',
+        //url: 'http://localhost:9000/questions',
         //Production
-        //url: 'https://refreshr.herokuapp.com/questions',
+        url: 'https://refreshr.herokuapp.com/questions',
         headers: { Authorization: `Bearer ${token}` },
         data: questionArray[i]
       })
@@ -148,9 +148,9 @@ const App = props => {
           axios({
             method: 'post',
             //Development
-            url: `http://localhost:9000/refreshrs/${refreshrID}/questions`,
+            //url: `http://localhost:9000/refreshrs/${refreshrID}/questions`,
             //Production
-            //url: `https://refreshr.herokuapp.com/refreshrs/${refreshrID}/questions`,
+            url: `https://refreshr.herokuapp.com/refreshrs/${refreshrID}/questions`,
             headers: { Authorization: `Bearer ${token}` },
             data: { question_id: res.data.newQuestionID }
             //console.log('RES from add questions ===', res);
@@ -183,9 +183,9 @@ const App = props => {
     await axios({
       method: 'put',
       //Development
-      url: `http://localhost:9000/refreshrs/${id}`,
+      //url: `http://localhost:9000/refreshrs/${id}`,
       //Production
-      //url: `https://refreshr.herokuapp.com/refreshrs/${id}`,
+      url: `https://refreshr.herokuapp.com/refreshrs/${id}`,
       headers: { Authorization: `Bearer ${token}` },
       data: refreshr
     })
@@ -199,9 +199,9 @@ const App = props => {
       axios({
         method: 'put',
         //Development
-        url: `http://localhost:9000/questions/${questionIDs[i]}`,
+        //url: `http://localhost:9000/questions/${questionIDs[i]}`,
         //Production
-        //url: 'https://refreshr.herokuapp.com/questions',
+        url: `https://refreshr.herokuapp.com/questions/${questionIDs[i]}`,
         headers: { Authorization: `Bearer ${token}` },
         data: questionArray[i]
       })
@@ -218,8 +218,8 @@ const App = props => {
   const getClasses = () => {
     axios({
       method: 'get',
-      url: `http://localhost:9000/teachers/${user_id}/classes`,
-      //url: `https://refreshr.herokuapp.com/teachers/${user_id}/classes`,
+      //url: `http://localhost:9000/teachers/${user_id}/classes`,
+      url: `https://refreshr.herokuapp.com/teachers/${user_id}/classes`,
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => {
@@ -240,9 +240,9 @@ const App = props => {
     
     await axios({
       method: 'get',
-      url: `http://localhost:9000/campaigns/user/${user_id}`,
+      //url: `http://localhost:9000/campaigns/user/${user_id}`,
 
-      //url: `https://refreshr.herokuapp.com/campaigns`,
+      url: `https://refreshr.herokuapp.com/campaigns/user/${user_id}`,
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => {

@@ -9,9 +9,9 @@ const jwtCheck = jwt({
     jwksUri: 'https://team-refreshr.auth0.com/.well-known/jwks.json'
   }),
   // PRODUCTION
-  //audience: 'https://refreshr.herokuapp.com',
+  audience: 'https://refreshr.herokuapp.com',
   // DEVELOPMENT
-  audience: 'http://localhost:9000',
+  //audience: 'http://localhost:9000',
   issuer: 'https://team-refreshr.auth0.com/',
   algorithms: ['RS256'],
 });

@@ -211,9 +211,9 @@ function CampaignForm(props) {
 
   const ax = axios.create({
     //PRODUCTION
-    //baseURL: 'https://refreshr.herokuapp.com',
+    baseURL: 'https://refreshr.herokuapp.com',
     //DEVELOPMENT
-    baseURL: 'http://localhost:9000',
+    //baseURL: 'http://localhost:9000',
     headers: {
       authorization: `Bearer ${token}`
     }

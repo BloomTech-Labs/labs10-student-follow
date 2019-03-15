@@ -2,7 +2,7 @@
 const ManagementClient = require('auth0').ManagementClient;
 const management = new ManagementClient({
   domain: 'team-refreshr.auth0.com',
-  //Production: https://refreshr.herokuapp.com
+  //Production: 'https://refreshr.herokuapp.com',
   //clientId: 'CjJZFl4f8C7ktct7cowshupaS5TG6usk',
   //clientSecret: 'PGBub45Igzu7THqKD_c3N61mOF_3vwNRIvMBRSLn2zqmQBOmFMc7PEdUxmXD6JwD',
   //Development: LocalHost:9000
