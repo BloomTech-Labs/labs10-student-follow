@@ -41,7 +41,6 @@ const styles = theme => ({
     display: 'flex',
     flexFlow: 'column nowrap',
     alignItems: 'center',
-    // width: '50%',
     fontSize: '1rem',
     minWidth: 375,
     minHeight: 225,

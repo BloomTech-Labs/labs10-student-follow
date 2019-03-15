@@ -24,7 +24,7 @@ const styles = theme => ({
     border: `1px solid ${theme.palette.secondary.main}`,
     flexWrap: 'wrap',
     width: '50%',
-    [theme.breakpoints.only('xs')]: {
+    [theme.breakpoints.down('sm')]: {
       width: '70%'
     },
     maxHeight: theme.spacing.unit * 50,
@@ -62,7 +62,10 @@ const styles = theme => ({
     marginTop: theme.spacing.unit * 3,
     borderRadius: '5px',
     border: `1px solid ${theme.palette.secondary.main}`,
-    width: '50%'
+    width: '50%',
+    [theme.breakpoints.down('sm')]: {
+      width: '70%'
+    }
   },
   editName: {
     display: 'flex',
