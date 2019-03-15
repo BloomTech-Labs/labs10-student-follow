@@ -159,7 +159,7 @@ const Dashboard = props => {
                       <TableCell className={classes.tableCell} align="center">
                         <a
                           className={classes.aLink}
-                          href={`https://` + row.preview}
+                          href={row.preview}
                           target="_blank"
                           rel="noopener noreferrer"
                         >
