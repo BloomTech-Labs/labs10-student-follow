@@ -200,6 +200,7 @@ function Refreshr(props) {
       ]
     };
     try {
+      console.log(data)
       await axios
         .post('https://api.typeform.com/forms', data, {
           headers

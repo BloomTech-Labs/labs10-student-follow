@@ -229,6 +229,8 @@ const App = props => {
       .catch(err => console.log(err));
   };
 
+
+
   //CAMPAIGNS
   const userCampaigns = async id => {
     const createData = (id, classname, preview, date, classID) => {
@@ -247,12 +249,17 @@ const App = props => {
     })
       .then(res => {
         console.log(res)
+        const idArr = []
           res.data.uniqueRefreshrs.map(c => {
             const date = moment(c.date);
             if( date > current && date < upperLimit){
-             return setCampaigns([
-                createData(c.sg_campaign_id, c.classname, c.typeform_url, date.format('MM/DD/YYYY'))
-              ]); 
+              if(!idArr.includes(c.typeform_url)){
+                idArr.push(c.typeform_url)
+                return setCampaigns([
+                  ...campaigns,
+                  createData(c.sg_campaign_id, c.classname, c.typeform_url, date.format('MM/DD/YYYY'))
+                ]);
+              }              
             } 
             return null  
           })
