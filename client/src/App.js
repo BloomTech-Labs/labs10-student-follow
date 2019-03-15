@@ -60,6 +60,7 @@ const App = props => {
   const [name, setName] = useState('');
   const [loading, setLoading] = useState(true);
   const [campaigns, setCampaigns] = useState([]);
+  const idArr = []
 
 
 
@@ -249,7 +250,6 @@ const App = props => {
     })
       .then(res => {
         console.log(res)
-        const idArr = []
           res.data.uniqueRefreshrs.map(c => {
             const date = moment(c.date);
             if( date > current && date < upperLimit){
