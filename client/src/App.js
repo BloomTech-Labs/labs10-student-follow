@@ -4,6 +4,7 @@ import { Route, withRouter } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
 import axios from 'axios';
+import moment from 'moment';
 import {
   LandingPage,
   BillingPage,
@@ -58,6 +59,9 @@ const App = props => {
   const [userClasses, setClasses] = useState([]);
   const [name, setName] = useState('');
   const [loading, setLoading] = useState(true);
+  const [campaigns, setCampaigns] = useState([]);
+
+
 
   /* METHODS */
 
@@ -71,6 +75,7 @@ const App = props => {
     setID(localStorage.getItem('user_id'));
     setName(localStorage.getItem('name'));
     setLoading(false);
+    
   };
   //all refreshrs for user
 
@@ -122,8 +127,6 @@ const App = props => {
           headers: { Authorization: `Bearer ${token}` },
           data: { refreshr_id: res.data.newRefreshrID }
         }).then(res => {
-          console.log('T_R ID', res.data.message);
-          //setMessage(res.data.message)
         });
       })
       .catch(err => {
@@ -142,8 +145,6 @@ const App = props => {
         data: questionArray[i]
       })
         .then(res => {
-          console.log('Q ID', res);
-          console.log('REF ID', refreshrID);
           axios({
             method: 'post',
             //Development
@@ -154,7 +155,6 @@ const App = props => {
             data: { question_id: res.data.newQuestionID }
             //console.log('RES from add questions ===', res);
           }).then(res => {
-            console.log('Q_R', res.data.results[0]);
           });
         })
         .catch(err => {
@@ -229,6 +229,35 @@ const App = props => {
       .catch(err => console.log(err));
   };
 
+  //CAMPAIGNS
+  const userCampaigns = async id => {
+    const createData = (id, classname, preview, date, classID) => {
+      return { id, classname, preview, date, classID };
+    };
+    let current = moment();
+    const upperLimit = moment(current).add(2, 'months')
+    
+    
+    await axios({
+      method: 'get',
+      url: `http://localhost:9000/campaigns/user/${user_id}`,
+
+      //url: `https://refreshr.herokuapp.com/campaigns`,
+      headers: { Authorization: `Bearer ${token}` }
+    })
+      .then(res => {
+          res.data.campaigns.map(c => {
+            const date = moment(c.date);
+            if( date > current && date < upperLimit){
+             return setCampaigns([...campaigns,
+                createData(c.sg_campaign_id, c.classname, c.typeform_url, date.format('MM/DD/YYYY'))
+              ]); 
+            }   
+          })
+      })
+      .catch(err => console.log(err));
+  };
+
   //PRICING MODAL
   const toggleModal = () => {
     toggleOpen(!open);
@@ -266,11 +295,11 @@ const App = props => {
               path="/dashboard"
               render={props => (
                 <Dashboard
-                  id={user_id}
-                  token={token}
                   history={props.history}
                   name={name}
                   loading={loading}
+                  rows={campaigns}
+                  userCampaigns={userCampaigns}
                 />
               )}
             />
@@ -326,7 +355,6 @@ const App = props => {
               render={props => <Refreshr sendRefreshrToDB={sendRefreshrToDB} />}
             />
             <Route path="/campaign" render={props => <CampaignForm />} />{' '}
-            {/* for testing */}
           </Grid>
         </Grid>
       </>
