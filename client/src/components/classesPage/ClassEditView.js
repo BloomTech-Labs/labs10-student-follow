@@ -456,7 +456,6 @@ function ClassEditView(props) {
 
   async function changeDate(e) {
     try {
-      console.log(e.target.value);
       setActiveDate(e.target.value); // think we need to do this on submit?
     } catch (err) {
       console.log(err);
@@ -490,6 +489,16 @@ function ClassEditView(props) {
       );
 
       campaigns = campaigns.map(c => c.sg_campaign_id);
+
+      // update date in db WRONG ENDPOINT DO CAMPAIGNS?
+      for (let i = 0; i < 3; i++) {
+        const res = await ax.put(
+          `/classes/${classData.id}/campaigns/${campaigns[i]}`,
+          {
+            date: activeRefreshr.date
+          }
+        );
+      }
 
       // update campaigns
       for (let i = 0; i < 3; i++) {

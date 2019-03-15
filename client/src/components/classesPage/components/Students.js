@@ -23,7 +23,7 @@ const styles = theme => ({
     flexFlow: 'column wrap',
     border: `1px solid ${theme.palette.secondary.main}`,
     flexWrap: 'wrap',
-    width: '45%',
+    width: '50%',
     [theme.breakpoints.only('xs')]: {
       width: '70%'
     },
@@ -61,7 +61,8 @@ const styles = theme => ({
   expansionPanel: {
     marginTop: theme.spacing.unit * 3,
     borderRadius: '5px',
-    border: `1px solid ${theme.palette.secondary.main}`
+    border: `1px solid ${theme.palette.secondary.main}`,
+    width: '50%'
   },
   editName: {
     display: 'flex',
@@ -81,15 +82,6 @@ const styles = theme => ({
 
 function students(props) {
   const { classes } = props;
-
-  function editStudent(id) {
-    const [student] = props.students.filter(s => s.student_id === id);
-    student.isEditing = true;
-  }
-
-  function handleChange(e, student) {
-    student[e.target.name] = e.target.value;
-  }
 
   return (
     <>

@@ -187,5 +187,13 @@ module.exports = {
     return db('teachers_classes_refreshrs')
       .where({ class_id, sg_campaign_id })
       .update({ sg_campaign_id: null, class_id: null });
+  },
+
+  updateCampaign: (sg_campaign_id, class_id, date) => {
+    console.log(date);
+
+    return db('teachers_classes_refreshrs')
+      .where({ sg_campaign_id, class_id })
+      .update({ date: date });
   }
 };
