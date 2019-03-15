@@ -253,7 +253,9 @@ const App = props => {
           res.data.uniqueRefreshrs.map(c => {
             const date = moment(c.date);
             if( date > current && date < upperLimit){
+              console.log(idArr)
               if(!idArr.includes(c.typeform_url)){
+                console.log(idArr)
                 idArr.push(c.typeform_url)
                 return setCampaigns([
                   ...campaigns,
