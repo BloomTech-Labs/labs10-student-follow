@@ -77,7 +77,8 @@ const styles = theme => ({
     }
   },
   datePicker: {
-    color: theme.palette.primary.contrastText
+    color: theme.palette.primary.contrastText,
+    fontSize: '1.1rem'
   },
   title: {
     color: `${theme.palette.primary.contrastText}`,
@@ -92,6 +93,7 @@ const styles = theme => ({
     height: 40
   },
   listItem: {
+    fontSize: '1.1rem',
     '&:hover': {
       backgroundColor: '#363c42'
     },
@@ -108,6 +110,9 @@ const styles = theme => ({
   },
   listIcon: {
     color: theme.palette.primary.contrastText
+  },
+  listItemText: {
+    fontSize: '1.1rem'
   }
 });
 
@@ -145,9 +150,7 @@ function Refreshrs(props) {
                     variant="outlined"
                     type="date"
                     InputProps={{ className: classes.datePicker }}
-                    defaultValue={moment(props.activeRefreshr.date).format(
-                      'YYYY-MM-DD'
-                    )}
+                    value={moment(props.activeDate).format('YYYY-MM-DD')}
                     onChange={e => props.changeDate(e)}
                   />
                 </form>
@@ -223,7 +226,10 @@ function Refreshrs(props) {
                 <img src={logo} alt="refreshr logo" className={classes.logo} />
               </ListItemIcon>
 
-              <ListItemText>{r.name}</ListItemText>
+              <ListItemText
+                classes={{ primary: classes.listItemText }}
+                primary={r.name}
+              />
             </ListItem>
           ))}
           <ListItem
@@ -233,7 +239,10 @@ function Refreshrs(props) {
             <ListItemIcon>
               <AddCircleOutline className={classes.listIcon} />
             </ListItemIcon>
-            <ListItemText>Add new refreshr to class</ListItemText>
+            <ListItemText
+              classes={{ primary: classes.listItemText }}
+              primary="Add new refreshr to class"
+            />
           </ListItem>
         </List>
         <RefreshrDialog
