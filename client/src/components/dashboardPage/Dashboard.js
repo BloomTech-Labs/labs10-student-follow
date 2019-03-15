@@ -70,7 +70,7 @@ const styles = theme => ({
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    fontSize: '1.6rem'
+    fontSize: '1.2rem'
   },
   tableCell: {
     fontSize: '1rem',
