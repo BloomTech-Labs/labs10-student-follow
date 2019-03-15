@@ -20,6 +20,7 @@ import { ArrowBack, Close, Send } from '@material-ui/icons';
 import logo from '../components/LogoSmall.png';
 import axios from 'axios';
 import moment from 'moment';
+import makeEmail from '../components/Email';
 
 const styles = theme => ({
   container: {
@@ -276,13 +277,14 @@ function CampaignForm(props) {
         subject: activeRefreshr.name,
         sender_id: 428251, // permanent (Refreshr Team)
         suppression_group_id: 9332, // permanent (Unsubscribe ID)
-        html_content: `<html><head><title></title></head><body><p>
-      Take your Refreshr <a href=${activeRefreshr.typeform_url}>here</a>.</p>
-      <p></p>
-      <a href=
-      [unsubscribe]>
-      Unsubscribe</a>
-      </body></html>`,
+        html_content: makeEmail(activeRefreshr),
+        // html_content: `<html><head><title></title></head><body><p>
+        // Take your Refreshr <a href=${activeRefreshr.typeform_url}>here</a>.</p>
+        // <p></p>
+        // <a href=
+        // [unsubscribe]>
+        // Unsubscribe</a>
+        // </body></html>`,
         plain_content: `Take your Refreshr ${
           activeRefreshr.typeform_url
         } [unsubscribe]
@@ -290,6 +292,7 @@ function CampaignForm(props) {
         // refreshr_id: activeRefreshr.refreshr_id
       };
       // });
+      // const testRefreshr = makeEmail(activeRefreshr);
       setScheduledRefreshrs([...scheduledRefreshrs, activeRefreshr]);
       setRefreshrs(
         refreshrs.filter(r => r.refreshr_id !== activeRefreshr.refreshr_id)

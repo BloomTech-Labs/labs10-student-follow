@@ -118,6 +118,8 @@ function ClassCreateView(props) {
       // create sg recipient
       const recipient = localStorage.getItem('email');
 
+      console.log(refreshr);
+
       const refreshrRes = await sgAx.post('/campaigns', refreshr);
 
       const campaign_id = refreshrRes.data.id;
