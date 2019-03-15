@@ -49,13 +49,15 @@ lock.on('authenticated', authResult => {
       alert(error);
       return;
     }
-    console.log(profile)
     localStorage.setItem('accessToken', authResult.accessToken);
     localStorage.setItem('name', `${profile.given_name}`);
     localStorage.setItem('email', profile.email);
     localStorage.setItem('profile', JSON.stringify(profile));
     // PRODUCTION
-    localStorage.setItem('user_id', profile['https://refreshr.herokuapp.com/uid']);
+    localStorage.setItem(
+      'user_id',
+      profile['https://refreshr.herokuapp.com/uid']
+    );
     // DEVELOPMENT
     //localStorage.setItem('user_id', profile['http://localhost:9000/uid']);
 
@@ -81,11 +83,7 @@ lock.on('authenticated', authResult => {
 
       headers: { Authorization: `Bearer ${authResult.accessToken}` },
       data: body
-    })
-      .then(res => {
-        console.log(res);
-      })
-      .catch(err => console.log(err));
+    }).catch(err => console.log(err));
   });
 });
 
@@ -97,6 +95,5 @@ lock.on('authorization_error', error => {
     }
   });
 });
-
 
 export default lock;

@@ -103,10 +103,8 @@ const Dashboard = props => {
   useEffect(() => {
     if (!loading) {
       userCampaigns();
-      console.log(rows)
     }
   }, [loading]);
-
 
   return (
     <>
@@ -138,9 +136,7 @@ const Dashboard = props => {
               </TableHead>
               <TableBody className={classes.tableBody}>
                 {rows.length > 0 ? (
-                  (console.log(rows),
                   rows.map((row, index) => (
-                    //console.log(row),
                     <TableRow key={index} className={classes.tableRow}>
                       <TableCell className={classes.tableCell} align="center">
                         {row.date}
@@ -150,7 +146,6 @@ const Dashboard = props => {
                         align="center"
                         onClick={e => {
                           e.preventDefault();
-                          console.log(row.classID)
                           history.push(`/classes/edit/${row.classID}`);
                         }}
                       >
@@ -167,7 +162,7 @@ const Dashboard = props => {
                         </a>
                       </TableCell>
                     </TableRow>
-                  )))
+                  ))
                 ) : (
                   <TableRow className={classes.tableRow}>
                     <TableCell style={{ border: 'none' }}>
