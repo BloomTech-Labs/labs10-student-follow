@@ -63,7 +63,8 @@ const styles = theme => ({
     padding: theme.spacing.unit * 3,
     justifyContent: 'space-between',
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    border: `1px solid ${theme.palette.secondary.main}`
   },
   dateField: {
     marginTop: 20
@@ -155,6 +156,16 @@ const styles = theme => ({
   logo: {
     width: 25,
     height: 25
+  },
+  dualButtonDiv: {
+    display: 'flex',
+    flexFlow: 'row nowrap',
+    justifyContent: 'space-around'
+  },
+  dualButton: {
+    width: '49%',
+    margin: 2.5,
+    fontSize: '1.2rem'
   }
 });
 
@@ -208,8 +219,6 @@ function CampaignForm(props) {
     }
   });
 
-  /* putting the axios request here for now just to design the page. it may make more sense to make
-  it in the parent component and then pass down props to the children components */
   const getRefreshrs = async () => {
     try {
       const uid = localStorage.getItem('user_id');
@@ -232,18 +241,64 @@ function CampaignForm(props) {
   }
 
   // SCHEDULE REFRESHR OPERATIONS
-  const scheduleRefreshr = e => {
+  const scheduleRefreshr = async () => {
     props.setCampaignData({
       ...props.campaignData,
       title: 'Your Refreshr Is Here!',
       subject: activeRefreshr.name,
       html_content: `<html><head><title></title></head><body><p>
-      Take your Refreshr at <a>${
+      Take your Refreshr <a href=${activeRefreshr.typeform_url}>here</a>.</p>
+      <p></p>
+      <p></p>
+      <p></p>
+      <p></p>
+      <p></p>
+      <p></p>
+      <p></p>
+      <p></p>
+      <p></p>
+      <a href=
+      [unsubscribe]>
+      Unsubscribe</a>
+      </body></html>`,
+      plain_content: `Take your Refreshr ${
         activeRefreshr.typeform_url
-      }. [unsubscribe]</p></body></html>`,
-      plain_content: `Take your Refreshr at ${
+      } [unsubscribe]
+      `,
+      refreshr_id: activeRefreshr.refreshr_id
+    });
+
+    setScheduledRefreshrs([...scheduledRefreshrs, activeRefreshr]);
+    setRefreshrs(
+      refreshrs.filter(r => r.refreshr_id !== activeRefreshr.refreshr_id)
+    );
+    setActiveRefreshr(null);
+  };
+
+  const sendTestRefreshr = async () => {
+    props.setCampaignData({
+      ...props.campaignData,
+      title: 'Your Refreshr Is Here!',
+      subject: activeRefreshr.name,
+      html_content: `<html><head><title></title></head><body><p>
+      Take your Refreshr <a href=${activeRefreshr.typeform_url}>here</a>.</p>
+      <p></p>
+      <p></p>
+      <p></p>
+      <p></p>
+      <p></p>
+      <p></p>
+      <p></p>
+      <p></p>
+      <p></p>
+      <a href=
+      [unsubscribe]>
+      Unsubscribe</a>
+      </body></html>`,
+      plain_content: `Take your Refreshr ${
         activeRefreshr.typeform_url
-      } [unsubscribe]`,
+      } [unsubscribe]
+      `,
       refreshr_id: activeRefreshr.refreshr_id
     });
     setScheduledRefreshrs([...scheduledRefreshrs, activeRefreshr]);
@@ -251,6 +306,7 @@ function CampaignForm(props) {
       refreshrs.filter(r => r.refreshr_id !== activeRefreshr.refreshr_id)
     );
     setActiveRefreshr(null);
+    props.sendTest(activeRefreshr);
   };
 
   const handleClick = id => {
@@ -269,26 +325,26 @@ function CampaignForm(props) {
     e.preventDefault();
     const date = e.target.value;
 
-    const schedule0 = moment(`${e.target.value}T00:00:00`).format(
-      'ddd, MMMM Do, YYYY ha'
-    );
-    const schedule1 = moment(`${e.target.value}T00:00:00`)
+    // const date = e.target.value;
+
+    const schedule0 = moment(date).format('ddd, MMMM Do, YYYY ha');
+    const schedule1 = moment(date)
       .add(2, 'day')
       .format('ddd, MMMM Do, YYYY ha');
-    const schedule2 = moment(`${e.target.value}T00:00:00`)
+    const schedule2 = moment(date)
       .add(2, 'weeks')
       .format('ddd, MMMM Do, YYYY ha');
-    const schedule3 = moment(`${e.target.value}T00:00:00`)
+    const schedule3 = moment(date)
       .add(2, 'month')
       .format('ddd, MMMM Do, YYYY ha');
 
-    const twoDaysUnix = moment(`${e.target.value}T00:00:00`)
+    const twoDaysUnix = moment(date)
       .add(2, 'day')
       .unix();
-    const twoWeeksUnix = moment(`${e.target.value}T00:00:00`)
+    const twoWeeksUnix = moment(date)
       .add(2, 'weeks')
       .unix();
-    const twoMonthsUnix = moment(`${e.target.value}T00:00:00`)
+    const twoMonthsUnix = moment(date)
       .add(2, 'month')
       .unix();
 
@@ -297,6 +353,7 @@ function CampaignForm(props) {
       { send_at: twoWeeksUnix },
       { send_at: twoMonthsUnix }
     ];
+
     setActiveRefreshr({ ...activeRefreshr, timeTriData, date });
 
     setSchedule({
@@ -370,7 +427,9 @@ function CampaignForm(props) {
             variant="outlined"
             type="date"
             defaultValue={today}
-            onChange={e => alterTime(e)}
+            onChange={e => {
+              alterTime(e);
+            }}
           />
           {schedule.schedule0 && (
             <div className={classes.scheduleDiv}>
@@ -404,13 +463,24 @@ function CampaignForm(props) {
               </Typography>
             </div>
           )}
-          <Button
-            variant="outlined"
-            color="secondary"
-            onClick={scheduleRefreshr}
-          >
-            Load Schedule
-          </Button>
+          <div className={classes.dualButtonDiv}>
+            <Button
+              variant="outlined"
+              color="secondary"
+              onClick={scheduleRefreshr}
+              className={classes.dualButton}
+            >
+              Load Schedule
+            </Button>
+            <Button
+              variant="outlined"
+              color="secondary"
+              onClick={sendTestRefreshr}
+              className={classes.dualButton}
+            >
+              Send Test
+            </Button>
+          </div>
         </Card>
       ) : (
         <Card className={classes.activeCard}>
