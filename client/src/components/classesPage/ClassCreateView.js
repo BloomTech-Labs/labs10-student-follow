@@ -28,7 +28,7 @@ const styles = theme => ({
   loading: {
     position: 'absolute',
     top: '40%',
-    color: 'blue',
+    color: 'white',
     zIndex: '1'
   }
 });
@@ -101,6 +101,40 @@ function ClassCreateView(props) {
       authorization: `Bearer ${token}` // development
     }
   });
+
+  const sendTest = async refreshr => {
+    try {
+      setIsLoading(true);
+      let body = {
+        name: listData.classnameInput
+      };
+      let res = await sgAx.post('/contactdb/lists', body);
+      console.log(res);
+
+      const list = res.data.id;
+      console.log('list:', list);
+
+      // create sg recipient
+      const recipient = localStorage.getItem('email');
+      console.log(recipient);
+
+      console.log(newRefreshr);
+
+      const refreshrRes = await sgAx.post('/campaigns', newRefreshr);
+      console.log(refreshrRes);
+
+      const campaign_id = refreshrRes.data.id;
+      console.log(campaign_id);
+
+      res = await sgAx.post(`/campaigns/${campaign_id}/schedules/test`, {
+        to: recipient
+      });
+      setIsLoading(false);
+    } catch (err) {
+      console.log(err);
+      setIsLoading(false);
+    }
+  };
 
   const sgDb = async refreshrs => {
     try {
@@ -217,6 +251,7 @@ function ClassCreateView(props) {
             // setTimeData={setTimeData}
             timeTriData={timeTriData}
             setTimeTriData={setTimeTriData}
+            sendTest={sendTest}
           />
         ) : null}
       </Grid>
